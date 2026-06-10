@@ -55,7 +55,7 @@ app.post('/api/connect', async (req, res) => {
     res.json({
       linkUrl,
       authCode,
-      tinkUserId,
+      tinkUserId: userId,
       sandbox: process.env.TINK_SANDBOX === 'true',
     });
   } catch (err) {
