@@ -80,7 +80,7 @@ function buildTinkLinkUrlSimple(redirectUri) {
   if (process.env.TINK_SANDBOX === 'true') {
     params.set('test', 'true');
   }
-  return `https://link.tink.com/1.0/authorize/credentials?${params.toString()}`;
+  return `https://link.tink.com/1.0/transactions/connect-accounts/?${params.toString()}`;
 }
 
 // ── Exchange callback code for user access token ───────────
