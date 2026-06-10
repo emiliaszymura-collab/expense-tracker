@@ -28,17 +28,27 @@ async function createUser(externalUserId, market = 'PL', locale = 'pl_PL') {
 }
 
 // ── Get authorization code for Tink Link ──────────────────
-async function getAuthorizationCode(userId, externalUserId, scopes = 'accounts:read,transactions:read,balances:read') {
+async function getAuthorizationCode(tinkUserId, externalUserId, scopes = 'accounts:read,transactions:read,balances:read') {
   const token = await getAppToken('authorization:grant');
-  const params = new URLSearchParams({
-    user_id: userId,
+
+  // Try with internal user_id first, fall back to external_user_id
+  const body = new URLSearchParams({
     scope: scopes,
-    id_hint: externalUserId || userId,
+    id_hint: externalUserId || tinkUserId,
     actor_client_id: 'df05e4b379934cd09963197cc855bfe9',
   });
+
+  // Use external_user_id if we don't have a proper Tink UUID
+  const isExternalId = !tinkUserId || tinkUserId === externalUserId || tinkUserId.startsWith('user_');
+  if (isExternalId) {
+    body.set('external_user_id', externalUserId || tinkUserId);
+  } else {
+    body.set('user_id', tinkUserId);
+  }
+
   const res = await axios.post(
     `${BASE}/api/v1/oauth/authorization-grant/delegate`,
-    params.toString(),
+    body.toString(),
     { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/x-www-form-urlencoded' } }
   );
   return res.data.code;
