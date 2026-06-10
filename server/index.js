@@ -12,6 +12,7 @@ app.use(express.json());
 
 // In-memory token store (w produkcji: baza danych)
 const tokenStore = {}; // userId → { access_token, refresh_token, expires_at }
+const tinkUserMap = {}; // localUserId → tinkInternalUserId
 
 async function getValidToken(userId) {
   const stored = tokenStore[userId];
@@ -47,20 +48,25 @@ app.post('/api/connect', async (req, res) => {
 
     const redirectUri = `${FRONTEND_URL}?tink_code=1`;
 
-    // Create Tink user (idempotent — safe to call multiple times)
-    let tinkUserId = userId;
-    let externalUserId = userId;
-    try {
-      const user = await tink.createUser(userId);
-      tinkUserId = user.user_id;       // Tink internal UUID
-      externalUserId = user.external_user_id || userId;
-    } catch (err) {
-      // User may already exist — tinkUserId stays as our local userId
-      console.log('[connect] user likely exists, proceeding with external_user_id');
+    // Reuse existing Tink user if we already created one for this local userId
+    let tinkUserId = tinkUserMap[userId];
+
+    if (!tinkUserId) {
+      // Create a fresh unique external ID for Tink
+      const externalId = `${userId}_${Date.now()}`;
+      try {
+        const user = await tink.createUser(externalId);
+        tinkUserId = user.user_id; // Tink internal UUID
+        tinkUserMap[userId] = tinkUserId;
+        console.log('[connect] created Tink user:', tinkUserId);
+      } catch (err) {
+        console.error('[connect] createUser failed:', err.response?.data || err.message);
+        return res.status(500).json({ error: 'Nie można utworzyć użytkownika Tink: ' + (err.response?.data?.errorMessage || err.message) });
+      }
     }
 
     // Get auth code for Tink Link
-    const authCode = await tink.getAuthorizationCode(tinkUserId, externalUserId);
+    const authCode = await tink.getAuthorizationCode(tinkUserId, userId);
     const linkUrl = tink.buildTinkLinkUrl(authCode, redirectUri);
 
     res.json({
