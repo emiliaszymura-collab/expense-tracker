@@ -28,12 +28,12 @@ async function createUser(externalUserId, market = 'PL', locale = 'pl_PL') {
 }
 
 // ── Get authorization code for Tink Link ──────────────────
-async function getAuthorizationCode(userId, scopes = 'accounts:read,transactions:read,balances:read') {
+async function getAuthorizationCode(userId, externalUserId, scopes = 'accounts:read,transactions:read,balances:read') {
   const token = await getAppToken('authorization:grant');
   const params = new URLSearchParams({
     user_id: userId,
     scope: scopes,
-    id_hint: userId,
+    id_hint: externalUserId || userId,
     actor_client_id: 'df05e4b379934cd09963197cc855bfe9',
   });
   const res = await axios.post(

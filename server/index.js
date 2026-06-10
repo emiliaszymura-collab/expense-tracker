@@ -48,17 +48,19 @@ app.post('/api/connect', async (req, res) => {
     const redirectUri = `${FRONTEND_URL}?tink_code=1`;
 
     // Create Tink user (idempotent — safe to call multiple times)
-    let tinkUserId;
+    let tinkUserId = userId;
+    let externalUserId = userId;
     try {
       const user = await tink.createUser(userId);
-      tinkUserId = user.user_id;
+      tinkUserId = user.user_id;       // Tink internal UUID
+      externalUserId = user.external_user_id || userId;
     } catch (err) {
-      // User may already exist — get auth code anyway
-      tinkUserId = userId;
+      // User may already exist — tinkUserId stays as our local userId
+      console.log('[connect] user likely exists, proceeding with external_user_id');
     }
 
     // Get auth code for Tink Link
-    const authCode = await tink.getAuthorizationCode(tinkUserId);
+    const authCode = await tink.getAuthorizationCode(tinkUserId, externalUserId);
     const linkUrl = tink.buildTinkLinkUrl(authCode, redirectUri);
 
     res.json({
