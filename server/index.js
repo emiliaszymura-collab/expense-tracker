@@ -46,28 +46,11 @@ app.post('/api/connect', async (req, res) => {
     const { userId } = req.body;
     if (!userId) return res.status(400).json({ error: 'userId required' });
 
-    const redirectUri = `${FRONTEND_URL}?tink_code=1`;
+    const redirectUri = `${FRONTEND_URL}`;
 
-    // Reuse existing Tink user if we already created one for this local userId
-    let tinkUserId = tinkUserMap[userId];
-
-    if (!tinkUserId) {
-      // Create a fresh unique external ID for Tink
-      const externalId = `${userId}_${Date.now()}`;
-      try {
-        const user = await tink.createUser(externalId);
-        tinkUserId = user.user_id; // Tink internal UUID
-        tinkUserMap[userId] = tinkUserId;
-        console.log('[connect] created Tink user:', tinkUserId);
-      } catch (err) {
-        console.error('[connect] createUser failed:', err.response?.data || err.message);
-        return res.status(500).json({ error: 'Nie można utworzyć użytkownika Tink: ' + (err.response?.data?.errorMessage || err.message) });
-      }
-    }
-
-    // Get auth code for Tink Link
-    const authCode = await tink.getAuthorizationCode(tinkUserId, userId);
-    const linkUrl = tink.buildTinkLinkUrl(authCode, redirectUri);
+    // Simple flow: let Tink Link create the user, no pre-creation needed
+    const linkUrl = tink.buildTinkLinkUrlSimple(redirectUri);
+    const authCode = null;
 
     res.json({
       linkUrl,

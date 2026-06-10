@@ -54,7 +54,7 @@ async function getAuthorizationCode(tinkUserId, externalUserId, scopes = 'accoun
   return res.data.code;
 }
 
-// ── Build Tink Link URL ────────────────────────────────────
+// ── Build Tink Link URL (with auth code) ──────────────────
 function buildTinkLinkUrl(authCode, redirectUri) {
   const params = new URLSearchParams({
     client_id: process.env.TINK_CLIENT_ID,
@@ -66,6 +66,21 @@ function buildTinkLinkUrl(authCode, redirectUri) {
     test: process.env.TINK_SANDBOX === 'true' ? 'true' : 'false',
   });
   return `https://link.tink.com/1.0/authorize?${params.toString()}`;
+}
+
+// ── Build Tink Link URL (simple, no pre-created user) ─────
+function buildTinkLinkUrlSimple(redirectUri) {
+  const params = new URLSearchParams({
+    client_id: process.env.TINK_CLIENT_ID,
+    redirect_uri: redirectUri,
+    scope: 'accounts:read,transactions:read,balances:read',
+    market: 'PL',
+    locale: 'pl_PL',
+  });
+  if (process.env.TINK_SANDBOX === 'true') {
+    params.set('test', 'true');
+  }
+  return `https://link.tink.com/1.0/authorize/credentials?${params.toString()}`;
 }
 
 // ── Exchange callback code for user access token ───────────
@@ -175,6 +190,7 @@ module.exports = {
   createUser,
   getAuthorizationCode,
   buildTinkLinkUrl,
+  buildTinkLinkUrlSimple,
   exchangeCode,
   refreshToken,
   listAccounts,
