@@ -39,7 +39,9 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 }
 
 function App() {
-  const [view, setView] = useState<View>('dashboard');
+  // If returning from Tink with ?code=, go straight to banksync tab
+  const initialView: View = new URLSearchParams(window.location.search).has('code') ? 'banksync' : 'dashboard';
+  const [view, setView] = useState<View>(initialView);
   const [expenses, setExpenses] = useLocalStorage<Expense[]>('expenses', []);
   const [categories, setCategories] = useLocalStorage<Category[]>('categories', DEFAULT_CATEGORIES);
   const [goals, setGoals] = useLocalStorage<SavingsGoal[]>('goals', []);

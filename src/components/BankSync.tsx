@@ -35,7 +35,7 @@ declare global {
   }
 }
 
-const SERVER = process.env.REACT_APP_SERVER_URL || 'http://localhost:3001';
+const SERVER = process.env.REACT_APP_SERVER_URL || 'https://expense-tracker-production-7e6f.up.railway.app';
 const CLIENT_ID = '58213a5a545e457f95997df8b3ccdf95';
 const REDIRECT_URI = window.location.origin;
 
@@ -101,6 +101,19 @@ export default function BankSync({ categories, onImport }: Props) {
       .catch(() => setServerOk(false));
   }, []);
 
+  // Handle redirect back from Tink Link with ?code=
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (code && !connected) {
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+      setSuccess('🔄 Odbieranie danych z banku...');
+      exchangeAndConnect(code);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const loadAccounts = useCallback(async () => {
     if (!connected) return;
     try {
@@ -130,8 +143,7 @@ export default function BankSync({ categories, onImport }: Props) {
   }, [userId, setConnected, loadAccounts]);
 
   const openTinkLink = async () => {
-    if (!sdkReady) { setError('Tink Link SDK nie jest jeszcze załadowany. Odśwież stronę.'); return; }
-    if (!serverOk) { setError('Serwer niedostępny. Uruchom: cd server && node index.js'); return; }
+    if (!serverOk) { setError('Serwer niedostępny. Spróbuj ponownie za chwilę.'); return; }
 
     setLoading(true); setError('');
     try {
@@ -144,27 +156,33 @@ export default function BankSync({ categories, onImport }: Props) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      // Open Tink Link popup
-      window.TinkLink!.open({
-        client_id: CLIENT_ID,
-        redirect_uri: REDIRECT_URI,
-        scope: 'accounts:read,transactions:read,balances:read',
-        market: 'PL',
-        locale: 'pl_PL',
-        authorization_code: data.authCode,
-        test: data.sandbox === true,
-        onSuccess: ({ code }) => {
-          setLoading(false);
-          exchangeAndConnect(code);
-        },
-        onError: (err) => {
-          setLoading(false);
-          setError(`Błąd Tink: ${err.message || err.error}`);
-        },
-        onCancel: () => {
-          setLoading(false);
-        },
-      });
+      // Try SDK popup first, fall back to redirect
+      if (sdkReady && window.TinkLink) {
+        window.TinkLink.open({
+          client_id: CLIENT_ID,
+          redirect_uri: REDIRECT_URI,
+          scope: 'accounts:read,transactions:read,balances:read',
+          market: 'PL',
+          locale: 'pl_PL',
+          authorization_code: data.authCode,
+          test: data.sandbox === true,
+          onSuccess: ({ code }) => {
+            setLoading(false);
+            exchangeAndConnect(code);
+          },
+          onError: (err) => {
+            setLoading(false);
+            setError(`Błąd Tink: ${err.message || err.error}`);
+          },
+          onCancel: () => {
+            setLoading(false);
+          },
+        });
+      } else {
+        // Fallback: redirect to Tink Link URL
+        setLoading(false);
+        window.location.href = data.linkUrl;
+      }
     } catch (err: any) {
       setLoading(false);
       setError(err.message);
@@ -329,7 +347,7 @@ export default function BankSync({ categories, onImport }: Props) {
               <button
                 className="btn btn-primary"
                 onClick={openTinkLink}
-                disabled={loading || !sdkReady}
+                disabled={loading}
                 style={{ width: '100%', justifyContent: 'center', fontSize: 16, padding: '16px', marginBottom: 12, maxWidth: 400 }}
               >
                 {loading
