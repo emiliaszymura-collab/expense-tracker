@@ -39,8 +39,9 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 }
 
 function App() {
-  // If returning from Tink with ?code=, go straight to banksync tab
-  const initialView: View = new URLSearchParams(window.location.search).has('code') ? 'banksync' : 'dashboard';
+  // If returning from a bank link (?ref= GoCardless, ?code= Tink), open bank sync
+  const _qs = new URLSearchParams(window.location.search);
+  const initialView: View = (_qs.has('ref') || _qs.has('code')) ? 'banksync' : 'dashboard';
   const [view, setView] = useState<View>(initialView);
   const [expenses, setExpenses] = useLocalStorage<Expense[]>('expenses', []);
   const [categories, setCategories] = useLocalStorage<Category[]>('categories', DEFAULT_CATEGORIES);
