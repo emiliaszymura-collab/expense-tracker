@@ -70,14 +70,14 @@ function buildTinkLinkUrl(authCode, redirectUri) {
 
 // ── Build Tink Link URL (simple, no pre-created user) ─────
 function buildTinkLinkUrlSimple(redirectUri) {
+  const isSandbox = process.env.TINK_SANDBOX === 'true';
   const params = new URLSearchParams({
     client_id: process.env.TINK_CLIENT_ID,
     redirect_uri: redirectUri,
-    scope: 'accounts:read,transactions:read,balances:read',
     market: 'PL',
     locale: 'pl_PL',
   });
-  if (process.env.TINK_SANDBOX === 'true') {
+  if (isSandbox) {
     params.set('test', 'true');
   }
   return `https://link.tink.com/1.0/transactions/connect-accounts/?${params.toString()}`;
