@@ -7,14 +7,14 @@ interface Props {
 }
 
 interface Bank {
-  id: string;
   name: string;
+  country: string;
   logo?: string;
-  maxAccessDays?: number;
+  maxDays?: number;
 }
 
 interface Account {
-  id: string;
+  uid: string;
   name: string;
   iban?: string;
   currency?: string;
@@ -46,39 +46,44 @@ export default function BankSync({ categories, onImport }: Props) {
 
   const catNames = categories.map(c => c.name);
 
-  // Check backend config
+  // Check backend config + existing connection
   useEffect(() => {
-    fetch(`${SERVER}/api/gc/health`)
+    fetch(`${SERVER}/api/eb/health`)
       .then(r => r.json())
-      .then(d => setConfigured(!!d.configured))
+      .then(d => {
+        setConfigured(!!d.configured);
+        if (d.connected) {
+          setConnected(true);
+          fetch(`${SERVER}/api/eb/accounts`).then(r => r.json()).then(a => setAccounts(a.accounts || [])).catch(() => {});
+        }
+      })
       .catch(() => setConfigured(false));
   }, []);
 
-  // Load Polish banks once configured & not connected
+  // Load Polish banks
   useEffect(() => {
     if (configured && !connected && banks.length === 0) {
-      fetch(`${SERVER}/api/gc/banks`)
+      fetch(`${SERVER}/api/eb/banks`)
         .then(r => r.json())
         .then(d => Array.isArray(d) ? setBanks(d) : setError(d.error || 'Nie udało się pobrać banków'))
         .catch(() => setError('Nie udało się pobrać listy banków'));
     }
   }, [configured, connected, banks.length]);
 
-  // Load accounts for a linked requisition
-  const loadAccounts = useCallback(async (ref?: string) => {
+  // Complete a session from the callback code
+  const completeSession = useCallback(async (code: string) => {
     setLoading(true); setError('');
     try {
-      const url = ref ? `${SERVER}/api/gc/accounts?ref=${encodeURIComponent(ref)}` : `${SERVER}/api/gc/accounts`;
-      const res = await fetch(url);
+      const res = await fetch(`${SERVER}/api/eb/session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Błąd pobierania kont');
-      if (data.status === 'LN') {
-        setAccounts(data.accounts || []);
-        setConnected(true);
-        setSuccess('✅ Bank połączony! Możesz teraz synchronizować transakcje.');
-      } else {
-        setError('Połączenie nie zostało jeszcze zatwierdzone w banku. Spróbuj ponownie.');
-      }
+      if (!res.ok) throw new Error(data.error || 'Błąd autoryzacji');
+      setAccounts(data.accounts || []);
+      setConnected(true);
+      setSuccess('✅ Bank połączony! Możesz teraz synchronizować transakcje.');
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -86,29 +91,28 @@ export default function BankSync({ categories, onImport }: Props) {
     }
   }, []);
 
-  // Handle redirect back from the bank (?ref=)
+  // Handle redirect back from the bank (?code=)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const ref = params.get('ref');
-    if (ref) {
+    const code = params.get('code');
+    if (code) {
       window.history.replaceState({}, '', window.location.pathname);
-      loadAccounts(ref);
+      completeSession(code);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const connectBank = async (institutionId: string) => {
+  const connectBank = async (bank: Bank) => {
     setLoading(true); setError('');
     try {
-      const res = await fetch(`${SERVER}/api/gc/connect`, {
+      const res = await fetch(`${SERVER}/api/eb/connect`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ institutionId }),
+        body: JSON.stringify({ aspspName: bank.name, country: bank.country }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Nie udało się rozpocząć połączenia');
-      // Redirect the user to the bank's authorization page
-      window.location.href = data.link;
+      window.location.href = data.url; // redirect to the bank
     } catch (err: any) {
       setLoading(false);
       setError(err.message);
@@ -119,7 +123,7 @@ export default function BankSync({ categories, onImport }: Props) {
     setSyncing(true); setError(''); setSuccess('');
     try {
       const params = new URLSearchParams({ fromDate, categories: catNames.join(',') });
-      const res = await fetch(`${SERVER}/api/gc/transactions?${params}`);
+      const res = await fetch(`${SERVER}/api/eb/transactions?${params}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Błąd pobierania transakcji');
       if (!data.expenses || data.expenses.length === 0) {
@@ -148,7 +152,7 @@ export default function BankSync({ categories, onImport }: Props) {
     <div>
       <div className="page-header">
         <div className="page-title">Sync banku</div>
-        <div className="page-subtitle">Automatyczny import przez GoCardless · prawdziwe banki · PSD2</div>
+        <div className="page-subtitle">Automatyczny import na żywo · prawdziwe banki · PSD2 · Enable Banking</div>
       </div>
 
       {configured === false && (
@@ -156,9 +160,9 @@ export default function BankSync({ categories, onImport }: Props) {
           <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
             <span style={{ fontSize: 20 }}>⚠️</span>
             <div>
-              <div style={{ fontWeight: 600, marginBottom: 6 }}>GoCardless nie jest jeszcze skonfigurowany</div>
+              <div style={{ fontWeight: 600, marginBottom: 6 }}>Bank nie jest jeszcze skonfigurowany</div>
               <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.6 }}>
-                Dodaj <code>GC_SECRET_ID</code> i <code>GC_SECRET_KEY</code> w zmiennych środowiskowych serwera (Railway).
+                Dodaj <code>EB_APP_ID</code> i <code>EB_PRIVATE_KEY</code> w zmiennych środowiskowych serwera (Railway).
               </div>
             </div>
           </div>
@@ -177,7 +181,6 @@ export default function BankSync({ categories, onImport }: Props) {
       )}
 
       {connected ? (
-        /* ── Connected: accounts + sync ── */
         <div>
           <div className="card" style={{ marginBottom: 16 }}>
             <div className="section-header" style={{ marginBottom: 20 }}>
@@ -190,7 +193,7 @@ export default function BankSync({ categories, onImport }: Props) {
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10, marginBottom: 20 }}>
                 {accounts.map(acc => (
-                  <div key={acc.id} style={{ background: 'var(--bg)', borderRadius: 12, padding: '14px' }}>
+                  <div key={acc.uid} style={{ background: 'var(--bg)', borderRadius: 12, padding: '14px' }}>
                     <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 6 }}>{acc.name}</div>
                     {acc.iban && <div style={{ fontSize: 11, color: 'var(--text2)', marginBottom: 6 }}>{acc.iban}</div>}
                     {fmtMoney(acc.balance, acc.currency) && (
@@ -223,17 +226,16 @@ export default function BankSync({ categories, onImport }: Props) {
           </div>
 
           <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--text2)', padding: '8px 0' }}>
-            🔒 Połączenie tylko do odczytu · PSD2 · Dane chronione przez GoCardless
+            🔒 Połączenie tylko do odczytu · PSD2 · Dane chronione przez Enable Banking
           </div>
         </div>
       ) : (
-        /* ── Not connected: bank picker ── */
         <div className="card">
           <div style={{ textAlign: 'center', padding: '8px 0 20px' }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>🏦</div>
             <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.5px', marginBottom: 8 }}>Połącz swój bank</div>
             <div style={{ fontSize: 14, color: 'var(--text2)', maxWidth: 360, margin: '0 auto' }}>
-              Wybierz bank z listy. Zalogujesz się raz, bezpiecznie, a transakcje zaimportują się automatycznie.
+              Wybierz bank z listy. Zalogujesz się raz, bezpiecznie, a transakcje będą się aktualizować automatycznie.
             </div>
           </div>
 
@@ -255,8 +257,8 @@ export default function BankSync({ categories, onImport }: Props) {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, maxHeight: 420, overflowY: 'auto' }}>
                 {filteredBanks.map(b => (
                   <button
-                    key={b.id}
-                    onClick={() => connectBank(b.id)}
+                    key={b.name}
+                    onClick={() => connectBank(b)}
                     disabled={loading}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 10, background: 'var(--bg)',
@@ -281,7 +283,7 @@ export default function BankSync({ categories, onImport }: Props) {
           )}
 
           <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--text2)', marginTop: 16 }}>
-            🔒 Bezpieczne · PSD2 · Tylko odczyt · Powered by GoCardless
+            🔒 Bezpieczne · PSD2 · Tylko odczyt · Powered by Enable Banking
           </div>
         </div>
       )}

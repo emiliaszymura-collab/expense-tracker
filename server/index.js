@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const tink = require('./tink');
 const gc = require('./gocardless');
+const eb = require('./enablebanking');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -232,6 +233,99 @@ app.get('/api/gc/transactions', async (req, res) => {
   }
 });
 
+// ════════════════════════════════════════════════════════════
+//  Enable Banking — real PL banks for individuals (Restricted Production)
+// ════════════════════════════════════════════════════════════
+// state → { aspspName, country }  ;  ebSession holds the active link
+const ebStates = {};
+let ebSession = null; // { sessionId, accounts: [{uid,name,currency,iban}] }
+
+app.get('/api/eb/health', (req, res) => {
+  res.json({ configured: eb.configured(), connected: !!ebSession });
+});
+
+// List Polish banks
+app.get('/api/eb/banks', async (req, res) => {
+  try {
+    if (!eb.configured()) return res.status(400).json({ error: 'Enable Banking nie skonfigurowany' });
+    res.json(await eb.listBanks(req.query.country || 'PL'));
+  } catch (err) {
+    console.error('[eb/banks]', err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data?.message || err.message });
+  }
+});
+
+// Start bank authorization → redirect URL
+app.post('/api/eb/connect', async (req, res) => {
+  try {
+    if (!eb.configured()) return res.status(400).json({ error: 'Enable Banking nie skonfigurowany' });
+    const { aspspName, country } = req.body;
+    if (!aspspName) return res.status(400).json({ error: 'aspspName required' });
+    const state = `et_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    ebStates[state] = { aspspName, country: country || 'PL' };
+    const redirectUrl = req.headers.origin || FRONTEND_URL;
+    const { url } = await eb.startAuth(aspspName, country, redirectUrl, state);
+    res.json({ url, state });
+  } catch (err) {
+    console.error('[eb/connect]', err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data?.message || err.message });
+  }
+});
+
+// Complete authorization with the callback code → store session + accounts
+app.post('/api/eb/session', async (req, res) => {
+  try {
+    if (!eb.configured()) return res.status(400).json({ error: 'Enable Banking nie skonfigurowany' });
+    const { code } = req.body;
+    if (!code) return res.status(400).json({ error: 'code required' });
+
+    const session = await eb.createSession(code);
+    const accounts = await Promise.all((session.accounts || []).map(async a => {
+      const bal = await eb.getBalances(a.uid);
+      return {
+        uid: a.uid,
+        name: a.name || a.account_id?.iban || 'Konto',
+        iban: a.account_id?.iban,
+        currency: a.currency || bal?.currency || 'PLN',
+        balance: bal ? bal.amount : null,
+      };
+    }));
+    ebSession = { sessionId: session.session_id, accounts };
+    res.json({ connected: true, accounts });
+  } catch (err) {
+    console.error('[eb/session]', err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data?.message || err.message });
+  }
+});
+
+// Current accounts (if connected)
+app.get('/api/eb/accounts', (req, res) => {
+  if (!ebSession) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
+  res.json({ connected: true, accounts: ebSession.accounts });
+});
+
+// Pull transactions for all linked accounts → mapped expenses
+app.get('/api/eb/transactions', async (req, res) => {
+  try {
+    if (!eb.configured()) return res.status(400).json({ error: 'Enable Banking nie skonfigurowany' });
+    if (!ebSession) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
+    const { fromDate, categories } = req.query;
+    const catList = categories ? categories.split(',') : null;
+
+    let expenses = [];
+    for (const acc of ebSession.accounts) {
+      const txs = await eb.getTransactions(acc.uid, fromDate);
+      expenses = expenses.concat(txs.map(t => eb.mapTransaction(t, catList)).filter(Boolean));
+    }
+    const seen = new Set();
+    expenses = expenses.filter(e => (seen.has(e.id) ? false : seen.add(e.id)));
+    res.json({ expenses, total: expenses.length });
+  } catch (err) {
+    console.error('[eb/transactions]', err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data?.message || err.message });
+  }
+});
+
 // SPA fallback: any non-API GET returns index.html
 app.get(/^(?!\/(api|health)).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -243,4 +337,5 @@ app.listen(PORT, () => {
   const ready = process.env.TINK_CLIENT_SECRET && process.env.TINK_CLIENT_SECRET !== 'your_client_secret_here';
   console.log(`   Tink API: ${ready ? '✅ skonfigurowany' : '⚠️  brakuje TINK_CLIENT_SECRET'}`);
   console.log(`   GoCardless: ${gcConfigured() ? '✅ skonfigurowany' : '⚠️  brakuje GC_SECRET_ID/GC_SECRET_KEY'}`);
+  console.log(`   Enable Banking: ${eb.configured() ? '✅ skonfigurowany' : '⚠️  brakuje EB_APP_ID/EB_PRIVATE_KEY'}`);
 });
