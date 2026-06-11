@@ -35,7 +35,8 @@ declare global {
   }
 }
 
-const SERVER = process.env.REACT_APP_SERVER_URL || 'https://expense-tracker-production-7e6f.up.railway.app';
+// Frontend is served from the same origin as the API, so use relative URLs
+const SERVER = process.env.REACT_APP_SERVER_URL || '';
 const CLIENT_ID = '58213a5a545e457f95997df8b3ccdf95';
 const REDIRECT_URI = window.location.origin;
 

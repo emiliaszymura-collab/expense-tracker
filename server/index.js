@@ -1,14 +1,19 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const tink = require('./tink');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-app.use(cors({ origin: [FRONTEND_URL, 'http://localhost:3000'] }));
+// Same-origin frontend is served from ./public, so CORS can be permissive
+app.use(cors());
 app.use(express.json());
+
+// Serve the built React frontend (same origin as the API)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // In-memory token store (w produkcji: baza danych)
 const tokenStore = {}; // userId → { access_token, refresh_token, expires_at }
@@ -46,7 +51,8 @@ app.post('/api/connect', async (req, res) => {
     const { userId } = req.body;
     if (!userId) return res.status(400).json({ error: 'userId required' });
 
-    const redirectUri = `${FRONTEND_URL}`;
+    // Redirect back to wherever the frontend is served from (same origin)
+    const redirectUri = req.headers.origin || FRONTEND_URL;
 
     // Simple flow: let Tink Link create the user, no pre-creation needed
     const linkUrl = tink.buildTinkLinkUrlSimple(redirectUri);
@@ -129,6 +135,11 @@ app.get('/api/transactions', async (req, res) => {
 app.post('/api/webhook', (req, res) => {
   console.log('[Tink Webhook]', JSON.stringify(req.body, null, 2));
   res.json({ received: true });
+});
+
+// SPA fallback: any non-API GET returns index.html
+app.get(/^(?!\/(api|health)).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
