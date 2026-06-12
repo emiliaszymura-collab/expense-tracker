@@ -19,6 +19,7 @@ interface Account {
   iban?: string;
   currency?: string;
   balance?: number | null;
+  bank?: string;
 }
 
 // Same origin as the API (served from the backend)
@@ -200,6 +201,7 @@ export default function BankSync({ categories, onImport }: Props) {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10, marginBottom: 20 }}>
                 {accounts.map(acc => (
                   <div key={acc.uid} style={{ background: 'var(--bg)', borderRadius: 12, padding: '14px' }}>
+                    {acc.bank && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.3 }}>{acc.bank}</div>}
                     <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 6 }}>{acc.name}</div>
                     {acc.iban && <div style={{ fontSize: 11, color: 'var(--text2)', marginBottom: 6 }}>{acc.iban}</div>}
                     {fmtMoney(acc.balance, acc.currency) && (

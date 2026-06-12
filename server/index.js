@@ -237,19 +237,26 @@ app.get('/api/gc/transactions', async (req, res) => {
 // ════════════════════════════════════════════════════════════
 //  Enable Banking — real PL banks for individuals (Restricted Production)
 // ════════════════════════════════════════════════════════════
-// state → { aspspName, country }  ;  ebSession holds the active link
 const ebStates = {};
-let ebSession = null; // { sessionId, accounts: [{uid,name,currency,iban}] }
+// Multiple bank connections at once. Each: { bank, sessionId, accounts:[{uid,name,iban,currency,balance,bank}] }
+let ebSessions = [];
 
-// Pull recent transactions for all linked accounts and persist them (deduped).
+function allEbAccounts() {
+  return ebSessions.flatMap(s => s.accounts);
+}
+
+// Pull recent transactions for ALL linked accounts across ALL banks and persist them (deduped).
 // psu = optional {ip,userAgent} for user-triggered requests (lifts bank rate limits).
 async function refreshBank(psu, fromDate) {
-  if (!ebSession) return { expenses: [], added: 0 };
   const from = fromDate || new Date(Date.now() - 90 * 864e5).toISOString().split('T')[0];
   let expenses = [];
-  for (const acc of ebSession.accounts) {
-    const txs = await eb.getTransactions(acc.uid, from, psu);
-    expenses = expenses.concat(txs.map(t => eb.mapTransaction(t, null)).filter(Boolean));
+  for (const acc of allEbAccounts()) {
+    try {
+      const txs = await eb.getTransactions(acc.uid, from, psu);
+      expenses = expenses.concat(txs.map(t => eb.mapTransaction(t, null)).filter(Boolean));
+    } catch (e) {
+      console.error(`[refresh ${acc.bank || ''} ${acc.uid}]`, e.response?.data?.message || e.message);
+    }
   }
   const seen = new Set();
   expenses = expenses.filter(e => (seen.has(e.id) ? false : seen.add(e.id)));
@@ -258,7 +265,7 @@ async function refreshBank(psu, fromDate) {
 }
 
 app.get('/api/eb/health', (req, res) => {
-  res.json({ configured: eb.configured(), connected: !!ebSession, durable: db.durable });
+  res.json({ configured: eb.configured(), connected: ebSessions.length > 0, banks: ebSessions.map(s => s.bank), durable: db.durable });
 });
 
 // List Polish banks
@@ -298,6 +305,7 @@ app.post('/api/eb/session', async (req, res) => {
     if (!code) return res.status(400).json({ error: 'code required' });
 
     const session = await eb.createSession(code);
+    const bank = session.aspsp?.name || 'Bank';
     const accounts = await Promise.all((session.accounts || []).map(async a => {
       const bal = await eb.getBalances(a.uid);
       return {
@@ -306,37 +314,40 @@ app.post('/api/eb/session', async (req, res) => {
         iban: a.account_id?.iban,
         currency: a.currency || bal?.currency || 'PLN',
         balance: bal ? bal.amount : null,
+        bank,
       };
     }));
-    ebSession = { sessionId: session.session_id, accounts };
-    await db.setKV('eb_session', ebSession);
+    // Replace any existing connection for the same bank, then add this one
+    ebSessions = ebSessions.filter(s => s.bank !== bank);
+    ebSessions.push({ bank, sessionId: session.session_id, accounts });
+    await db.setKV('eb_sessions', ebSessions);
     // Kick off an initial background import so transactions appear automatically
     refreshBank().then(r => console.log(`[eb] initial import +${r.added}`)).catch(e => console.error('[eb initial]', e.message));
-    res.json({ connected: true, accounts });
+    res.json({ connected: true, accounts: allEbAccounts() });
   } catch (err) {
     console.error('[eb/session]', err.response?.data || err.message);
     res.status(500).json({ error: err.response?.data?.message || err.message });
   }
 });
 
-// Current accounts (if connected)
+// Current accounts across all connected banks
 app.get('/api/eb/accounts', (req, res) => {
-  if (!ebSession) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
-  res.json({ connected: true, accounts: ebSession.accounts });
+  if (!ebSessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
+  res.json({ connected: true, accounts: allEbAccounts() });
 });
 
 // Pull transactions for all linked accounts → mapped expenses
 app.get('/api/eb/transactions', async (req, res) => {
   try {
     if (!eb.configured()) return res.status(400).json({ error: 'Enable Banking nie skonfigurowany' });
-    if (!ebSession) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
+    if (!ebSessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
     const { fromDate, categories } = req.query;
     const catList = categories ? categories.split(',') : null;
     // This request is user-triggered → send PSU headers so the bank lifts background limits
     const psu = { ip: (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0].trim(), userAgent: req.headers['user-agent'] };
 
     let expenses = [];
-    for (const acc of ebSession.accounts) {
+    for (const acc of allEbAccounts()) {
       const txs = await eb.getTransactions(acc.uid, fromDate, psu);
       expenses = expenses.concat(txs.map(t => eb.mapTransaction(t, catList)).filter(Boolean));
     }
@@ -369,14 +380,18 @@ app.get(/^(?!\/(api|health)).*/, (req, res) => {
 db.init()
   .then(async () => {
     console.log(`   Baza: ${db.durable ? '✅ PostgreSQL (trwała)' : '⚠️  pamięć (dodaj PostgreSQL na Railway dla trwałości)'}`);
-    const saved = await db.getKV('eb_session');
-    if (saved && saved.accounts) {
-      ebSession = saved;
-      console.log(`   Bank: ✅ przywrócono połączenie (${saved.accounts.length} kont)`);
+    const saved = await db.getKV('eb_sessions');
+    if (Array.isArray(saved) && saved.length) {
+      ebSessions = saved;
+      console.log(`   Bank: ✅ przywrócono ${saved.length} połączeń (${allEbAccounts().length} kont)`);
+    } else {
+      // Migrate any old single-session key
+      const legacy = await db.getKV('eb_session');
+      if (legacy && legacy.accounts) { ebSessions = [{ bank: 'Bank', ...legacy }]; }
     }
     // Automatyczne odświeżanie co 6h (4×/dobę — w granicach limitów banków)
     setInterval(() => {
-      if (!ebSession) return;
+      if (!ebSessions.length) return;
       refreshBank()
         .then(r => r.added && console.log(`[auto-refresh] +${r.added} nowych transakcji`))
         .catch(e => console.error('[auto-refresh]', e.message));
