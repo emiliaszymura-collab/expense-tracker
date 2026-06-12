@@ -42,7 +42,8 @@ function configured() {
 // ── List banks for a country (Poland) ──────────────────────
 async function listBanks(country = 'PL') {
   const res = await axios.get(`${BASE}/aspsps?country=${country.toUpperCase()}`, { headers: headers() });
-  return (res.data?.aspsps || []).map(a => ({
+  const list = res.data?.aspsps || (Array.isArray(res.data) ? res.data : []);
+  return list.map(a => ({
     name: a.name,
     country: a.country,
     logo: a.logo,
