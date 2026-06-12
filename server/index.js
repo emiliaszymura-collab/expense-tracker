@@ -5,6 +5,7 @@ const path = require('path');
 const tink = require('./tink');
 const gc = require('./gocardless');
 const eb = require('./enablebanking');
+const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -240,8 +241,24 @@ app.get('/api/gc/transactions', async (req, res) => {
 const ebStates = {};
 let ebSession = null; // { sessionId, accounts: [{uid,name,currency,iban}] }
 
+// Pull recent transactions for all linked accounts and persist them (deduped).
+// psu = optional {ip,userAgent} for user-triggered requests (lifts bank rate limits).
+async function refreshBank(psu, fromDate) {
+  if (!ebSession) return { expenses: [], added: 0 };
+  const from = fromDate || new Date(Date.now() - 90 * 864e5).toISOString().split('T')[0];
+  let expenses = [];
+  for (const acc of ebSession.accounts) {
+    const txs = await eb.getTransactions(acc.uid, from, psu);
+    expenses = expenses.concat(txs.map(t => eb.mapTransaction(t, null)).filter(Boolean));
+  }
+  const seen = new Set();
+  expenses = expenses.filter(e => (seen.has(e.id) ? false : seen.add(e.id)));
+  const added = await db.saveTransactions(expenses);
+  return { expenses, added };
+}
+
 app.get('/api/eb/health', (req, res) => {
-  res.json({ configured: eb.configured(), connected: !!ebSession });
+  res.json({ configured: eb.configured(), connected: !!ebSession, durable: db.durable });
 });
 
 // List Polish banks
@@ -291,6 +308,9 @@ app.post('/api/eb/session', async (req, res) => {
       };
     }));
     ebSession = { sessionId: session.session_id, accounts };
+    await db.setKV('eb_session', ebSession);
+    // Kick off an initial background import so transactions appear automatically
+    refreshBank().then(r => console.log(`[eb] initial import +${r.added}`)).catch(e => console.error('[eb initial]', e.message));
     res.json({ connected: true, accounts });
   } catch (err) {
     console.error('[eb/session]', err.response?.data || err.message);
@@ -321,6 +341,7 @@ app.get('/api/eb/transactions', async (req, res) => {
     }
     const seen = new Set();
     expenses = expenses.filter(e => (seen.has(e.id) ? false : seen.add(e.id)));
+    await db.saveTransactions(expenses); // keep the persistent store in sync
     res.json({ expenses, total: expenses.length });
   } catch (err) {
     console.error('[eb/transactions]', err.response?.data || err.message);
@@ -328,10 +349,39 @@ app.get('/api/eb/transactions', async (req, res) => {
   }
 });
 
+// All transactions the server has imported & stored (auto-refresh + manual)
+app.get('/api/eb/stored', async (req, res) => {
+  try {
+    res.json({ expenses: await db.loadTransactions() });
+  } catch (err) {
+    console.error('[eb/stored]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // SPA fallback: any non-API GET returns index.html
 app.get(/^(?!\/(api|health)).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+// Initialize persistence, restore any active bank session, and start the 6h auto-refresh
+db.init()
+  .then(async () => {
+    console.log(`   Baza: ${db.durable ? '✅ PostgreSQL (trwała)' : '⚠️  pamięć (dodaj PostgreSQL na Railway dla trwałości)'}`);
+    const saved = await db.getKV('eb_session');
+    if (saved && saved.accounts) {
+      ebSession = saved;
+      console.log(`   Bank: ✅ przywrócono połączenie (${saved.accounts.length} kont)`);
+    }
+    // Automatyczne odświeżanie co 6h (4×/dobę — w granicach limitów banków)
+    setInterval(() => {
+      if (!ebSession) return;
+      refreshBank()
+        .then(r => r.added && console.log(`[auto-refresh] +${r.added} nowych transakcji`))
+        .catch(e => console.error('[auto-refresh]', e.message));
+    }, 6 * 60 * 60 * 1000);
+  })
+  .catch(e => console.error('[db init]', e.message));
 
 app.listen(PORT, () => {
   console.log(`✅ Tink server na porcie ${PORT}`);

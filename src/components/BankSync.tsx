@@ -46,7 +46,7 @@ export default function BankSync({ categories, onImport }: Props) {
 
   const catNames = categories.map(c => c.name);
 
-  // Check backend config + existing connection
+  // Check backend config + existing connection, and auto-load any server-stored transactions
   useEffect(() => {
     fetch(`${SERVER}/api/eb/health`)
       .then(r => r.json())
@@ -58,6 +58,12 @@ export default function BankSync({ categories, onImport }: Props) {
         }
       })
       .catch(() => setConfigured(false));
+    // Pull whatever the server has already imported (auto-refresh runs every 6h server-side)
+    fetch(`${SERVER}/api/eb/stored`)
+      .then(r => r.json())
+      .then(d => { if (d.expenses && d.expenses.length) onImport(d.expenses); })
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Load Polish banks

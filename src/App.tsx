@@ -56,7 +56,11 @@ function App() {
   const updateGoal = (id: string, amount: number) =>
     setGoals(prev => prev.map(g => g.id === id ? { ...g, current: Math.min(g.current + amount, g.target) } : g));
   const deleteGoal = (id: string) => setGoals(prev => prev.filter(g => g.id !== id));
-  const importExpenses = (newExpenses: Expense[]) => setExpenses(prev => [...newExpenses, ...prev]);
+  const importExpenses = (newExpenses: Expense[]) => setExpenses(prev => {
+    const ids = new Set(prev.map(e => e.id));
+    const fresh = newExpenses.filter(e => !ids.has(e.id));
+    return fresh.length ? [...fresh, ...prev] : prev;
+  });
 
   const renderView = () => {
     switch (view) {
