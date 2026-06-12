@@ -27,8 +27,12 @@ function buildJwt() {
   return `${data}.${sig}`;
 }
 
-function headers() {
-  return { Authorization: `Bearer ${buildJwt()}`, 'Content-Type': 'application/json' };
+function headers(psu) {
+  const h = { Authorization: `Bearer ${buildJwt()}`, 'Content-Type': 'application/json' };
+  // PSU headers signal the user is actively present → banks lift the 4x/day background limit
+  if (psu && psu.ip) h['PSU-IP-Address'] = psu.ip;
+  if (psu && psu.userAgent) h['PSU-User-Agent'] = psu.userAgent;
+  return h;
 }
 
 function configured() {
@@ -83,7 +87,7 @@ async function getBalances(accountUid) {
   } catch (_) { return null; }
 }
 
-async function getTransactions(accountUid, dateFrom) {
+async function getTransactions(accountUid, dateFrom, psu) {
   let all = [];
   let continuationKey = null;
   do {
@@ -91,7 +95,7 @@ async function getTransactions(accountUid, dateFrom) {
     if (dateFrom) params.set('date_from', dateFrom);
     if (continuationKey) params.set('continuation_key', continuationKey);
     const url = `${BASE}/accounts/${accountUid}/transactions${params.toString() ? '?' + params.toString() : ''}`;
-    const res = await axios.get(url, { headers: headers() });
+    const res = await axios.get(url, { headers: headers(psu) });
     all = all.concat(res.data?.transactions || []);
     continuationKey = res.data?.continuation_key || null;
   } while (continuationKey && all.length < 1000);

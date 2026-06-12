@@ -311,10 +311,12 @@ app.get('/api/eb/transactions', async (req, res) => {
     if (!ebSession) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
     const { fromDate, categories } = req.query;
     const catList = categories ? categories.split(',') : null;
+    // This request is user-triggered → send PSU headers so the bank lifts background limits
+    const psu = { ip: (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0].trim(), userAgent: req.headers['user-agent'] };
 
     let expenses = [];
     for (const acc of ebSession.accounts) {
-      const txs = await eb.getTransactions(acc.uid, fromDate);
+      const txs = await eb.getTransactions(acc.uid, fromDate, psu);
       expenses = expenses.concat(txs.map(t => eb.mapTransaction(t, catList)).filter(Boolean));
     }
     const seen = new Set();
