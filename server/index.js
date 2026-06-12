@@ -280,7 +280,8 @@ app.post('/api/eb/connect', async (req, res) => {
     if (!aspspName) return res.status(400).json({ error: 'aspspName required' });
     const state = `et_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     ebStates[state] = { aspspName, country: country || 'PL' };
-    const redirectUrl = req.headers.origin || FRONTEND_URL;
+    // Enable Banking stores redirect URLs WITH a trailing slash — match exactly or /auth is rejected
+    const redirectUrl = (req.headers.origin || FRONTEND_URL).replace(/\/$/, '') + '/';
     const { url } = await eb.startAuth(aspspName, country, redirectUrl, state);
     res.json({ url, state });
   } catch (err) {
