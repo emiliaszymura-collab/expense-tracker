@@ -36,6 +36,7 @@ export default function BankSync({ categories, onImport }: Props) {
   const [search, setSearch] = useState('');
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [connected, setConnected] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [error, setError] = useState('');
@@ -67,15 +68,15 @@ export default function BankSync({ categories, onImport }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Load Polish banks
+  // Load Polish banks (when not connected, or when adding another bank)
   useEffect(() => {
-    if (configured && !connected && banks.length === 0) {
+    if (configured && (!connected || showPicker) && banks.length === 0) {
       fetch(`${SERVER}/api/eb/banks`)
         .then(r => r.json())
         .then(d => Array.isArray(d) ? setBanks(d) : setError(d.error || 'Nie udało się pobrać banków'))
         .catch(() => setError('Nie udało się pobrać listy banków'));
     }
-  }, [configured, connected, banks.length]);
+  }, [configured, connected, showPicker, banks.length]);
 
   // Complete a session from the callback code
   const completeSession = useCallback(async (code: string) => {
@@ -187,12 +188,12 @@ export default function BankSync({ categories, onImport }: Props) {
         </div>
       )}
 
-      {connected ? (
+      {connected && (
         <div>
           <div className="card" style={{ marginBottom: 16 }}>
             <div className="section-header" style={{ marginBottom: 20 }}>
               <div className="section-title">Połączone konta</div>
-              <button className="btn btn-sm btn-secondary" onClick={disconnect}>Odłącz</button>
+              <button className="btn btn-sm btn-secondary" onClick={disconnect}>Odłącz wszystkie</button>
             </div>
 
             {accounts.length === 0 ? (
@@ -231,14 +232,31 @@ export default function BankSync({ categories, onImport }: Props) {
             >
               {syncing ? <><span className="spinner" style={{ borderColor: 'rgba(255,255,255,.3)', borderTopColor: 'white' }} /> Pobieranie transakcji…</> : '⬇️  Synchronizuj transakcje'}
             </button>
+
+            {!showPicker && (
+              <button
+                className="btn btn-secondary"
+                style={{ width: '100%', justifyContent: 'center', padding: '12px', fontSize: 14, marginTop: 10 }}
+                onClick={() => setShowPicker(true)}
+              >
+                ➕  Dodaj kolejny bank
+              </button>
+            )}
           </div>
 
           <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--text2)', padding: '8px 0' }}>
             🔒 Połączenie tylko do odczytu · PSD2 · Dane chronione przez Enable Banking
           </div>
         </div>
-      ) : (
+      )}
+
+      {(!connected || showPicker) && (
         <div className="card">
+          {connected && (
+            <div style={{ textAlign: 'right', marginBottom: 4 }}>
+              <button className="btn btn-sm btn-secondary" onClick={() => setShowPicker(false)}>✕ Anuluj</button>
+            </div>
+          )}
           <div style={{ textAlign: 'center', padding: '8px 0 20px' }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>🏦</div>
             <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.5px', marginBottom: 8 }}>Połącz swój bank</div>
