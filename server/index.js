@@ -6,6 +6,7 @@ const tink = require('./tink');
 const gc = require('./gocardless');
 const eb = require('./enablebanking');
 const db = require('./db');
+const auth = require('./auth');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -233,6 +234,84 @@ app.get('/api/gc/transactions', async (req, res) => {
     res.status(500).json({ error: err.response?.data?.detail || err.message });
   }
 });
+
+// ════════════════════════════════════════════════════════════
+//  Auth — passkey (Face ID) login with PIN master credential
+// ════════════════════════════════════════════════════════════
+function rpInfo(req) {
+  const origin = req.headers.origin || `https://${req.headers.host}`;
+  let rpID;
+  try { rpID = new URL(origin).hostname; } catch { rpID = (req.headers.host || '').split(':')[0]; }
+  return { origin, rpID };
+}
+
+// Gate is only enforced once a PIN has been configured (non-breaking rollout)
+async function requireAuth(req, res, next) {
+  try {
+    if (!(await auth.isConfigured())) return next();
+    if (await auth.verifyToken(req.headers['x-auth-token'])) return next();
+    return res.status(401).json({ error: 'unauthorized' });
+  } catch (e) { return res.status(500).json({ error: e.message }); }
+}
+
+app.get('/api/auth/status', async (req, res) => {
+  try {
+    res.json({
+      configured: await auth.isConfigured(),
+      hasPasskey: await auth.hasCredentials(),
+      authed: await auth.verifyToken(req.headers['x-auth-token']),
+    });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// First-time PIN setup (only when not yet configured), or PIN login
+app.post('/api/auth/setup', async (req, res) => {
+  try {
+    if (await auth.isConfigured()) return res.status(400).json({ error: 'PIN już ustawiony' });
+    await auth.setPin(req.body.pin);
+    res.json({ token: await auth.issueToken() });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+app.post('/api/auth/pin', async (req, res) => {
+  try {
+    if (!(await auth.verifyPin(req.body.pin))) return res.status(401).json({ error: 'Błędny PIN' });
+    res.json({ token: await auth.issueToken() });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Register a passkey on this device (requires a valid session: PIN login or existing passkey)
+app.post('/api/auth/passkey/register/options', requireAuth, async (req, res) => {
+  try {
+    if (!(await auth.verifyToken(req.headers['x-auth-token']))) return res.status(401).json({ error: 'Zaloguj PIN-em najpierw' });
+    res.json(await auth.registrationOptions(rpInfo(req).rpID));
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.post('/api/auth/passkey/register/verify', requireAuth, async (req, res) => {
+  try {
+    if (!(await auth.verifyToken(req.headers['x-auth-token']))) return res.status(401).json({ error: 'Zaloguj PIN-em najpierw' });
+    const { origin, rpID } = rpInfo(req);
+    const ok = await auth.verifyRegistration(rpID, origin, req.body.response);
+    res.json({ verified: ok });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+// Passkey login (Face ID / fingerprint)
+app.post('/api/auth/passkey/login/options', async (req, res) => {
+  try { res.json(await auth.authenticationOptions(rpInfo(req).rpID)); }
+  catch (e) { res.status(500).json({ error: e.message }); }
+});
+app.post('/api/auth/passkey/login/verify', async (req, res) => {
+  try {
+    const { origin, rpID } = rpInfo(req);
+    const ok = await auth.verifyAuthentication(rpID, origin, req.body.response);
+    if (!ok) return res.status(401).json({ error: 'Nie udało się zweryfikować' });
+    res.json({ token: await auth.issueToken() });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+
+// Protect all bank endpoints behind the gate (once configured)
+app.use('/api/eb', requireAuth);
 
 // ════════════════════════════════════════════════════════════
 //  Enable Banking — real PL banks for individuals (Restricted Production)

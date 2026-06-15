@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Expense, Category } from '../types';
+import { authHeader } from '../authToken';
 
 interface Props {
   categories: Category[];
@@ -50,18 +51,18 @@ export default function BankSync({ categories, onImport }: Props) {
 
   // Check backend config + existing connection, and auto-load any server-stored transactions
   useEffect(() => {
-    fetch(`${SERVER}/api/eb/health`)
+    fetch(`${SERVER}/api/eb/health`, { headers: { ...authHeader() } })
       .then(r => r.json())
       .then(d => {
         setConfigured(!!d.configured);
         if (d.connected) {
           setConnected(true);
-          fetch(`${SERVER}/api/eb/accounts`).then(r => r.json()).then(a => setAccounts(a.accounts || [])).catch(() => {});
+          fetch(`${SERVER}/api/eb/accounts`, { headers: { ...authHeader() } }).then(r => r.json()).then(a => setAccounts(a.accounts || [])).catch(() => {});
         }
       })
       .catch(() => setConfigured(false));
     // Pull whatever the server has already imported (auto-refresh runs every 6h server-side)
-    fetch(`${SERVER}/api/eb/stored`)
+    fetch(`${SERVER}/api/eb/stored`, { headers: { ...authHeader() } })
       .then(r => r.json())
       .then(d => { if (d.expenses && d.expenses.length) onImport(d.expenses); })
       .catch(() => {});
@@ -71,7 +72,7 @@ export default function BankSync({ categories, onImport }: Props) {
   // Load Polish banks (when not connected, or when adding another bank)
   useEffect(() => {
     if (configured && (!connected || showPicker) && banks.length === 0) {
-      fetch(`${SERVER}/api/eb/banks`)
+      fetch(`${SERVER}/api/eb/banks`, { headers: { ...authHeader() } })
         .then(r => r.json())
         .then(d => Array.isArray(d) ? setBanks(d) : setError(d.error || 'Nie udało się pobrać banków'))
         .catch(() => setError('Nie udało się pobrać listy banków'));
@@ -84,7 +85,7 @@ export default function BankSync({ categories, onImport }: Props) {
     try {
       const res = await fetch(`${SERVER}/api/eb/session`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({ code }),
       });
       const data = await res.json();
@@ -115,7 +116,7 @@ export default function BankSync({ categories, onImport }: Props) {
     try {
       const res = await fetch(`${SERVER}/api/eb/connect`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({ aspspName: bank.name, country: bank.country }),
       });
       const data = await res.json();
@@ -131,7 +132,7 @@ export default function BankSync({ categories, onImport }: Props) {
     setSyncing(true); setError(''); setSuccess('');
     try {
       const params = new URLSearchParams({ fromDate, categories: catNames.join(',') });
-      const res = await fetch(`${SERVER}/api/eb/transactions?${params}`);
+      const res = await fetch(`${SERVER}/api/eb/transactions?${params}`, { headers: { ...authHeader() } });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Błąd pobierania transakcji');
       if (!data.expenses || data.expenses.length === 0) {
