@@ -16,8 +16,13 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 app.use(cors());
 app.use(express.json({ limit: '12mb' })); // receipt images can be large
 
-// Serve the built React frontend (same origin as the API)
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve the built React frontend (same origin as the API).
+// Hashed assets can cache forever; index.html must always revalidate so new deploys show up.
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('index.html')) res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  },
+}));
 
 // In-memory token store (w produkcji: baza danych)
 const tokenStore = {}; // userId → { access_token, refresh_token, expires_at }
@@ -505,8 +510,9 @@ app.delete('/api/receipts/:id', async (req, res) => {
   }
 });
 
-// SPA fallback: any non-API GET returns index.html
+// SPA fallback: any non-API GET returns index.html (always revalidated)
 app.get(/^(?!\/(api|health)).*/, (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
