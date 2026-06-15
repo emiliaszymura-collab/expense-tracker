@@ -39,10 +39,11 @@ async function init() {
 // ── Key/value (used for the active bank session) ──
 async function setKV(key, value) {
   if (hasPg) {
+    // Serialize every value to JSON text so strings/arrays/objects all fit the JSONB column
     await pool.query(
-      `INSERT INTO kv(key,value,updated_at) VALUES($1,$2,now())
-       ON CONFLICT(key) DO UPDATE SET value=$2, updated_at=now()`,
-      [key, value]
+      `INSERT INTO kv(key,value,updated_at) VALUES($1,$2::jsonb,now())
+       ON CONFLICT(key) DO UPDATE SET value=$2::jsonb, updated_at=now()`,
+      [key, JSON.stringify(value)]
     );
   } else {
     mem.kv.set(key, value);
