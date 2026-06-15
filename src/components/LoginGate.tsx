@@ -13,8 +13,11 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [offerPasskey, setOfferPasskey] = useState(false);
+  // Passkeys are per-device — track whether THIS device has registered one
+  const [pkHere, setPkHere] = useState(localStorage.getItem('pkRegistered') === '1');
 
   const supportsPasskey = browserSupportsWebAuthn();
+  const markPkHere = () => { localStorage.setItem('pkRegistered', '1'); setPkHere(true); };
 
   const refresh = useCallback(async () => {
     try {
@@ -52,8 +55,8 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
       const { token } = await post('/api/auth/setup', { pin });
       setToken(token);
       setPin(''); setPin2('');
-      const s = await refresh();
-      if (s && supportsPasskey) setOfferPasskey(true);
+      await refresh();
+      if (supportsPasskey && !pkHere) setOfferPasskey(true);
     } catch (e: any) { setError(e.message); } finally { setBusy(false); }
   };
 
@@ -65,9 +68,9 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
       const { token } = await post('/api/auth/pin', { pin });
       setToken(token);
       setPin('');
-      const s = await refresh();
-      if (s && !s.hasPasskey && supportsPasskey) setOfferPasskey(true);
-      else if (s && s.hasPasskey === false && supportsPasskey) setOfferPasskey(true);
+      await refresh();
+      // Offer Face ID whenever THIS device hasn't registered one yet (per-device)
+      if (supportsPasskey && !pkHere) setOfferPasskey(true);
     } catch (e: any) { setError(e.message); } finally { setBusy(false); }
   };
 
@@ -80,9 +83,10 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
       const asr = await startAuthentication({ optionsJSON: options });
       const { token } = await post('/api/auth/passkey/login/verify', { response: asr });
       setToken(token);
+      markPkHere();
       await refresh();
     } catch (e: any) {
-      setError(e.message === 'Błąd' ? 'Nie rozpoznano — spróbuj PIN-em' : (e.message || 'Nie udało się'));
+      setError('Nie rozpoznano twarzy/odcisku — zaloguj się PIN-em, a potem włącz Face ID na tym urządzeniu.');
     } finally { setBusy(false); }
   };
 
@@ -94,6 +98,7 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
       const options = await post('/api/auth/passkey/register/options');
       const att = await startRegistration({ optionsJSON: options });
       await post('/api/auth/passkey/register/verify', { response: att });
+      markPkHere();
       setOfferPasskey(false);
       await refresh();
     } catch (e: any) { setError(e.message || 'Nie udało się włączyć Face ID'); } finally { setBusy(false); }
@@ -154,7 +159,7 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
         <h2 style={h2}>Odblokuj</h2>
         <p style={sub}>Twoje dane są chronione.</p>
         {error && <div style={err}>{error}</div>}
-        {status.hasPasskey && supportsPasskey && (
+        {supportsPasskey && (pkHere || status.hasPasskey) && (
           <button style={btnPrimary} onClick={doPasskeyLogin} disabled={busy}>
             {busy ? '…' : '🙂  Zaloguj przez Face ID'}
           </button>
