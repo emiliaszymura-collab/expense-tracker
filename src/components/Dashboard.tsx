@@ -4,6 +4,7 @@ import {
   PieChart, Pie, Cell, BarChart, Bar,
 } from 'recharts';
 import { Expense, Category, SavingsGoal, View } from '../types';
+import { categorize, catColor, catEmoji, spendingOnly, savingsTotal } from '../categorize';
 
 interface Props {
   expenses: Expense[];
@@ -31,27 +32,38 @@ function getWeekExpenses(expenses: Expense[]) {
 }
 
 function buildMonthlyTrend(expenses: Expense[]) {
-  const months: Record<string, number> = {};
+  if (expenses.length === 0) return [];
   const now = new Date();
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = d.toLocaleDateString('pl-PL', { month: 'short', year: '2-digit' });
-    months[key] = 0;
+  // Start from the first month that actually has data (no leading empty months)
+  let minTime = Infinity;
+  expenses.forEach(e => { const t = new Date(e.date).getTime(); if (!isNaN(t) && t < minTime) minTime = t; });
+  if (!isFinite(minTime)) return [];
+  const first = new Date(minTime);
+  let start = new Date(first.getFullYear(), first.getMonth(), 1);
+  // Cap the window to the last 12 months for readability
+  const earliestAllowed = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+  if (start < earliestAllowed) start = earliestAllowed;
+
+  const months: { key: string; total: number }[] = [];
+  const cursor = new Date(start);
+  while (cursor <= now) {
+    months.push({ key: cursor.toLocaleDateString('pl-PL', { month: 'short', year: '2-digit' }), total: 0 });
+    cursor.setMonth(cursor.getMonth() + 1);
   }
+  const index: Record<string, number> = {};
+  months.forEach((m, i) => { index[m.key] = i; });
   expenses.forEach(e => {
-    const d = new Date(e.date);
-    const key = d.toLocaleDateString('pl-PL', { month: 'short', year: '2-digit' });
-    if (key in months) months[key] += e.amount;
+    const key = new Date(e.date).toLocaleDateString('pl-PL', { month: 'short', year: '2-digit' });
+    if (key in index) months[index[key]].total += e.amount;
   });
-  return Object.entries(months).map(([month, total]) => ({ month, total: Math.round(total * 100) / 100 }));
+  return months.map(m => ({ month: m.key, total: Math.round(m.total * 100) / 100 }));
 }
 
-function buildCategoryData(expenses: Expense[], categories: Category[]) {
+function buildCategoryData(expenses: Expense[]) {
   const totals: Record<string, number> = {};
-  expenses.forEach(e => { totals[e.category] = (totals[e.category] || 0) + e.amount; });
-  return categories
-    .filter(c => totals[c.name])
-    .map(c => ({ name: c.name, value: Math.round(totals[c.name] * 100) / 100, color: c.color, emoji: c.emoji }))
+  expenses.forEach(e => { const c = categorize(e); totals[c] = (totals[c] || 0) + e.amount; });
+  return Object.entries(totals)
+    .map(([name, value]) => ({ name, value: Math.round(value * 100) / 100, color: catColor(name), emoji: catEmoji(name) }))
     .sort((a, b) => b.value - a.value);
 }
 
@@ -85,21 +97,21 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function Dashboard({ expenses, categories, goals, onNavigate }: Props) {
-  const monthExp = getMonthExpenses(expenses);
-  const weekExp = getWeekExpenses(expenses);
+export default function Dashboard({ expenses, goals, onNavigate }: Props) {
+  // Savings transfers (Smart Saver) are NOT spending — exclude them from every total/chart.
+  const spending = spendingOnly(expenses);
+  const monthExp = getMonthExpenses(spending);
+  const weekExp = getWeekExpenses(spending);
   const monthTotal = monthExp.reduce((s, e) => s + e.amount, 0);
   const weekTotal = weekExp.reduce((s, e) => s + e.amount, 0);
   const avgDay = monthTotal / new Date().getDate();
   const biggest = [...monthExp].sort((a, b) => b.amount - a.amount)[0];
+  const monthSavings = savingsTotal(getMonthExpenses(expenses));
 
-  const monthlyTrend = buildMonthlyTrend(expenses);
-  const categoryData = buildCategoryData(monthExp, categories);
-  const weeklyBar = buildWeeklyBar(expenses);
-  const recent = expenses.slice(0, 5);
-
-  const getCatColor = (name: string) => categories.find(c => c.name === name)?.color || '#8e8e93';
-  const getCatEmoji = (name: string) => categories.find(c => c.name === name)?.emoji || '💰';
+  const monthlyTrend = buildMonthlyTrend(spending);
+  const categoryData = buildCategoryData(monthExp);
+  const weeklyBar = buildWeeklyBar(spending);
+  const recent = spending.slice(0, 5);
 
   return (
     <div>
@@ -137,6 +149,20 @@ export default function Dashboard({ expenses, categories, goals, onNavigate }: P
           )}
         </div>
       </div>
+
+      {/* Savings set aside (Smart Saver) — informational, not counted as spending */}
+      {monthSavings > 0 && (
+        <div className="card" style={{ marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', borderLeft: '3px solid var(--success)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span className="emoji" style={{ fontSize: 26 }}>🐷</span>
+            <div>
+              <div style={{ fontWeight: 600 }}>Odłożone oszczędności (Smart Saver)</div>
+              <div style={{ fontSize: 13, color: 'var(--text2)' }}>Nie wliczone w wydatki — to Twoje odkładane środki</div>
+            </div>
+          </div>
+          <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--success)' }}>{fmt(monthSavings)}</div>
+        </div>
+      )}
 
       {/* Charts Row */}
       <div className="bento bento-3" style={{ marginBottom: 16 }}>
@@ -177,8 +203,8 @@ export default function Dashboard({ expenses, categories, goals, onNavigate }: P
                   <Tooltip formatter={(v: any) => fmt(v)} />
                 </PieChart>
               </ResponsiveContainer>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
-                {categoryData.slice(0, 4).map((c, i) => (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8, maxHeight: 180, overflowY: 'auto' }}>
+                {categoryData.map((c, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <div style={{ width: 8, height: 8, borderRadius: '50%', background: c.color }} />
@@ -222,16 +248,19 @@ export default function Dashboard({ expenses, categories, goals, onNavigate }: P
               Brak wydatków
             </div>
           ) : (
-            recent.map(e => (
-              <div key={e.id} className="expense-row">
-                <div className="expense-emoji emoji" style={{ background: `${getCatColor(e.category)}18` }}>{getCatEmoji(e.category)}</div>
-                <div className="expense-info">
-                  <div className="expense-desc">{e.description}</div>
-                  <div className="expense-meta">{e.category} · {new Date(e.date).toLocaleDateString('pl-PL')}</div>
+            recent.map(e => {
+              const cat = categorize(e);
+              return (
+                <div key={e.id} className="expense-row">
+                  <div className="expense-emoji emoji" style={{ background: `${catColor(cat)}18` }}>{catEmoji(cat)}</div>
+                  <div className="expense-info">
+                    <div className="expense-desc">{e.description}</div>
+                    <div className="expense-meta">{cat} · {new Date(e.date).toLocaleDateString('pl-PL')}</div>
+                  </div>
+                  <div className="expense-amount">{fmt(e.amount)}</div>
                 </div>
-                <div className="expense-amount">{fmt(e.amount)}</div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 

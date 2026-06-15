@@ -1,5 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Expense, Category, SavingsGoal } from '../types';
+import { categorize, spendingOnly } from '../categorize';
+
+// Map raw (English) API errors to a friendly Polish message; never expose technical/billing details.
+function friendlyError(raw: string): string {
+  const m = (raw || '').toLowerCase();
+  if (/credit balance|billing|plans & billing|insufficient|quota/.test(m))
+    return '⚠️ Asystent AI jest chwilowo niedostępny. Spróbuj ponownie później.';
+  if (/rate limit|overloaded|too many|429|529/.test(m))
+    return '⚠️ Asystent AI jest teraz przeciążony. Spróbuj za chwilę.';
+  if (/authentication|invalid.*api.?key|x-api-key|401|permission/.test(m))
+    return '⚠️ Problem z kluczem API — sprawdź klucz w ustawieniach.';
+  return '⚠️ Asystent AI jest chwilowo niedostępny. Spróbuj ponownie później.';
+}
 
 interface Props {
   expenses: Expense[];
@@ -27,14 +40,14 @@ function fmt(n: number) {
 
 function buildContext(expenses: Expense[], categories: Category[], goals: SavingsGoal[]) {
   const now = new Date();
-  const monthExp = expenses.filter(e => {
+  const monthExp = spendingOnly(expenses).filter(e => {
     const d = new Date(e.date);
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
   });
   const monthTotal = monthExp.reduce((s, e) => s + e.amount, 0);
 
   const byCat: Record<string, number> = {};
-  monthExp.forEach(e => { byCat[e.category] = (byCat[e.category] || 0) + e.amount; });
+  monthExp.forEach(e => { const c = categorize(e); byCat[c] = (byCat[c] || 0) + e.amount; });
 
   const catSummary = Object.entries(byCat)
     .sort((a, b) => b[1] - a[1])
@@ -102,14 +115,19 @@ export default function AIAdvisor({ expenses, categories, goals, apiKey }: Props
       });
 
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error?.message || `Błąd API: ${res.status}`);
+        let raw = `status ${res.status}`;
+        try { const err = await res.json(); raw = err.error?.message || err.error?.type || raw; } catch {}
+        throw new Error(friendlyError(raw));
       }
 
       const data = await res.json();
       setMessages(prev => [...prev, { role: 'assistant', content: data.content[0].text }]);
     } catch (err: any) {
-      setError(err.message || 'Błąd połączenia z AI');
+      // Network errors or thrown friendly messages — keep it user-friendly and Polish
+      const msg = typeof err?.message === 'string' && err.message.startsWith('⚠️')
+        ? err.message
+        : '⚠️ Asystent AI jest chwilowo niedostępny. Spróbuj ponownie później.';
+      setError(msg);
     } finally {
       setLoading(false);
     }

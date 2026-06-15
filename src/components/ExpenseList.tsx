@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Expense, Category } from '../types';
+import { categorize, catColor, catEmoji, isSavings, ALL_CATEGORIES } from '../categorize';
 
 interface Props {
   expenses: Expense[];
@@ -12,7 +13,7 @@ function fmt(n: number) {
   return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(n);
 }
 
-export default function ExpenseList({ expenses, categories, onDelete, onAdd }: Props) {
+export default function ExpenseList({ expenses, onDelete, onAdd }: Props) {
   const [search, setSearch] = useState('');
   const [catFilter, setCatFilter] = useState('');
   const [dateFrom, setDateFrom] = useState('');
@@ -20,13 +21,10 @@ export default function ExpenseList({ expenses, categories, onDelete, onAdd }: P
   const [sort, setSort] = useState<'date-desc' | 'date-asc' | 'amount-desc' | 'amount-asc'>('date-desc');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  const getCatColor = (name: string) => categories.find(c => c.name === name)?.color || '#8e8e93';
-  const getCatEmoji = (name: string) => categories.find(c => c.name === name)?.emoji || '💰';
-
   const filtered = useMemo(() => {
     let list = [...expenses];
-    if (search) list = list.filter(e => e.description.toLowerCase().includes(search.toLowerCase()) || e.category.toLowerCase().includes(search.toLowerCase()) || (e.notes || '').toLowerCase().includes(search.toLowerCase()));
-    if (catFilter) list = list.filter(e => e.category === catFilter);
+    if (search) list = list.filter(e => e.description.toLowerCase().includes(search.toLowerCase()) || categorize(e).toLowerCase().includes(search.toLowerCase()) || (e.notes || '').toLowerCase().includes(search.toLowerCase()));
+    if (catFilter) list = list.filter(e => categorize(e) === catFilter);
     if (dateFrom) list = list.filter(e => e.date >= dateFrom);
     if (dateTo) list = list.filter(e => e.date <= dateTo);
     list.sort((a, b) => {
@@ -38,7 +36,8 @@ export default function ExpenseList({ expenses, categories, onDelete, onAdd }: P
     return list;
   }, [expenses, search, catFilter, dateFrom, dateTo, sort]);
 
-  const total = filtered.reduce((s, e) => s + e.amount, 0);
+  // Total excludes savings transfers (Smart Saver), which aren't spending
+  const total = filtered.filter(e => !isSavings(e)).reduce((s, e) => s + e.amount, 0);
 
   return (
     <div>
@@ -64,7 +63,7 @@ export default function ExpenseList({ expenses, categories, onDelete, onAdd }: P
           />
           <select className="filter-select" value={catFilter} onChange={e => setCatFilter(e.target.value)}>
             <option value="">Wszystkie kategorie</option>
-            {categories.map(c => <option key={c.id} value={c.name}>{c.emoji} {c.name}</option>)}
+            {ALL_CATEGORIES.map(name => <option key={name} value={name}>{catEmoji(name)} {name}</option>)}
           </select>
           <input type="date" className="filter-select" value={dateFrom} onChange={e => setDateFrom(e.target.value)} title="Od" />
           <input type="date" className="filter-select" value={dateTo} onChange={e => setDateTo(e.target.value)} title="Do" />
@@ -101,19 +100,21 @@ export default function ExpenseList({ expenses, categories, onDelete, onAdd }: P
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(e => (
+                {filtered.map(e => {
+                  const cat = categorize(e);
+                  return (
                   <tr key={e.id}>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div className="emoji" style={{ width: 32, height: 32, borderRadius: 8, background: `${getCatColor(e.category)}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>
-                          {getCatEmoji(e.category)}
+                        <div className="emoji" style={{ width: 32, height: 32, borderRadius: 8, background: `${catColor(cat)}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>
+                          {catEmoji(cat)}
                         </div>
-                        <span style={{ fontSize: 13, color: 'var(--text2)' }}>{e.category}</span>
+                        <span style={{ fontSize: 13, color: 'var(--text2)' }}>{cat}</span>
                       </div>
                     </td>
                     <td>
-                      <div style={{ fontWeight: 500 }}>{e.description}</div>
-                      {e.notes && <div style={{ fontSize: 12, color: 'var(--text2)', marginTop: 2 }}>{e.notes}</div>}
+                      <div className="cell-desc" style={{ fontWeight: 500 }}>{e.description}</div>
+                      {e.notes && <div className="cell-desc" style={{ fontSize: 12, color: 'var(--text2)', marginTop: 2 }}>{e.notes}</div>}
                     </td>
                     <td style={{ color: 'var(--text2)', fontSize: 13 }}>
                       {new Date(e.date).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -132,21 +133,24 @@ export default function ExpenseList({ expenses, categories, onDelete, onAdd }: P
                       )}
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
 
             {/* Mobile list */}
             <div className="expense-list-mobile">
-              {filtered.map(e => (
+              {filtered.map(e => {
+                const cat = categorize(e);
+                return (
                 <div key={e.id} className="expense-row">
-                  <div className="expense-emoji emoji" style={{ background: `${getCatColor(e.category)}18` }}>
-                    {getCatEmoji(e.category)}
+                  <div className="expense-emoji emoji" style={{ background: `${catColor(cat)}18` }}>
+                    {catEmoji(cat)}
                   </div>
                   <div className="expense-info">
                     <div className="expense-desc">{e.description}</div>
                     <div className="expense-meta">
-                      {e.category} · {new Date(e.date).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' })}
+                      {cat} · {new Date(e.date).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' })}
                     </div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
@@ -161,7 +165,8 @@ export default function ExpenseList({ expenses, categories, onDelete, onAdd }: P
                     )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
