@@ -5,14 +5,17 @@ let pool = null;
 let ready = false;
 const mem = { kv: new Map(), tx: new Map() };
 
-const hasPg = !!process.env.DATABASE_URL;
+// Accept either the internal (preferred) or public Railway connection string
+const CONN = process.env.DATABASE_URL || process.env.DATABASE_PUBLIC_URL || '';
+const hasPg = !!CONN;
 
 async function init() {
   if (!hasPg) { ready = true; return; }
   const { Pool } = require('pg');
+  const internal = CONN.includes('localhost') || CONN.includes('.railway.internal');
   pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
+    connectionString: CONN,
+    ssl: internal ? false : { rejectUnauthorized: false },
   });
   await pool.query(`
     CREATE TABLE IF NOT EXISTS kv (
