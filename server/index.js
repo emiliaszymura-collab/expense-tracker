@@ -14,7 +14,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 // Same-origin frontend is served from ./public, so CORS can be permissive
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '12mb' })); // receipt images can be large
 
 // Serve the built React frontend (same origin as the API)
 app.use(express.static(path.join(__dirname, 'public')));
@@ -446,6 +446,61 @@ app.get('/api/eb/stored', async (req, res) => {
     res.json({ expenses: await db.loadTransactions() });
   } catch (err) {
     console.error('[eb/stored]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ════════════════════════════════════════════════════════════
+//  Receipts — searchable receipt archive (e.g. for warranties)
+// ════════════════════════════════════════════════════════════
+app.use('/api/receipts', requireAuth);
+
+app.post('/api/receipts', async (req, res) => {
+  try {
+    const r = req.body || {};
+    if (!r.image && !r.store) return res.status(400).json({ error: 'Brak danych paragonu' });
+    const id = r.id || `rc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    await db.saveReceipt({
+      id,
+      date: r.date || new Date().toISOString().split('T')[0],
+      store: r.store || 'Paragon',
+      total: typeof r.total === 'number' ? r.total : (parseFloat(r.total) || null),
+      items: Array.isArray(r.items) ? r.items : [],
+      category: r.category || null,
+      notes: r.notes || null,
+      image: r.image || null,
+    });
+    res.json({ id });
+  } catch (err) {
+    console.error('[receipts/save]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/receipts', async (req, res) => {
+  try {
+    res.json({ receipts: await db.listReceipts(req.query.q) });
+  } catch (err) {
+    console.error('[receipts/list]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/receipts/:id', async (req, res) => {
+  try {
+    const r = await db.getReceipt(req.params.id);
+    if (!r) return res.status(404).json({ error: 'Nie znaleziono' });
+    res.json(r);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/api/receipts/:id', async (req, res) => {
+  try {
+    await db.deleteReceipt(req.params.id);
+    res.json({ ok: true });
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });

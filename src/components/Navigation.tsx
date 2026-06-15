@@ -18,7 +18,7 @@ const mainItems: NavItem[] = [
   { view: 'dashboard', icon: '◼', label: 'Dashboard' },
   { view: 'expenses', icon: '💳', label: 'Wydatki' },
   { view: 'add', icon: '＋', label: 'Dodaj' },
-  { view: 'scanner', icon: '📷', label: 'Skanuj' },
+  { view: 'scanner', icon: '🧾', label: 'Paragony' },
   { view: 'advisor', icon: '🤖', label: 'AI' },
 ];
 
@@ -39,7 +39,7 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
     { view: 'dashboard', icon: '◼', label: 'Dashboard' },
     { view: 'expenses', icon: '💳', label: 'Wydatki' },
     { view: 'add', icon: '＋', label: 'Dodaj' },
-    { view: 'scanner', icon: '📷', label: 'Skanuj' },
+    { view: 'scanner', icon: '🧾', label: 'Paragony' },
     { view: 'advisor', icon: '🤖', label: 'AI' },
   ];
 

@@ -3,7 +3,7 @@
 // Otherwise → in-memory fallback (works, but resets on redeploy).
 let pool = null;
 let ready = false;
-const mem = { kv: new Map(), tx: new Map() };
+const mem = { kv: new Map(), tx: new Map(), receipts: new Map() };
 
 // Accept either the internal (preferred) or public Railway connection string
 const CONN = process.env.DATABASE_URL || process.env.DATABASE_PUBLIC_URL || '';
@@ -31,6 +31,18 @@ async function init() {
       date        TEXT,
       notes       TEXT,
       created_at  TIMESTAMPTZ DEFAULT now()
+    );
+    CREATE TABLE IF NOT EXISTS receipts (
+      id         TEXT PRIMARY KEY,
+      date       TEXT,
+      store      TEXT,
+      total      NUMERIC,
+      items      JSONB,
+      category   TEXT,
+      notes      TEXT,
+      image      TEXT,
+      search     TEXT,
+      created_at TIMESTAMPTZ DEFAULT now()
     );
   `);
   ready = true;
@@ -86,4 +98,59 @@ async function loadTransactions() {
   return Array.from(mem.tx.values());
 }
 
-module.exports = { init, setKV, getKV, saveTransactions, loadTransactions, get durable() { return hasPg; }, get ready() { return ready; } };
+// ── Receipts (scanned receipt archive, searchable by store/product) ──
+function receiptSearchText(r) {
+  return [r.store, (r.items || []).map(i => (typeof i === 'string' ? i : i.name)).join(' '), r.notes]
+    .filter(Boolean).join(' ').toLowerCase();
+}
+
+async function saveReceipt(r) {
+  const search = receiptSearchText(r);
+  if (hasPg) {
+    await pool.query(
+      `INSERT INTO receipts(id,date,store,total,items,category,notes,image,search,created_at)
+       VALUES($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,now()) ON CONFLICT(id) DO NOTHING`,
+      [r.id, r.date, r.store, r.total, JSON.stringify(r.items || []), r.category, r.notes || null, r.image || null, search]
+    );
+  } else {
+    mem.receipts.set(r.id, { ...r, search });
+  }
+  return r.id;
+}
+
+// List receipt metadata (no image) with optional search by store/product/notes
+async function listReceipts(q) {
+  if (hasPg) {
+    const rows = q
+      ? (await pool.query(`SELECT id,date,store,total,items,category,notes FROM receipts WHERE search LIKE $1 ORDER BY date DESC NULLS LAST`, ['%' + q.toLowerCase() + '%'])).rows
+      : (await pool.query(`SELECT id,date,store,total,items,category,notes FROM receipts ORDER BY date DESC NULLS LAST`)).rows;
+    return rows.map(r => ({ ...r, total: r.total != null ? Number(r.total) : null }));
+  }
+  let arr = Array.from(mem.receipts.values());
+  if (q) arr = arr.filter(r => (r.search || '').includes(q.toLowerCase()));
+  arr.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  return arr.map(({ image, search, ...meta }) => meta);
+}
+
+// Full receipt incl. image
+async function getReceipt(id) {
+  if (hasPg) {
+    const r = (await pool.query(`SELECT id,date,store,total,items,category,notes,image FROM receipts WHERE id=$1`, [id])).rows[0];
+    return r ? { ...r, total: r.total != null ? Number(r.total) : null } : null;
+  }
+  const r = mem.receipts.get(id);
+  if (!r) return null;
+  const { search, ...rest } = r;
+  return rest;
+}
+
+async function deleteReceipt(id) {
+  if (hasPg) await pool.query(`DELETE FROM receipts WHERE id=$1`, [id]);
+  else mem.receipts.delete(id);
+}
+
+module.exports = {
+  init, setKV, getKV, saveTransactions, loadTransactions,
+  saveReceipt, listReceipts, getReceipt, deleteReceipt,
+  get durable() { return hasPg; }, get ready() { return ready; },
+};

@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Expense, Category } from '../types';
+import { authHeader } from '../authToken';
 
 interface Props {
   categories: Category[];
@@ -7,12 +8,51 @@ interface Props {
   apiKey: string;
 }
 
+interface ReceiptItem { name: string; price?: number }
 interface ParsedReceipt {
-  amount: number;
-  description: string;
-  category: string;
+  store: string;
+  total: number;
   date: string;
+  category: string;
   notes: string;
+  items: ReceiptItem[];
+}
+interface SavedReceipt {
+  id: string;
+  store: string;
+  date: string;
+  total: number | null;
+  items: ReceiptItem[];
+  category?: string;
+  notes?: string;
+  image?: string;
+}
+
+const SERVER = process.env.REACT_APP_SERVER_URL || '';
+
+function fmt(n?: number | null) {
+  if (n === null || n === undefined) return '—';
+  return n.toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' });
+}
+
+// Resize/compress so receipts stay small enough to store and OCR well
+function resizeImage(dataUrl: string, maxDim = 1568, quality = 0.8): Promise<string> {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      let { width, height } = img;
+      const scale = Math.min(1, maxDim / Math.max(width, height));
+      width = Math.round(width * scale); height = Math.round(height * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return resolve(dataUrl);
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
 }
 
 export default function ReceiptScanner({ categories, onAdd, apiKey }: Props) {
@@ -22,33 +62,49 @@ export default function ReceiptScanner({ categories, onAdd, apiKey }: Props) {
   const [parsed, setParsed] = useState<ParsedReceipt | null>(null);
   const [error, setError] = useState('');
   const [dragOver, setDragOver] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
 
+  // Archive
+  const [receipts, setReceipts] = useState<SavedReceipt[]>([]);
+  const [query, setQuery] = useState('');
+  const [viewing, setViewing] = useState<SavedReceipt | null>(null);
+
+  const loadReceipts = useCallback(async (q?: string) => {
+    try {
+      const url = `${SERVER}/api/receipts${q ? `?q=${encodeURIComponent(q)}` : ''}`;
+      const res = await fetch(url, { headers: { ...authHeader() } });
+      const data = await res.json();
+      if (res.ok) setReceipts(data.receipts || []);
+    } catch { /* ignore */ }
+  }, []);
+
+  useEffect(() => { loadReceipts(); }, [loadReceipts]);
+  useEffect(() => {
+    const t = setTimeout(() => loadReceipts(query.trim()), 300);
+    return () => clearTimeout(t);
+  }, [query, loadReceipts]);
+
   const handleFile = (file: File) => {
-    if (!file.type.startsWith('image/')) {
-      setError('Wybierz plik graficzny (JPG, PNG, HEIC)');
-      return;
-    }
+    if (!file.type.startsWith('image/')) { setError('Wybierz plik graficzny (JPG, PNG, HEIC)'); return; }
     setImageName(file.name);
     const reader = new FileReader();
-    reader.onload = e => setImage(e.target?.result as string);
+    reader.onload = async e => setImage(await resizeImage(e.target?.result as string));
     reader.readAsDataURL(file);
-    setParsed(null);
-    setError('');
+    setParsed(null); setError(''); setSaved('');
   };
 
   const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
+    e.preventDefault(); setDragOver(false);
     const file = e.dataTransfer.files[0];
     if (file) handleFile(file);
   };
 
   const scanReceipt = async () => {
     if (!image) return;
-    if (!apiKey) { setError('Wprowadź klucz API Anthropic w panelu bocznym'); return; }
-    setLoading(true);
-    setError('');
+    if (!apiKey) { setError('Wprowadź klucz API Anthropic w panelu (menu „Więcej")'); return; }
+    setLoading(true); setError(''); setSaved('');
     try {
       const base64 = image.split(',')[1];
       const mediaType = image.split(';')[0].split(':')[1];
@@ -65,184 +121,245 @@ export default function ReceiptScanner({ categories, onAdd, apiKey }: Props) {
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
-          max_tokens: 512,
+          max_tokens: 1024,
           messages: [{
             role: 'user',
             content: [
-              {
-                type: 'image',
-                source: { type: 'base64', media_type: mediaType, data: base64 },
-              },
+              { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
               {
                 type: 'text',
-                text: `Przeanalizuj ten paragon i wyodrębnij dane. Odpowiedz TYLKO w formacie JSON (bez markdown), np.:
-{"amount": 45.50, "description": "Biedronka", "category": "Jedzenie", "date": "${today}", "notes": "zakupy spożywcze"}
+                text: `Przeanalizuj ten paragon. Odpowiedz TYLKO w formacie JSON (bez markdown):
+{"store": "nazwa sklepu", "total": 45.50, "date": "${today}", "category": "Jedzenie", "notes": "", "items": [{"name": "Mleko 2%", "price": 3.49}, {"name": "Chleb", "price": 4.20}]}
 
-Dostępne kategorie: ${catNames}
-Wybierz najlepiej pasującą kategorię.
-Jeśli data nie jest widoczna, użyj dzisiejszej: ${today}
-Kwotę podaj jako liczbę w PLN.`,
+Zasady:
+- "store": nazwa sklepu/firmy z paragonu
+- "total": suma do zapłaty (liczba PLN)
+- "date": data zakupu z paragonu (format YYYY-MM-DD); jeśli brak, użyj ${today}
+- "category": jedna z: ${catNames}
+- "items": lista WSZYSTKICH produktów z paragonu (nazwa + cena jeśli widoczna). To najważniejsze — wypisz każdą pozycję, żeby można było ją później wyszukać (np. pod gwarancję).
+- "notes": dodatkowe info (np. nr paragonu) lub pusty string`,
               },
             ],
           }],
         }),
       });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error?.message || `Błąd API: ${res.status}`);
-      }
-
+      if (!res.ok) throw new Error('scan-failed');
       const data = await res.json();
-      const text = data.content[0].text.trim();
-      const jsonText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      const result = JSON.parse(jsonText) as ParsedReceipt;
-      if (!categories.find(c => c.name === result.category)) {
-        result.category = categories[0]?.name || 'Inne';
-      }
+      const text = (data.content[0].text || '').trim().replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      const result = JSON.parse(text) as ParsedReceipt;
+      result.items = Array.isArray(result.items) ? result.items : [];
+      if (!result.date) result.date = today;
+      if (!categories.find(c => c.name === result.category)) result.category = categories[0]?.name || 'Inne';
       setParsed(result);
     } catch (err: any) {
-      setError(err.message || 'Błąd podczas skanowania paragonu');
-    } finally {
-      setLoading(false);
-    }
+      setError(err.message === 'scan-failed'
+        ? '⚠️ Nie udało się rozpoznać paragonu (sprawdź klucz API lub spróbuj wyraźniejsze zdjęcie).'
+        : '⚠️ Nie udało się odczytać danych z paragonu. Spróbuj ponownie.');
+    } finally { setLoading(false); }
   };
 
-  const handleSave = () => {
-    if (!parsed) return;
-    onAdd({
-      id: crypto.randomUUID(),
-      amount: parsed.amount,
-      category: parsed.category,
-      description: parsed.description,
-      date: parsed.date,
-      notes: parsed.notes || undefined,
-    });
+  const saveReceipt = async (alsoExpense: boolean) => {
+    if (!parsed || !image) return;
+    setSaving(true); setError('');
+    try {
+      const res = await fetch(`${SERVER}/api/receipts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
+        body: JSON.stringify({ ...parsed, image }),
+      });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error || 'Błąd zapisu'); }
+      if (alsoExpense) {
+        onAdd({
+          id: crypto.randomUUID(),
+          amount: parsed.total,
+          category: parsed.category,
+          description: parsed.store,
+          date: parsed.date,
+          notes: parsed.notes || undefined,
+        });
+      }
+      setSaved(alsoExpense ? '✅ Paragon zapisany i dodany do wydatków!' : '✅ Paragon zapisany w archiwum!');
+      setImage(null); setParsed(null); setImageName('');
+      loadReceipts(query.trim());
+    } catch (err: any) { setError(err.message); } finally { setSaving(false); }
   };
 
-  const getCatEmoji = (name: string) => categories.find(c => c.name === name)?.emoji || '🧾';
-  const getCatColor = (name: string) => categories.find(c => c.name === name)?.color || '#8e8e93';
+  const openReceipt = async (id: string) => {
+    try {
+      const res = await fetch(`${SERVER}/api/receipts/${id}`, { headers: { ...authHeader() } });
+      if (res.ok) setViewing(await res.json());
+    } catch { /* ignore */ }
+  };
+
+  const deleteReceipt = async (id: string) => {
+    try {
+      await fetch(`${SERVER}/api/receipts/${id}`, { method: 'DELETE', headers: { ...authHeader() } });
+      setViewing(null);
+      loadReceipts(query.trim());
+    } catch { /* ignore */ }
+  };
 
   return (
     <div>
       <div className="page-header">
-        <div className="page-title">Skanuj paragon</div>
-        <div className="page-subtitle">AI automatycznie rozpozna kwotę i kategorię</div>
+        <div className="page-title">Paragony</div>
+        <div className="page-subtitle">Dodaj paragon i wyszukuj później po produkcie lub sklepie (np. pod gwarancję)</div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, maxWidth: 860 }}>
-        {/* Upload */}
-        <div className="card">
-          <div className="section-title" style={{ marginBottom: 16 }}>Zdjęcie paragonu</div>
+      {saved && (
+        <div style={{ background: 'rgba(52,199,89,0.08)', color: 'var(--success)', borderRadius: 12, padding: '12px 16px', marginBottom: 16, fontWeight: 500 }}>{saved}</div>
+      )}
 
-          {!image ? (
-            <div
-              className={`drop-zone ${dragOver ? 'drag-over' : ''}`}
-              onDragOver={e => { e.preventDefault(); setDragOver(true); }}
-              onDragLeave={() => setDragOver(false)}
-              onDrop={handleDrop}
-              onClick={() => fileRef.current?.click()}
-            >
-              <div className="drop-zone-icon">📷</div>
-              <div className="drop-zone-title">Przeciągnij lub kliknij</div>
-              <div className="drop-zone-sub">JPG, PNG, HEIC · maks. 10 MB</div>
-            </div>
-          ) : (
+      {/* ── Add receipt ── */}
+      <div className="card" style={{ marginBottom: 16 }}>
+        <div className="section-title" style={{ marginBottom: 16 }}>Dodaj paragon</div>
+
+        {!image ? (
+          <div
+            className={`drop-zone ${dragOver ? 'drag-over' : ''}`}
+            onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleDrop}
+            onClick={() => fileRef.current?.click()}
+          >
+            <div className="drop-zone-icon">📷</div>
+            <div className="drop-zone-title">Zrób zdjęcie lub wybierz paragon</div>
+            <div className="drop-zone-sub">JPG, PNG, HEIC</div>
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 16 }}>
             <div>
-              <img
-                src={image}
-                alt="paragon"
-                style={{ width: '100%', maxHeight: 340, objectFit: 'contain', borderRadius: 12, background: 'var(--bg)' }}
-              />
-              <div style={{ marginTop: 12, fontSize: 13, color: 'var(--text2)', textAlign: 'center' }}>{imageName}</div>
-              <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
-                <button className="btn btn-primary" style={{ flex: 1 }} onClick={scanReceipt} disabled={loading}>
-                  {loading ? <><span className="spinner" /> Skanowanie...</> : '🔍 Skanuj paragon'}
-                </button>
-                <button className="btn btn-secondary" onClick={() => { setImage(null); setParsed(null); setError(''); }} disabled={loading}>
-                  Zmień
-                </button>
+              <img src={image} alt="paragon" style={{ width: '100%', maxHeight: 360, objectFit: 'contain', borderRadius: 12, background: 'var(--bg)' }} />
+              <div style={{ marginTop: 10, fontSize: 13, color: 'var(--text2)', textAlign: 'center', overflowWrap: 'anywhere' }}>{imageName}</div>
+              <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+                {!parsed && (
+                  <button className="btn btn-primary" style={{ flex: 1 }} onClick={scanReceipt} disabled={loading}>
+                    {loading ? <><span className="spinner" /> Skanowanie…</> : '🔍 Skanuj paragon'}
+                  </button>
+                )}
+                <button className="btn btn-secondary" onClick={() => { setImage(null); setParsed(null); setError(''); }} disabled={loading || saving}>Zmień</button>
               </div>
             </div>
-          )}
 
-          <input type="file" accept="image/*" ref={fileRef} style={{ display: 'none' }} onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
-        </div>
-
-        {/* Result */}
-        <div className="card">
-          <div className="section-title" style={{ marginBottom: 16 }}>Wynik skanowania</div>
-
-          {error && (
-            <div style={{ background: 'rgba(255,59,48,0.08)', color: 'var(--danger)', borderRadius: 10, padding: '14px 16px', fontSize: 14 }}>
-              ⚠️ {error}
-            </div>
-          )}
-
-          {!parsed && !error && !loading && (
-            <div className="empty-state" style={{ padding: '40px 16px' }}>
-              <div className="empty-state-icon">🧾</div>
-              <div className="empty-state-title">Brak wyników</div>
-              <div className="empty-state-sub">Prześlij zdjęcie paragonu i kliknij „Skanuj"</div>
-            </div>
-          )}
-
-          {loading && (
-            <div style={{ textAlign: 'center', padding: '60px 0' }}>
-              <div style={{ fontSize: 40, marginBottom: 16 }}>🔍</div>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Analizuję paragon...</div>
-              <div style={{ color: 'var(--text2)', fontSize: 14 }}>AI rozpoznaje dane</div>
-            </div>
-          )}
-
-          {parsed && (
             <div>
-              <div style={{ background: 'var(--bg)', borderRadius: 14, padding: 20, marginBottom: 20 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
-                  <div className="emoji" style={{ width: 52, height: 52, borderRadius: 14, background: `${getCatColor(parsed.category)}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>
-                    {getCatEmoji(parsed.category)}
+              {error && <div style={{ background: 'rgba(255,59,48,0.08)', color: 'var(--danger)', borderRadius: 10, padding: '12px 14px', fontSize: 14, marginBottom: 12 }}>{error}</div>}
+              {!parsed && !loading && !error && (
+                <div className="empty-state" style={{ padding: '32px 12px' }}>
+                  <div className="empty-state-icon">🧾</div>
+                  <div className="empty-state-sub">Kliknij „Skanuj", a AI odczyta sklep, datę i produkty</div>
+                </div>
+              )}
+              {loading && <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--text2)' }}><div style={{ fontSize: 36, marginBottom: 12 }}>🔍</div>Analizuję paragon…</div>}
+
+              {parsed && (
+                <div>
+                  <div className="form-group">
+                    <label className="form-label">Sklep</label>
+                    <input className="form-input" value={parsed.store} onChange={e => setParsed({ ...parsed, store: e.target.value })} />
                   </div>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: 22 }}>{parsed.amount.toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' })}</div>
-                    <div style={{ color: 'var(--text2)', fontSize: 14 }}>{parsed.description}</div>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label className="form-label">Data</label>
+                      <input className="form-input" type="date" value={parsed.date} onChange={e => setParsed({ ...parsed, date: e.target.value })} />
+                    </div>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label className="form-label">Suma (PLN)</label>
+                      <input className="form-input" type="number" step="0.01" value={parsed.total} onChange={e => setParsed({ ...parsed, total: parseFloat(e.target.value) })} />
+                    </div>
+                  </div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text2)', margin: '4px 0 8px' }}>Produkty ({parsed.items.length})</div>
+                  <div style={{ maxHeight: 160, overflowY: 'auto', background: 'var(--bg)', borderRadius: 10, padding: '8px 12px', marginBottom: 14 }}>
+                    {parsed.items.length === 0 ? (
+                      <div style={{ fontSize: 13, color: 'var(--text2)', padding: '8px 0' }}>Nie wykryto pozycji</div>
+                    ) : parsed.items.map((it, i) => (
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 13, padding: '4px 0' }}>
+                        <span style={{ overflowWrap: 'anywhere' }}>{it.name}</span>
+                        {it.price != null && <span style={{ color: 'var(--text2)', whiteSpace: 'nowrap' }}>{fmt(it.price)}</span>}
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <button className="btn btn-primary" onClick={() => saveReceipt(false)} disabled={saving}>{saving ? '…' : '💾 Zapisz paragon'}</button>
+                    <button className="btn btn-secondary" onClick={() => saveReceipt(true)} disabled={saving}>💾 Zapisz i dodaj jako wydatek</button>
                   </div>
                 </div>
+              )}
+            </div>
+          </div>
+        )}
+        <input type="file" accept="image/*" ref={fileRef} style={{ display: 'none' }} onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
+      </div>
 
-                {[
-                  { label: 'Kategoria', value: `${getCatEmoji(parsed.category)} ${parsed.category}` },
-                  { label: 'Data', value: new Date(parsed.date).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' }) },
-                  ...(parsed.notes ? [{ label: 'Notatki', value: parsed.notes }] : []),
-                ].map(row => (
-                  <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--border)', fontSize: 14 }}>
-                    <span style={{ color: 'var(--text2)' }}>{row.label}</span>
-                    <span style={{ fontWeight: 500 }}>{row.value}</span>
+      {/* ── Archive ── */}
+      <div className="card">
+        <div className="section-header" style={{ marginBottom: 16 }}>
+          <div className="section-title">Twoje paragony ({receipts.length})</div>
+        </div>
+        <input
+          className="form-input"
+          placeholder={'🔍 Szukaj po produkcie lub sklepie (np. lodówka, Media Markt)'}
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          style={{ marginBottom: 14 }}
+        />
+        {receipts.length === 0 ? (
+          <div className="empty-state" style={{ padding: '32px 12px' }}>
+            <div className="empty-state-icon">🧾</div>
+            <div className="empty-state-sub">{query ? 'Brak paragonów dla tego wyszukiwania' : 'Brak zapisanych paragonów — dodaj pierwszy powyżej'}</div>
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 10 }}>
+            {receipts.map(r => (
+              <button key={r.id} onClick={() => openReceipt(r.id)} style={{ textAlign: 'left', background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 12, padding: 14, cursor: 'pointer' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
+                  <span style={{ fontWeight: 600, overflowWrap: 'anywhere' }}>{r.store}</span>
+                  <span style={{ fontWeight: 700, color: 'var(--accent)', whiteSpace: 'nowrap' }}>{fmt(r.total)}</span>
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--text2)', marginBottom: 6 }}>
+                  {new Date(r.date).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </div>
+                {r.items && r.items.length > 0 && (
+                  <div style={{ fontSize: 12, color: 'var(--text2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {r.items.slice(0, 3).map(i => i.name).join(', ')}{r.items.length > 3 ? '…' : ''}
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ── Receipt detail modal ── */}
+      {viewing && (
+        <div onClick={() => setViewing(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 18, padding: 20, maxWidth: 520, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 4 }}>
+              <div>
+                <div style={{ fontSize: 20, fontWeight: 700 }}>{viewing.store}</div>
+                <div style={{ fontSize: 13, color: 'var(--text2)' }}>{new Date(viewing.date).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })} · {fmt(viewing.total)}</div>
+              </div>
+              <button className="btn btn-sm btn-secondary" onClick={() => setViewing(null)}>✕</button>
+            </div>
+            {viewing.image && (
+              <img src={viewing.image} alt="paragon" style={{ width: '100%', borderRadius: 12, margin: '12px 0', background: 'var(--bg)' }} />
+            )}
+            {viewing.items && viewing.items.length > 0 && (
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text2)', marginBottom: 6 }}>Produkty</div>
+                {viewing.items.map((it, i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 14, padding: '4px 0', borderBottom: '1px solid var(--border)' }}>
+                    <span style={{ overflowWrap: 'anywhere' }}>{it.name}</span>
+                    {it.price != null && <span style={{ color: 'var(--text2)', whiteSpace: 'nowrap' }}>{fmt(it.price)}</span>}
                   </div>
                 ))}
               </div>
-
-              {/* Editable fields */}
-              <div className="form-group">
-                <label className="form-label">Opis</label>
-                <input className="form-input" value={parsed.description} onChange={e => setParsed({ ...parsed, description: e.target.value })} />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Kategoria</label>
-                <select className="form-select" value={parsed.category} onChange={e => setParsed({ ...parsed, category: e.target.value })}>
-                  {categories.map(c => <option key={c.id} value={c.name}>{c.emoji} {c.name}</option>)}
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Kwota (PLN)</label>
-                <input className="form-input" type="number" step="0.01" value={parsed.amount} onChange={e => setParsed({ ...parsed, amount: parseFloat(e.target.value) })} />
-              </div>
-
-              <button className="btn btn-primary" style={{ width: '100%' }} onClick={handleSave}>
-                ✓ Zapisz wydatek
-              </button>
-            </div>
-          )}
+            )}
+            {viewing.notes && <div style={{ fontSize: 13, color: 'var(--text2)', marginBottom: 12 }}>{viewing.notes}</div>}
+            <button className="btn btn-danger" style={{ width: '100%' }} onClick={() => deleteReceipt(viewing.id)}>🗑 Usuń paragon</button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
