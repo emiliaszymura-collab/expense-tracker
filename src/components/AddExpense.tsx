@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Expense, Category } from '../types';
 import { ConfettiCheck } from '../motion';
+import { CategoryIcon } from '../icons';
 
 interface Props {
   categories: Category[];
@@ -94,13 +95,13 @@ export default function AddExpense({ categories, onAdd, onBack }: Props) {
                       display: 'flex', alignItems: 'center', gap: 6,
                       padding: '8px 14px', borderRadius: 20, border: '1.5px solid',
                       borderColor: category === c.name ? c.color : 'var(--border)',
-                      background: category === c.name ? `${c.color}18` : 'white',
+                      background: category === c.name ? `${c.color}18` : 'var(--input-bg)',
                       color: category === c.name ? c.color : 'var(--text2)',
                       cursor: 'pointer', fontWeight: 500, fontSize: 14,
                       transition: 'all 0.15s',
                     }}
                   >
-                    {c.emoji} {c.name}
+                    <CategoryIcon name={c.name} size={16} color={category === c.name ? c.color : 'var(--text2)'} /> {c.name}
                   </button>
                 ))}
               </div>
@@ -146,8 +147,8 @@ export default function AddExpense({ categories, onAdd, onBack }: Props) {
             {/* Preview */}
             {amount && description && (
               <div style={{ background: 'var(--bg)', borderRadius: 12, padding: '16px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div className="emoji" style={{ width: 44, height: 44, borderRadius: 12, background: selectedCat ? `${selectedCat.color}18` : 'var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
-                  {selectedCat?.emoji || '💰'}
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: selectedCat ? `${selectedCat.color}18` : 'var(--border)', color: selectedCat?.color || 'var(--text2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CategoryIcon name={category} size={22} color={selectedCat?.color} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 600 }}>{description}</div>

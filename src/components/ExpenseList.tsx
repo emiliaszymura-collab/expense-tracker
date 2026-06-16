@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Expense, Category } from '../types';
-import { categorize, catColor, catEmoji, isSavings, ALL_CATEGORIES } from '../categorize';
+import { categorize, catColor, isSavings, ALL_CATEGORIES } from '../categorize';
 import { EASE } from '../motion';
+import { CategoryIcon } from '../icons';
 
 interface Props {
   expenses: Expense[];
@@ -65,7 +66,7 @@ export default function ExpenseList({ expenses, onDelete, onAdd }: Props) {
           />
           <select className="filter-select" value={catFilter} onChange={e => setCatFilter(e.target.value)}>
             <option value="">Wszystkie kategorie</option>
-            {ALL_CATEGORIES.map(name => <option key={name} value={name}>{catEmoji(name)} {name}</option>)}
+            {ALL_CATEGORIES.map(name => <option key={name} value={name}>{name}</option>)}
           </select>
           <input type="date" className="filter-select" value={dateFrom} onChange={e => setDateFrom(e.target.value)} title="Od" />
           <input type="date" className="filter-select" value={dateTo} onChange={e => setDateTo(e.target.value)} title="Do" />
@@ -108,8 +109,8 @@ export default function ExpenseList({ expenses, onDelete, onAdd }: Props) {
                   <tr key={e.id}>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div className="emoji" style={{ width: 32, height: 32, borderRadius: 8, background: `${catColor(cat)}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>
-                          {catEmoji(cat)}
+                        <div style={{ width: 32, height: 32, borderRadius: 8, background: `${catColor(cat)}18`, color: catColor(cat), display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <CategoryIcon name={cat} size={17} color={catColor(cat)} />
                         </div>
                         <span style={{ fontSize: 13, color: 'var(--text2)' }}>{cat}</span>
                       </div>
@@ -155,8 +156,8 @@ export default function ExpenseList({ expenses, onDelete, onAdd }: Props) {
                   transition={{ duration: 0.3, ease: EASE }}
                   className="expense-row"
                 >
-                  <div className="expense-emoji emoji" style={{ background: `${catColor(cat)}18` }}>
-                    {catEmoji(cat)}
+                  <div className="expense-emoji" style={{ background: `${catColor(cat)}18`, color: catColor(cat) }}>
+                    <CategoryIcon name={cat} color={catColor(cat)} />
                   </div>
                   <div className="expense-info">
                     <div className="expense-desc">{e.description}</div>

@@ -6,6 +6,7 @@ import {
 import { Expense, Category, SavingsGoal, View } from '../types';
 import { categorize, catColor, catEmoji, spendingOnly, savingsTotal } from '../categorize';
 import { Stagger, StaggerItem, Reveal, AnimatedNumber } from '../motion';
+import { CategoryIcon, PiggyBank } from '../icons';
 import BalanceForecast from './BalanceForecast';
 import WeeklyReport from './WeeklyReport';
 
@@ -218,7 +219,7 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
       {monthSavings > 0 && (
         <div className="card" style={{ marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', borderLeft: '3px solid var(--success)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span className="emoji" style={{ fontSize: 26 }}>🐷</span>
+            <span style={{ display: 'inline-flex', color: 'var(--success)' }}><PiggyBank size={26} strokeWidth={1.9} /></span>
             <div>
               <div style={{ fontWeight: 600 }}>Odłożone oszczędności (Smart Saver)</div>
               <div style={{ fontSize: 13, color: 'var(--text2)' }}>Nie wliczone w wydatki — to Twoje odkładane środki</div>
@@ -272,7 +273,7 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
                   <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <div style={{ width: 8, height: 8, borderRadius: '50%', background: c.color }} />
-                      <span><span className="emoji">{c.emoji}</span> {c.name}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><CategoryIcon name={c.name} size={15} color={c.color} /> {c.name}</span>
                     </div>
                     <span style={{ fontWeight: 600 }}>{fmt(c.value)}</span>
                   </div>
@@ -326,7 +327,7 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
               const cat = categorize(e);
               return (
                 <div key={e.id} className="expense-row">
-                  <div className="expense-emoji emoji" style={{ background: `${catColor(cat)}18` }}>{catEmoji(cat)}</div>
+                  <div className="expense-emoji" style={{ background: `${catColor(cat)}18`, color: catColor(cat) }}><CategoryIcon name={cat} color={catColor(cat)} /></div>
                   <div className="expense-info">
                     <div className="expense-desc">{e.description}</div>
                     <div className="expense-meta">{cat} · {new Date(e.date).toLocaleDateString('pl-PL')}</div>

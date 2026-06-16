@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View } from '../types';
+import { ViewIcon, Plus } from '../icons';
 
 interface Props {
   currentView: View;
@@ -103,7 +104,7 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
             className={`nav-item ${currentView === item.view ? 'active' : ''}`}
             onClick={() => onNavigate(item.view)}
           >
-            <span className="nav-item-icon">{item.icon}</span>
+            <span className="nav-item-icon"><ViewIcon view={item.view} size={19} /></span>
             <span>{item.label}</span>
           </button>
         ))}
@@ -115,7 +116,7 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
             className={`nav-item ${currentView === item.view ? 'active' : ''}`}
             onClick={() => onNavigate(item.view)}
           >
-            <span className="nav-item-icon">{item.icon}</span>
+            <span className="nav-item-icon"><ViewIcon view={item.view} size={19} /></span>
             <span>{item.label}</span>
           </button>
         ))}
@@ -149,11 +150,11 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
           >
             {item.view === 'add' ? (
               <div className="bottom-nav-add-btn">
-                <span style={{ fontSize: 22, lineHeight: 1 }}>＋</span>
+                <Plus size={24} strokeWidth={2.4} color="#fff" />
               </div>
             ) : (
               <>
-                <span className="bottom-nav-icon emoji">{item.icon}</span>
+                <span className="bottom-nav-icon"><ViewIcon view={item.view} size={22} /></span>
                 <span className="bottom-nav-label">{item.label}</span>
               </>
             )}
@@ -184,7 +185,7 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
                 className={`bottom-sheet-item ${currentView === item.view ? 'active' : ''}`}
                 onClick={() => { onNavigate(item.view); setMoreOpen(false); }}
               >
-                <span className="emoji" style={{ fontSize: 22 }}>{item.icon}</span>
+                <span style={{ display: 'inline-flex' }}><ViewIcon view={item.view} size={22} /></span>
                 <span>{item.label}</span>
                 <span style={{ marginLeft: 'auto', color: 'var(--text2)' }}>›</span>
               </button>

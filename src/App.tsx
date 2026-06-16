@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './App.css';
 import { EASE, MotionButton } from './motion';
+import { Sun, Moon } from './icons';
 import { Expense, Category, SavingsGoal, View } from './types';
 import Navigation from './components/Navigation';
 import Dashboard from './components/Dashboard';
@@ -112,7 +113,7 @@ function App() {
         onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
       >
-        <span className="emoji" style={{ fontSize: 18 }}>{theme === 'dark' ? '☀️' : '🌙'}</span>
+        {theme === 'dark' ? <Sun size={20} strokeWidth={1.9} /> : <Moon size={20} strokeWidth={1.9} />}
       </MotionButton>
       <Navigation currentView={view} onNavigate={setView} apiKey={apiKey} onApiKeyChange={setApiKey} accent={accent} onAccentChange={setAccent} />
       <main className="main-content">

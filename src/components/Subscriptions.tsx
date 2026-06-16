@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Expense } from '../types';
 import { detectSubscriptions, monthlyTotal } from '../subscriptions';
 import { Stagger, StaggerItem, AnimatedNumber } from '../motion';
+import { Repeat } from '../icons';
 
 interface Props { expenses: Expense[]; }
 
@@ -33,7 +34,7 @@ export default function Subscriptions({ expenses }: Props) {
             to {fmt(perYear)} rocznie{unusedCount > 0 ? ` · ⚠️ ${unusedCount} możliwe nieużywane` : ''}
           </div>
         </div>
-        <div style={{ fontSize: 44 }} className="emoji">🔁</div>
+        <div style={{ color: 'var(--accent)' }}><Repeat size={40} strokeWidth={1.7} /></div>
       </div>
 
       {subs.length === 0 ? (
@@ -49,8 +50,8 @@ export default function Subscriptions({ expenses }: Props) {
           {subs.map(s => (
             <StaggerItem key={s.name} className="card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '16px 20px', opacity: s.unused ? 0.85 : 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, minWidth: 0 }}>
-                <div className="emoji" style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
-                  {s.unused ? '💤' : '🔁'}
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--bg)', color: s.unused ? 'var(--warning)' : 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Repeat size={20} strokeWidth={1.9} />
                 </div>
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontWeight: 600, overflowWrap: 'anywhere' }}>{s.name}</div>
