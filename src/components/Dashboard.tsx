@@ -6,6 +6,7 @@ import {
 import { Expense, Category, SavingsGoal, View } from '../types';
 import { categorize, catColor, catEmoji, spendingOnly, savingsTotal } from '../categorize';
 import { Stagger, StaggerItem, Reveal, AnimatedNumber } from '../motion';
+import BalanceForecast from './BalanceForecast';
 
 interface Props {
   expenses: Expense[];
@@ -280,6 +281,11 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
             <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text2)', fontSize: 14 }}>Brak danych</div>
           )}
         </div>
+      </Reveal>
+
+      {/* Balance forecast */}
+      <Reveal>
+        <BalanceForecast expenses={expenses} />
       </Reveal>
 
       {/* Bottom Row */}
