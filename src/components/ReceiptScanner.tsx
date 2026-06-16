@@ -333,7 +333,7 @@ Zasady:
       {/* ── Receipt detail modal ── */}
       {viewing && (
         <div onClick={() => setViewing(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: 'white', borderRadius: 18, padding: 20, maxWidth: 520, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: 'var(--card)', color: 'var(--text)', borderRadius: 18, padding: 20, maxWidth: 520, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 4 }}>
               <div>
                 <div style={{ fontSize: 20, fontWeight: 700 }}>{viewing.store}</div>

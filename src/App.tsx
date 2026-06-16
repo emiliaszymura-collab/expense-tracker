@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './App.css';
-import { EASE } from './motion';
+import { EASE, MotionButton } from './motion';
 import { Expense, Category, SavingsGoal, View } from './types';
 import Navigation from './components/Navigation';
 import Dashboard from './components/Dashboard';
@@ -49,6 +49,11 @@ function App() {
   const [categories, setCategories] = useLocalStorage<Category[]>('categories', DEFAULT_CATEGORIES);
   const [goals, setGoals] = useLocalStorage<SavingsGoal[]>('goals', []);
   const [apiKey, setApiKey] = useLocalStorage<string>('anthropicApiKey', '');
+  const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('theme', 'light');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   const addExpense = (expense: Expense) => setExpenses(prev => [expense, ...prev]);
   const deleteExpense = (id: string) => setExpenses(prev => prev.filter(e => e.id !== id));
@@ -91,6 +96,14 @@ function App() {
 
   return (
     <div className="app">
+      <MotionButton
+        className="theme-toggle"
+        aria-label="Przełącz motyw"
+        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
+      >
+        <span className="emoji" style={{ fontSize: 18 }}>{theme === 'dark' ? '☀️' : '🌙'}</span>
+      </MotionButton>
       <Navigation currentView={view} onNavigate={setView} apiKey={apiKey} onApiKeyChange={setApiKey} />
       <main className="main-content">
         <AnimatePresence mode="wait">

@@ -177,10 +177,10 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
 // ── inline styles (keep this component self-contained) ──
 const wrap: React.CSSProperties = { minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg, #f5f5f7)', padding: 20 };
 const modalWrap: React.CSSProperties = { position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.35)', zIndex: 1000, padding: 20 };
-const card: React.CSSProperties = { background: 'white', borderRadius: 20, padding: '32px 28px', maxWidth: 360, width: '100%', textAlign: 'center', boxShadow: '0 10px 40px rgba(0,0,0,0.12)' };
+const card: React.CSSProperties = { background: 'var(--card, #fff)', color: 'var(--text, #1d1d1f)', borderRadius: 20, padding: '32px 28px', maxWidth: 360, width: '100%', textAlign: 'center', boxShadow: '0 10px 40px rgba(0,0,0,0.18)' };
 const h2: React.CSSProperties = { fontSize: 22, fontWeight: 700, letterSpacing: '-0.5px', margin: '0 0 8px' };
 const sub: React.CSSProperties = { fontSize: 14, color: 'var(--text2, #6e6e73)', margin: '0 0 20px', lineHeight: 1.5 };
-const input: React.CSSProperties = { width: '100%', boxSizing: 'border-box', padding: '14px 16px', borderRadius: 12, border: '1px solid #d2d2d7', fontSize: 16, marginBottom: 10, outline: 'none' };
+const input: React.CSSProperties = { width: '100%', boxSizing: 'border-box', padding: '14px 16px', borderRadius: 12, border: '1px solid var(--border)', background: 'var(--input-bg, #fff)', color: 'var(--text)', fontSize: 16, marginBottom: 10, outline: 'none' };
 const btnPrimary: React.CSSProperties = { width: '100%', boxSizing: 'border-box', padding: '14px', borderRadius: 12, border: 'none', background: 'var(--accent, #0071e3)', color: 'white', fontSize: 16, fontWeight: 600, cursor: 'pointer', marginBottom: 10 };
 const btnSecondary: React.CSSProperties = { ...btnPrimary, background: '#e8e8ed', color: '#1d1d1f' };
 const btnText: React.CSSProperties = { width: '100%', padding: '8px', border: 'none', background: 'transparent', color: 'var(--text2, #6e6e73)', fontSize: 13, cursor: 'pointer' };
