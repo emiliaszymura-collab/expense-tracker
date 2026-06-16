@@ -23,6 +23,7 @@ const mainItems: NavItem[] = [
 ];
 
 const toolItems: NavItem[] = [
+  { view: 'subscriptions', icon: '🔁', label: 'Subskrypcje' },
   { view: 'categories', icon: '🏷️', label: 'Kategorie' },
   { view: 'goals', icon: '🎯', label: 'Cele' },
   { view: 'banksync', icon: '🏦', label: 'Sync banku' },
@@ -44,6 +45,7 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
   ];
 
   const moreItems: NavItem[] = [
+    { view: 'subscriptions', icon: '🔁', label: 'Subskrypcje' },
     { view: 'categories', icon: '🏷️', label: 'Kategorie' },
     { view: 'goals', icon: '🎯', label: 'Cele' },
     { view: 'banksync', icon: '🏦', label: 'Sync banku' },

@@ -33,4 +33,5 @@ export type View =
   | 'categories'
   | 'goals'
   | 'import'
-  | 'banksync';
+  | 'banksync'
+  | 'subscriptions';

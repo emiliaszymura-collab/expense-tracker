@@ -13,6 +13,7 @@ import Categories from './components/Categories';
 import SavingsGoals from './components/SavingsGoals';
 import ImportCSV from './components/ImportCSV';
 import BankSync from './components/BankSync';
+import Subscriptions from './components/Subscriptions';
 
 const DEFAULT_CATEGORIES: Category[] = [
   { id: '1', name: 'Jedzenie', color: '#34c759', emoji: '🍔' },
@@ -90,6 +91,8 @@ function App() {
         return <ImportCSV categories={categories} onImport={importExpenses} />;
       case 'banksync':
         return <BankSync categories={categories} onImport={importExpenses} />;
+      case 'subscriptions':
+        return <Subscriptions expenses={expenses} />;
       default:
         return null;
     }
