@@ -34,5 +34,4 @@ export type View =
   | 'goals'
   | 'import'
   | 'banksync'
-  | 'subscriptions'
-  | 'challenges';
+  | 'subscriptions';

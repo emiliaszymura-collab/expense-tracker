@@ -14,7 +14,6 @@ import SavingsGoals from './components/SavingsGoals';
 import ImportCSV from './components/ImportCSV';
 import BankSync from './components/BankSync';
 import Subscriptions from './components/Subscriptions';
-import Challenges from './components/Challenges';
 
 const DEFAULT_CATEGORIES: Category[] = [
   { id: '1', name: 'Jedzenie', color: '#34c759', emoji: '🍔' },
@@ -100,8 +99,6 @@ function App() {
         return <BankSync categories={categories} onImport={importExpenses} />;
       case 'subscriptions':
         return <Subscriptions expenses={expenses} />;
-      case 'challenges':
-        return <Challenges expenses={expenses} goals={goals} onAddToGoal={updateGoal} />;
       default:
         return null;
     }
