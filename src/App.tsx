@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './App.css';
-import { pageVariants, pageTransition } from './motion';
+import { EASE } from './motion';
 import { Expense, Category, SavingsGoal, View } from './types';
 import Navigation from './components/Navigation';
 import Dashboard from './components/Dashboard';
@@ -96,11 +96,10 @@ function App() {
         <AnimatePresence mode="wait">
           <motion.div
             key={view}
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={pageTransition}
+            initial={view === 'dashboard' ? { opacity: 0, y: -16 } : { opacity: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={view === 'dashboard' ? { opacity: 0, y: 16 } : { opacity: 0 }}
+            transition={{ duration: view === 'dashboard' ? 0.4 : 0.18, ease: EASE }}
           >
             {renderView()}
           </motion.div>
