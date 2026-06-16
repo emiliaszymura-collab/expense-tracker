@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Expense, Category } from '../types';
 import { categorize, catColor, isSavings, ALL_CATEGORIES } from '../categorize';
 import { EASE } from '../motion';
-import { CategoryIcon } from '../icons';
+import { CategoryIcon, Wallet } from '../icons';
 
 interface Props {
   expenses: Expense[];
@@ -80,7 +80,7 @@ export default function ExpenseList({ expenses, onDelete, onAdd }: Props) {
 
         {filtered.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-state-icon">💳</div>
+            <div className="empty-state-icon" style={{ color: 'var(--text2)' }}><Wallet size={40} strokeWidth={1.5} /></div>
             <div className="empty-state-title">Brak wydatków</div>
             <div className="empty-state-sub">
               {expenses.length === 0 ? 'Dodaj pierwszy wydatek' : 'Brak wyników dla wybranych filtrów'}

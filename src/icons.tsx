@@ -47,8 +47,11 @@ export function CategoryIcon({ name, size = 18, color }: { name: string; size?: 
   return <Icon size={size} strokeWidth={1.9} color={color} />;
 }
 
+export const hasCategoryIcon = (name: string): boolean => name in CATEGORY_ICONS;
+
 // ── Re-exported icons for misc UI (buttons, sections) ──
 export {
   Sun, Moon, Search, Pencil, Trash2, Check, Download, Plus, Repeat, PiggyBank,
   TrendingUp, Calendar, FileText, Images, ReceiptText, Sparkles, Target, Landmark,
+  Wallet, Upload,
 };

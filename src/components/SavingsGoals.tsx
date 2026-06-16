@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SavingsGoal } from '../types';
+import { Target } from '../icons';
 
 interface Props {
   goals: SavingsGoal[];
@@ -111,7 +112,7 @@ export default function SavingsGoals({ goals, onAdd, onUpdate, onDelete }: Props
       {goals.length === 0 ? (
         <div className="card">
           <div className="empty-state">
-            <div className="empty-state-icon">🎯</div>
+            <div className="empty-state-icon" style={{ color: 'var(--text2)' }}><Target size={40} strokeWidth={1.5} /></div>
             <div className="empty-state-title">Brak celów oszczędnościowych</div>
             <div className="empty-state-sub">Stwórz pierwszy cel, aby śledzić swoje oszczędności</div>
             <button className="btn btn-primary" onClick={() => setShowForm(true)}>＋ Nowy cel</button>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Expense, Category } from '../types';
 import { authHeader } from '../authToken';
+import { Landmark } from '../icons';
 
 interface Props {
   categories: Category[];
@@ -231,7 +232,7 @@ export default function BankSync({ categories, onImport }: Props) {
               onClick={syncTransactions}
               disabled={syncing}
             >
-              {syncing ? <><span className="spinner" style={{ borderColor: 'rgba(255,255,255,.3)', borderTopColor: 'white' }} /> Pobieranie transakcji…</> : '⬇️  Synchronizuj transakcje'}
+              {syncing ? <><span className="spinner" style={{ borderColor: 'rgba(255,255,255,.3)', borderTopColor: 'white' }} /> Pobieranie transakcji…</> : 'Synchronizuj transakcje'}
             </button>
 
             {!showPicker && (
@@ -240,13 +241,13 @@ export default function BankSync({ categories, onImport }: Props) {
                 style={{ width: '100%', justifyContent: 'center', padding: '12px', fontSize: 14, marginTop: 10 }}
                 onClick={() => setShowPicker(true)}
               >
-                ➕  Dodaj kolejny bank
+                Dodaj kolejny bank
               </button>
             )}
           </div>
 
           <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--text2)', padding: '8px 0' }}>
-            🔒 Połączenie tylko do odczytu · PSD2 · Dane chronione przez Enable Banking
+            Połączenie tylko do odczytu · PSD2 · Dane chronione przez Enable Banking
           </div>
         </div>
       )}
@@ -259,7 +260,7 @@ export default function BankSync({ categories, onImport }: Props) {
             </div>
           )}
           <div style={{ textAlign: 'center', padding: '8px 0 20px' }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>🏦</div>
+            <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center', color: 'var(--accent)' }}><Landmark size={44} strokeWidth={1.6} /></div>
             <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.5px', marginBottom: 8 }}>Połącz swój bank</div>
             <div style={{ fontSize: 14, color: 'var(--text2)', maxWidth: 360, margin: '0 auto' }}>
               Wybierz bank z listy. Zalogujesz się raz, bezpiecznie, a transakcje będą się aktualizować automatycznie.
@@ -295,7 +296,7 @@ export default function BankSync({ categories, onImport }: Props) {
                   >
                     {b.logo
                       ? <img src={b.logo} alt="" width={28} height={28} style={{ borderRadius: 6, objectFit: 'contain' }} />
-                      : <span style={{ fontSize: 22 }}>🏦</span>}
+                      : <Landmark size={22} strokeWidth={1.8} color="var(--text2)" />}
                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{b.name}</span>
                   </button>
                 ))}
@@ -310,7 +311,7 @@ export default function BankSync({ categories, onImport }: Props) {
           )}
 
           <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--text2)', marginTop: 16 }}>
-            🔒 Bezpieczne · PSD2 · Tylko odczyt · Powered by Enable Banking
+            Bezpieczne · PSD2 · Tylko odczyt · Powered by Enable Banking
           </div>
         </div>
       )}

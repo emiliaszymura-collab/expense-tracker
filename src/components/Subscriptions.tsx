@@ -40,7 +40,7 @@ export default function Subscriptions({ expenses }: Props) {
       {subs.length === 0 ? (
         <div className="card">
           <div className="empty-state" style={{ padding: '40px 16px' }}>
-            <div className="empty-state-icon">🔁</div>
+            <div className="empty-state-icon" style={{ color: 'var(--text2)' }}><Repeat size={40} strokeWidth={1.5} /></div>
             <div className="empty-state-title">Brak wykrytych subskrypcji</div>
             <div className="empty-state-sub">Wykrywam płatności, które powtarzają się co miesiąc z podobną kwotą. Zaimportuj transakcje z banku, a pojawią się tutaj.</div>
           </div>

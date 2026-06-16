@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Expense, Category } from '../types';
+import { Upload } from '../icons';
 
 interface Props {
   categories: Category[];
@@ -142,7 +143,7 @@ export default function ImportCSV({ categories, onImport }: Props) {
             onDrop={e => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
             onClick={() => fileRef.current?.click()}
           >
-            <div className="drop-zone-icon">📥</div>
+            <div className="drop-zone-icon" style={{ color: 'var(--accent)' }}><Upload size={40} strokeWidth={1.6} /></div>
             <div className="drop-zone-title">Przeciągnij plik CSV lub kliknij</div>
             <div className="drop-zone-sub">Eksport z PKO, mBank, Santander, ING i innych</div>
           </div>
@@ -226,7 +227,7 @@ export default function ImportCSV({ categories, onImport }: Props) {
           </div>
 
           <button className="btn btn-primary" style={{ minWidth: 200 }} onClick={handleImport}>
-            📥 Importuj {rows.length} transakcji
+            Importuj {rows.length} transakcji
           </button>
         </div>
       )}

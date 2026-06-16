@@ -6,7 +6,7 @@ import {
 import { Expense, Category, SavingsGoal, View } from '../types';
 import { categorize, catColor, catEmoji, spendingOnly, savingsTotal } from '../categorize';
 import { Stagger, StaggerItem, Reveal, AnimatedNumber } from '../motion';
-import { CategoryIcon, PiggyBank } from '../icons';
+import { CategoryIcon, PiggyBank, Target } from '../icons';
 import BalanceForecast from './BalanceForecast';
 import WeeklyReport from './WeeklyReport';
 
@@ -347,7 +347,7 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
           </div>
           {goals.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--text2)', fontSize: 14 }}>
-              <div style={{ fontSize: 32, marginBottom: 8 }}>🎯</div>
+              <div style={{ marginBottom: 8, display: 'flex', justifyContent: 'center', color: 'var(--text2)' }}><Target size={30} strokeWidth={1.6} /></div>
               Brak celów
             </div>
           ) : (

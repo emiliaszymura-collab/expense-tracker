@@ -110,7 +110,7 @@ Zasady: ton motywujący ale szczery; użyj KONKRETNYCH liczb i % zmian; wskaż 1
   return (
     <div className="card" style={{ marginBottom: 16 }}>
       <div className="section-header" style={{ marginBottom: 14 }}>
-        <div className="section-title">📝 Raport tygodnia</div>
+        <div className="section-title">Raport tygodnia</div>
         <button className="btn btn-sm btn-primary" onClick={generate} disabled={loading}>
           {loading ? <span className="spinner" /> : (report ? 'Odśwież' : 'Wygeneruj')}
         </button>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Category } from '../types';
+import { CategoryIcon, hasCategoryIcon, Trash2 } from '../icons';
 
 interface Props {
   categories: Category[];
@@ -46,11 +47,11 @@ export default function Categories({ categories, onAdd, onDelete }: Props) {
               <div key={cat.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
                 <div style={{
                   width: 44, height: 44, borderRadius: 12,
-                  background: `${cat.color}18`,
+                  background: `${cat.color}18`, color: cat.color,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
                   fontFamily: 'var(--emoji-font)',
                 }}>
-                  {cat.emoji}
+                  {hasCategoryIcon(cat.name) ? <CategoryIcon name={cat.name} size={22} color={cat.color} /> : cat.emoji}
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 600 }}>{cat.name}</div>
@@ -66,7 +67,7 @@ export default function Categories({ categories, onAdd, onDelete }: Props) {
                       <button className="btn btn-sm btn-secondary" onClick={() => setDeleteConfirm(null)}>Anuluj</button>
                     </div>
                   ) : (
-                    <button className="btn btn-icon" onClick={() => setDeleteConfirm(cat.id)}>🗑</button>
+                    <button className="btn btn-icon" onClick={() => setDeleteConfirm(cat.id)}><Trash2 size={16} /></button>
                   )
                 )}
                 {DEFAULT_IDS.includes(cat.id) && (
@@ -110,7 +111,7 @@ export default function Categories({ categories, onAdd, onDelete }: Props) {
                     width: 38, height: 38, borderRadius: 8, fontSize: 20,
                     border: '1.5px solid', cursor: 'pointer',
                     borderColor: emoji === e ? 'var(--accent)' : 'var(--border)',
-                    background: emoji === e ? 'rgba(0,113,227,0.08)' : 'white',
+                    background: emoji === e ? 'rgba(0,113,227,0.08)' : 'var(--input-bg)',
                     transition: 'all 0.1s',
                   }}
                 >

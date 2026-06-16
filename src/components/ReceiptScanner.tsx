@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Expense, Category } from '../types';
 import { authHeader } from '../authToken';
+import { ReceiptText } from '../icons';
 
 interface Props {
   categories: Category[];
@@ -276,7 +277,7 @@ Zasady:
             onDrop={handleDrop}
             onClick={() => fileRef.current?.click()}
           >
-            <div className="drop-zone-icon">📷</div>
+            <div className="drop-zone-icon" style={{ color: 'var(--accent)' }}><ReceiptText size={40} strokeWidth={1.6} /></div>
             <div className="drop-zone-title">Zrób zdjęcie lub wybierz paragon</div>
             <div className="drop-zone-sub">JPG, PNG, HEIC</div>
           </div>
@@ -288,7 +289,7 @@ Zasady:
               <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
                 {!parsed && (
                   <button className="btn btn-primary" style={{ flex: 1 }} onClick={scanReceipt} disabled={loading}>
-                    {loading ? <><span className="spinner" /> Skanowanie…</> : '🔍 Skanuj paragon'}
+                    {loading ? <><span className="spinner" /> Skanowanie…</> : 'Skanuj paragon'}
                   </button>
                 )}
                 <button className="btn btn-secondary" onClick={() => { setImage(null); setParsed(null); setError(''); }} disabled={loading || saving}>Zmień</button>
@@ -299,11 +300,11 @@ Zasady:
               {error && <div style={{ background: 'rgba(255,59,48,0.08)', color: 'var(--danger)', borderRadius: 10, padding: '12px 14px', fontSize: 14, marginBottom: 12 }}>{error}</div>}
               {!parsed && !loading && !error && (
                 <div className="empty-state" style={{ padding: '32px 12px' }}>
-                  <div className="empty-state-icon">🧾</div>
+                  <div className="empty-state-icon" style={{ color: 'var(--text2)' }}><ReceiptText size={40} strokeWidth={1.5} /></div>
                   <div className="empty-state-sub">Kliknij „Skanuj", a AI odczyta sklep, datę i produkty</div>
                 </div>
               )}
-              {loading && <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--text2)' }}><div style={{ fontSize: 36, marginBottom: 12 }}>🔍</div>Analizuję paragon…</div>}
+              {loading && <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--text2)' }}><div style={{ marginBottom: 12 }}><span className="spinner" style={{ width: 28, height: 28 }} /></div>Analizuję paragon…</div>}
 
               {parsed && (
                 <div>
@@ -333,8 +334,8 @@ Zasady:
                     ))}
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <button className="btn btn-primary" onClick={() => saveReceipt(false)} disabled={saving}>{saving ? '…' : '💾 Zapisz paragon'}</button>
-                    <button className="btn btn-secondary" onClick={() => saveReceipt(true)} disabled={saving}>💾 Zapisz i dodaj jako wydatek</button>
+                    <button className="btn btn-primary" onClick={() => saveReceipt(false)} disabled={saving}>{saving ? '…' : 'Zapisz paragon'}</button>
+                    <button className="btn btn-secondary" onClick={() => saveReceipt(true)} disabled={saving}>Zapisz i dodaj jako wydatek</button>
                   </div>
                 </div>
               )}
@@ -347,11 +348,11 @@ Zasady:
         <div style={{ borderTop: '1px solid var(--border)', marginTop: 18, paddingTop: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
             <div>
-              <div style={{ fontWeight: 600 }}>📚 Skanowanie seryjne</div>
+              <div style={{ fontWeight: 600 }}>Skanowanie seryjne</div>
               <div style={{ fontSize: 13, color: 'var(--text2)' }}>Wgraj wiele paragonów naraz — AI przetworzy wszystkie</div>
             </div>
             <button className="btn btn-secondary" onClick={() => batchRef.current?.click()} disabled={batchRunning || saving}>
-              {batchRunning ? <><span className="spinner" /> Przetwarzanie…</> : '➕ Wybierz wiele zdjęć'}
+              {batchRunning ? <><span className="spinner" /> Przetwarzanie…</> : 'Wybierz wiele zdjęć'}
             </button>
             <input type="file" accept="image/*" multiple ref={batchRef} style={{ display: 'none' }} onChange={e => e.target.files && e.target.files.length && handleBatchFiles(e.target.files)} />
           </div>
@@ -380,7 +381,7 @@ Zasady:
               </div>
               {!batchRunning && (
                 <button className="btn btn-primary" style={{ width: '100%', marginTop: 12 }} onClick={saveBatch} disabled={saving || !batch.some(b => b.pick && b.status === 'done')}>
-                  {saving ? '…' : `✓ Zapisz zaznaczone (${batch.filter(b => b.pick && b.status === 'done').length})`}
+                  {saving ? '…' : `Zapisz zaznaczone (${batch.filter(b => b.pick && b.status === 'done').length})`}
                 </button>
               )}
             </div>
@@ -395,14 +396,14 @@ Zasady:
         </div>
         <input
           className="form-input"
-          placeholder={'🔍 Szukaj po produkcie lub sklepie (np. lodówka, Media Markt)'}
+          placeholder={'Szukaj po produkcie lub sklepie (np. lodówka, Media Markt)'}
           value={query}
           onChange={e => setQuery(e.target.value)}
           style={{ marginBottom: 14 }}
         />
         {receipts.length === 0 ? (
           <div className="empty-state" style={{ padding: '32px 12px' }}>
-            <div className="empty-state-icon">🧾</div>
+            <div className="empty-state-icon" style={{ color: 'var(--text2)' }}><ReceiptText size={40} strokeWidth={1.5} /></div>
             <div className="empty-state-sub">{query ? 'Brak paragonów dla tego wyszukiwania' : 'Brak zapisanych paragonów — dodaj pierwszy powyżej'}</div>
           </div>
         ) : (
