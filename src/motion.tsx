@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, useInView, Variants, HTMLMotionProps } from 'framer-motion';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, useInView, animate, Variants, HTMLMotionProps } from 'framer-motion';
 
 // Apple-like buttery easing
 export const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
@@ -54,6 +54,16 @@ export function Reveal({ children, delay = 0, className, style }: { children: Re
       {children}
     </motion.div>
   );
+}
+
+// ── Animated number: counts up from 0 to value ──
+export function AnimatedNumber({ value, format, duration = 1 }: { value: number; format?: (n: number) => string; duration?: number }) {
+  const [display, setDisplay] = useState(0);
+  useEffect(() => {
+    const controls = animate(0, value, { duration, ease: EASE, onUpdate: v => setDisplay(v) });
+    return () => controls.stop();
+  }, [value, duration]);
+  return <>{format ? format(display) : Math.round(display).toString()}</>;
 }
 
 // ── Spring button: scale 0.96 on tap with bounce ──

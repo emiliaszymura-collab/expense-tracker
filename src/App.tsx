@@ -50,6 +50,7 @@ function App() {
   const [goals, setGoals] = useLocalStorage<SavingsGoal[]>('goals', []);
   const [apiKey, setApiKey] = useLocalStorage<string>('anthropicApiKey', '');
   const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('theme', 'light');
+  const [budget, setBudget] = useLocalStorage<number>('monthlyBudget', 0);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -72,7 +73,7 @@ function App() {
   const renderView = () => {
     switch (view) {
       case 'dashboard':
-        return <Dashboard expenses={expenses} categories={categories} goals={goals} onNavigate={setView} />;
+        return <Dashboard expenses={expenses} categories={categories} goals={goals} onNavigate={setView} budget={budget} onSetBudget={setBudget} />;
       case 'expenses':
         return <ExpenseList expenses={expenses} categories={categories} onDelete={deleteExpense} onAdd={() => setView('add')} />;
       case 'add':

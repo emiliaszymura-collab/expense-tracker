@@ -5,13 +5,15 @@ import {
 } from 'recharts';
 import { Expense, Category, SavingsGoal, View } from '../types';
 import { categorize, catColor, catEmoji, spendingOnly, savingsTotal } from '../categorize';
-import { Stagger, StaggerItem, Reveal } from '../motion';
+import { Stagger, StaggerItem, Reveal, AnimatedNumber } from '../motion';
 
 interface Props {
   expenses: Expense[];
   categories: Category[];
   goals: SavingsGoal[];
   onNavigate: (view: View) => void;
+  budget: number;
+  onSetBudget: (b: number) => void;
 }
 
 function fmt(n: number) {
@@ -98,7 +100,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function Dashboard({ expenses, goals, onNavigate }: Props) {
+export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBudget }: Props) {
+  const [editBudget, setEditBudget] = React.useState(false);
+  const [budgetInput, setBudgetInput] = React.useState(String(budget || ''));
   // Savings transfers (Smart Saver) are NOT spending — exclude them from every total/chart.
   const spending = spendingOnly(expenses);
   const monthExp = getMonthExpenses(spending);
@@ -114,11 +118,67 @@ export default function Dashboard({ expenses, goals, onNavigate }: Props) {
   const weeklyBar = buildWeeklyBar(spending);
   const recent = spending.slice(0, 5);
 
+  // ── "Dziś" widget: how much you can still spend per remaining day ──
+  const _now = new Date();
+  const daysInMonth = new Date(_now.getFullYear(), _now.getMonth() + 1, 0).getDate();
+  const daysLeft = Math.max(1, daysInMonth - _now.getDate() + 1);
+  const remaining = budget - monthTotal;
+  const perDay = remaining / daysLeft;
+  const overBudget = remaining < 0;
+
+  const saveBudget = () => {
+    const v = parseFloat(budgetInput.replace(',', '.'));
+    if (!isNaN(v) && v >= 0) onSetBudget(Math.round(v));
+    setEditBudget(false);
+  };
+
   return (
     <div>
       <div className="page-header">
         <div className="page-title">Dashboard</div>
         <div className="page-subtitle">{new Date().toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+      </div>
+
+      {/* "Dziś" widget */}
+      <div className="card" style={{ marginBottom: 16, position: 'relative', overflow: 'hidden' }}>
+        {budget <= 0 || editBudget ? (
+          <div>
+            <div style={{ fontWeight: 600, marginBottom: 4 }}>Ustaw miesięczny budżet</div>
+            <div style={{ fontSize: 13, color: 'var(--text2)', marginBottom: 12 }}>Podaj, ile chcesz wydawać miesięcznie — policzę, ile możesz wydać dziś.</div>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <input
+                className="form-input"
+                type="number"
+                inputMode="decimal"
+                placeholder="np. 3000"
+                value={budgetInput}
+                onChange={e => setBudgetInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && saveBudget()}
+                style={{ maxWidth: 200 }}
+                autoFocus
+              />
+              <button className="btn btn-primary" onClick={saveBudget}>Zapisz</button>
+              {budget > 0 && <button className="btn btn-secondary" onClick={() => setEditBudget(false)}>Anuluj</button>}
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ fontSize: 14, color: 'var(--text2)', marginBottom: 6 }}>
+                {overBudget ? '⚠️ Przekroczono budżet o' : 'Możesz dziś wydać'}
+              </div>
+              <div style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-1px', color: overBudget ? 'var(--danger)' : 'var(--success)' }}>
+                <AnimatedNumber value={Math.abs(overBudget ? remaining : perDay)} format={fmt} />
+              </div>
+              <div style={{ fontSize: 13, color: 'var(--text2)', marginTop: 6 }}>
+                {overBudget
+                  ? `Budżet ${fmt(budget)} · wydano ${fmt(monthTotal)}`
+                  : `przez ${daysLeft} ${daysLeft === 1 ? 'dzień' : 'dni'} · budżet ${fmt(budget)} · zostało ${fmt(remaining)}`}
+              </div>
+            </div>
+            <button className="btn btn-sm btn-secondary" onClick={() => { setBudgetInput(String(budget)); setEditBudget(true); }}>✏️ Budżet</button>
+          </div>
+        )}
       </div>
 
       {/* Stats Row */}
