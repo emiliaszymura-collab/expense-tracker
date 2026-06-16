@@ -14,6 +14,7 @@ import SavingsGoals from './components/SavingsGoals';
 import ImportCSV from './components/ImportCSV';
 import BankSync from './components/BankSync';
 import Subscriptions from './components/Subscriptions';
+import Challenges from './components/Challenges';
 
 const DEFAULT_CATEGORIES: Category[] = [
   { id: '1', name: 'Jedzenie', color: '#34c759', emoji: '🍔' },
@@ -52,10 +53,16 @@ function App() {
   const [apiKey, setApiKey] = useLocalStorage<string>('anthropicApiKey', '');
   const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('theme', 'light');
   const [budget, setBudget] = useLocalStorage<number>('monthlyBudget', 0);
+  const [accent, setAccent] = useLocalStorage<string>('accent', '#0071e3');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--accent', accent);
+    document.documentElement.style.setProperty('--accent-hover', accent);
+  }, [accent]);
 
   const addExpense = (expense: Expense) => setExpenses(prev => [expense, ...prev]);
   const deleteExpense = (id: string) => setExpenses(prev => prev.filter(e => e.id !== id));
@@ -93,6 +100,8 @@ function App() {
         return <BankSync categories={categories} onImport={importExpenses} />;
       case 'subscriptions':
         return <Subscriptions expenses={expenses} />;
+      case 'challenges':
+        return <Challenges expenses={expenses} goals={goals} onAddToGoal={updateGoal} />;
       default:
         return null;
     }
@@ -108,7 +117,7 @@ function App() {
       >
         <span className="emoji" style={{ fontSize: 18 }}>{theme === 'dark' ? '☀️' : '🌙'}</span>
       </MotionButton>
-      <Navigation currentView={view} onNavigate={setView} apiKey={apiKey} onApiKeyChange={setApiKey} />
+      <Navigation currentView={view} onNavigate={setView} apiKey={apiKey} onApiKeyChange={setApiKey} accent={accent} onAccentChange={setAccent} />
       <main className="main-content">
         <AnimatePresence mode="wait">
           <motion.div

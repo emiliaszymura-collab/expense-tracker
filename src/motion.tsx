@@ -66,6 +66,40 @@ export function AnimatedNumber({ value, format, duration = 1 }: { value: number;
   return <>{format ? format(display) : Math.round(display).toString()}</>;
 }
 
+// ── Success burst: checkmark + subtle confetti (KROK 9) ──
+const CONFETTI_COLORS = ['#0071e3', '#34c759', '#ff9500', '#af52de', '#ff2d55', '#5ac8fa'];
+export function ConfettiCheck({ show }: { show: boolean }) {
+  if (!show) return null;
+  const particles = Array.from({ length: 16 });
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 2000 }}
+    >
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: 'spring', stiffness: 420, damping: 18 }}
+        style={{ width: 88, height: 88, borderRadius: '50%', background: 'var(--success)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 46, color: '#fff', boxShadow: '0 8px 30px rgba(52,199,89,0.4)' }}
+      >✓</motion.div>
+      {particles.map((_, i) => {
+        const ang = (i / particles.length) * Math.PI * 2;
+        const dist = 90 + Math.random() * 50;
+        return (
+          <motion.div
+            key={i}
+            initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+            animate={{ x: Math.cos(ang) * dist, y: Math.sin(ang) * dist, opacity: 0, scale: 0.4 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            style={{ position: 'absolute', width: 10, height: 10, borderRadius: 2, background: CONFETTI_COLORS[i % CONFETTI_COLORS.length] }}
+          />
+        );
+      })}
+    </motion.div>
+  );
+}
+
 // ── Spring button: scale 0.96 on tap with bounce ──
 type MotionButtonProps = HTMLMotionProps<'button'> & { children: React.ReactNode };
 export function MotionButton({ children, ...props }: MotionButtonProps) {

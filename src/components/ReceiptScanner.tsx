@@ -101,34 +101,30 @@ export default function ReceiptScanner({ categories, onAdd, apiKey }: Props) {
     if (file) handleFile(file);
   };
 
-  const scanReceipt = async () => {
-    if (!image) return;
-    if (!apiKey) { setError('Wprowadź klucz API Anthropic w panelu (menu „Więcej")'); return; }
-    setLoading(true); setError(''); setSaved('');
-    try {
-      const base64 = image.split(',')[1];
-      const mediaType = image.split(';')[0].split(':')[1];
-      const catNames = categories.map(c => c.name).join(', ');
-      const today = new Date().toISOString().split('T')[0];
-
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1024,
-          messages: [{
-            role: 'user',
-            content: [
-              { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-              {
-                type: 'text',
-                text: `Przeanalizuj ten paragon. Odpowiedz TYLKO w formacie JSON (bez markdown):
+  // Core Vision call — parse one receipt image into structured data
+  const callVision = async (img: string): Promise<ParsedReceipt> => {
+    const base64 = img.split(',')[1];
+    const mediaType = img.split(';')[0].split(':')[1];
+    const catNames = categories.map(c => c.name).join(', ');
+    const today = new Date().toISOString().split('T')[0];
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1024,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+            {
+              type: 'text',
+              text: `Przeanalizuj ten paragon. Odpowiedz TYLKO w formacie JSON (bez markdown):
 {"store": "nazwa sklepu", "total": 45.50, "date": "${today}", "category": "Jedzenie", "notes": "", "items": [{"name": "Mleko 2%", "price": 3.49}, {"name": "Chleb", "price": 4.20}]}
 
 Zasady:
@@ -136,27 +132,84 @@ Zasady:
 - "total": suma do zapłaty (liczba PLN)
 - "date": data zakupu z paragonu (format YYYY-MM-DD); jeśli brak, użyj ${today}
 - "category": jedna z: ${catNames}
-- "items": lista WSZYSTKICH produktów z paragonu (nazwa + cena jeśli widoczna). To najważniejsze — wypisz każdą pozycję, żeby można było ją później wyszukać (np. pod gwarancję).
+- "items": lista WSZYSTKICH produktów z paragonu (nazwa + cena jeśli widoczna).
 - "notes": dodatkowe info (np. nr paragonu) lub pusty string`,
-              },
-            ],
-          }],
-        }),
-      });
+            },
+          ],
+        }],
+      }),
+    });
+    if (!res.ok) throw new Error('scan-failed');
+    const data = await res.json();
+    const text = (data.content[0].text || '').trim().replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    const result = JSON.parse(text) as ParsedReceipt;
+    result.items = Array.isArray(result.items) ? result.items : [];
+    if (!result.date) result.date = today;
+    if (!categories.find(c => c.name === result.category)) result.category = categories[0]?.name || 'Inne';
+    return result;
+  };
 
-      if (!res.ok) throw new Error('scan-failed');
-      const data = await res.json();
-      const text = (data.content[0].text || '').trim().replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      const result = JSON.parse(text) as ParsedReceipt;
-      result.items = Array.isArray(result.items) ? result.items : [];
-      if (!result.date) result.date = today;
-      if (!categories.find(c => c.name === result.category)) result.category = categories[0]?.name || 'Inne';
-      setParsed(result);
+  const scanReceipt = async () => {
+    if (!image) return;
+    if (!apiKey) { setError('Wprowadź klucz API Anthropic w panelu (menu „Więcej")'); return; }
+    setLoading(true); setError(''); setSaved('');
+    try {
+      setParsed(await callVision(image));
     } catch (err: any) {
-      setError(err.message === 'scan-failed'
-        ? '⚠️ Nie udało się rozpoznać paragonu (sprawdź klucz API lub spróbuj wyraźniejsze zdjęcie).'
-        : '⚠️ Nie udało się odczytać danych z paragonu. Spróbuj ponownie.');
+      setError('⚠️ Nie udało się rozpoznać paragonu (sprawdź klucz API/środki lub spróbuj wyraźniejsze zdjęcie).');
     } finally { setLoading(false); }
+  };
+
+  // ── Batch scanning ──
+  const batchRef = useRef<HTMLInputElement>(null);
+  const [batch, setBatch] = useState<{ image: string; parsed?: ParsedReceipt; status: 'pending' | 'done' | 'error'; pick: boolean }[]>([]);
+  const [batchRunning, setBatchRunning] = useState(false);
+
+  const handleBatchFiles = async (files: FileList) => {
+    if (!apiKey) { setError('Wprowadź klucz API Anthropic w panelu (menu „Więcej")'); return; }
+    setError(''); setSaved('');
+    const imgs: string[] = [];
+    for (const f of Array.from(files)) {
+      if (!f.type.startsWith('image/')) continue;
+      const dataUrl = await new Promise<string>(res => { const r = new FileReader(); r.onload = e => res(e.target?.result as string); r.readAsDataURL(f); });
+      imgs.push(await resizeImage(dataUrl));
+    }
+    const initial: { image: string; parsed?: ParsedReceipt; status: 'pending' | 'done' | 'error'; pick: boolean }[] =
+      imgs.map(image => ({ image, status: 'pending', pick: true }));
+    setBatch(initial);
+    setBatchRunning(true);
+    const results = [...initial];
+    for (let i = 0; i < results.length; i++) {
+      try {
+        const parsed = await callVision(results[i].image);
+        results[i] = { ...results[i], parsed, status: 'done' };
+      } catch {
+        results[i] = { ...results[i], status: 'error' };
+      }
+      setBatch([...results]);
+    }
+    setBatchRunning(false);
+  };
+
+  const saveBatch = async () => {
+    setSaving(true); setError('');
+    let saved = 0;
+    for (const b of batch) {
+      if (!b.pick || b.status !== 'done' || !b.parsed) continue;
+      try {
+        await fetch(`${SERVER}/api/receipts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...authHeader() },
+          body: JSON.stringify({ ...b.parsed, image: b.image }),
+        });
+        onAdd({ id: crypto.randomUUID(), amount: b.parsed.total, category: b.parsed.category, description: b.parsed.store, date: b.parsed.date, notes: b.parsed.notes || undefined });
+        saved++;
+      } catch { /* skip */ }
+    }
+    setSaving(false);
+    setBatch([]);
+    setSaved(`✅ Zapisano ${saved} paragonów i dodano do wydatków!`);
+    loadReceipts(query.trim());
   };
 
   const saveReceipt = async (alsoExpense: boolean) => {
@@ -289,6 +342,50 @@ Zasady:
           </div>
         )}
         <input type="file" accept="image/*" ref={fileRef} style={{ display: 'none' }} onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
+
+        {/* ── Batch scanning ── */}
+        <div style={{ borderTop: '1px solid var(--border)', marginTop: 18, paddingTop: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ fontWeight: 600 }}>📚 Skanowanie seryjne</div>
+              <div style={{ fontSize: 13, color: 'var(--text2)' }}>Wgraj wiele paragonów naraz — AI przetworzy wszystkie</div>
+            </div>
+            <button className="btn btn-secondary" onClick={() => batchRef.current?.click()} disabled={batchRunning || saving}>
+              {batchRunning ? <><span className="spinner" /> Przetwarzanie…</> : '➕ Wybierz wiele zdjęć'}
+            </button>
+            <input type="file" accept="image/*" multiple ref={batchRef} style={{ display: 'none' }} onChange={e => e.target.files && e.target.files.length && handleBatchFiles(e.target.files)} />
+          </div>
+
+          {batch.length > 0 && (
+            <div style={{ marginTop: 14 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 320, overflowY: 'auto' }}>
+                {batch.map((b, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'var(--bg)', borderRadius: 10, padding: '10px 12px' }}>
+                    <img src={b.image} alt="" width={40} height={40} style={{ borderRadius: 8, objectFit: 'cover', flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      {b.status === 'pending' && <span style={{ color: 'var(--text2)', fontSize: 13 }}><span className="spinner" /> Skanowanie…</span>}
+                      {b.status === 'error' && <span style={{ color: 'var(--danger)', fontSize: 13 }}>Nie rozpoznano</span>}
+                      {b.status === 'done' && b.parsed && (
+                        <>
+                          <div style={{ fontWeight: 600, fontSize: 14, overflowWrap: 'anywhere' }}>{b.parsed.store}</div>
+                          <div style={{ fontSize: 12, color: 'var(--text2)' }}>{fmt(b.parsed.total)} · {b.parsed.items.length} poz. · {b.parsed.date}</div>
+                        </>
+                      )}
+                    </div>
+                    {b.status === 'done' && (
+                      <input type="checkbox" checked={b.pick} onChange={e => setBatch(prev => prev.map((x, j) => j === i ? { ...x, pick: e.target.checked } : x))} style={{ width: 18, height: 18 }} />
+                    )}
+                  </div>
+                ))}
+              </div>
+              {!batchRunning && (
+                <button className="btn btn-primary" style={{ width: '100%', marginTop: 12 }} onClick={saveBatch} disabled={saving || !batch.some(b => b.pick && b.status === 'done')}>
+                  {saving ? '…' : `✓ Zapisz zaznaczone (${batch.filter(b => b.pick && b.status === 'done').length})`}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ── Archive ── */}

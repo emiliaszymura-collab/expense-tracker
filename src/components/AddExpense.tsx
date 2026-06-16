@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Expense, Category } from '../types';
+import { ConfettiCheck } from '../motion';
 
 interface Props {
   categories: Category[];
@@ -15,6 +16,7 @@ export default function AddExpense({ categories, onAdd, onBack }: Props) {
   const [date, setDate] = useState(today);
   const [notes, setNotes] = useState('');
   const [error, setError] = useState('');
+  const [burst, setBurst] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,20 +28,23 @@ export default function AddExpense({ categories, onAdd, onBack }: Props) {
       setError('Podaj opis wydatku');
       return;
     }
-    onAdd({
+    const exp: Expense = {
       id: crypto.randomUUID(),
       amount: parseFloat(parseFloat(amount).toFixed(2)),
       category,
       description: description.trim(),
       date,
       notes: notes.trim() || undefined,
-    });
+    };
+    setBurst(true);
+    setTimeout(() => onAdd(exp), 750);
   };
 
   const selectedCat = categories.find(c => c.name === category);
 
   return (
     <div>
+      <ConfettiCheck show={burst} />
       <div className="page-header">
         <button className="btn btn-secondary btn-sm" onClick={onBack} style={{ marginBottom: 16 }}>
           ← Wróć

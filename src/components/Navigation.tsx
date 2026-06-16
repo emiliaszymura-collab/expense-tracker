@@ -6,6 +6,40 @@ interface Props {
   onNavigate: (view: View) => void;
   apiKey: string;
   onApiKeyChange: (key: string) => void;
+  accent: string;
+  onAccentChange: (c: string) => void;
+}
+
+const ACCENTS = [
+  { name: 'Niebieski', color: '#0071e3' },
+  { name: 'Zielony', color: '#34c759' },
+  { name: 'Fioletowy', color: '#af52de' },
+  { name: 'Pomarańczowy', color: '#ff9500' },
+];
+
+function AccentPicker({ accent, onAccentChange }: { accent: string; onAccentChange: (c: string) => void }) {
+  return (
+    <div style={{ marginTop: 16 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text2)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 10 }}>
+        Kolor akcentu
+      </div>
+      <div style={{ display: 'flex', gap: 10 }}>
+        {ACCENTS.map(a => (
+          <button
+            key={a.color}
+            title={a.name}
+            aria-label={a.name}
+            onClick={() => onAccentChange(a.color)}
+            style={{
+              width: 26, height: 26, borderRadius: '50%', background: a.color, cursor: 'pointer',
+              border: accent === a.color ? '2px solid var(--text)' : '2px solid transparent',
+              boxShadow: accent === a.color ? '0 0 0 2px var(--card)' : 'none', padding: 0,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 interface NavItem {
@@ -24,6 +58,7 @@ const mainItems: NavItem[] = [
 
 const toolItems: NavItem[] = [
   { view: 'subscriptions', icon: '🔁', label: 'Subskrypcje' },
+  { view: 'challenges', icon: '🏆', label: 'Wyzwania' },
   { view: 'categories', icon: '🏷️', label: 'Kategorie' },
   { view: 'goals', icon: '🎯', label: 'Cele' },
   { view: 'banksync', icon: '🏦', label: 'Sync banku' },
@@ -31,7 +66,7 @@ const toolItems: NavItem[] = [
 ];
 
 
-export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyChange }: Props) {
+export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyChange, accent, onAccentChange }: Props) {
   const [showKey, setShowKey] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
 
@@ -46,6 +81,7 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
 
   const moreItems: NavItem[] = [
     { view: 'subscriptions', icon: '🔁', label: 'Subskrypcje' },
+    { view: 'challenges', icon: '🏆', label: 'Wyzwania' },
     { view: 'categories', icon: '🏷️', label: 'Kategorie' },
     { view: 'goals', icon: '🎯', label: 'Cele' },
     { view: 'banksync', icon: '🏦', label: 'Sync banku' },
@@ -101,6 +137,7 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
             ? <div style={{ fontSize: 11, color: 'var(--success)', marginTop: 6 }}>✓ Klucz ustawiony</div>
             : <div style={{ fontSize: 11, color: 'var(--text2)', marginTop: 6 }}>Wymagany dla OCR i AI</div>
           }
+          <AccentPicker accent={accent} onAccentChange={onAccentChange} />
         </div>
       </nav>
 
@@ -171,6 +208,7 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
                 ? <div style={{ fontSize: 13, color: 'var(--success)', marginTop: 8 }}>✓ Klucz ustawiony</div>
                 : <div style={{ fontSize: 13, color: 'var(--text2)', marginTop: 8 }}>Wymagany dla Skanowania i AI</div>
               }
+              <AccentPicker accent={accent} onAccentChange={onAccentChange} />
             </div>
           </div>
         </>
