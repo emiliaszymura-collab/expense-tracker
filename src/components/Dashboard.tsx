@@ -7,6 +7,7 @@ import { Expense, Category, SavingsGoal, View } from '../types';
 import { categorize, catColor, catEmoji, spendingOnly, savingsTotal } from '../categorize';
 import { Stagger, StaggerItem, Reveal, AnimatedNumber } from '../motion';
 import BalanceForecast from './BalanceForecast';
+import WeeklyReport from './WeeklyReport';
 
 interface Props {
   expenses: Expense[];
@@ -15,6 +16,7 @@ interface Props {
   onNavigate: (view: View) => void;
   budget: number;
   onSetBudget: (b: number) => void;
+  apiKey: string;
 }
 
 function fmt(n: number) {
@@ -101,7 +103,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBudget }: Props) {
+export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBudget, apiKey }: Props) {
   const [editBudget, setEditBudget] = React.useState(false);
   const [budgetInput, setBudgetInput] = React.useState(String(budget || ''));
   // Savings transfers (Smart Saver) are NOT spending — exclude them from every total/chart.
@@ -281,6 +283,11 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
             <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text2)', fontSize: 14 }}>Brak danych</div>
           )}
         </div>
+      </Reveal>
+
+      {/* Weekly AI report */}
+      <Reveal>
+        <WeeklyReport expenses={expenses} apiKey={apiKey} />
       </Reveal>
 
       {/* Balance forecast */}
