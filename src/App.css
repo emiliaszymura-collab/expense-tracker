@@ -1027,6 +1027,14 @@ body {
   font-weight: 600;
 }
 
+/* ── Buttery button press feedback (KROK 0) ── */
+.btn {
+  transition: transform 0.12s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+.btn:active {
+  transform: scale(0.96);
+}
+
 /* ── Layout overflow guards (BUG 5: no horizontal scroll / cut-off content) ── */
 html, body {
   max-width: 100%;

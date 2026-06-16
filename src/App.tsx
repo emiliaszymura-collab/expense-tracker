@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import './App.css';
+import { pageVariants, pageTransition } from './motion';
 import { Expense, Category, SavingsGoal, View } from './types';
 import Navigation from './components/Navigation';
 import Dashboard from './components/Dashboard';
@@ -90,7 +92,20 @@ function App() {
   return (
     <div className="app">
       <Navigation currentView={view} onNavigate={setView} apiKey={apiKey} onApiKeyChange={setApiKey} />
-      <main className="main-content">{renderView()}</main>
+      <main className="main-content">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={view}
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={pageTransition}
+          >
+            {renderView()}
+          </motion.div>
+        </AnimatePresence>
+      </main>
     </div>
   );
 }

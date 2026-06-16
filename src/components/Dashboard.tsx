@@ -5,6 +5,7 @@ import {
 } from 'recharts';
 import { Expense, Category, SavingsGoal, View } from '../types';
 import { categorize, catColor, catEmoji, spendingOnly, savingsTotal } from '../categorize';
+import { Stagger, StaggerItem, Reveal } from '../motion';
 
 interface Props {
   expenses: Expense[];
@@ -121,23 +122,23 @@ export default function Dashboard({ expenses, goals, onNavigate }: Props) {
       </div>
 
       {/* Stats Row */}
-      <div className="bento bento-4" style={{ marginBottom: 16 }}>
-        <div className="card card-sm">
+      <Stagger className="bento bento-4" style={{ marginBottom: 16 }}>
+        <StaggerItem className="card card-sm">
           <div className="stat-label">Ten miesiąc</div>
           <div className="stat-value">{fmt(monthTotal)}</div>
           <div className="stat-sub">{monthExp.length} transakcji</div>
-        </div>
-        <div className="card card-sm">
+        </StaggerItem>
+        <StaggerItem className="card card-sm">
           <div className="stat-label">Ten tydzień</div>
           <div className="stat-value">{fmt(weekTotal)}</div>
           <div className="stat-sub">{weekExp.length} transakcji</div>
-        </div>
-        <div className="card card-sm">
+        </StaggerItem>
+        <StaggerItem className="card card-sm">
           <div className="stat-label">Średnia dzienna</div>
           <div className="stat-value">{fmt(avgDay)}</div>
           <div className="stat-sub">w tym miesiącu</div>
-        </div>
-        <div className="card card-sm">
+        </StaggerItem>
+        <StaggerItem className="card card-sm">
           <div className="stat-label">Największy wydatek</div>
           {biggest ? (
             <>
@@ -147,8 +148,8 @@ export default function Dashboard({ expenses, goals, onNavigate }: Props) {
           ) : (
             <div className="stat-value" style={{ fontSize: 18, color: 'var(--text2)' }}>—</div>
           )}
-        </div>
-      </div>
+        </StaggerItem>
+      </Stagger>
 
       {/* Savings set aside (Smart Saver) — informational, not counted as spending */}
       {monthSavings > 0 && (
@@ -165,7 +166,7 @@ export default function Dashboard({ expenses, goals, onNavigate }: Props) {
       )}
 
       {/* Charts Row */}
-      <div className="bento bento-3" style={{ marginBottom: 16 }}>
+      <Reveal className="bento bento-3" style={{ marginBottom: 16 }}>
         {/* Monthly trend */}
         <div className="card col-span-2">
           <div className="section-header">
@@ -219,10 +220,10 @@ export default function Dashboard({ expenses, goals, onNavigate }: Props) {
             <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text2)', fontSize: 14 }}>Brak danych</div>
           )}
         </div>
-      </div>
+      </Reveal>
 
       {/* Bottom Row */}
-      <div className="bento bento-3">
+      <Reveal className="bento bento-3">
         {/* Weekly bar */}
         <div className="card">
           <div className="section-title" style={{ marginBottom: 16 }}>Ostatnie 7 dni</div>
@@ -301,7 +302,7 @@ export default function Dashboard({ expenses, goals, onNavigate }: Props) {
             </div>
           )}
         </div>
-      </div>
+      </Reveal>
     </div>
   );
 }

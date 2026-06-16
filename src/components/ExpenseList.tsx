@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Expense, Category } from '../types';
 import { categorize, catColor, catEmoji, isSavings, ALL_CATEGORIES } from '../categorize';
+import { EASE } from '../motion';
 
 interface Props {
   expenses: Expense[];
@@ -140,10 +142,19 @@ export default function ExpenseList({ expenses, onDelete, onAdd }: Props) {
 
             {/* Mobile list */}
             <div className="expense-list-mobile">
+              <AnimatePresence initial={false}>
               {filtered.map(e => {
                 const cat = categorize(e);
                 return (
-                <div key={e.id} className="expense-row">
+                <motion.div
+                  key={e.id}
+                  layout
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ duration: 0.3, ease: EASE }}
+                  className="expense-row"
+                >
                   <div className="expense-emoji emoji" style={{ background: `${catColor(cat)}18` }}>
                     {catEmoji(cat)}
                   </div>
@@ -164,9 +175,10 @@ export default function ExpenseList({ expenses, onDelete, onAdd }: Props) {
                       <button className="btn btn-icon" style={{ padding: '6px 8px', fontSize: 14 }} onClick={() => setDeleteConfirm(e.id)}>🗑</button>
                     )}
                   </div>
-                </div>
+                </motion.div>
                 );
               })}
+              </AnimatePresence>
             </div>
           </div>
         )}
