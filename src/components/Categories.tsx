@@ -38,7 +38,7 @@ export default function Categories({ categories, onAdd, onDelete }: Props) {
         <div className="page-subtitle">Zarządzaj kategoriami wydatków</div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 16, maxWidth: 860 }}>
+      <div className="split-layout">
         {/* List */}
         <div className="card">
           <div className="section-title" style={{ marginBottom: 20 }}>Wszystkie kategorie ({categories.length})</div>

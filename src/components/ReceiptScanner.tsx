@@ -282,7 +282,7 @@ Zasady:
             <div className="drop-zone-sub">JPG, PNG, HEIC</div>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 16 }}>
+          <div className="split-2">
             <div>
               <img src={image} alt="paragon" style={{ width: '100%', maxHeight: 360, objectFit: 'contain', borderRadius: 12, background: 'var(--bg)' }} />
               <div style={{ marginTop: 10, fontSize: 13, color: 'var(--text2)', textAlign: 'center', overflowWrap: 'anywhere' }}>{imageName}</div>

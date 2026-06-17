@@ -1083,6 +1083,25 @@ body {
   .theme-toggle { top: 12px; right: 12px; width: 40px; height: 40px; }
 }
 
+/* ── Responsive split layouts (stack to 1 column on mobile) ── */
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 16px;
+  max-width: 860px;
+}
+.split-2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+@media (max-width: 768px) {
+  .split-layout,
+  .split-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Markdown rendering (AI responses) ── */
 .md > *:first-child { margin-top: 0; }
 .md > *:last-child { margin-bottom: 0; }
