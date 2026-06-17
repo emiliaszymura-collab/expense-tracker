@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Expense } from '../types';
 import { categorize, spendingOnly } from '../categorize';
 
@@ -135,7 +137,7 @@ Zasady: ton motywujący ale szczery; użyj KONKRETNYCH liczb i % zmian; wskaż 1
       {error && <div style={{ background: 'rgba(255,59,48,0.08)', color: 'var(--danger)', borderRadius: 10, padding: '10px 14px', fontSize: 13 }}>{error}</div>}
 
       {report ? (
-        <div style={{ fontSize: 14.5, lineHeight: 1.6, whiteSpace: 'pre-wrap', color: 'var(--text)' }}>{report}</div>
+        <div className="md" style={{ fontSize: 14.5, lineHeight: 1.6, color: 'var(--text)' }}><ReactMarkdown remarkPlugins={[remarkGfm]}>{report}</ReactMarkdown></div>
       ) : !error && (
         <div style={{ fontSize: 13, color: 'var(--text2)' }}>Kliknij „Wygeneruj", a AI przygotuje motywujące podsumowanie Twojego tygodnia z porównaniem do poprzedniego.</div>
       )}

@@ -151,16 +151,28 @@ export default function SavingsGoals({ goals, onAdd, onUpdate, onDelete }: Props
                 </div>
 
                 <div style={{ marginTop: 16 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-                    <span style={{ fontSize: 22, fontWeight: 700 }}>{fmt(g.current)}</span>
-                    <span style={{ fontSize: 14, color: 'var(--text2)' }}>z {fmt(g.target)}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 12, marginBottom: 10 }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 11, color: 'var(--text2)', marginBottom: 2 }}>Odłożone</div>
+                      <div style={{ fontSize: 22, fontWeight: 700, whiteSpace: 'nowrap' }}>{fmt(g.current)}</div>
+                    </div>
+                    <div style={{ minWidth: 0, textAlign: 'right' }}>
+                      <div style={{ fontSize: 11, color: 'var(--text2)', marginBottom: 2 }}>Cel</div>
+                      <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--text2)', whiteSpace: 'nowrap' }}>{fmt(g.target)}</div>
+                    </div>
                   </div>
                   <div className="progress-bar" style={{ height: 8 }}>
                     <div className="progress-fill" style={{ width: `${pct}%`, background: g.color }} />
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text2)', marginTop: 6 }}>
-                    <span>{Math.round(pct)}% ukończone</span>
-                    <span>brakuje {fmt(remaining)}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginTop: 8 }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 11, color: 'var(--text2)' }}>Ukończone</div>
+                      <div style={{ fontSize: 14, fontWeight: 600 }}>{Math.round(pct)}%</div>
+                    </div>
+                    <div style={{ minWidth: 0, textAlign: 'right' }}>
+                      <div style={{ fontSize: 11, color: 'var(--text2)' }}>Brakuje</div>
+                      <div style={{ fontSize: 14, fontWeight: 600, whiteSpace: 'nowrap' }}>{fmt(remaining)}</div>
+                    </div>
                   </div>
                 </div>
 
@@ -183,20 +195,21 @@ export default function SavingsGoals({ goals, onAdd, onUpdate, onDelete }: Props
                     <input
                       type="number"
                       className="form-input"
-                      placeholder="Dodaj kwotę..."
+                      placeholder="Kwota"
                       value={addMoney[g.id] || ''}
                       onChange={e => setAddMoney(prev => ({ ...prev, [g.id]: e.target.value }))}
                       min="0.01"
                       step="0.01"
-                      style={{ flex: 1, padding: '9px 12px', fontSize: 14 }}
+                      style={{ flex: 1, minWidth: 0, padding: '9px 12px', fontSize: 14 }}
                       onKeyDown={e => e.key === 'Enter' && handleAddMoney(g.id)}
                     />
                     <button
                       className="btn btn-primary btn-sm"
+                      style={{ flexShrink: 0, whiteSpace: 'nowrap' }}
                       onClick={() => handleAddMoney(g.id)}
                       disabled={!addMoney[g.id] || parseFloat(addMoney[g.id]) <= 0}
                     >
-                      ＋
+                      Dodaj
                     </button>
                   </div>
                 )}

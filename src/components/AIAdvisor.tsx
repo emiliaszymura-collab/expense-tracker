@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Expense, Category, SavingsGoal } from '../types';
 import { categorize, spendingOnly } from '../categorize';
 
@@ -149,7 +151,9 @@ export default function AIAdvisor({ expenses, categories, goals, apiKey }: Props
                   AI Doradca
                 </div>
               )}
-              <div style={{ whiteSpace: 'pre-wrap' }}>{m.content}</div>
+              {m.role === 'assistant'
+                ? <div className="md"><ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown></div>
+                : <div style={{ whiteSpace: 'pre-wrap' }}>{m.content}</div>}
             </div>
           ))}
 
