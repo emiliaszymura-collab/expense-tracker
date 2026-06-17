@@ -107,6 +107,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBudget, apiKey }: Props) {
   const [editBudget, setEditBudget] = React.useState(false);
   const [budgetInput, setBudgetInput] = React.useState(String(budget || ''));
+
+  // Force recharts ResponsiveContainer to re-measure after mount + page transition
+  // (fixes empty charts on iOS Safari where the initial width measures 0)
+  React.useEffect(() => {
+    const fire = () => window.dispatchEvent(new Event('resize'));
+    const timers = [80, 250, 500, 800].map(ms => setTimeout(fire, ms));
+    return () => timers.forEach(clearTimeout);
+  }, []);
   // Savings transfers (Smart Saver) are NOT spending — exclude them from every total/chart.
   const spending = spendingOnly(expenses);
   const monthExp = getMonthExpenses(spending);

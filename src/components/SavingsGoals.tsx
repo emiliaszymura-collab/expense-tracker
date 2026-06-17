@@ -195,7 +195,7 @@ export default function SavingsGoals({ goals, onAdd, onUpdate, onDelete }: Props
                     <input
                       type="number"
                       className="form-input"
-                      placeholder="Kwota"
+                      placeholder="0,00"
                       value={addMoney[g.id] || ''}
                       onChange={e => setAddMoney(prev => ({ ...prev, [g.id]: e.target.value }))}
                       min="0.01"
