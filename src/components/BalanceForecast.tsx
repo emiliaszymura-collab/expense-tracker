@@ -94,7 +94,7 @@ export default function BalanceForecast({ expenses }: Props) {
               ⚠️ Przy obecnym tempie saldo może spaść poniżej 0{forecast.negDay ? ` ok. ${forecast.negDay}` : ''}. Warto ograniczyć wydatki.
             </div>
           )}
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="99%" height={240}>
             <AreaChart data={forecast.data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="balGrad" x1="0" y1="0" x2="0" y2="1">

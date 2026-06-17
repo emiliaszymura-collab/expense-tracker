@@ -236,7 +236,7 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
           <div className="section-header">
             <div className="section-title">Trend miesięczny</div>
           </div>
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="99%" height={220}>
             <AreaChart data={monthlyTrend} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
@@ -268,14 +268,13 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
                   <Tooltip formatter={(v: any) => fmt(v)} />
                 </PieChart>
               </ResponsiveContainer>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8, maxHeight: 180, overflowY: 'auto' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8, maxHeight: 180, overflowY: 'auto', paddingRight: 4 }}>
                 {categoryData.map((c, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: c.color }} />
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><CategoryIcon name={c.name} size={15} color={c.color} /> {c.name}</span>
-                    </div>
-                    <span style={{ fontWeight: 600 }}>{fmt(c.value)}</span>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: c.color, flexShrink: 0 }} />
+                    <span style={{ flexShrink: 0, display: 'inline-flex', color: c.color }}><CategoryIcon name={c.name} size={15} color={c.color} /></span>
+                    <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.name}</span>
+                    <span style={{ fontWeight: 600, flexShrink: 0 }}>{fmt(c.value)}</span>
                   </div>
                 ))}
               </div>
@@ -301,7 +300,7 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
         {/* Weekly bar */}
         <div className="card">
           <div className="section-title" style={{ marginBottom: 16 }}>Ostatnie 7 dni</div>
-          <ResponsiveContainer width="100%" height={150}>
+          <ResponsiveContainer width="99%" height={150}>
             <BarChart data={weeklyBar} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" vertical={false} />
               <XAxis dataKey="day" tick={{ fontSize: 12, fill: 'var(--text2)' }} axisLine={false} tickLine={false} />
