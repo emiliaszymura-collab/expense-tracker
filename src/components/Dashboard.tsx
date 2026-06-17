@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   PieChart, Pie, Cell, BarChart, Bar,
 } from 'recharts';
+import { MeasuredChart } from '../Chart';
 import { Expense, Category, SavingsGoal, View } from '../types';
 import { categorize, catColor, catEmoji, spendingOnly, savingsTotal } from '../categorize';
 import { Stagger, StaggerItem, Reveal, AnimatedNumber } from '../motion';
@@ -244,21 +245,23 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
           <div className="section-header">
             <div className="section-title">Trend miesięczny</div>
           </div>
-          <ResponsiveContainer width="99%" height={220}>
-            <AreaChart data={monthlyTrend} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <MeasuredChart height={220}>
+            {(w) => (
+            <AreaChart width={w} height={220} data={monthlyTrend} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#0071e3" stopOpacity={0.15} />
                   <stop offset="95%" stopColor="#0071e3" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(128,128,128,0.15)" />
               <XAxis dataKey="month" tick={{ fontSize: 12, fill: 'var(--text2)' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 12, fill: 'var(--text2)' }} axisLine={false} tickLine={false} tickFormatter={v => `${v} zł`} />
               <Tooltip content={<CustomTooltip />} />
               <Area type="monotone" dataKey="total" stroke="#0071e3" strokeWidth={2.5} fill="url(#areaGrad)" dot={{ r: 4, fill: '#0071e3', strokeWidth: 0 }} activeDot={{ r: 6 }} />
             </AreaChart>
-          </ResponsiveContainer>
+            )}
+          </MeasuredChart>
         </div>
 
         {/* Pie chart */}
@@ -266,8 +269,9 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
           <div className="section-title" style={{ marginBottom: 16 }}>Kategorie</div>
           {categoryData.length > 0 ? (
             <>
-              <ResponsiveContainer width="100%" height={160}>
-                <PieChart>
+              <MeasuredChart height={160}>
+                {(w) => (
+                <PieChart width={w} height={160}>
                   <Pie data={categoryData} cx="50%" cy="50%" innerRadius={45} outerRadius={70} dataKey="value" paddingAngle={3}>
                     {categoryData.map((entry, i) => (
                       <Cell key={i} fill={entry.color} />
@@ -275,7 +279,8 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
                   </Pie>
                   <Tooltip formatter={(v: any) => fmt(v)} />
                 </PieChart>
-              </ResponsiveContainer>
+                )}
+              </MeasuredChart>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8, maxHeight: 180, overflowY: 'auto', paddingRight: 4 }}>
                 {categoryData.map((c, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13 }}>
@@ -308,15 +313,17 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
         {/* Weekly bar */}
         <div className="card">
           <div className="section-title" style={{ marginBottom: 16 }}>Ostatnie 7 dni</div>
-          <ResponsiveContainer width="99%" height={150}>
-            <BarChart data={weeklyBar} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" vertical={false} />
+          <MeasuredChart height={150}>
+            {(w) => (
+            <BarChart width={w} height={150} data={weeklyBar} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(128,128,128,0.15)" vertical={false} />
               <XAxis dataKey="day" tick={{ fontSize: 12, fill: 'var(--text2)' }} axisLine={false} tickLine={false} />
               <YAxis hide />
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="kwota" fill="#0071e3" radius={[6, 6, 0, 0]} />
             </BarChart>
-          </ResponsiveContainer>
+            )}
+          </MeasuredChart>
         </div>
 
         {/* Recent expenses */}

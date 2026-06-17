@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
+import { MeasuredChart } from '../Chart';
 import { Expense } from '../types';
 import { spendingOnly } from '../categorize';
 import { detectSubscriptions, monthlyTotal } from '../subscriptions';
@@ -94,8 +95,9 @@ export default function BalanceForecast({ expenses }: Props) {
               ⚠️ Przy obecnym tempie saldo może spaść poniżej 0{forecast.negDay ? ` ok. ${forecast.negDay}` : ''}. Warto ograniczyć wydatki.
             </div>
           )}
-          <ResponsiveContainer width="99%" height={240}>
-            <AreaChart data={forecast.data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <MeasuredChart height={240}>
+            {(w) => (
+            <AreaChart width={w} height={240} data={forecast.data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="balGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor={forecast.min < 0 ? '#ff3b30' : '#34c759'} stopOpacity={0.18} />
@@ -109,7 +111,8 @@ export default function BalanceForecast({ expenses }: Props) {
               <ReferenceLine y={0} stroke="var(--danger)" strokeDasharray="4 4" />
               <Area type="monotone" dataKey="saldo" stroke={forecast.min < 0 ? '#ff3b30' : '#34c759'} strokeWidth={2.5} fill="url(#balGrad)" dot={false} />
             </AreaChart>
-          </ResponsiveContainer>
+            )}
+          </MeasuredChart>
           <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginTop: 12, fontSize: 13 }}>
             <span style={{ color: 'var(--text2)' }}>Teraz: <strong style={{ color: 'var(--text)' }}>{fmt(startBalance)}</strong></span>
             <span style={{ color: 'var(--text2)' }}>Za 30 dni: <strong style={{ color: forecast.end < 0 ? 'var(--danger)' : 'var(--success)' }}>{fmt(forecast.end)}</strong></span>
