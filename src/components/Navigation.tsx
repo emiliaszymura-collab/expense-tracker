@@ -70,16 +70,16 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
   const [showKey, setShowKey] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
 
-  // Bottom tabs: 4 main + "Więcej"
+  // Bottom tabs: 4 items + "Więcej" = 5 total, so the center "+" sits exactly in the middle
   const bottomTabs: NavItem[] = [
     { view: 'dashboard', icon: '◼', label: 'Dashboard' },
     { view: 'expenses', icon: '💳', label: 'Wydatki' },
     { view: 'add', icon: '＋', label: 'Dodaj' },
     { view: 'scanner', icon: '🧾', label: 'Paragony' },
-    { view: 'advisor', icon: '🤖', label: 'AI' },
   ];
 
   const moreItems: NavItem[] = [
+    { view: 'advisor', icon: '🤖', label: 'AI doradca' },
     { view: 'subscriptions', icon: '🔁', label: 'Subskrypcje' },
     { view: 'categories', icon: '🏷️', label: 'Kategorie' },
     { view: 'goals', icon: '🎯', label: 'Cele' },
