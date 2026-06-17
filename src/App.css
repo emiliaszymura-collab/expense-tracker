@@ -926,16 +926,21 @@ body {
 
   /* "Dodaj" big round button */
   .bottom-nav-add-btn {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     background: var(--accent);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(0, 113, 227, 0.4);
-    margin-bottom: 2px;
+    box-shadow: 0 6px 18px rgba(0, 113, 227, 0.45);
+    transform: translateY(-12px);
+    margin-bottom: -10px;
+  }
+  /* Center "Dodaj" item content so the raised + sits perfectly in the middle */
+  .bottom-nav-item:has(.bottom-nav-add-btn) {
+    justify-content: center;
   }
 
   .bottom-nav-item.active .bottom-nav-add-btn {
