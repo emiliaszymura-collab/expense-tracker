@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>HR Mission Control</title>
+<!--
+╔══════════════════════════════════════════════════════════╗
+║           HR MISSION CONTROL  v1.0                       ║
+╠══════════════════════════════════════════════════════════╣
+║ JAK URUCHOMIĆ:                                           ║
+║   Otwórz plik hr-mission-control.html w przeglądarce.    ║
+║   Działa lokalnie — zero internetu, zero instalacji.     ║
+║   Na iPadzie: „Otwórz w Safari" → gotowe.               ║
+║                                                          ║
+║ JAK GRAĆ:                                                ║
+║   • Kliknij START → 90-sekundowa runda                   ║
+║   • CV napływają z INBOX → Rekruter je ocenia            ║
+║   • ≥ PRÓG% → do Szefa (+punkty)  |  < PRÓG% → Kosz     ║
+║   • KLIKNIJ pokój agenta = BOOST (2× szybciej)           ║
+║   • Boost kosztuje 20 energii (regen 5/s)                ║
+║   • Suwak PRÓG: ustaw jak surowy jest HR (60–90%)        ║
+║   • Pilnuj kolejki w INBOX — overflow = kara pkt!        ║
+║   • Agenci Onboarding/Kadry/Szkolenia/Kultura            ║
+║     mają własne zadania — boostuj ich też!               ║
+╚══════════════════════════════════════════════════════════╝
+-->
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:100%; height:100%; background:#000; overflow:hidden; touch-action:none; }
+canvas { display:block; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+'use strict';
+
+// ══════════════════════════════════════════════
+// CANVAS + DPR (Retina / iPad)
+// ══════════════════════════════════════════════
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+let W=0, H=0, DPR=1;
+
+function resizeCanvas() {
+  DPR = window.devicePixelRatio || 1;
+  W   = window.innerWidth;
+  H   = window.innerHeight;
+  canvas.width        = Math.round(W * DPR);
+  canvas.height       = Math.round(H * DPR);
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  computeLayout();
+}
+window.addEventListener('resize', resizeCanvas);
+
+// ══════════════════════════════════════════════
+// STAŁE
+// ══════════════════════════════════════════════
+const CFG = {
+  ROUND:      90,
+  CV_BASE:    3200,
+  CV_MIN:     1100,
+  BOOST_COST: 20,
+  BOOST_DUR:  3000,
+  BOOST_CD:   8000,
+  E_MAX:      100,
+  E_REGEN:    5,
+  Q_MAX:      6,
+  Q_PEN:      -4,
+  THRESH_MIN: 60,
+  THRESH_MAX: 90,
+  THRESH_DEF: 70,
+  TASK_INT:   9000,
+};
+
+const PANEL_W  = 220;
+const HEADER_H = 62;
+
+// ══════════════════════════════════════════════
+// LAYOUT
+// ══════════════════════════════════════════════
+let LY = {};   // { rooms:{}, cx, cy, ... }
+
+function computeLayout() {
+  const sx = PANEL_W + 10;
+  const sw = W - sx - 10;
+  const sy = HEADER_H + 8;
+  const sh = H - sy - 10;
+  const cx = sx + sw/2;
+  const cy = sy + sh/2;
+  const rx = sw * 0.295;
+  const ry = sh * 0.275;
+  const rW = Math.max(108, Math.min(138, sw*0.17));
+  const rH = Math.max(76,  Math.min(94,  sh*0.16));
+
+  // 5 agentów w układzie pięciokąta (góra→prawy-górny→prawy-dolny→lewy-dolny→lewy-górny)
+  const angles = [270,342,54,126,198].map(d=>d*Math.PI/180);
+  const keys   = ['recruiter','onboarding','kadry','szkolenia','kultura'];
+  const rooms  = {};
+
+  keys.forEach((k,i) => {
+    const ax = cx + Math.cos(angles[i])*rx - rW/2;
+    const ay = cy + Math.sin(angles[i])*ry - rH/2;
+    rooms[k] = { x:ax, y:ay, w:rW, h:rH, cx:ax+rW/2, cy:ay+rH/2 };
+  });
+
+  const iW=92, iH=56;
+  rooms.inbox = { x:sx+8, y:sy+8, w:iW, h:iH, cx:sx+8+iW/2, cy:sy+8+iH/2 };
+
+  const bW=105, bH=58;
+  rooms.boss = { x:sx+sw-bW-8, y:sy+8, w:bW, h:bH, cx:sx+sw-bW/2-8, cy:sy+8+bH/2 };
+
+  const tW=88, tH=52;
+  rooms.trash = { x:sx+sw-tW-8, y:sy+sh-tH-8, w:tW, h:tH, cx:sx+sw-tW/2-8, cy:sy+sh-tH/2-8 };
+
+  LY = { rooms, cx, cy, rx, ry, sx, sy, sw, sh };
+}
+
+// ══════════════════════════════════════════════
+// DEFINICJE AGENTÓW
+// ══════════════════════════════════════════════
+const ADEFS = {
+  recruiter:  { name:'REKRUTER',   color:'#ff3cac', emoji:'🔍', speed:3200 },
+  onboarding: { name:'ONBOARDING', color:'#7b2fff', emoji:'🚀', speed:4400 },
+  kadry:      { name:'KADRY',      color:'#00d4ff', emoji:'📋', speed:3700 },
+  szkolenia:  { name:'SZKOLENIA',  color:'#ffdd00', emoji:'📚', speed:3000 },
+  kultura:    { name:'KULTURA',    color:'#00ff9d', emoji:'🌟', speed:2700 },
+};
+
+// ══════════════════════════════════════════════
+// STAN GRY
+// ══════════════════════════════════════════════
+let GS = {};
+
+function newAgent(key) {
+  const d = ADEFS[key];
+  return {
+    key, name:d.name, color:d.color, emoji:d.emoji, speed:d.speed,
+    status:'idle',   // idle | working | cooldown | break
+    boostActive:false, boostEnd:0, cooldownEnd:0, breakEnd:0,
+    currentItem:null, processEnd:0,
+    accepted:0, rejected:0, done:0,
+  };
+}
+
+function resetGS() {
+  const stars = GS.stars && GS.stars.length ? GS.stars : makeStars();
+  const thr   = GS.threshold != null ? GS.threshold : CFG.THRESH_DEF;
+  GS = {
+    phase: 'menu',
+    score: 0,
+    energy: CFG.E_MAX,
+    roundTime: CFG.ROUND,
+    threshold: thr,
+    cvAccepted: 0,
+    cvRejected: 0,
+    uid: 0,
+    agents: {},
+    envelopes: [],
+    cvQueue: [],
+    tasks: [],
+    cvMs: 2000,
+    taskMs: CFG.TASK_INT,
+    eventActive: null,
+    eventMs: 0,
+    checkMs: 14000,
+    stars,
+    particles: [],
+  };
+  Object.keys(ADEFS).forEach(k => { GS.agents[k] = newAgent(k); });
+}
+
+function makeStars() {
+  return Array.from({length:200}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    r: Math.random()*1.4+0.3, a: Math.random()*0.7+0.2,
+    sp: Math.random()*2.5+0.5, off: Math.random()*Math.PI*2,
+  }));
+}
+
+// ══════════════════════════════════════════════
+// FACTORY: CV + ZADANIE
+// ══════════════════════════════════════════════
+function makeCV() {
+  const r = LY.rooms;
+  return {
+    id: GS.uid++, match: Math.floor(Math.random()*101),
+    x:r.inbox.cx, y:r.inbox.cy, tx:r.inbox.cx, ty:r.inbox.cy,
+    phase:'queued',   // queued|flying|processing|going|done
+    color:'#ffe066', alpha:1,
+    speed:165+Math.random()*75, size:20, wob:Math.random()*Math.PI*2,
+  };
+}
+
+function makeTask(k) {
+  const r = LY.rooms[k];
+  return {
+    id:GS.uid++, agentKey:k,
+    x:r.cx, y:r.cy-18,
+    phase:'waiting', alpha:1, age:0, maxAge:18,
+    color: ADEFS[k].color,
+  };
+}
+
+// ══════════════════════════════════════════════
+// ZDARZENIA LOSOWE
+// ══════════════════════════════════════════════
+const EVENTS = [
+  { type:'rush',  name:'📨 WYSYP CV!',        dur:11 },
+  { type:'break', name:'☕ REKRUTER NA PRZERWIE', dur:9 },
+  { type:'bonus', name:'⚡ BONUS ENERGII',     dur:0  },
+  { type:'storm', name:'⚡ BURZA ZADAŃ',       dur:8  },
+];
+
+function tryEvent() {
+  if (GS.eventActive || Math.random()>0.38) return;
+  const ev = {...EVENTS[Math.floor(Math.random()*EVENTS.length)]};
+  GS.eventActive = ev;
+  GS.eventMs = ev.dur * 1000;
+  if (ev.type==='break') {
+    GS.agents.recruiter.status = 'break';
+    GS.agents.recruiter.breakEnd = Date.now() + ev.dur*1000;
+  }
+  if (ev.type==='bonus') {
+    GS.energy = Math.min(CFG.E_MAX, GS.energy+40);
+    burst(W/2, H/2, '#ffdd00', 18);
+    GS.eventActive = null;
+  }
+}
+
+function endEvent() {
+  if (!GS.eventActive) return;
+  if (GS.eventActive.type==='break' && GS.agents.recruiter.status==='break')
+    GS.agents.recruiter.status='idle';
+  GS.eventActive = null;
+}
+
+// ══════════════════════════════════════════════
+// CZĄSTECZKI
+// ══════════════════════════════════════════════
+function burst(x,y,color,n) {
+  for (let i=0;i<n;i++) {
+    const a=Math.random()*Math.PI*2, sp=40+Math.random()*90;
+    GS.particles.push({ x,y,color,alpha:1, vx:Math.cos(a)*sp, vy:Math.sin(a)*sp,
+      r:2+Math.random()*3, life:1 });
+  }
+}
+
+// ══════════════════════════════════════════════
+// UPDATE
+// ══════════════════════════════════════════════
+function update(dt) {
+  if (GS.phase!=='playing') return;
+  const now = Date.now();
+
+  GS.roundTime -= dt;
+  if (GS.roundTime<=0) { GS.roundTime=0; GS.phase='summary'; return; }
+
+  GS.energy = Math.min(CFG.E_MAX, GS.energy + CFG.E_REGEN*dt);
+
+  // Zdarzenia
+  GS.checkMs -= dt*1000;
+  if (GS.checkMs<=0) { GS.checkMs=11000+Math.random()*11000; tryEvent(); }
+  if (GS.eventActive && GS.eventActive.dur>0) {
+    GS.eventMs -= dt*1000;
+    if (GS.eventMs<=0) endEvent();
+  }
+
+  // Spawn CV
+  GS.cvMs -= dt*1000;
+  if (GS.cvMs<=0) {
+    spawnCV();
+    const rush = GS.eventActive && GS.eventActive.type==='rush';
+    const elapsed = CFG.ROUND - GS.roundTime;
+    GS.cvMs = rush ? CFG.CV_MIN : Math.max(CFG.CV_MIN, CFG.CV_BASE - elapsed*22);
+  }
+
+  // Spawn zadań
+  GS.taskMs -= dt*1000;
+  if (GS.taskMs<=0) {
+    const storm = GS.eventActive && GS.eventActive.type==='storm';
+    GS.taskMs = storm ? 2800 : CFG.TASK_INT + Math.random()*4000;
+    spawnTask();
+  }
+
+  // Kara za overflow
+  if (GS.cvQueue.length >= CFG.Q_MAX)
+    GS.score = Math.max(0, GS.score + CFG.Q_PEN*dt);
+
+  // Agenci
+  Object.values(GS.agents).forEach(ag => tickAgent(ag, now));
+
+  // Koperty
+  tickEnvelopes(dt, now);
+
+  // Zadania
+  tickTasks(dt);
+
+  // Cząsteczki
+  GS.particles = GS.particles.filter(p => {
+    p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=55*dt;
+    p.life -= dt*1.6; p.alpha=p.life;
+    return p.life>0;
+  });
+}
+
+function tickAgent(ag, now) {
+  if (ag.boostActive && now>=ag.boostEnd) {
+    ag.boostActive=false;
+    if (!ag.currentItem) { ag.status='cooldown'; ag.cooldownEnd=now+CFG.BOOST_CD; }
+  }
+  if (ag.status==='cooldown' && now>=ag.cooldownEnd)
+    ag.status = ag.currentItem?'working':'idle';
+  if (ag.status==='break' && now>=ag.breakEnd)
+    ag.status = ag.currentItem?'working':'idle';
+
+  if (ag.key==='recruiter') {
+    if (ag.status==='idle' && GS.cvQueue.length>0) {
+      const cv = GS.cvQueue.shift();
+      ag.currentItem=cv; ag.status='working';
+      const spd = ag.boostActive ? ag.speed/2 : ag.speed;
+      ag.processEnd = now+spd;
+      cv.phase='flying'; cv.tx=LY.rooms.recruiter.cx; cv.ty=LY.rooms.recruiter.cy;
+    }
+    if (ag.status==='working' && ag.currentItem && now>=ag.processEnd) finishCV(ag);
+  } else {
+    if (ag.status==='idle') {
+      const t = GS.tasks.find(t=>t.agentKey===ag.key && t.phase==='waiting');
+      if (t) {
+        ag.currentItem=t; ag.status='working'; t.phase='processing';
+        const spd = ag.boostActive ? ag.speed/2 : ag.speed;
+        ag.processEnd = now+spd;
+      }
+    }
+    if (ag.status==='working' && ag.currentItem && now>=ag.processEnd) finishTask(ag);
+  }
+}
+
+function finishCV(ag) {
+  const cv = ag.currentItem; ag.currentItem=null;
+  const ok = cv.match >= GS.threshold;
+  cv.color = ok?'#00ff66':'#ff4444'; cv.phase='going';
+  cv.tx = ok?LY.rooms.boss.cx:LY.rooms.trash.cx;
+  cv.ty = ok?LY.rooms.boss.cy:LY.rooms.trash.cy;
+  if (ok) {
+    GS.score += 10 + Math.round(cv.match/10);
+    GS.cvAccepted++; ag.accepted++;
+    burst(cv.tx, cv.ty, '#00ff66', 8);
+    spawnTaskFor('onboarding');
+  } else {
+    GS.score += 3;
+    GS.cvRejected++; ag.rejected++;
+    burst(cv.tx, cv.ty, '#ff4444', 5);
+  }
+  if (!ag.boostActive) ag.status='idle';
+}
+
+function finishTask(ag) {
+  const t=ag.currentItem; ag.currentItem=null;
+  t.phase='done'; t.alpha=0;
+  GS.score+=6; ag.done++;
+  burst(LY.rooms[ag.key].cx, LY.rooms[ag.key].cy, ag.color, 5);
+  if (!ag.boostActive) { ag.status='cooldown'; ag.cooldownEnd=Date.now()+2800; }
+}
+
+function tickEnvelopes(dt, now) {
+  GS.envelopes = GS.envelopes.filter(e=>e.alpha>0);
+  GS.envelopes.forEach(e => {
+    if (e.phase==='queued') return;
+    if (e.phase==='processing') {
+      e.x = LY.rooms.recruiter.cx + Math.sin(now*0.003+e.wob)*7;
+      e.y = LY.rooms.recruiter.cy + Math.cos(now*0.003+e.wob)*7;
+      return;
+    }
+    if (e.phase==='done') { e.alpha-=dt*3; return; }
+    const dx=e.tx-e.x, dy=e.ty-e.y, d=Math.sqrt(dx*dx+dy*dy);
+    if (d<6) {
+      if (e.phase==='flying') { e.phase='processing'; e.x=LY.rooms.recruiter.cx; e.y=LY.rooms.recruiter.cy; }
+      else e.phase='done';
+    } else {
+      e.x += dx/d*e.speed*dt;
+      e.y += dy/d*e.speed*dt;
+    }
+  });
+}
+
+function tickTasks(dt) {
+  GS.tasks = GS.tasks.filter(t=>t.alpha>0);
+  GS.tasks.forEach(t => {
+    if (t.phase==='done') { t.alpha-=dt*4; return; }
+    if (t.phase==='waiting') {
+      t.age+=dt;
+      if (t.age>=t.maxAge) { GS.score=Math.max(0,GS.score-8); t.alpha=0; }
+    }
+  });
+}
+
+// ══════════════════════════════════════════════
+// SPAWN
+// ══════════════════════════════════════════════
+function spawnCV() {
+  if (GS.cvQueue.length>=CFG.Q_MAX+4) return;
+  const cv=makeCV(); GS.cvQueue.push(cv); GS.envelopes.push(cv);
+}
+
+function spawnTask() {
+  const ks=['onboarding','kadry','szkolenia','kultura'];
+  spawnTaskFor(ks[Math.floor(Math.random()*ks.length)]);
+}
+
+function spawnTaskFor(k) {
+  if (GS.tasks.filter(t=>t.agentKey===k && t.phase!=='done').length>=3) return;
+  GS.tasks.push(makeTask(k));
+}
+
+// ══════════════════════════════════════════════
+// BOOST
+// ══════════════════════════════════════════════
+function boost(key) {
+  const ag=GS.agents[key];
+  if (!ag||ag.boostActive||ag.status==='cooldown') return;
+  if (GS.energy<CFG.BOOST_COST) return;
+  GS.energy-=CFG.BOOST_COST;
+  ag.boostActive=true; ag.boostEnd=Date.now()+CFG.BOOST_DUR;
+  if (ag.status==='break') ag.status='idle';
+  if (ag.status!=='working' && ag.currentItem) ag.status='working';
+  if (ag.currentItem) ag.processEnd=Date.now()+(ag.processEnd-Date.now())/2;
+  burst(LY.rooms[key].cx, LY.rooms[key].cy, ag.color, 10);
+}
+
+// ══════════════════════════════════════════════
+// INPUT
+// ══════════════════════════════════════════════
+let _slX=0, _slW=0, _slDrag=false;
+let _menuBtn=null, _sumBtn=null;
+let _btnS={x:0,y:0,w:0,h:0}, _btnP={x:0,y:0,w:0,h:0};
+
+function inRect(px,py,r) { return px>=r.x&&px<=r.x+r.w&&py>=r.y&&py<=r.y+r.h; }
+
+function onDown(px,py) {
+  if (GS.phase==='menu') {
+    if (_menuBtn && inRect(px,py,_menuBtn)) startGame();
+    return;
+  }
+  if (GS.phase==='summary') {
+    if (_sumBtn && inRect(px,py,_sumBtn)) GS.phase='menu';
+    return;
+  }
+  if (inRect(px,py,_btnS)) { startGame(); return; }
+  if (inRect(px,py,_btnP)) { GS.phase = GS.phase==='playing'?'paused':'playing'; return; }
+
+  // Suwak
+  if (_slW>0 && py>=HEADER_H-32 && py<=HEADER_H-2 && px>=_slX && px<=_slX+_slW) {
+    _slDrag=true; setThresh(px); return;
+  }
+  // Pokoje
+  if (GS.phase==='playing') {
+    for (const k of Object.keys(ADEFS)) {
+      if (LY.rooms[k] && inRect(px,py,LY.rooms[k])) { boost(k); return; }
+    }
+  }
+}
+
+function onMove(px,py) { if (_slDrag) setThresh(px); }
+function onUp() { _slDrag=false; }
+function setThresh(px) {
+  const n=Math.max(0,Math.min(1,(px-_slX)/_slW));
+  GS.threshold=Math.round(CFG.THRESH_MIN+n*(CFG.THRESH_MAX-CFG.THRESH_MIN));
+}
+
+canvas.addEventListener('mousedown', e=>onDown(e.offsetX,e.offsetY));
+canvas.addEventListener('mousemove', e=>onMove(e.offsetX,e.offsetY));
+canvas.addEventListener('mouseup',   ()=>onUp());
+
+canvas.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  const t=e.touches[0], r=canvas.getBoundingClientRect();
+  onDown((t.clientX-r.left)/(r.width/W),(t.clientY-r.top)/(r.height/H));
+},{passive:false});
+canvas.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  const t=e.touches[0], r=canvas.getBoundingClientRect();
+  onMove((t.clientX-r.left)/(r.width/W),(t.clientY-r.top)/(r.height/H));
+},{passive:false});
+canvas.addEventListener('touchend',()=>onUp(),{passive:false});
+
+// ══════════════════════════════════════════════
+// START
+// ══════════════════════════════════════════════
+function startGame() {
+  const thr=GS.threshold, stars=GS.stars;
+  resetGS();
+  GS.threshold=thr; GS.stars=stars; GS.phase='playing';
+}
+
+// ══════════════════════════════════════════════
+// NARZĘDZIA RYSOWANIA
+// ══════════════════════════════════════════════
+function h2r(hex,a) {
+  const n=parseInt(hex.slice(1),16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+}
+
+function rr(x,y,w,h,r) {
+  ctx.beginPath();
+  if (ctx.roundRect) { ctx.roundRect(x,y,w,h,r); return; }
+  ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+}
+
+// ══════════════════════════════════════════════
+// TŁO + GWIAZDY
+// ══════════════════════════════════════════════
+function drawBg(t) {
+  const g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.72);
+  g.addColorStop(0,'#1a0035'); g.addColorStop(0.55,'#0c0018'); g.addColorStop(1,'#000008');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  GS.stars.forEach(s=>{
+    ctx.globalAlpha=s.a*(0.38+0.62*Math.sin(t*s.sp+s.off));
+    ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
+  });
+  ctx.globalAlpha=1;
+}
+
+// ══════════════════════════════════════════════
+// STACJA (hub + linie)
+// ══════════════════════════════════════════════
+function drawStation(t) {
+  const {cx,cy,rx,ry}=LY;
+  const pulse=0.35+0.2*Math.sin(t*0.9);
+
+  ctx.save();
+  ctx.setLineDash([4,9]);
+  Object.keys(ADEFS).forEach(k=>{
+    const r=LY.rooms[k], ag=GS.agents[k];
+    ctx.strokeStyle=ag.color; ctx.lineWidth=1; ctx.globalAlpha=pulse*0.26;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(r.cx,r.cy); ctx.stroke();
+  });
+  ctx.strokeStyle='#9933ff'; ctx.lineWidth=1.5; ctx.globalAlpha=pulse*0.18;
+  ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+
+  const hp=0.55+0.45*Math.sin(t*1.8);
+  ctx.save();
+  ctx.shadowColor='#cc44ff'; ctx.shadowBlur=18*hp;
+  ctx.beginPath(); ctx.arc(cx,cy,22,0,Math.PI*2);
+  ctx.fillStyle='#130022'; ctx.fill();
+  ctx.strokeStyle='#cc44ff'; ctx.lineWidth=2; ctx.globalAlpha=hp; ctx.stroke();
+  ctx.restore();
+
+  ctx.save();
+  ctx.font=`bold ${Math.round(13*Math.min(W,H)/900)}px 'Courier New',monospace`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='#cc44ff'; ctx.shadowColor='#cc44ff'; ctx.shadowBlur=8; ctx.globalAlpha=hp;
+  ctx.fillText('HR',cx,cy);
+  ctx.restore();
+}
+
+// ══════════════════════════════════════════════
+// PIXEL-LUDZIK
+// ══════════════════════════════════════════════
+function drawPerson(x,y,color,working,t) {
+  const s=3, bob=working?Math.sin(t*7)*2.5:0;
+  y=Math.round(y+bob);
+  ctx.save();
+  ctx.fillStyle=color; ctx.shadowColor=color; ctx.shadowBlur=8;
+  ctx.fillRect(x-s,   y-s*4, s*2, s*2);            // głowa
+  ctx.fillRect(x-s*.5,y-s*2, s,   s*2);             // tułów
+  const ra=working?Math.sin(t*7)*s:0;
+  ctx.fillRect(x-s*2, y-s*2+ra, s, s);              // lewa ręka
+  ctx.fillRect(x+s,   y-s*2-ra, s, s);              // prawa ręka
+  const lb=working?Math.sin(t*7+1)*s*.5:0;
+  ctx.fillRect(x-s,   y,     s, s*1.5+lb);          // lewa noga
+  ctx.fillRect(x,     y,     s, s*1.5-lb);          // prawa noga
+  ctx.restore();
+}
+
+// ══════════════════════════════════════════════
+// POKÓJ AGENTA
+// ══════════════════════════════════════════════
+function drawRoom(key,t) {
+  const r=LY.rooms[key], ag=GS.agents[key];
+  const c=ag.color;
+  const working=ag.status==='working';
+  const boost=ag.boostActive;
+  const dim=ag.status==='cooldown'||ag.status==='break';
+  const glow=dim?.16:boost?1.0:working?.7+.2*Math.sin(t*5):.42+.2*Math.sin(t*1.1);
+
+  // Tło pokoju
+  ctx.save();
+  ctx.fillStyle=h2r(c, dim?.04:boost?.28:.11);
+  rr(r.x,r.y,r.w,r.h,8); ctx.fill();
+  ctx.strokeStyle=c; ctx.lineWidth=boost?3:1.8;
+  ctx.shadowColor=c; ctx.shadowBlur=22*glow; ctx.globalAlpha=glow;
+  rr(r.x,r.y,r.w,r.h,8); ctx.stroke();
+  ctx.restore();
+
+  // Nazwa
+  const fz=Math.max(9,Math.min(11,r.w/12));
+  ctx.save();
+  ctx.font=`bold ${fz}px 'Courier New',monospace`;
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  ctx.fillStyle=dim?'#444':c; ctx.shadowColor=c; ctx.shadowBlur=dim?0:5;
+  ctx.fillText(`${ag.emoji} ${ag.name}`,r.cx,r.y+4);
+  ctx.restore();
+
+  // Ludzik
+  drawPerson(r.cx, r.cy-4, dim?'#444':c, working, t);
+
+  // Status
+  let sl='GOTOWY', sc='#555';
+  if (boost)             { sl='⚡BOOST';   sc='#ffdd00'; }
+  else if (ag.status==='cooldown') { sl='COOLDOWN'; sc='#555'; }
+  else if (ag.status==='break')    { sl='☕PRZERWA'; sc='#ff8833'; }
+  else if (working)                { sl='PRACUJE';  sc=c; }
+  ctx.save();
+  ctx.font=`${Math.max(8,fz-1)}px 'Courier New',monospace`;
+  ctx.textAlign='center'; ctx.textBaseline='bottom';
+  ctx.fillStyle=sc; ctx.shadowColor=sc; ctx.shadowBlur=working||boost?5:0;
+  ctx.fillText(sl,r.cx,r.y+r.h-4);
+  ctx.restore();
+
+  // Pasek postępu
+  if (working && ag.currentItem) {
+    const total=ag.boostActive?ag.speed/2:ag.speed;
+    const prog=Math.min(1,Math.max(0,1-(ag.processEnd-Date.now())/total));
+    const bx=r.x+8, by=r.y+r.h-14, bw=r.w-16;
+    ctx.fillStyle='rgba(0,0,0,.45)'; ctx.fillRect(bx,by,bw,5);
+    ctx.fillStyle=c; ctx.shadowColor=c; ctx.shadowBlur=6;
+    ctx.fillRect(bx,by,bw*prog,5); ctx.shadowBlur=0;
+  }
+
+  // Oczekujące zadania (kropki) dla agentów pomocniczych
+  if (key!=='recruiter') {
+    const wt=GS.tasks.filter(t=>t.agentKey===key&&t.phase==='waiting').length;
+    if (wt>0) {
+      ctx.save();
+      ctx.fillStyle=c; ctx.shadowColor=c; ctx.shadowBlur=8;
+      for (let i=0;i<Math.min(wt,4);i++) {
+        ctx.beginPath(); ctx.arc(r.x+r.w-10-i*11, r.y+10, 4, 0, Math.PI*2); ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
+// INBOX / SZEF / KOSZ
+// ══════════════════════════════════════════════
+function drawSpecial(t) {
+  const r=LY.rooms, pulse=0.5+0.35*Math.sin(t*1.8);
+  const ov=GS.cvQueue.length>=CFG.Q_MAX;
+
+  // INBOX
+  const ic=ov?'#ff4444':'#ffe066';
+  drawSpecialBox(r.inbox,ic,16*pulse,'📬 INBOX',`[${GS.cvQueue.length}/${CFG.Q_MAX}]`);
+  if (ov) {
+    ctx.save();
+    ctx.font='bold 10px Courier New,monospace'; ctx.textAlign='center';
+    ctx.fillStyle=`rgba(255,80,80,${.5+.5*Math.sin(t*9)})`;
+    ctx.shadowColor='#ff5050'; ctx.shadowBlur=10;
+    ctx.fillText('⚠ OVERFLOW',r.inbox.cx,r.inbox.cy+23);
+    ctx.restore();
+  }
+
+  // SZEF
+  drawSpecialBox(r.boss,'#00ff9d',16,'👔 SZEF',`✓ ${GS.cvAccepted}`);
+
+  // KOSZ
+  drawSpecialBox(r.trash,'#ff4466',14,'🗑 KOSZ',`✗ ${GS.cvRejected}`);
+}
+
+function drawSpecialBox(r,c,blur,l1,l2) {
+  ctx.save();
+  ctx.shadowColor=c; ctx.shadowBlur=blur;
+  ctx.strokeStyle=c; ctx.lineWidth=2.2;
+  rr(r.x,r.y,r.w,r.h,8); ctx.stroke();
+  ctx.fillStyle=h2r(c,.09); rr(r.x,r.y,r.w,r.h,8); ctx.fill();
+  ctx.font='bold 11px Courier New,monospace';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle=c; ctx.shadowBlur=5;
+  ctx.fillText(l1,r.cx,r.cy-9); ctx.fillText(l2,r.cx,r.cy+8);
+  ctx.restore();
+}
+
+// ══════════════════════════════════════════════
+// KOPERTA CV
+// ══════════════════════════════════════════════
+function drawEnv(e,t) {
+  if (e.alpha<=0) return;
+  const {x,y,color:c,alpha,size,match,phase}=e;
+  ctx.save();
+  ctx.globalAlpha=alpha; ctx.shadowColor=c; ctx.shadowBlur=12;
+  // Korpus
+  ctx.fillStyle=h2r(c,.88);
+  rr(x-size/2,y-size*.34,size,size*.65,3); ctx.fill();
+  // Klapa
+  ctx.beginPath();
+  ctx.moveTo(x-size/2,y-size*.34); ctx.lineTo(x,y+size*.06); ctx.lineTo(x+size/2,y-size*.34);
+  ctx.fillStyle=h2r(c,.5); ctx.fill();
+  // Procent po przetworzeniu
+  if (phase==='going'||phase==='done') {
+    ctx.font=`bold ${Math.round(size*.5)}px 'Courier New',monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=c; ctx.shadowColor=c; ctx.shadowBlur=10;
+    ctx.fillText(`${match}%`,x,y);
+  }
+  ctx.restore();
+}
+
+// ══════════════════════════════════════════════
+// KOLEJKA — orbit przy INBOX
+// ══════════════════════════════════════════════
+function animQueue(t) {
+  const r=LY.rooms.inbox;
+  GS.cvQueue.forEach((cv,i)=>{
+    const a=(i/Math.max(1,GS.cvQueue.length))*Math.PI*2+t*.8;
+    const rad=28+Math.min(i,5)*8;
+    cv.x=r.cx+Math.cos(a)*rad;
+    cv.y=r.cy+Math.sin(a)*rad*.55;
+  });
+}
+
+// ══════════════════════════════════════════════
+// PANEL CREW
+// ══════════════════════════════════════════════
+function drawCrew(t) {
+  const pw=PANEL_W;
+  ctx.fillStyle='rgba(7,0,18,.91)'; ctx.fillRect(0,0,pw,H);
+
+  // Prawa krawędź
+  ctx.save();
+  ctx.strokeStyle=`rgba(153,51,255,${.4+.3*Math.sin(t*1.4)})`; ctx.lineWidth=1.5;
+  ctx.shadowColor='#9933ff'; ctx.shadowBlur=8;
+  ctx.beginPath(); ctx.moveTo(pw,0); ctx.lineTo(pw,H); ctx.stroke();
+  ctx.restore();
+
+  // Tytuł
+  ctx.save();
+  ctx.font='bold 12px Courier New,monospace'; ctx.textAlign='center';
+  ctx.fillStyle='#cc44ff'; ctx.shadowColor='#cc44ff'; ctx.shadowBlur=8;
+  ctx.fillText('◈ CREW STATUS ◈',pw/2,26);
+  ctx.restore();
+  ctx.fillStyle='rgba(153,51,255,.22)'; ctx.fillRect(10,38,pw-20,1);
+
+  const keys=Object.keys(ADEFS);
+  const avail=H-195;
+  const ih=Math.max(70,Math.min(85,avail/keys.length));
+  let iy=46;
+
+  keys.forEach(key=>{
+    const ag=GS.agents[key];
+    const c=ag.color, working=ag.status==='working';
+    const bst=ag.boostActive, dim=ag.status==='cooldown'||ag.status==='break';
+    const gl=dim?.16:bst?1.0:working?.62+.2*Math.sin(t*5):.33;
+    const ir={x:8,y:iy,w:pw-16,h:ih-6};
+
+    ctx.save();
+    ctx.fillStyle=h2r(c,dim?.03:.07);
+    rr(ir.x,ir.y,ir.w,ir.h,5); ctx.fill();
+    ctx.strokeStyle=c; ctx.lineWidth=1;
+    ctx.shadowColor=c; ctx.shadowBlur=dim?2:working?10:4; ctx.globalAlpha=gl;
+    rr(ir.x,ir.y,ir.w,ir.h,5); ctx.stroke();
+    ctx.restore();
+
+    const fz=Math.max(9,Math.min(11,pw/20));
+    ctx.save();
+    ctx.font=`bold ${fz}px Courier New,monospace`; ctx.textAlign='left'; ctx.textBaseline='top';
+    ctx.fillStyle=dim?'#444':c; ctx.shadowColor=c; ctx.shadowBlur=dim?0:4;
+    ctx.fillText(`${ag.emoji} ${ag.name}`,ir.x+5,ir.y+5);
+    ctx.restore();
+
+    let sl='GOTOWY', sc='#555';
+    if (bst)                   { sl='⚡BOOST';   sc='#ffdd00'; }
+    else if (ag.status==='cooldown') { sl='COOLDOWN'; sc='#555'; }
+    else if (ag.status==='break')    { sl='☕PRZERWA'; sc='#ff8833'; }
+    else if (working)                { sl='PRACUJE';  sc=c; }
+    ctx.save();
+    ctx.font=`${fz}px Courier New,monospace`; ctx.textAlign='left'; ctx.textBaseline='top';
+    ctx.fillStyle=sc; ctx.shadowColor=sc; ctx.shadowBlur=working?4:0;
+    ctx.fillText(sl,ir.x+5,ir.y+18);
+    ctx.restore();
+
+    ctx.save();
+    ctx.font=`${fz-1}px Courier New,monospace`; ctx.textAlign='right'; ctx.textBaseline='top';
+    ctx.fillStyle='#00ff9d'; ctx.fillText(`✓${ag.accepted+ag.done}`,ir.x+ir.w-5,ir.y+5);
+    ctx.fillStyle='#ff4466'; ctx.fillText(`✗${ag.rejected}`,ir.x+ir.w-5,ir.y+18);
+    ctx.restore();
+
+    if (ag.status==='cooldown') {
+      const prog=1-Math.max(0,(ag.cooldownEnd-Date.now())/CFG.BOOST_CD);
+      const bx=ir.x+5,by=ir.y+ir.h-10,bw=ir.w-10;
+      ctx.fillStyle='rgba(0,0,0,.4)'; ctx.fillRect(bx,by,bw,4);
+      ctx.fillStyle='#555'; ctx.fillRect(bx,by,bw*prog,4);
+    }
+    iy+=ih;
+  });
+
+  ctx.fillStyle='rgba(153,51,255,.22)'; ctx.fillRect(10,iy+4,pw-20,1); iy+=14;
+
+  // Wynik
+  ctx.save();
+  ctx.font='bold 11px Courier New,monospace'; ctx.textAlign='left'; ctx.textBaseline='top';
+  ctx.fillStyle='#cc44ff'; ctx.shadowColor='#cc44ff'; ctx.shadowBlur=6;
+  ctx.fillText('◈ WYNIK',12,iy);
+  ctx.font='bold 22px Courier New,monospace';
+  ctx.fillStyle='#fff'; ctx.shadowColor='#9933ff'; ctx.shadowBlur=12;
+  ctx.fillText(Math.floor(GS.score).toString().padStart(6,'0'),12,iy+14);
+  ctx.restore(); iy+=46;
+
+  // Energia
+  ctx.save();
+  ctx.font='bold 11px Courier New,monospace'; ctx.textAlign='left'; ctx.textBaseline='top';
+  ctx.fillStyle='#00d4ff'; ctx.shadowColor='#00d4ff'; ctx.shadowBlur=6;
+  ctx.fillText('◈ ENERGIA',12,iy);
+  ctx.restore();
+  const ew=pw-24;
+  const ec=GS.energy>50?'#00d4ff':GS.energy>25?'#ffdd00':'#ff4444';
+  ctx.fillStyle='rgba(0,0,0,.5)'; ctx.fillRect(12,iy+16,ew,10);
+  ctx.fillStyle=ec; ctx.shadowColor=ec; ctx.shadowBlur=8;
+  ctx.fillRect(12,iy+16,ew*(GS.energy/CFG.E_MAX),10); ctx.shadowBlur=0;
+  ctx.save();
+  ctx.font='9px Courier New,monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='#fff'; ctx.fillText(`${Math.round(GS.energy)}/${CFG.E_MAX}`,12+ew/2,iy+21);
+  ctx.restore(); iy+=36;
+
+  // Zdarzenie
+  if (GS.eventActive) {
+    ctx.save();
+    const ep=.5+.5*Math.sin(t*5);
+    ctx.font='bold 10px Courier New,monospace'; ctx.textAlign='center'; ctx.textBaseline='top';
+    ctx.fillStyle=`rgba(255,165,0,${.65+.35*ep})`;
+    ctx.shadowColor='#ff8800'; ctx.shadowBlur=8;
+    ctx.fillText('⚡ ZDARZENIE!',pw/2,iy);
+    ctx.fillText(GS.eventActive.name,pw/2,iy+14);
+    ctx.restore();
+  }
+
+  // Podpowiedź
+  ctx.save();
+  ctx.font='9px Courier New,monospace'; ctx.textAlign='center'; ctx.textBaseline='bottom';
+  ctx.fillStyle='rgba(180,150,255,.4)';
+  ctx.fillText('[KLIKNIJ POKÓJ = BOOST]',pw/2,H-10);
+  ctx.restore();
+}
+
+// ══════════════════════════════════════════════
+// NAGŁÓWEK
+// ══════════════════════════════════════════════
+function drawHeader(t) {
+  const hx=PANEL_W;
+  ctx.fillStyle='rgba(3,0,10,.93)'; ctx.fillRect(hx,0,W-hx,HEADER_H);
+  ctx.save();
+  ctx.strokeStyle='rgba(204,68,255,.48)'; ctx.lineWidth=1;
+  ctx.shadowColor='#cc44ff'; ctx.shadowBlur=5;
+  ctx.beginPath(); ctx.moveTo(hx,HEADER_H); ctx.lineTo(W,HEADER_H); ctx.stroke();
+  ctx.restore();
+
+  // Tytuł
+  const tfz=Math.max(13,Math.min(19,(W-PANEL_W)/18));
+  ctx.save();
+  ctx.font=`bold ${tfz}px Courier New,monospace`;
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillStyle='#ff3cac'; ctx.shadowColor='#ff3cac'; ctx.shadowBlur=14;
+  ctx.fillText('◈ HR MISSION CONTROL',hx+14,HEADER_H/2);
+  ctx.restore();
+
+  // Czas
+  const ts=(GS.phase==='playing'||GS.phase==='paused')
+    ?`${Math.ceil(GS.roundTime).toString().padStart(2,'0')}s`:'--s';
+  const tc=GS.roundTime<20&&GS.phase==='playing'?'#ff4444':'#fff';
+  ctx.save();
+  ctx.font='bold 16px Courier New,monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle=tc; ctx.shadowColor=tc;
+  ctx.shadowBlur=GS.roundTime<20&&GS.phase==='playing'?10+6*Math.sin(t*9):4;
+  ctx.fillText(`⏱ ${ts}`,W-310,HEADER_H/2);
+  ctx.restore();
+
+  // Przyciski
+  const bh=34,bw=76,by=(HEADER_H-bh)/2;
+  _btnS={x:W-220,y:by,w:bw,h:bh};
+  _btnP={x:W-136,y:by,w:bw,h:bh};
+  drawBtn('START',_btnS,'#00ff9d',GS.phase==='playing',t);
+  drawBtn('PAUZA',_btnP,'#7b2fff',GS.phase==='paused',t);
+
+  // Suwak
+  const sx=hx+(W-hx)*.38, sw=Math.min(165,(W-hx)*.19);
+  _slX=sx; _slW=sw;
+  drawSlider(sx,8,sw,46,t);
+}
+
+function drawBtn(lbl,r,c,active,t) {
+  const g=active?.9+.1*Math.sin(t*3):.5;
+  ctx.save();
+  ctx.shadowColor=c; ctx.shadowBlur=active?14:5;
+  ctx.strokeStyle=c; ctx.lineWidth=active?2.5:1.5; ctx.globalAlpha=g;
+  rr(r.x,r.y,r.w,r.h,6); ctx.stroke();
+  ctx.fillStyle=h2r(c,active?.2:.07); rr(r.x,r.y,r.w,r.h,6); ctx.fill();
+  ctx.globalAlpha=1; ctx.shadowBlur=0;
+  ctx.font='bold 12px Courier New,monospace';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle=active?c:'#999'; ctx.shadowColor=c; ctx.shadowBlur=active?7:0;
+  ctx.fillText(lbl,r.x+r.w/2,r.y+r.h/2);
+  ctx.restore();
+}
+
+function drawSlider(x,y,w,h,t) {
+  const n=(GS.threshold-CFG.THRESH_MIN)/(CFG.THRESH_MAX-CFG.THRESH_MIN);
+  const kx=x+n*w, ty=y+h-14;
+  ctx.save();
+  ctx.font='10px Courier New,monospace'; ctx.textAlign='left'; ctx.textBaseline='top';
+  ctx.fillStyle='#aaaaff';
+  ctx.fillText(`PRÓG AKCEPTACJI: ${GS.threshold}%`,x,y+2);
+  ctx.restore();
+  ctx.fillStyle='rgba(150,100,255,.27)'; ctx.fillRect(x,ty-2,w,4);
+  ctx.fillStyle='#cc44ff'; ctx.shadowColor='#cc44ff'; ctx.shadowBlur=5;
+  ctx.fillRect(x,ty-2,n*w,4); ctx.shadowBlur=0;
+  ctx.beginPath(); ctx.arc(kx,ty,8,0,Math.PI*2);
+  ctx.fillStyle='#cc44ff'; ctx.shadowColor='#cc44ff'; ctx.shadowBlur=10;
+  ctx.fill(); ctx.shadowBlur=0;
+}
+
+// ══════════════════════════════════════════════
+// EKRAN MENU
+// ══════════════════════════════════════════════
+function drawMenu(t) {
+  const cx=W/2, cy=H/2, fz=Math.max(15,Math.min(27,W*.032));
+  ctx.save();
+  ctx.font=`bold ${fz}px Courier New,monospace`; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='#ff3cac'; ctx.shadowColor='#ff3cac'; ctx.shadowBlur=26+8*Math.sin(t);
+  ctx.fillText('◈ HR MISSION CONTROL ◈',cx,cy-120);
+  ctx.restore();
+
+  ctx.save();
+  ctx.font=`${Math.max(11,fz*.58)}px Courier New,monospace`; ctx.textAlign='center';
+  ctx.fillStyle='#cc99ff';
+  ctx.fillText('Zarządzaj stacją HR — rekrutuj najlepszych!',cx,cy-80);
+  ctx.restore();
+
+  const lines=[
+    '• CV napływają z INBOX → Rekruter ocenia automatycznie',
+    '• Wynik ≥ PRÓG% → Szef (+pkt)  |  < PRÓG% → Kosz',
+    '• KLIKNIJ pokój agenta → BOOST (2× szybciej, -20 energii)',
+    '• Energia regen 5/s — pilnuj overflow kolejki!',
+    '• Onboarding / Kadry / Szkolenia / Kultura mają zadania',
+    '• Losowe zdarzenia: wysyp CV, przerwa, bonus energii…',
+  ];
+  ctx.save();
+  ctx.font=`${Math.max(10,fz*.48)}px Courier New,monospace`; ctx.textAlign='center';
+  ctx.fillStyle='#9966cc';
+  lines.forEach((l,i)=>ctx.fillText(l,cx,cy-28+i*24));
+  ctx.restore();
+
+  const bw=200,bh=52,bx=cx-100,by=cy+120;
+  ctx.save();
+  ctx.shadowColor='#00ff9d'; ctx.shadowBlur=20*(.7+.3*Math.sin(t*2));
+  ctx.strokeStyle='#00ff9d'; ctx.lineWidth=2.5;
+  rr(bx,by,bw,bh,10); ctx.stroke();
+  ctx.fillStyle='rgba(0,255,157,.12)'; rr(bx,by,bw,bh,10); ctx.fill();
+  ctx.restore();
+  ctx.save();
+  ctx.font='bold 18px Courier New,monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='#00ff9d'; ctx.shadowColor='#00ff9d'; ctx.shadowBlur=10;
+  ctx.fillText('▶  ROZPOCZNIJ MISJĘ',cx,by+bh/2);
+  ctx.restore();
+  _menuBtn={x:bx,y:by,w:bw,h:bh};
+}
+
+// ══════════════════════════════════════════════
+// EKRAN PODSUMOWANIA
+// ══════════════════════════════════════════════
+function drawSummary(t) {
+  ctx.fillStyle='rgba(4,0,18,.94)'; ctx.fillRect(0,0,W,H);
+  const cx=W/2, cy=H/2, fz=Math.max(13,Math.min(25,W*.027));
+
+  ctx.save();
+  ctx.font=`bold ${fz*1.3}px Courier New,monospace`; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='#ff3cac'; ctx.shadowColor='#ff3cac'; ctx.shadowBlur=22;
+  ctx.fillText('◈ RAPORT MISJI ◈',cx,cy-168);
+  ctx.restore();
+
+  let rating='AGENT NOWICJUSZ', rc='#ff4444';
+  if (GS.score>=400)  { rating='JUNIOR REKRUTER';     rc='#ffaa00'; }
+  if (GS.score>=700)  { rating='STARSZY REKRUTER';    rc='#ffdd00'; }
+  if (GS.score>=1100) { rating='KIEROWNIK HR';        rc='#00d4ff'; }
+  if (GS.score>=1600) { rating='DYREKTOR PERSONALNY'; rc='#00ff9d'; }
+  if (GS.score>=2200) { rating='★ HR MASTER ★';       rc='#ff3cac'; }
+
+  const rows=[
+    ['WYNIK KOŃCOWY:',   Math.floor(GS.score).toString().padStart(6,'0'), '#fff'],
+    ['CV PRZYJĘTE:',     GS.cvAccepted.toString(), '#00ff9d'],
+    ['CV ODRZUCONE:',    GS.cvRejected.toString(), '#ff4466'],
+    ['ŁĄCZNIE CV:',      (GS.cvAccepted+GS.cvRejected).toString(), '#00d4ff'],
+    ['PRÓG UŻYWANY:',    `${GS.threshold}%`, '#cc44ff'],
+    ['OCENA MISJI:',     rating, rc],
+  ];
+
+  ctx.save();
+  ctx.font=`${Math.max(11,fz*.76)}px Courier New,monospace`;
+  rows.forEach(([l,v,c],i)=>{
+    ctx.textAlign='right'; ctx.fillStyle='#9966cc'; ctx.fillText(l,cx-14,cy-82+i*42);
+    ctx.textAlign='left'; ctx.fillStyle=c; ctx.shadowColor=c; ctx.shadowBlur=6;
+    ctx.fillText(v,cx+14,cy-82+i*42); ctx.shadowBlur=0;
+  });
+  ctx.restore();
+
+  const bw=210,bh=50,bx=cx-105,by=cy+182;
+  ctx.save();
+  ctx.shadowColor='#cc44ff'; ctx.shadowBlur=14;
+  ctx.strokeStyle='#cc44ff'; ctx.lineWidth=2;
+  rr(bx,by,bw,bh,10); ctx.stroke();
+  ctx.fillStyle='rgba(204,68,255,.12)'; rr(bx,by,bw,bh,10); ctx.fill();
+  ctx.restore();
+  ctx.save();
+  ctx.font='bold 16px Courier New,monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='#cc44ff'; ctx.shadowColor='#cc44ff'; ctx.shadowBlur=8;
+  ctx.fillText('↺  NOWA MISJA',cx,by+bh/2);
+  ctx.restore();
+  _sumBtn={x:bx,y:by,w:bw,h:bh};
+}
+
+// ══════════════════════════════════════════════
+// CZĄSTECZKI
+// ══════════════════════════════════════════════
+function drawParticles() {
+  GS.particles.forEach(p=>{
+    ctx.save(); ctx.globalAlpha=p.alpha;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=p.color; ctx.shadowColor=p.color; ctx.shadowBlur=6;
+    ctx.fill(); ctx.restore();
+  });
+}
+
+// ══════════════════════════════════════════════
+// GŁÓWNA PĘTLA
+// ══════════════════════════════════════════════
+let _prev=0;
+
+function loop(ts) {
+  const dt=Math.min((ts-_prev)/1000,.1); _prev=ts;
+  const t=ts/1000;
+  ctx.clearRect(0,0,W,H);
+
+  drawBg(t);
+
+  if (GS.phase==='menu') { drawMenu(t); requestAnimationFrame(loop); return; }
+
+  update(dt);
+
+  drawStation(t);
+  Object.keys(ADEFS).forEach(k=>drawRoom(k,t));
+  drawSpecial(t);
+  animQueue(t);
+  GS.envelopes.forEach(e=>drawEnv(e,t));
+  drawParticles();
+  drawCrew(t);
+  drawHeader(t);
+
+  if (GS.phase==='paused') {
+    ctx.fillStyle='rgba(0,0,0,.62)'; ctx.fillRect(0,0,W,H);
+    const fz=Math.max(20,Math.min(44,H*.055));
+    ctx.save();
+    ctx.font=`bold ${fz}px Courier New,monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle='#cc44ff'; ctx.shadowColor='#cc44ff'; ctx.shadowBlur=24;
+    ctx.fillText('⏸ PAUZA',W/2,H/2); ctx.shadowBlur=0;
+    ctx.font=`${Math.max(13,fz*.42)}px Courier New,monospace`;
+    ctx.fillStyle='#9966cc';
+    ctx.fillText('Kliknij PAUZA aby kontynuować',W/2,H/2+fz);
+    ctx.restore();
+  }
+
+  if (GS.phase==='summary') drawSummary(t);
+
+  requestAnimationFrame(loop);
+}
+
+// ══════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════
+resetGS();
+resizeCanvas();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
