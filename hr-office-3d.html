@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>HR-OS: Biuro 3D</title>
+<!--
+  JAK OTWORZYĆ:
+    Dwuklik → Chrome / Firefox / Edge / Safari (wymaga internetu — Three.js z CDN).
+    iPad: Safari → musi mieć dostęp do sieci przy pierwszym otwarciu.
+
+  STEROWANIE KAMERĄ:
+    Przeciągnij myszą / palcem  → obróć (ograniczony kąt)
+    Kółko myszy / pinch         → zoom in/out
+    Pan wyłączony (dla czystości kompozycji)
+-->
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#070b14;overflow:hidden;
+  font-family:'Courier New',Courier,monospace;color:#c8d8f0}
+
+/* ── VIGNETTE ── */
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:2;
+  background:radial-gradient(ellipse at 50% 50%,transparent 52%,rgba(4,6,14,.82) 100%)}
+
+/* ── HEADER ── */
+#ui-header{position:fixed;top:0;left:0;right:0;z-index:10;
+  padding:18px 24px 0;display:flex;align-items:flex-start;
+  justify-content:space-between;pointer-events:none}
+#logo{font-size:22px;font-weight:700;letter-spacing:3px;
+  color:#4aa3ff;text-shadow:0 0 18px #4aa3ff99}
+#badge{display:inline-flex;align-items:center;gap:6px;margin-top:6px;
+  background:rgba(10,20,40,.85);border:1px solid rgba(74,163,255,.28);
+  border-radius:20px;padding:4px 12px;font-size:11px;color:#46d17f}
+#badge-dot{width:7px;height:7px;border-radius:50%;background:#46d17f;
+  box-shadow:0 0 6px #46d17f;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+#title-block{text-align:center}
+#title-main{font-size:clamp(15px,2.4vw,26px);font-weight:700;
+  color:#fff;letter-spacing:.5px;text-shadow:0 0 28px rgba(74,163,255,.45)}
+#title-sub{margin-top:5px;font-size:clamp(10px,1.1vw,13px);
+  color:#7a9ab8;font-style:italic}
+
+/* ── ETYKIETY 3D ── */
+.lbl{position:fixed;z-index:8;pointer-events:none;
+  transform:translate(-50%,-100%);
+  background:rgba(6,11,26,.9);border:1px solid rgba(74,163,255,.3);
+  border-radius:8px;padding:5px 10px;white-space:nowrap;font-size:11px}
+.lbl-dot{display:inline-block;width:6px;height:6px;border-radius:50%;
+  margin-right:5px;vertical-align:middle}
+.lbl-name{font-weight:700;font-size:12px;color:#ddeeff}
+.lbl-sub{color:#607890;font-size:10px;margin-top:2px}
+
+/* ── MATCH % ── */
+#match-pct{position:fixed;z-index:9;pointer-events:none;
+  transform:translate(-50%,-50%);font-size:13px;font-weight:700;
+  background:rgba(4,10,24,.88);border:1px solid #4aa3ff44;
+  border-radius:6px;padding:3px 10px;transition:color .4s,border-color .4s}
+
+/* ── TERMINAL ── */
+#terminal{position:fixed;bottom:0;left:0;right:0;z-index:10;
+  background:rgba(3,7,16,.94);border-top:1px solid rgba(74,163,255,.2);
+  padding:10px 22px 14px;pointer-events:none}
+#term-tabs{display:flex;gap:16px;margin-bottom:7px}
+.ttab{font-size:11px;color:#405060;padding-bottom:3px}
+.ttab.on{color:#4aa3ff;border-bottom:1px solid #4aa3ff}
+#term-log{height:54px;overflow:hidden;display:flex;flex-direction:column-reverse;gap:3px}
+.ll{font-size:11px;display:flex;gap:8px;animation:fi .4s ease forwards;opacity:0}
+@keyframes fi{to{opacity:1}}
+.la{color:#4a6880;min-width:82px}
+.li{color:#4aa3ff}.ls{color:#46d17f}.lw{color:#ffb43e}
+.lm{color:#8aaac8}
+
+/* ── FOOTER ── */
+#footer{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
+  z-index:10;pointer-events:none;font-size:11px;color:#344455;
+  text-align:center;letter-spacing:.4px;font-style:italic}
+</style>
+</head>
+<body>
+
+<div id="ui-header">
+  <div>
+    <div id="logo">HR-OS</div>
+    <div id="badge"><div id="badge-dot"></div>HR-OS: Online</div>
+  </div>
+  <div id="title-block">
+    <div id="title-main">Own your hiring loop</div>
+    <div id="title-sub">Asystent HR przejmuje rutynę. Człowiek trzyma decyzje.</div>
+  </div>
+  <div style="width:110px"></div>
+</div>
+
+<div id="vignette"></div>
+<div id="labels"></div>
+<div id="match-pct">87% match</div>
+
+<div id="footer">Ludzie wyznaczają kierunek. Agenci robią robotę. Decyzja zostaje przy człowieku.</div>
+
+<div id="terminal">
+  <div id="term-tabs">
+    <div class="ttab on">Terminal</div>
+    <div class="ttab">Output</div>
+    <div class="ttab">Event Log</div>
+  </div>
+  <div id="term-log"></div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three":        "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls }   from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+// ══════════════════════════════════════════════
+// PALETA
+// ══════════════════════════════════════════════
+const P = {
+  blue:   0x4aa3ff, green:  0x46d17f,
+  purple: 0x9b6bff, amber:  0xffb43e, red: 0xff5d6c,
+  bg:     0x070b14, floor:  0x0d1624,
+  desk:   0x1a2840, metal:  0x1e3050, dark: 0x08101e,
+};
+
+// ══════════════════════════════════════════════
+// SCENA + RENDERER
+// ══════════════════════════════════════════════
+const scene    = new THREE.Scene();
+scene.background = new THREE.Color(P.bg);
+scene.fog        = new THREE.FogExp2(P.bg, 0.038);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace  = THREE.SRGBColorSpace;
+renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+// Three r160: useLegacyLights=false = fizycznie poprawne światła
+renderer.useLegacyLights   = false;
+document.body.appendChild(renderer.domElement);
+renderer.domElement.style.cssText = 'position:fixed;inset:0;width:100%!important;height:100%!important';
+
+// ══════════════════════════════════════════════
+// KAMERA IZOMETRYCZNA (OrthographicCamera ~35°)
+// ══════════════════════════════════════════════
+let aspect = innerWidth / innerHeight;
+const FS   = 14; // frustum size
+const camera = new THREE.OrthographicCamera(
+  -FS*aspect/2, FS*aspect/2, FS/2, -FS/2, 0.1, 200
+);
+camera.position.set(18, 13, 18);
+camera.lookAt(0, 0, 0);
+
+// ══════════════════════════════════════════════
+// ORBIT CONTROLS
+// ══════════════════════════════════════════════
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enablePan    = false;
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.minPolarAngle = Math.PI * 0.18;
+controls.maxPolarAngle = Math.PI * 0.44;
+controls.minZoom = 0.5;
+controls.maxZoom = 2.5;
+controls.target.set(0, 0, 0);
+controls.update();
+
+// ══════════════════════════════════════════════
+// POST-PROCESSING: BLOOM
+// ══════════════════════════════════════════════
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(
+  new THREE.Vector2(innerWidth, innerHeight),
+  0.60,   // strength
+  0.55,   // radius
+  0.80    // threshold
+);
+composer.addPass(bloom);
+
+// ══════════════════════════════════════════════
+// RESIZE
+// ══════════════════════════════════════════════
+function onResize() {
+  aspect = innerWidth / innerHeight;
+  camera.left   = -FS*aspect/2; camera.right  = FS*aspect/2;
+  camera.top    =  FS/2;        camera.bottom = -FS/2;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+}
+window.addEventListener('resize', onResize);
+onResize();
+
+// ══════════════════════════════════════════════
+// ŚWIATŁA
+// ══════════════════════════════════════════════
+
+// Ambient — ciemny, zimny
+scene.add(new THREE.AmbientLight(0x18283c, 8));
+
+// Główny kierunkowy (cienie)
+const sun = new THREE.DirectionalLight(0xc8dcf4, 12);
+sun.position.set(14, 22, 12);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera,
+  { near:.5, far:80, left:-13, right:13, top:13, bottom:-13 });
+sun.shadow.bias = -0.001;
+scene.add(sun);
+
+// Kolorowe pointlighty (neonowe akcenty)
+const ptB = new THREE.PointLight(P.blue,   40, 8);  ptB.position.set(-2, 3, -1); scene.add(ptB);
+const ptP = new THREE.PointLight(P.purple, 30, 7);  ptP.position.set( 3, 3,  0); scene.add(ptP);
+const ptG = new THREE.PointLight(P.green,  25, 6);  ptG.position.set( 0, 2.5,2.5);scene.add(ptG);
+const ptA = new THREE.PointLight(P.amber,  25, 6);  ptA.position.set(-3.5,2.5,1.5);scene.add(ptA);
+const ptR = new THREE.PointLight(P.red,    18, 5);  ptR.position.set( 0.5,2.5,-4);scene.add(ptR);
+
+// ══════════════════════════════════════════════
+// POMOCNICZE FACTORY
+// ══════════════════════════════════════════════
+function mat(color, o={}) {
+  return new THREE.MeshStandardMaterial({
+    color: new THREE.Color(color),
+    roughness:  o.r ?? 0.75,
+    metalness:  o.m ?? 0.1,
+    emissive:   o.em  ? new THREE.Color(o.em)  : undefined,
+    emissiveIntensity: o.ei ?? 1,
+    transparent: !!o.op,
+    opacity: o.op ?? 1,
+  });
+}
+
+function addBox(w,h,d, material, x,y,z, parent=scene, rx=0,ry=0,rz=0) {
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), material);
+  mesh.position.set(x,y,z);
+  mesh.rotation.set(rx,ry,rz);
+  mesh.castShadow = mesh.receiveShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+
+function addCyl(rt,rb,h,seg, material, x,y,z, parent=scene) {
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg), material);
+  mesh.position.set(x,y,z);
+  mesh.castShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+
+function addSph(r,seg, material, x,y,z, parent=scene) {
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(r,seg,seg), material);
+  mesh.position.set(x,y,z);
+  mesh.castShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+
+function group(x,y,z) {
+  const g = new THREE.Group(); g.position.set(x,y,z); scene.add(g); return g;
+}
+
+// ══════════════════════════════════════════════
+// PLATFORMA
+// ══════════════════════════════════════════════
+addBox(14.4, 0.44, 11.4, mat(0x0d1624, {r:.88, m:.08}), 0,-0.22,0);
+
+// Krawędź metaliczna
+const edgeM = mat(0x1e3352, {r:.35, m:.75});
+[[14.6,.06,.07, 0,.03, 5.7],[14.6,.06,.07, 0,.03,-5.7],
+ [.07,.06,11.6,-7.3,.03,0],[.07,.06,11.6, 7.3,.03,0]]
+ .forEach(([w,h,d,x,y,z])=>addBox(w,h,d,edgeM,x,y,z));
+
+// Emissive krawędź (niebieska)
+const edgeEM = mat(P.blue,{r:1,em:P.blue,ei:3.5});
+[[14.8,.025,.025,0,.04,5.71],[14.8,.025,.025,0,.04,-5.71],
+ [.025,.025,11.8,-7.31,.04,0],[.025,.025,11.8,7.31,.04,0]]
+ .forEach(([w,h,d,x,y,z])=>{
+   const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),edgeEM);
+   m.position.set(x,y,z); scene.add(m);
+ });
+
+// ══════════════════════════════════════════════
+// ŚWIECĄCE ŚCIEŻKI NA PODŁODZE
+// ══════════════════════════════════════════════
+const pathM = mat(P.blue,{r:1,em:P.blue,ei:4,op:.9});
+[
+  [.06,.018,4.2,  -2,.008,-2.4],   // INBOX → Recruiting
+  [4.0,.018,.06,   0.5,.008,-1],   // Desk → Kanban
+  [.06,.018,2.8,  -1,.008, 1.2],   // Desk → Library
+  [3.2,.018,.06,   1,.008, 2.5],   // Library → Kanban
+  [.06,.018,2.0,  -3.5,.008, 0],   // Vault spur
+  [2.5,.018,.06,  -1.5,.008,-3.8], // Security spur
+].forEach(([w,h,d,x,y,z])=>{
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),pathM);
+  m.position.set(x,y,z); scene.add(m);
+});
+
+// ══════════════════════════════════════════════
+// STANOWISKO 1 — RECRUITING DESK
+// ══════════════════════════════════════════════
+const g1 = group(-2,0,-1);
+const deskM  = mat(0x1a2840,{r:.8,m:.18});
+const monM   = mat(0x060e18,{r:.3,m:.75});
+const scrBlue= mat(P.blue, {r:1,em:P.blue,ei:3});
+const scrGrn = mat(P.green,{r:1,em:P.green,ei:2.5});
+// Blat
+addBox(2.4,.08,1.1,deskM, 0,.62,0, g1);
+// Nogi
+[[-1,.31,-.45],[1,.31,-.45],[-1,.31,.45],[1,.31,.45]].forEach(([x,y,z])=>
+  addCyl(.04,.04,.62,6,mat(0x2a3a50,{r:.35,m:.8}),x,y,z,g1));
+// Monitor 1 (niebieski)
+addBox(.72,.52,.05, monM,   -.44,1.02,-.43,g1);
+addBox(.64,.44,.03, scrBlue,-.44,1.02,-.41,g1);
+addCyl(.025,.025,.28,6,mat(0x1a2a40,{m:.8}),-.44,.8,-.4,g1);
+// Monitor 2 (zielony)
+addBox(.62,.44,.05, monM,    .42,1.00,-.43,g1);
+addBox(.54,.36,.03, scrGrn,  .42,1.00,-.41,g1);
+addCyl(.025,.025,.26,6,mat(0x1a2a40,{m:.8}),.42,.79,-.4,g1);
+// Klawiatura
+addBox(.52,.025,.2, mat(0x0c1824,{r:.9}), -.28,.665,.1,g1);
+// Mysz
+addBox(.08,.04,.12, mat(0x0a1620,{r:.8}), .18,.655,.16,g1);
+// INBOX
+addBox(.38,.24,.28, mat(P.amber,{em:P.amber,ei:1.8,r:.7}), -.9,.74,.18,g1);
+// Krzesło
+addBox(.6,.06,.6, mat(0x14222e,{r:.9}), .12,.42,.62,g1);
+addCyl(.03,.03,.42,6,mat(0x1a2840,{m:.6}),.12,.21,.62,g1);
+
+// ══════════════════════════════════════════════
+// STANOWISKO 2 — WHITEBOARD
+// ══════════════════════════════════════════════
+const g2 = group(2,0,-2.6);
+addCyl(.04,.04,1.9,6,mat(0x2a3a50,{m:.8}),-.72,.95,0,g2);
+addCyl(.04,.04,1.9,6,mat(0x2a3a50,{m:.8}), .72,.95,0,g2);
+addBox(1.7,1.2,.06, mat(0x0c1a2a,{r:.9}), 0,1.3,0,g2);
+addBox(1.58,1.1,.04, mat(0xdce8f4,{r:.95,m:0}), 0,1.3,.05,g2);
+// Kolorowe linie na tablicy
+[[P.blue,.55,.03,.22,-.38,1.52,.08],[P.green,.38,.03,.18,-.5,1.36,.08],
+ [P.amber,.46,.03,.2,.1,1.18,.08], [P.red,.3,.03,.15,-.18,1.02,.08],
+ [P.purple,.5,.03,.2,-.05,.86,.08]].forEach(([c,w,h,d,x,y,z])=>
+  addBox(w,h,d,mat(c,{em:c,ei:1.8}),x,y,z,g2));
+
+// ══════════════════════════════════════════════
+// STANOWISKO 3 — VAULT / KADRY
+// ══════════════════════════════════════════════
+const g3 = group(-3.5,0,1.6);
+const vaultM = mat(0x1e2d3e,{r:.45,m:.75});
+addBox(.95,1.2,.85, vaultM, 0,.6,0,g3);
+addBox(.82,1.06,.07, mat(0x243545,{r:.38,m:.82}), 0,.6,.46,g3);
+// Uchwyt (torus)
+const handle = new THREE.Mesh(new THREE.TorusGeometry(.1,.022,8,16),
+  mat(P.amber,{r:.25,m:.9,em:P.amber,ei:.6}));
+handle.position.set(0,.6,.52); g3.add(handle);
+// Dioda
+addBox(.05,.05,.05, mat(P.green,{em:P.green,ei:5}), .33,.72,.5,g3);
+// Panel boczny z logiem
+addBox(.18,.06,.03, mat(P.amber,{em:P.amber,ei:1.5}), -.15,.88,.5,g3);
+
+// ══════════════════════════════════════════════
+// STANOWISKO 4 — SKILLS LIBRARY
+// ══════════════════════════════════════════════
+const g4 = group(0,0,2.6);
+const shM = mat(0x182436,{r:.85,m:.12});
+// Półki i boki
+[[2.1,.06,.55,0,0,0],[2.1,.06,.55,0,.58,0],[2.1,.06,.55,0,1.16,0],[2.1,.06,.55,0,1.74,0],
+ [.06,1.8,.55,-1.05,.9,0],[.06,1.8,.55,1.05,.9,0]].forEach(([w,h,d,x,y,z])=>
+  addBox(w,h,d,shM,x,y,z,g4));
+// Segregatory
+const bkC=[P.blue,P.purple,P.green,P.amber,P.red,P.blue,P.green,P.purple,P.amber,0x4488cc,0x55bb55,P.red];
+bkC.forEach((c,i)=>{
+  const col=i%4, row=Math.floor(i/4);
+  addBox(.19,.42,.4, mat(c,{r:.8,em:c,ei:.4}),
+    -0.72+col*.42, 0.28+row*.58, 0, g4);
+});
+
+// ══════════════════════════════════════════════
+// STANOWISKO 5 — KANBAN WALL
+// ══════════════════════════════════════════════
+const g5 = group(3.6,0,0);
+addBox(.07,1.7,2.3, mat(0x0c1828,{r:.9}), 0,.85,0,g5);
+addBox(.05,1.6,2.1, mat(0x0a1420,{r:.95}), .03,.85,0,g5);
+// Kolumny
+[{c:P.amber,z:-.68,l:'TO-DO'},{c:P.blue,z:0,l:'IN PROG'},{c:P.green,z:.68,l:'DONE'}]
+.forEach(col=>{
+  addBox(.05,.07,.52, mat(col.c,{em:col.c,ei:3}), .05,1.58,col.z,g5);
+  for(let r=0;r<3;r++){
+    addBox(.04,.2,.4, mat(col.c,{r:.9,em:col.c,ei:.2,op:.92}),
+      .06, 1.32-r*.28, col.z, g5);
+  }
+});
+// Pionowe podziały
+[-.33,.33].forEach(z=>addBox(.04,1.6,.025,mat(0x1e3254,{r:1}), .04,.85,z,g5));
+
+// ══════════════════════════════════════════════
+// STANOWISKO 6 — SECURITY GATE
+// ══════════════════════════════════════════════
+const g6 = group(.5,0,-4.1);
+const gateM  = mat(0x1e3050,{r:.48,m:.72});
+const gateEM = mat(P.green, {em:P.green,ei:3});
+[-.42,.42].forEach(x=>{
+  addBox(.12,1.05,.12, gateM, x,.525,0,g6);
+  addBox(.06,.06,.06, mat(P.green,{em:P.green,ei:5}), x,.92,.08,g6);
+});
+addBox(.96,.05,.05, gateEM, 0,.88,0,g6);
+addBox(.09,.52,.2, mat(0x0e1a2c,{r:.65,m:.55}), .6,.26,0,g6);
+addBox(.05,.14,.14, mat(P.blue,{em:P.blue,ei:2.5}), .63,.3,0,g6);
+
+// ══════════════════════════════════════════════
+// ROBOTY (5 figurek)
+// ══════════════════════════════════════════════
+const RBOTS = [
+  {x:-1.5,z: .6, c:P.blue},
+  {x: 1.5,z:1.1, c:P.purple},
+  {x: .1, z:-.4, c:P.green},
+  {x:-.6, z:2.1, c:P.amber},
+  {x: 2.5,z:-1.6,c:P.red},
+];
+
+const robotData = RBOTS.map((rb,i)=>{
+  const G = group(rb.x, 0, rb.z);
+  const bm = mat(rb.c,{r:.38,m:.45});
+  const dm = mat(0x080f1c,{r:.8,m:.25});
+  const em = mat(rb.c,{r:.15,em:rb.c,ei:3.5});
+  const jm = mat(0x0e1828,{r:.5,m:.6});
+
+  // Nogi
+  const lL=addBox(.13,.24,.13,dm,-.1,.12,0,G);
+  const lR=addBox(.13,.24,.13,dm, .1,.12,0,G);
+  // Tułów
+  addBox(.36,.42,.3,bm, 0,.46,0,G);
+  // Pas emissive
+  addBox(.38,.05,.32,mat(rb.c,{em:rb.c,ei:2.5}), 0,.43,0,G);
+  // Szyja
+  addBox(.09,.09,.09,dm, 0,.69,0,G);
+  // Głowa
+  addBox(.3,.26,.26,bm, 0,.85,0,G);
+  // Oczy
+  const eL=addSph(.042,8,em,-.078,.85,.14,G);
+  const eR=addSph(.042,8,em, .078,.85,.14,G);
+  // Antena
+  addCyl(.012,.012,.16,6,dm, .055,.99,0,G);
+  addSph(.028,8,mat(rb.c,{em:rb.c,ei:4}), .055,1.08,0,G);
+  // Ramiona (grupy do animacji)
+  const aL=new THREE.Group(); aL.position.set(-.23,.46,0); G.add(aL);
+  addBox(.09,.24,.09,jm, 0,-.12,0,aL);
+  const aR=new THREE.Group(); aR.position.set( .23,.46,0); G.add(aR);
+  addBox(.09,.24,.09,jm, 0,-.12,0,aR);
+
+  return {G,aL,aR,eL,eR,em,lL,lR,off:i*1.18};
+});
+
+// ══════════════════════════════════════════════
+// KOPERTY CV (animowane wzdłuż krzywej)
+// ══════════════════════════════════════════════
+const cvCurve = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(-5.5,.2,-4.5),
+  new THREE.Vector3(-3.8,.2,-3.2),
+  new THREE.Vector3(-2,.2,-1.8),
+  new THREE.Vector3(-1,.2,-1),
+  new THREE.Vector3(.5,.2,-.5),
+  new THREE.Vector3(2,.2, .0),
+  new THREE.Vector3(3.5,.2,.1),
+], false, 'catmullrom', .5);
+
+const cvMatY = mat(P.amber,{em:P.amber,ei:3});
+const cvMatG = mat(P.green, {em:P.green, ei:2.5});
+
+const envs = Array.from({length:4},(_,i)=>{
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(.24,.03,.18),
+    i<2 ? cvMatY : cvMatG
+  );
+  mesh.castShadow = true;
+  scene.add(mesh);
+  return { mesh, t: i/4 };
+});
+
+// ══════════════════════════════════════════════
+// ETYKIETY HTML (projekcja 3D→2D)
+// ══════════════════════════════════════════════
+const LABELS = [
+  {name:'Recruiting Desk', sub:'Screening CV',        p:[-2,2.2,-1],    dot:'#4aa3ff'},
+  {name:'Whiteboard',      sub:'Planowanie etatów',   p:[ 2,2.2,-2.6],  dot:'#ffb43e'},
+  {name:'Vault / Kadry',   sub:'Akta i umowy',        p:[-3.5,2.4,1.6], dot:'#ffb43e'},
+  {name:'Skills Library',  sub:'Onboarding i rozwój', p:[ 0,2.4,2.6],   dot:'#46d17f'},
+  {name:'Kanban Wall',     sub:'Status rekrutacji',   p:[ 3.6,2.2,0],   dot:'#9b6bff'},
+  {name:'Security Gate',   sub:'Zgodność / RODO',     p:[ 0.5,2.2,-4.1],dot:'#ff5d6c'},
+];
+
+const lblContainer = document.getElementById('labels');
+const lblEls = LABELS.map(l=>{
+  const d=document.createElement('div'); d.className='lbl';
+  d.style.borderColor=l.dot+'44';
+  d.innerHTML=`<div><span class="lbl-dot" style="background:${l.dot};box-shadow:0 0 5px ${l.dot}"></span><span class="lbl-name">${l.name}</span></div><div class="lbl-sub">${l.sub}</div>`;
+  lblContainer.appendChild(d);
+  return {el:d, v:new THREE.Vector3(...l.p)};
+});
+
+const matchEl  = document.getElementById('match-pct');
+const matchV3  = new THREE.Vector3(-2, 2.25, -1);
+const _tmp     = new THREE.Vector3();
+
+function project(el, v3) {
+  _tmp.copy(v3).project(camera);
+  const x=(_tmp.x*.5+.5)*innerWidth;
+  const y=(-.5*_tmp.y+.5)*innerHeight;
+  el.style.left=x+'px'; el.style.top=y+'px';
+  el.style.display=_tmp.z<1?'block':'none';
+}
+
+// ══════════════════════════════════════════════
+// TERMINAL — event log
+// ══════════════════════════════════════════════
+const LOGS=[
+  {a:'recruiter', t:'INFO',    m:'Nowe CV: "Anna K." / senior dev / 5y exp'},
+  {a:'screening', t:'SUCCESS', m:'CV ocenione — match 87% → przekazano'},
+  {a:'compliance',t:'INFO',    m:'Zgodność z RODO art.6 potwierdzona'},
+  {a:'onboarding',t:'INFO',    m:'Nowy kandydat w pipeline: #2891'},
+  {a:'human',     t:'SUCCESS', m:'Decyzja u człowieka — zaproszenie wysłane'},
+  {a:'recruiter', t:'INFO',    m:'Nowe CV: "Marek W." / product mgr / 3y exp'},
+  {a:'screening', t:'WARN',    m:'CV match 42% — poniżej progu, wymaga przeglądu'},
+  {a:'compliance',t:'INFO',    m:'Weryfikacja RODO — dane zostaną usunięte'},
+  {a:'kanban',    t:'SUCCESS', m:'Etap "In Progress" → 3 kandydatów aktywnych'},
+  {a:'human',     t:'SUCCESS', m:'Decyzja finalna zatwierdzona przez HR Manager'},
+];
+const termLog=document.getElementById('term-log');
+let logIdx=0;
+function addLog(){
+  const ev=LOGS[logIdx++%LOGS.length];
+  const d=document.createElement('div'); d.className='ll';
+  const tc={INFO:'li',SUCCESS:'ls',WARN:'lw'}[ev.t]||'li';
+  d.innerHTML=`<span class="la">${ev.a}</span><span class="${tc}">[${ev.t}]</span><span class="lm">${ev.m}</span>`;
+  termLog.insertBefore(d,termLog.firstChild);
+  if(termLog.children.length>4) termLog.removeChild(termLog.lastChild);
+}
+addLog();
+setInterval(addLog,2800);
+
+// ══════════════════════════════════════════════
+// ANIMACJA
+// ══════════════════════════════════════════════
+const clock = new THREE.Clock();
+let matchPct = 87;
+let matchTimer = 0;
+
+function animate() {
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+
+  // ── Roboty: idle ──
+  robotData.forEach(rb=>{
+    const ph=t*1.25+rb.off;
+    rb.G.position.y      = Math.sin(ph)*.04;
+    rb.aL.rotation.z     = Math.sin(ph*1.4)*.38;
+    rb.aR.rotation.z     = -Math.sin(ph*1.4)*.38;
+    rb.G.rotation.y      = Math.sin(ph*.38)*.14;
+    // Miganie oczu
+    rb.em.emissiveIntensity = Math.sin(t*9+rb.off)>.96 ? .06 : 3.5;
+  });
+
+  // ── Koperty CV: ruch po krzywej ──
+  envs.forEach((env,i)=>{
+    env.t=(env.t+.0012)%1;
+    const pt  = cvCurve.getPoint(env.t);
+    const pt2 = cvCurve.getPoint(Math.min(env.t+.015,1));
+    env.mesh.position.copy(pt);
+    env.mesh.position.y += Math.sin(t*2.2+i)*.05+.12;
+    _tmp.copy(pt2); env.mesh.lookAt(_tmp);
+  });
+
+  // ── Pulsowanie świateł ──
+  ptB.intensity = 38+Math.sin(t*1.8)*5;
+  ptP.intensity = 28+Math.sin(t*2.2)*4;
+  ptG.intensity = 23+Math.sin(t*1.4)*3;
+  ptA.intensity = 22+Math.sin(t*2.0)*3;
+
+  // ── Uchwyt sejfu ──
+  handle.rotation.z = Math.sin(t*.48)*.18;
+
+  // ── % match (zmiana co ~3s) ──
+  matchTimer+=1/60;
+  if(matchTimer>3){ matchTimer=0; matchPct=48+Math.floor(Math.random()*52); }
+  matchEl.textContent=matchPct+'% match';
+  const ok=matchPct>=70;
+  matchEl.style.color       = ok?'#46d17f':'#ff5d6c';
+  matchEl.style.textShadow  = `0 0 10px ${ok?'#46d17f':'#ff5d6c'}`;
+  matchEl.style.borderColor = (ok?'#46d17f':'#ff5d6c')+'44';
+
+  // ── Orbit controls ──
+  controls.update();
+
+  // ── Etykiety HTML ──
+  lblEls.forEach(l=>project(l.el,l.v));
+  project(matchEl, matchV3);
+
+  // ── Render z bloomem ──
+  composer.render();
+}
+
+animate();
+</script>
+</body>
+</html>
