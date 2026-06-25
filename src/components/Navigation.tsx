@@ -91,6 +91,12 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
 
   return (
     <>
+      {/* ── Mobile Top Bar (logo) ── */}
+      <header className="mobile-topbar">
+        <img src="/logo.png" alt="" width={28} height={28} style={{ borderRadius: 7, objectFit: 'contain', flexShrink: 0 }} />
+        <span className="mobile-topbar-title">Wydatki<span>.</span></span>
+      </header>
+
       {/* ── Desktop Sidebar ── */}
       <nav className="nav">
         <div className="nav-logo">

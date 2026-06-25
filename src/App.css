@@ -187,6 +187,20 @@ body {
   padding: 20px;
 }
 
+/* ── Mobile top bar (logo) — hidden on desktop ── */
+.mobile-topbar {
+  display: none;
+}
+.mobile-topbar-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+.mobile-topbar-title span {
+  color: var(--accent);
+}
+
 /* ── Page Header ── */
 .page-header {
   margin-bottom: 32px;
@@ -741,16 +755,34 @@ body {
     display: none;
   }
 
-  /* Main content fills screen, leaves room for bottom nav */
+  /* Mobile top bar with logo */
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    padding: env(safe-area-inset-top) 16px 0;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    z-index: 150;
+  }
+
+  /* Main content fills screen, leaves room for top bar + bottom nav */
   .main-content {
     margin-left: 0;
-    padding: calc(20px + env(safe-area-inset-top)) 16px 100px;
+    padding: calc(64px + env(safe-area-inset-top)) 16px 100px;
     min-height: 100vh;
   }
 
-  /* Clear the fixed theme toggle (top-right) so headers/buttons don't collide */
+  /* No extra right padding needed — header sits below the top bar/toggle */
   .page-header {
-    padding-right: 52px;
+    padding-right: 0;
   }
 
   /* Goals: always one full-width card per row on phones */
