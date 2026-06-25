@@ -94,7 +94,8 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
       {/* ── Desktop Sidebar ── */}
       <nav className="nav">
         <div className="nav-logo">
-          Wydatki<span>.</span>
+          <img src="/logo.png" alt="" width={32} height={32} style={{ borderRadius: 8, objectFit: 'contain', flexShrink: 0 }} />
+          <div>Wydatki<span>.</span></div>
         </div>
 
         <div className="nav-section-title">Główne</div>
