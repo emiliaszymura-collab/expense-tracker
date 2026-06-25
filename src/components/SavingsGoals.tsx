@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SavingsGoal } from '../types';
-import { Target } from '../icons';
+import { Target, Trash2 } from '../icons';
 
 interface Props {
   goals: SavingsGoal[];
@@ -14,6 +14,15 @@ const GOAL_COLORS = ['#0071e3', '#34c759', '#ff9500', '#af52de', '#ff2d55', '#5a
 
 function fmt(n: number) {
   return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(n);
+}
+
+// Polish plural: 1 → "aktywny cel", 2–4 → "aktywne cele", 5+ → "aktywnych celów"
+function goalsLabel(n: number) {
+  if (n === 1) return '1 aktywny cel';
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return `${n} aktywne cele`;
+  return `${n} aktywnych celów`;
 }
 
 export default function SavingsGoals({ goals, onAdd, onUpdate, onDelete }: Props) {
@@ -53,9 +62,9 @@ export default function SavingsGoals({ goals, onAdd, onUpdate, onDelete }: Props
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <div className="page-title">Cele oszczędnościowe</div>
-            <div className="page-subtitle">{goals.length} aktywnych celów</div>
+            <div className="page-subtitle">{goalsLabel(goals.length)}</div>
           </div>
-          <button className="btn btn-primary" onClick={() => setShowForm(!showForm)}>
+          <button className="btn btn-primary" style={{ whiteSpace: 'nowrap', flexShrink: 0 }} onClick={() => setShowForm(!showForm)}>
             {showForm ? '✕ Anuluj' : '＋ Nowy cel'}
           </button>
         </div>
@@ -119,7 +128,7 @@ export default function SavingsGoals({ goals, onAdd, onUpdate, onDelete }: Props
           </div>
         </div>
       ) : (
-        <div className="bento bento-3">
+        <div className="goals-grid">
           {goals.map(g => {
             const pct = Math.min((g.current / g.target) * 100, 100);
             const days = daysLeft(g.deadline);
@@ -146,7 +155,7 @@ export default function SavingsGoals({ goals, onAdd, onUpdate, onDelete }: Props
                       <button className="btn btn-sm btn-secondary" onClick={() => setDeleteConfirm(null)}>Anuluj</button>
                     </div>
                   ) : (
-                    <button className="btn btn-icon" onClick={() => setDeleteConfirm(g.id)}>🗑</button>
+                    <button className="btn btn-icon" aria-label="Usuń cel" onClick={() => setDeleteConfirm(g.id)}><Trash2 size={16} /></button>
                   )}
                 </div>
 

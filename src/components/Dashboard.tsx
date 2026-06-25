@@ -129,7 +129,6 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
   const monthlyTrend = buildMonthlyTrend(spending);
   const categoryData = buildCategoryData(monthExp);
   const weeklyBar = buildWeeklyBar(spending);
-  const recent = spending.slice(0, 5);
 
   // ── "Dziś" widget: how much you can still spend per remaining day ──
   const _now = new Date();
@@ -308,16 +307,15 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
         <BalanceForecast expenses={expenses} />
       </Reveal>
 
-      {/* Bottom Row */}
-      <Reveal className="bento bento-3">
-        {/* Weekly bar */}
+      {/* Weekly bar — full width */}
+      <Reveal style={{ marginBottom: 16 }}>
         <div className="card">
           <div className="section-title" style={{ marginBottom: 16 }}>Ostatnie 7 dni</div>
-          <MeasuredChart height={150}>
+          <MeasuredChart height={160}>
             {(w) => (
-            <BarChart width={w} height={150} data={weeklyBar} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+            <BarChart width={w} height={160} data={weeklyBar} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(128,128,128,0.15)" vertical={false} />
-              <XAxis dataKey="day" tick={{ fontSize: 12, fill: 'var(--text2)' }} axisLine={false} tickLine={false} />
+              <XAxis dataKey="day" interval={0} tick={{ fontSize: 12, fill: 'var(--text2)' }} axisLine={false} tickLine={false} />
               <YAxis hide />
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="kwota" fill="#0071e3" radius={[6, 6, 0, 0]} />
@@ -325,35 +323,10 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
             )}
           </MeasuredChart>
         </div>
+      </Reveal>
 
-        {/* Recent expenses */}
-        <div className="card">
-          <div className="section-header">
-            <div className="section-title">Ostatnie wydatki</div>
-            <button className="btn btn-sm btn-secondary" onClick={() => onNavigate('expenses')}>Zobacz wszystkie</button>
-          </div>
-          {recent.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--text2)', fontSize: 14 }}>
-              Brak wydatków
-            </div>
-          ) : (
-            recent.map(e => {
-              const cat = categorize(e);
-              return (
-                <div key={e.id} className="expense-row">
-                  <div className="expense-emoji" style={{ background: `${catColor(cat)}18`, color: catColor(cat) }}><CategoryIcon name={cat} color={catColor(cat)} /></div>
-                  <div className="expense-info">
-                    <div className="expense-desc">{e.description}</div>
-                    <div className="expense-meta">{cat} · {new Date(e.date).toLocaleDateString('pl-PL')}</div>
-                  </div>
-                  <div className="expense-amount">{fmt(e.amount)}</div>
-                </div>
-              );
-            })
-          )}
-        </div>
-
-        {/* Goals */}
+      {/* Goals — full width */}
+      <Reveal>
         <div className="card">
           <div className="section-header">
             <div className="section-title">Cele oszczędnościowe</div>

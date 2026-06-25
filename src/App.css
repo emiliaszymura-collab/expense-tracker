@@ -226,6 +226,13 @@ body {
 .col-span-2 { grid-column: span 2; }
 .col-span-3 { grid-column: span 3; }
 
+/* ── Savings goals grid — wide cards, single column on phones ── */
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
 /* ── Stat Cards ── */
 .stat-label {
   font-size: 12px;
@@ -316,8 +323,14 @@ body {
 }
 
 .btn-icon {
-  padding: 8px;
-  background: rgba(0, 0, 0, 0.05);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  flex-shrink: 0;
+  background: rgba(127, 127, 127, 0.12);
   color: var(--text2);
   border-radius: 8px;
 }
@@ -731,8 +744,18 @@ body {
   /* Main content fills screen, leaves room for bottom nav */
   .main-content {
     margin-left: 0;
-    padding: 20px 16px 100px;
+    padding: calc(20px + env(safe-area-inset-top)) 16px 100px;
     min-height: 100vh;
+  }
+
+  /* Clear the fixed theme toggle (top-right) so headers/buttons don't collide */
+  .page-header {
+    padding-right: 52px;
+  }
+
+  /* Goals: always one full-width card per row on phones */
+  .goals-grid {
+    grid-template-columns: 1fr;
   }
 
   /* Page headers */
@@ -1083,7 +1106,7 @@ body {
   padding: 0;
 }
 @media (max-width: 768px) {
-  .theme-toggle { top: 12px; right: 12px; width: 40px; height: 40px; }
+  .theme-toggle { top: calc(12px + env(safe-area-inset-top)); right: 12px; width: 40px; height: 40px; }
 }
 
 /* ── Responsive split layouts (stack to 1 column on mobile) ── */
