@@ -93,14 +93,18 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
     <>
       {/* ── Mobile Top Bar (logo) ── */}
       <header className="mobile-topbar">
-        <img src="/logo.png" alt="" width={28} height={28} style={{ borderRadius: 7, objectFit: 'contain', flexShrink: 0 }} />
+        <span style={{ background: '#fff', borderRadius: 8, padding: 3, display: 'inline-flex', flexShrink: 0, boxShadow: '0 1px 3px rgba(0,0,0,0.18)' }}>
+          <img src="/logo.png" alt="" width={26} height={26} style={{ borderRadius: 6, objectFit: 'contain', display: 'block' }} />
+        </span>
         <span className="mobile-topbar-title">Wydatki<span>.</span></span>
       </header>
 
       {/* ── Desktop Sidebar ── */}
       <nav className="nav">
         <div className="nav-logo">
-          <img src="/logo.png" alt="" width={32} height={32} style={{ borderRadius: 8, objectFit: 'contain', flexShrink: 0 }} />
+          <span style={{ background: '#fff', borderRadius: 9, padding: 3, display: 'inline-flex', flexShrink: 0, boxShadow: '0 1px 3px rgba(0,0,0,0.18)' }}>
+            <img src="/logo.png" alt="" width={30} height={30} style={{ borderRadius: 7, objectFit: 'contain', display: 'block' }} />
+          </span>
           <div>Wydatki<span>.</span></div>
         </div>
 
