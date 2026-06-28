@@ -10,6 +10,7 @@ import { Stagger, StaggerItem, Reveal, AnimatedNumber } from '../motion';
 import { CategoryIcon, PiggyBank, Target } from '../icons';
 import BalanceForecast from './BalanceForecast';
 import WeeklyReport from './WeeklyReport';
+import AccountSync from './AccountSync';
 
 interface Props {
   expenses: Expense[];
@@ -19,6 +20,7 @@ interface Props {
   budget: number;
   onSetBudget: (b: number) => void;
   apiKey: string;
+  onImport: (expenses: Expense[]) => void;
 }
 
 function fmt(n: number) {
@@ -105,7 +107,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBudget, apiKey }: Props) {
+export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBudget, apiKey, onImport }: Props) {
   const [editBudget, setEditBudget] = React.useState(false);
   const [budgetInput, setBudgetInput] = React.useState(String(budget || ''));
 
@@ -150,6 +152,9 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
         <div className="page-title">Dashboard</div>
         <div className="page-subtitle">{new Date().toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
       </div>
+
+      {/* Bank sync status + manual refresh */}
+      <AccountSync onImport={onImport} />
 
       {/* "Dziś" widget */}
       <div className="card" style={{ marginBottom: 16, position: 'relative', overflow: 'hidden' }}>

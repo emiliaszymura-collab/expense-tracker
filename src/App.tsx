@@ -81,7 +81,7 @@ function App() {
   const renderView = () => {
     switch (view) {
       case 'dashboard':
-        return <Dashboard expenses={expenses} categories={categories} goals={goals} onNavigate={setView} budget={budget} onSetBudget={setBudget} apiKey={apiKey} />;
+        return <Dashboard expenses={expenses} categories={categories} goals={goals} onNavigate={setView} budget={budget} onSetBudget={setBudget} apiKey={apiKey} onImport={importExpenses} />;
       case 'expenses':
         return <ExpenseList expenses={expenses} categories={categories} onDelete={deleteExpense} onAdd={() => setView('add')} />;
       case 'add':

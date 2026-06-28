@@ -324,12 +324,15 @@ app.use('/api/eb', requireAuth);
 const ebStates = {};
 // Multiple bank connections at once. Each: { bank, sessionId, accounts:[{uid,name,iban,currency,balance,bank}] }
 let ebSessions = [];
+// Timestamp (ISO) of the last successful bank refresh — shown in the UI.
+let ebLastSync = null;
 
 function allEbAccounts() {
   return ebSessions.flatMap(s => s.accounts);
 }
 
 // Pull recent transactions for ALL linked accounts across ALL banks and persist them (deduped).
+// Also refreshes each account's LIVE balance so the UI shows the current amount.
 // psu = optional {ip,userAgent} for user-triggered requests (lifts bank rate limits).
 async function refreshBank(psu, fromDate) {
   const from = fromDate || new Date(Date.now() - 90 * 864e5).toISOString().split('T')[0];
@@ -341,11 +344,24 @@ async function refreshBank(psu, fromDate) {
     } catch (e) {
       console.error(`[refresh ${acc.bank || ''} ${acc.uid}]`, e.response?.data?.message || e.message);
     }
+    // Always refresh the live balance, even if a transaction fetch failed.
+    try {
+      const bal = await eb.getBalances(acc.uid);
+      if (bal && typeof bal.amount === 'number') {
+        acc.balance = bal.amount;
+        if (bal.currency) acc.currency = bal.currency;
+      }
+    } catch (e) {
+      console.error(`[balance ${acc.bank || ''} ${acc.uid}]`, e.response?.data?.message || e.message);
+    }
   }
   const seen = new Set();
   expenses = expenses.filter(e => (seen.has(e.id) ? false : seen.add(e.id)));
   const added = await db.saveTransactions(expenses);
-  return { expenses, added };
+  ebLastSync = new Date().toISOString();
+  await db.setKV('eb_last_sync', ebLastSync);
+  await db.setKV('eb_sessions', ebSessions); // persist refreshed balances
+  return { expenses, added, lastSync: ebLastSync, accounts: allEbAccounts() };
 }
 
 app.get('/api/eb/health', (req, res) => {
@@ -414,10 +430,24 @@ app.post('/api/eb/session', async (req, res) => {
   }
 });
 
-// Current accounts across all connected banks
+// Current accounts across all connected banks (+ last sync time)
 app.get('/api/eb/accounts', (req, res) => {
   if (!ebSessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
-  res.json({ connected: true, accounts: allEbAccounts() });
+  res.json({ connected: true, accounts: allEbAccounts(), lastSync: ebLastSync });
+});
+
+// Manual "Synchronizuj teraz": refresh transactions + live balances, return how many were added
+app.post('/api/eb/sync', async (req, res) => {
+  try {
+    if (!eb.configured()) return res.status(400).json({ error: 'Enable Banking nie skonfigurowany' });
+    if (!ebSessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
+    const psu = { ip: (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0].trim(), userAgent: req.headers['user-agent'] };
+    const r = await refreshBank(psu, req.body?.fromDate);
+    res.json({ added: r.added, expenses: r.expenses, lastSync: r.lastSync, accounts: r.accounts });
+  } catch (err) {
+    console.error('[eb/sync]', err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data?.message || err.message });
+  }
 });
 
 // Pull transactions for all linked accounts → mapped expenses
@@ -529,13 +559,15 @@ db.init()
       const legacy = await db.getKV('eb_session');
       if (legacy && legacy.accounts) { ebSessions = [{ bank: 'Bank', ...legacy }]; }
     }
-    // Automatyczne odświeżanie co 6h (4×/dobę — w granicach limitów banków)
+    // Restore last sync timestamp
+    ebLastSync = (await db.getKV('eb_last_sync')) || null;
+    // Automatyczne odświeżanie co 1h (transakcje + salda na żywo)
     setInterval(() => {
       if (!ebSessions.length) return;
       refreshBank()
         .then(r => r.added && console.log(`[auto-refresh] +${r.added} nowych transakcji`))
         .catch(e => console.error('[auto-refresh]', e.message));
-    }, 6 * 60 * 60 * 1000);
+    }, 60 * 60 * 1000);
   })
   .catch(e => console.error('[db init]', e.message));
 
