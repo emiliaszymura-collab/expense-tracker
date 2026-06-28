@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HR-OS — Oferta dla agencji rekrutacyjnych</title>
+<!--
+  OFERTA 1-STRONA dla agencji rekrutacyjnych.
+  JAK UŻYĆ:
+   - Otwórz w przeglądarce. Kliknij „Drukuj / Zapisz PDF" (prawy górny róg) i zapisz jako PDF — gotowe do wysłania.
+   - Zmień dane kontaktowe na dole na swoje (e-mail/telefon).
+-->
+<style>
+  :root{
+    --navy:#0f1b35; --blue:#2f6df6; --blue2:#4aa3ff; --ink:#1b2433; --muted:#5b6b85;
+    --line:#e3e9f4; --bg:#f5f8fe; --green:#1f9d57;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; color:var(--ink); background:var(--bg); line-height:1.5; }
+  .page{ max-width:820px; margin:24px auto; background:#fff; box-shadow:0 10px 40px rgba(20,40,80,.10); border-radius:14px; overflow:hidden; }
+  .printbar{ position:fixed; top:16px; right:16px; z-index:10; }
+  .printbar button{ cursor:pointer; background:var(--blue); color:#fff; border:none; padding:10px 16px; border-radius:10px; font-size:14px; font-weight:600; box-shadow:0 6px 18px rgba(47,109,246,.35); }
+
+  header{ background:linear-gradient(135deg,#0f1b35,#1c2f5c); color:#fff; padding:30px 38px; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .logo{ font-weight:800; font-size:24px; letter-spacing:.5px; }
+  .logo .os{ color:var(--blue2); }
+  .tag{ margin-left:auto; font-size:12px; color:#aebfdd; border:1px solid rgba(174,191,221,.35); padding:5px 11px; border-radius:999px; }
+  header h1{ font-size:30px; font-weight:800; margin-top:18px; line-height:1.15; }
+  header h1 .hl{ color:var(--blue2); }
+  header p{ margin-top:8px; color:#c4d2ee; font-size:15px; max-width:620px; }
+
+  .body{ padding:30px 38px; }
+  h2{ font-size:13px; text-transform:uppercase; letter-spacing:.8px; color:var(--blue); margin:26px 0 12px; }
+  h2:first-child{ margin-top:0; }
+  p.lead{ font-size:15px; color:var(--ink); }
+  .muted{ color:var(--muted); }
+
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .card{ border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:#fbfcff; }
+  .card .t{ font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px; }
+  .card .d{ font-size:13px; color:var(--muted); margin-top:4px; }
+  .dot{ width:9px; height:9px; border-radius:50%; background:var(--blue2); box-shadow:0 0 8px var(--blue2); flex:0 0 auto; }
+
+  .steps{ counter-reset:s; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .step{ position:relative; border:1px solid var(--line); border-radius:12px; padding:30px 12px 12px; font-size:12.5px; color:var(--muted); background:#fff; }
+  .step:before{ counter-increment:s; content:counter(s); position:absolute; top:10px; left:12px; width:22px; height:22px; border-radius:50%; background:var(--blue); color:#fff; font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center; }
+  .step b{ color:var(--ink); display:block; font-size:13px; margin-bottom:3px; }
+
+  .rodo{ border-left:4px solid var(--green); background:#f1faf4; border-radius:8px; padding:12px 16px; font-size:13px; color:#1c5d39; }
+  .rodo b{ color:#14492b; }
+
+  .price{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+  .pcard{ border:1px solid var(--line); border-radius:12px; padding:16px; text-align:center; }
+  .pcard.high{ border-color:var(--blue); box-shadow:0 6px 20px rgba(47,109,246,.12); }
+  .pcard .pl{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; }
+  .pcard .pv{ font-size:22px; font-weight:800; color:var(--navy); margin:6px 0 2px; }
+  .pcard .pd{ font-size:12px; color:var(--muted); }
+  .badge{ display:inline-block; font-size:10.5px; font-weight:700; color:#fff; background:var(--green); padding:2px 8px; border-radius:999px; margin-bottom:6px; }
+
+  .cta{ margin-top:24px; background:linear-gradient(135deg,#2f6df6,#4aa3ff); color:#fff; border-radius:12px; padding:18px 22px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .cta .big{ font-size:17px; font-weight:800; }
+  .cta .sub{ font-size:13px; color:#e6efff; }
+  .contact{ margin-left:auto; text-align:right; font-size:13px; }
+  .contact b{ display:block; font-size:15px; }
+
+  footer{ padding:16px 38px; border-top:1px solid var(--line); font-size:11px; color:var(--muted); text-align:center; }
+
+  @media print{
+    body{ background:#fff; } .printbar{ display:none; }
+    .page{ box-shadow:none; margin:0; max-width:100%; border-radius:0; }
+    @page{ margin:12mm; }
+  }
+  @media (max-width:680px){ .grid,.price{ grid-template-columns:1fr; } .steps{ grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+  <div class="printbar"><button onclick="window.print()">🖨️ Drukuj / Zapisz PDF</button></div>
+
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="logo">HR<span class="os">-OS</span></div>
+        <div class="tag">Hiring Loop System OS</div>
+      </div>
+      <h1>Z <span class="hl">200 CV do top 10</span> w godzinę — zgodnie z RODO.</h1>
+      <p>System do automatycznego screeningu CV dla agencji rekrutacyjnych. AI robi rutynę: czyta, ocenia i porządkuje kandydatów. Decyzję podejmuje rekruter.</p>
+    </header>
+
+    <div class="body">
+      <h2>Problem, który znamy</h2>
+      <p class="lead">Agencje toną w CV. Na jeden wakat spływa 100–300 aplikacji, a ręczny screening zajmuje rekruterowi <b>2–3 dni na każdy wakat</b>. Najlepsi kandydaci czekają i odchodzą do konkurencji. Czas = utracona prowizja.</p>
+
+      <h2>Rozwiązanie: HR-OS Auto-Shortlist</h2>
+      <div class="grid">
+        <div class="card"><div class="t"><span class="dot"></span> Ranking w godzinę</div><div class="d">Wrzucasz CV + opis wakatu. Dostajesz top kandydatów z % dopasowania i uzasadnieniem.</div></div>
+        <div class="card"><div class="t"><span class="dot"></span> Talent pool, który pracuje</div><div class="d">CV nie giną po procesie — wracają do bazy i „odżywają" przy nowym wakacie.</div></div>
+        <div class="card"><div class="t"><span class="dot"></span> Macierz dopasowania</div><div class="d">Jedno CV oceniane do wielu otwartych wakatów naraz — widzisz, gdzie wcisnąć kandydata.</div></div>
+        <div class="card"><div class="t"><span class="dot"></span> Gotowy shortlist dla klienta</div><div class="d">Automatyczny raport top kandydatów — wysyłasz klientowi w minuty, nie godziny.</div></div>
+      </div>
+
+      <h2>Jak to działa</h2>
+      <div class="steps">
+        <div class="step"><b>Wpływa CV</b>z maila, formularza lub Twojego ATS</div>
+        <div class="step"><b>AI ocenia</b>dopasowanie do wakatu + uzasadnienie</div>
+        <div class="step"><b>Rekruter decyduje</b>zatwierdza lub odrzuca jednym kliknięciem</div>
+        <div class="step"><b>Shortlist gotowy</b>raport dla klienta i aktualizacja bazy</div>
+      </div>
+
+      <h2>Zgodność wbudowana</h2>
+      <div class="rodo">⚖️ <b>Decyzję o kandydacie zawsze podejmuje człowiek.</b> Ocena AI to wyłącznie rekomendacja — zgodnie z RODO (art. 22) i unijnym AI Act. Scoring ignoruje dane wrażliwe (wiek, płeć, pochodzenie), co ogranicza ryzyko biasu. Pełny dziennik zdarzeń = audytowalność.</div>
+
+      <h2>Cennik</h2>
+      <div class="price">
+        <div class="pcard"><div class="pl">Pilot 30 dni</div><div class="pv">0–999 zł</div><div class="pd">Wdrożenie testowe na Twoich CV, bez zobowiązań</div></div>
+        <div class="pcard high"><span class="badge">NAJCZĘŚCIEJ</span><div class="pl">Wdrożenie</div><div class="pv">3 000–6 000 zł</div><div class="pd">Konfiguracja, podpięcie CV/ATS, kalibracja scoringu</div></div>
+        <div class="pcard"><div class="pl">Abonament</div><div class="pv">od 900 zł/mc</div><div class="pd">Utrzymanie, wsparcie, dostęp do systemu i bazy</div></div>
+      </div>
+
+      <div class="cta">
+        <div>
+          <div class="big">Zobacz demo na żywo — 15 minut</div>
+          <div class="sub">Puszczę scoring na Waszych przykładowych CV. Zobaczycie wynik na własnych danych.</div>
+        </div>
+        <div class="contact">
+          <b>Emilia Szymura</b>
+          emiliaszymura@icloud.com<br/>
+          <span class="muted">HR-OS — Hiring Loop System OS</span>
+        </div>
+      </div>
+    </div>
+
+    <footer>HR-OS to narzędzie wspierające rekruterów. Ostateczne decyzje o kandydatach podejmują ludzie. Dokument poglądowy — warunki ustalane indywidualnie.</footer>
+  </div>
+</body>
+</html>

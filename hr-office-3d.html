@@ -48,7 +48,14 @@
 
   /* UI */
   .ui{ position:fixed; z-index:10; pointer-events:none; }
-  #topleft{ top:18px; left:20px; }
+  /* Górny pasek systemowy */
+  #sysbar{ position:fixed; top:0; left:0; right:0; height:32px; z-index:11; display:flex; align-items:center; gap:8px;
+    padding:0 16px; font-size:12px; color:var(--przygas); background:rgba(6,10,20,0.82);
+    border-bottom:1px solid rgba(120,160,220,0.14); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+  #sysbar .os{ display:flex; align-items:center; gap:7px; color:var(--tekst); font-weight:600; }
+  #sysbar .os .ic{ width:13px; height:13px; border-radius:4px; background:linear-gradient(135deg,#4aa3ff,#9b6bff); box-shadow:0 0 8px rgba(74,163,255,.6); }
+  #sysbar .clock{ margin-left:auto; font-variant-numeric:tabular-nums; }
+  #topleft{ top:44px; left:20px; }
   .brandline{ display:flex; align-items:center; gap:10px; }
   .logo{ font-weight:800; font-size:20px; letter-spacing:.5px;
     background:linear-gradient(90deg,#bcd6ff,#4aa3ff); -webkit-background-clip:text; background-clip:text; color:transparent; }
@@ -57,12 +64,12 @@
   .badge .live{ width:8px; height:8px; border-radius:50%; background:var(--zielony); box-shadow:0 0 10px var(--zielony); animation:pulse 1.8s ease-in-out infinite; }
   @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.35} }
 
-  #topright{ top:18px; right:20px; pointer-events:auto; display:flex; gap:8px; }
+  #topright{ top:42px; right:20px; pointer-events:auto; display:flex; gap:8px; }
   .ctrlBtn{ cursor:pointer; font-size:12px; color:var(--tekst); background:rgba(12,20,38,0.7);
     border:1px solid rgba(120,160,220,0.25); border-radius:999px; padding:7px 12px; backdrop-filter:blur(8px); }
   .ctrlBtn:hover{ border-color:rgba(120,160,220,0.55); }
 
-  #thesis{ top:58px; left:20px; max-width:60vw; }
+  #thesis{ top:88px; left:20px; max-width:60vw; }
   #thesis h1{ font-size:clamp(22px,3.6vw,40px); font-weight:800; line-height:1.05; text-shadow:0 2px 24px rgba(0,0,0,.5); }
   #thesis h1 .blue{ color:var(--niebieski); }
   #thesis p{ margin-top:8px; font-size:clamp(12px,1.6vw,15px); color:var(--przygas); max-width:340px; }
@@ -101,6 +108,8 @@
   .cvCard{ display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer;
     background:rgba(22,33,58,0.6); border:1px solid rgba(120,160,220,0.14); transition:all .2s; }
   .cvCard:hover{ border-color:rgba(120,160,220,0.4); transform:translateX(-3px); background:rgba(28,42,72,0.7); }
+  .cvCard.sel{ border-color:rgba(74,163,255,0.7); box-shadow:0 0 0 1px rgba(74,163,255,0.4), 0 6px 20px rgba(74,163,255,0.15); background:rgba(30,46,80,0.8); }
+  .cvMore{ margin-top:5px; cursor:pointer; font-size:9.5px; color:var(--niebieski); background:none; border:none; padding:0; text-decoration:underline; }
   .cvAva{ width:42px; height:42px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center;
     font-weight:800; font-size:15px; color:#06121f; }
   .cvInfo{ flex:1; min-width:0; }
@@ -111,13 +120,13 @@
   .cvPct{ font-size:14px; font-weight:800; } .cvPill{ font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:99px; margin-top:4px; display:inline-block; }
 
   /* Szczegóły kandydata */
-  #cvDetail{ position:fixed; inset:0; z-index:45; display:none; align-items:center; justify-content:center; padding:20px;
+  #cvDetail, #agentModal, #stationModal{ position:fixed; inset:0; z-index:45; display:none; align-items:center; justify-content:center; padding:20px;
     background:rgba(3,6,14,0.6); backdrop-filter:blur(4px); }
-  #cvDetail.open{ display:flex; }
+  #cvDetail.open, #agentModal.open, #stationModal.open{ display:flex; }
   .cvCardBig{ width:min(440px,94vw); max-height:88vh; overflow-y:auto; background:linear-gradient(180deg, rgba(16,24,44,0.99), rgba(10,15,28,0.99));
     border:1px solid rgba(120,160,220,0.25); border-radius:18px; box-shadow:0 30px 80px rgba(0,0,0,.6); padding:22px;
     transform:scale(.92); opacity:0; transition:all .3s ease; }
-  #cvDetail.open .cvCardBig{ transform:scale(1); opacity:1; }
+  #cvDetail.open .cvCardBig, #agentModal.open .cvCardBig, #stationModal.open .cvCardBig{ transform:scale(1); opacity:1; }
   .dHead{ display:flex; align-items:center; gap:14px; }
   .dAva{ width:60px; height:60px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:22px; color:#06121f; }
   .dName{ font-size:19px; font-weight:780; } .dRole{ font-size:13px; color:var(--przygas); margin-top:2px; }
@@ -128,6 +137,9 @@
   .chips{ display:flex; flex-wrap:wrap; gap:6px; } .chip{ font-size:12px; padding:5px 11px; border-radius:99px; background:rgba(120,160,220,0.14); border:1px solid rgba(120,160,220,0.2); }
   .dRow{ display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid rgba(120,160,220,0.1); }
   .dRow span:first-child{ color:var(--przygas); }
+  .dStats{ display:flex; gap:8px; margin-top:16px; }
+  .statTile{ flex:1; text-align:center; padding:10px 6px; border-radius:11px; background:rgba(120,160,220,0.1); border:1px solid rgba(120,160,220,0.16); }
+  .statTile .v{ font-size:17px; font-weight:800; } .statTile .l{ font-size:9.5px; color:var(--przygas); margin-top:2px; }
   .dAI{ margin-top:16px; padding:14px; border-radius:12px; background:rgba(70,209,127,0.08); border:1px solid rgba(70,209,127,0.2); font-size:13px; line-height:1.5; }
   .dAI b{ color:var(--zielony); }
   .dRODO{ margin-top:12px; padding:11px 13px; border-radius:10px; background:rgba(155,107,255,0.1); border:1px solid rgba(155,107,255,0.25); font-size:11.5px; color:#c9b8ff; line-height:1.5; }
@@ -146,6 +158,12 @@
   <div id="app"></div>
   <div id="vignette"></div>
 
+  <!-- Górny pasek systemowy -->
+  <div id="sysbar">
+    <div class="os"><span class="ic"></span> Hiring Loop System OS</div>
+    <div class="clock" id="clock">—</div>
+  </div>
+
   <div class="ui" id="topleft">
     <div class="brandline"><div class="logo">HR-OS</div><div class="badge"><span class="live"></span> HR-OS: Online</div></div>
   </div>
@@ -158,7 +176,7 @@
 
   <div class="ui" id="thesis">
     <h1>Own your<br/><span class="blue">hiring loop</span></h1>
-    <p>Asystent HR przejmuje rutynę. Człowiek trzyma decyzje. <b>Kliknij INBOX</b>, aby zobaczyć CV.</p>
+    <p>System HR przejmuje rutynę. Człowiek trzyma decyzje. <b>Kliknij INBOX</b>, aby zobaczyć CV.</p>
   </div>
 
   <div class="ui" id="terminal">
@@ -180,6 +198,12 @@
   <!-- Szczegóły kandydata -->
   <div id="cvDetail"><div class="cvCardBig" id="cvDetailBody"></div></div>
 
+  <!-- Szczegóły agenta -->
+  <div id="agentModal"><div class="cvCardBig" id="agentBody"></div></div>
+
+  <!-- Szczegóły stanowiska -->
+  <div id="stationModal"><div class="cvCardBig" id="stationBody"></div></div>
+
   <div id="loader">Ładowanie sceny 3D…</div>
 
   <script type="importmap">
@@ -197,6 +221,7 @@
   import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
   import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
   import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+  import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
   const KOLOR={ niebieski:0x4aa3ff, zielony:0x46d17f, fiolet:0x9b6bff, bursztyn:0xffb43e, czerwony:0xff5d6c };
   const hex=c=>'#'+c.toString(16).padStart(6,'0');
@@ -205,17 +230,27 @@
   // DANE KANDYDATÓW (CV) — model danych dla podglądu INBOX
   // ===========================================================================
   const KANDYDACI=[
-    { imie:'Anna Kowalska',    rola:'Frontend Developer',  match:94, status:'Nowe',         skills:['React','TypeScript','CSS','Testy'], exp:'5 lat', edu:'PW — Informatyka', miasto:'Warszawa', ai:'Bardzo silne dopasowanie do stacku zespołu. Doświadczenie w React i testach jednostkowych pokrywa wymagania.' },
-    { imie:'Piotr Nowak',      rola:'Backend Developer',   match:88, status:'W ocenie',     skills:['Node.js','PostgreSQL','Docker','AWS'], exp:'7 lat', edu:'AGH — Informatyka', miasto:'Kraków', ai:'Mocny profil backendowy. Warto zweryfikować doświadczenie z mikroserwisami na rozmowie.' },
-    { imie:'Maria Wiśniewska', rola:'UX/UI Designer',      match:91, status:'Nowe',         skills:['Figma','Design System','Badania','Prototypy'], exp:'4 lata', edu:'ASP — Wzornictwo', miasto:'Wrocław', ai:'Portfolio spójne z naszym design systemem. Wysoka jakość prototypów.' },
-    { imie:'Tomasz Lewandowski',rola:'DevOps Engineer',    match:79, status:'W ocenie',     skills:['Kubernetes','Terraform','CI/CD'], exp:'6 lat', edu:'PWr — Teleinformatyka', miasto:'Wrocław', ai:'Dobre kompetencje infra. Niższe dopasowanie do wymagań chmury GCP — do potwierdzenia.' },
-    { imie:'Katarzyna Zając',  rola:'Product Manager',     match:85, status:'U człowieka',  skills:['Roadmapy','Analityka','Agile','Stakeholderzy'], exp:'8 lat', edu:'SGH — Zarządzanie', miasto:'Warszawa', ai:'Silne kompetencje produktowe. Rekomendacja: rozmowa z Head of Product.' },
-    { imie:'Michał Wójcik',    rola:'Data Analyst',        match:72, status:'Nowe',         skills:['SQL','Python','Power BI'], exp:'3 lata', edu:'UW — Matematyka', miasto:'Łódź', ai:'Solidne podstawy analityczne, mniejsze doświadczenie biznesowe.' },
-    { imie:'Aleksandra Mazur', rola:'QA Engineer',         match:83, status:'Zaakceptowane', skills:['Cypress','Selenium','Manual QA'], exp:'5 lat', edu:'PG — Informatyka', miasto:'Gdańsk', ai:'Bardzo dobre dopasowanie do procesu QA. Zaakceptowana do dalszego etapu przez rekrutera.' },
-    { imie:'Jakub Krawczyk',   rola:'Frontend Developer',  match:61, status:'Odrzucone',    skills:['Vue','JavaScript'], exp:'2 lata', edu:'Bootcamp', miasto:'Poznań', ai:'Niższe dopasowanie do stacku (React vs Vue). Decyzja odrzucenia podjęta przez człowieka.' },
+    { imie:'Anna Kowalska',     rola:'Frontend Developer', match:94, status:'Nowy',         skills:['React','TypeScript','CSS','Testy'], exp:'5 lat', edu:'PW — Informatyka', miasto:'Warszawa', ai:'Bardzo silne dopasowanie do stacku zespołu. Doświadczenie w React i testach jednostkowych pokrywa wymagania.' },
+    { imie:'Piotr Nowak',       rola:'Backend Developer',  match:88, status:'W wątku',      skills:['Node.js','PostgreSQL','Docker','AWS'], exp:'7 lat', edu:'AGH — Informatyka', miasto:'Kraków', ai:'Mocny profil backendowy. Warto zweryfikować doświadczenie z mikroserwisami na rozmowie.' },
+    { imie:'Maria Wiśniewska',  rola:'UI/UX Engineer',     match:91, status:'Nowy',         skills:['Figma','Design System','Badania','Prototypy'], exp:'4 lata', edu:'ASP — Wzornictwo', miasto:'Wrocław', ai:'Portfolio spójne z naszym design systemem. Wysoka jakość prototypów.' },
+    { imie:'Tomasz Lewandowski',rola:'DevOps Engineer',    match:79, status:'W wątku',      skills:['Kubernetes','Terraform','CI/CD'], exp:'6 lat', edu:'PWr — Teleinformatyka', miasto:'Wrocław', ai:'Dobre kompetencje infra. Niższe dopasowanie do wymagań chmury GCP — do potwierdzenia.' },
+    { imie:'Katarzyna Zając',   rola:'Product Manager',    match:85, status:'W wątku',      skills:['Roadmapy','Analityka','Agile','Stakeholderzy'], exp:'8 lat', edu:'SGH — Zarządzanie', miasto:'Katowice', ai:'Silne kompetencje produktowe. Rekomendacja: rozmowa z Head of Product.' },
+    { imie:'Michał Wojak',      rola:'Data Analyst',       match:83, status:'Nowy',         skills:['SQL','Python','Power BI'], exp:'3 lata', edu:'UW — Matematyka', miasto:'Gdańsk', ai:'Solidne podstawy analityczne, mniejsze doświadczenie biznesowe.' },
+    { imie:'Aleksandra Mazur',  rola:'QA Engineer',        match:83, status:'Zaakceptowany', skills:['Cypress','Selenium','Manual QA'], exp:'5 lat', edu:'PG — Informatyka', miasto:'Gdańsk', ai:'Bardzo dobre dopasowanie do procesu QA. Zaakceptowana do dalszego etapu przez rekrutera.' },
+    { imie:'Jakub Krawiec',     rola:'Frontend Developer', match:61, status:'Odrzucony',    skills:['Vue','JavaScript'], exp:'2 lata', edu:'Bootcamp', miasto:'Rzeszów', ai:'Niższe dopasowanie do stacku (React vs Vue). Decyzja odrzucenia podjęta przez człowieka.' },
   ];
-  const STATUS_KOLOR={ 'Nowe':KOLOR.niebieski, 'W ocenie':KOLOR.bursztyn, 'Zaakceptowane':KOLOR.zielony, 'Odrzucone':KOLOR.czerwony, 'U człowieka':KOLOR.fiolet };
+  const STATUS_KOLOR={ 'Nowy':KOLOR.niebieski, 'W wątku':KOLOR.bursztyn, 'Zaakceptowany':KOLOR.zielony, 'Odrzucony':KOLOR.czerwony };
   const inicjaly=n=>n.split(' ').map(w=>w[0]).slice(0,2).join('');
+
+  // Dane AGENTÓW (kolejność = kolejność robotów w pozRobotow; idx 5 = operator przy biurku)
+  const AGENCI=[
+    { imie:'Recruiter Agent', rola:'Screening CV', kolor:KOLOR.bursztyn, status:'Pracuje', przetworzone:128, dokladnosc:'94%', czas:'2.3 s', cap:['Parsowanie CV','Ekstrakcja danych','Ranking'], zadania:['Screening 3 nowych CV','Aktualizacja Kanban'], opis:'Czyta i porządkuje CV z INBOX, tworzy wstępny ranking dla rekrutera.' },
+    { imie:'Screening Agent', rola:'Ocena kompetencji', kolor:KOLOR.zielony, status:'Online', przetworzone:96, dokladnosc:'91%', czas:'3.1 s', cap:['Dopasowanie skilli','Analiza doświadczenia'], zadania:['Ocena 2 kandydatów'], opis:'Porównuje kompetencje kandydatów z wymaganiami stanowiska.' },
+    { imie:'Compliance Agent', rola:'RODO / zgodność', kolor:KOLOR.fiolet, status:'Online', przetworzone:204, dokladnosc:'99%', czas:'0.8 s', cap:['Kontrola RODO','Anonimizacja','Audyt'], zadania:['Weryfikacja zgód','Audyt logów'], opis:'Pilnuje zgodności z RODO i AI Act, anonimizuje dane wrażliwe.' },
+    { imie:'Security Agent', rola:'Kontrola dostępu', kolor:KOLOR.czerwony, status:'Pracuje', przetworzone:512, dokladnosc:'100%', czas:'0.2 s', cap:['Bramki dostępu','Szyfrowanie','Anomalie'], zadania:['Monitoring dostępu'], opis:'Zarządza dostępem do akt i danych kadrowych.' },
+    { imie:'Onboarding Agent', rola:'Wdrożenie i rozwój', kolor:KOLOR.niebieski, status:'Online', przetworzone:64, dokladnosc:'96%', czas:'1.5 s', cap:['Plany onboardingu','Ścieżki rozwoju'], zadania:['Plan wdrożenia A. Mazur'], opis:'Buduje plany onboardingu i ścieżki rozwoju dla nowych pracowników.' },
+    { imie:'HR Orchestrator', rola:'Koordynacja agentów', kolor:KOLOR.niebieski, status:'Pracuje', przetworzone:'∞', dokladnosc:'—', czas:'real-time', cap:['Orkiestracja','Kolejkowanie','Raportowanie'], zadania:['Koordynacja pętli HR'], opis:'Centralny operator — rozdziela zadania między agentów i raportuje człowiekowi.' },
+  ];
 
   // ===========================================================================
   // SCENA / KAMERA / RENDERERY
@@ -225,13 +260,19 @@
   scene.background=new THREE.Color(0x0b1220);
   scene.fog=new THREE.Fog(0x070b14,30,72);
 
-  const renderer=new THREE.WebGLRenderer({antialias:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
   renderer.setSize(window.innerWidth,window.innerHeight);
   renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.15;
   renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   app.appendChild(renderer.domElement);
+
+  // Oświetlenie środowiskowe (IBL) — realistyczne odbicia na metalu, szkle i podłodze.
+  // Jednorazowa "zapieczona" mapa (PMREM) = duży zysk jakości, znikomy koszt w trakcie.
+  const pmrem=new THREE.PMREMGenerator(renderer);
+  scene.environment=pmrem.fromScene(new RoomEnvironment(),0.04).texture;
+  scene.environmentIntensity=0.55;
 
   const labelRenderer=new CSS2DRenderer(); labelRenderer.setSize(window.innerWidth,window.innerHeight);
   Object.assign(labelRenderer.domElement.style,{position:'fixed',top:'0',left:'0',pointerEvents:'none',zIndex:'6'});
@@ -253,7 +294,7 @@
   const hemi=new THREE.HemisphereLight(0x9bbcff,0x141c30,0.6); scene.add(hemi);
   const ambient=new THREE.AmbientLight(0x4a5d85,0.4); scene.add(ambient);
   const key=new THREE.DirectionalLight(0xeef4ff,2.2); key.position.set(16,26,12); key.castShadow=true;
-  key.shadow.mapSize.set(2048,2048); key.shadow.camera.near=1; key.shadow.camera.far=90;
+  key.shadow.mapSize.set(1024,1024); key.shadow.camera.near=1; key.shadow.camera.far=90;
   key.shadow.camera.left=-28; key.shadow.camera.right=28; key.shadow.camera.top=28; key.shadow.camera.bottom=-28;
   key.shadow.bias=-0.0004; key.shadow.radius=6; scene.add(key);
   const pAk=(c,x,y,z,m=60,d=28)=>{ const p=new THREE.PointLight(c,m,d,2.0); p.position.set(x,y,z); scene.add(p); return p; };
@@ -265,12 +306,13 @@
   const swiat=new THREE.Group(); scene.add(swiat);
   const platMat=new THREE.MeshStandardMaterial({color:0x141d33,roughness:0.85,metalness:0.15});
   const platforma=new THREE.Mesh(new RoundedBoxGeometry(34,2.4,34,6,1.0),platMat); platforma.position.y=-1.2; platforma.receiveShadow=true; swiat.add(platforma);
-  const podlogaMat=new THREE.MeshStandardMaterial({color:0x22304f,roughness:0.55,metalness:0.25});
+  const podlogaMat=new THREE.MeshStandardMaterial({color:0x1c2a47,roughness:0.32,metalness:0.45,envMapIntensity:0.8});
   const podloga=new THREE.Mesh(new RoundedBoxGeometry(33,0.3,33,6,0.6),podlogaMat); podloga.position.y=0.06; podloga.receiveShadow=true; swiat.add(podloga);
   const ramkaMat=new THREE.MeshStandardMaterial({color:0x0d1426,emissive:KOLOR.niebieski,emissiveIntensity:0.6,roughness:0.4,metalness:0.6});
   const ramka=new THREE.Mesh(new RoundedBoxGeometry(33.4,0.12,33.4,4,0.4),ramkaMat); ramka.position.y=0.24; swiat.add(ramka);
 
-  const szkloMat=new THREE.MeshPhysicalMaterial({color:0x16223c,roughness:0.25,metalness:0.0,transmission:0.6,transparent:true,opacity:0.5,thickness:0.6,ior:1.2,side:THREE.DoubleSide});
+  // Ściany: tani materiał transparentny zamiast transmission (duży zysk wydajności)
+  const szkloMat=new THREE.MeshStandardMaterial({color:0x16223c,roughness:0.3,metalness:0.1,transparent:true,opacity:0.42,side:THREE.DoubleSide});
   const scTyl=new THREE.Mesh(new THREE.BoxGeometry(32,11,0.4),szkloMat); scTyl.position.set(0,5.5,-15); scTyl.receiveShadow=true; swiat.add(scTyl);
   const scLewa=new THREE.Mesh(new THREE.BoxGeometry(0.4,11,32),szkloMat); scLewa.position.set(-15,5.5,0); scLewa.receiveShadow=true; swiat.add(scLewa);
   const liniaMat=new THREE.MeshStandardMaterial({color:0x0d1426,emissive:KOLOR.niebieski,emissiveIntensity:0.5,roughness:0.4,metalness:0.5});
@@ -283,7 +325,7 @@
   // ===========================================================================
   const matMat=(c,r=0.7,m=0.2)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
   const metalMat=()=>new THREE.MeshStandardMaterial({color:0x2a3550,roughness:0.4,metalness:0.8});
-  const ekranMat=k=>new THREE.MeshPhysicalMaterial({color:0x0a1830,emissive:k,emissiveIntensity:1.1,roughness:0.15,metalness:0.0,transmission:0.4,transparent:true,opacity:0.94,thickness:0.4});
+  const ekranMat=k=>new THREE.MeshStandardMaterial({color:0x0a1830,emissive:k,emissiveIntensity:1.1,roughness:0.2,metalness:0.0});
   const cienie=o=>o.traverse(m=>{ if(m.isMesh){ m.castShadow=true; m.receiveShadow=true; } });
 
   function budujRecruitingDesk(k){ const g=new THREE.Group();
@@ -367,7 +409,7 @@
   // ===========================================================================
   // CZĄSTECZKI W POWIETRZU (atmosfera)
   // ===========================================================================
-  (function(){ const N=320, pos=new Float32Array(N*3); for(let i=0;i<N;i++){ pos[i*3]=(Math.random()-0.5)*32; pos[i*3+1]=Math.random()*14; pos[i*3+2]=(Math.random()-0.5)*32; }
+  (function(){ const N=140, pos=new Float32Array(N*3); for(let i=0;i<N;i++){ pos[i*3]=(Math.random()-0.5)*32; pos[i*3+1]=Math.random()*14; pos[i*3+2]=(Math.random()-0.5)*32; }
     const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
     const mat=new THREE.PointsMaterial({color:0x8fc0ff,size:0.08,transparent:true,opacity:0.55,blending:THREE.AdditiveBlending,depthWrite:false});
     const pts=new THREE.Points(geo,mat); swiat.add(pts); window.__particles=pts; })();
@@ -391,10 +433,69 @@
     cienie(g); g.userData={ kind:'robot', rekaP, wizjerMat, faza:Math.random()*Math.PI*2, hop:0, base:1.0 }; return g; }
 
   const pozRobotow=[ {x:-7.5,z:-3.0,k:KOLOR.bursztyn,rot:0.7},{x:6.0,z:-2.0,k:KOLOR.zielony,rot:-1.6},{x:7.5,z:1.0,k:KOLOR.fiolet,rot:-2.0},{x:5.0,z:6.0,k:KOLOR.czerwony,rot:-2.6},{x:-5.0,z:6.0,k:KOLOR.niebieski,rot:2.4} ];
-  for(const p of pozRobotow){ const r=zrobRobota(p.k); r.position.set(p.x,0.3,p.z); r.rotation.y=p.rot; r.userData.baseY=0.3; swiat.add(r); roboty.push(r); interaktywne.push(r); }
+  pozRobotow.forEach((p,idx)=>{ const r=zrobRobota(p.k); r.position.set(p.x,0.3,p.z); r.rotation.y=p.rot; r.userData.baseY=0.3; r.userData.agentIdx=idx; swiat.add(r); roboty.push(r); interaktywne.push(r); });
 
   const operator=zrobRobota(KOLOR.niebieski); operator.position.set(0,0.3,2.6); operator.rotation.y=Math.PI;
-  operator.userData.rekaP.rotation.set(-1.0,0,-0.6); operator.userData.rekaP.position.set(0.45,1.1,-0.3); operator.userData.baseY=0.3; swiat.add(operator);
+  operator.userData.rekaP.rotation.set(-1.0,0,-0.6); operator.userData.rekaP.position.set(0.45,1.1,-0.3); operator.userData.baseY=0.3; operator.userData.agentIdx=5; swiat.add(operator); interaktywne.push(operator);
+
+  // ===========================================================================
+  // DETALE BIURA — rośliny, terraria, lampki, fotele, kubek ("drogi" klimat)
+  // ===========================================================================
+  // Doniczkowa roślina: stożkowa korona z kilku brył + ceramiczna doniczka
+  function roslina(x,z,s=1){
+    const g=new THREE.Group();
+    const doniczka=new THREE.Mesh(new THREE.CylinderGeometry(0.32*s,0.24*s,0.42*s,16),
+      new THREE.MeshStandardMaterial({color:0xb6c2d6,roughness:0.5,metalness:0.05,envMapIntensity:0.6}));
+    doniczka.position.y=0.21*s; g.add(doniczka);
+    const ziemia=new THREE.Mesh(new THREE.CylinderGeometry(0.3*s,0.3*s,0.06*s,16),new THREE.MeshStandardMaterial({color:0x2a2017,roughness:1})); ziemia.position.y=0.42*s; g.add(ziemia);
+    const lisc=new THREE.MeshStandardMaterial({color:0x2f7d4f,roughness:0.7,envMapIntensity:0.5});
+    for(let i=0;i<5;i++){ const b=new THREE.Mesh(new THREE.SphereGeometry((0.28-i*0.03)*s,12,12),lisc);
+      b.position.set((Math.random()-0.5)*0.2*s, (0.6+i*0.18)*s, (Math.random()-0.5)*0.2*s); b.scale.y=1.3; g.add(b); }
+    g.position.set(x,0.3,z); cienie(g); swiat.add(g); return g;
+  }
+  // Szklane terrarium (kopuła) na podświetlanym cokole — sygnaturowy element renderów
+  function terrarium(x,z,kolor=KOLOR.zielony){
+    const g=new THREE.Group();
+    const cokol=new THREE.Mesh(new RoundedBoxGeometry(1.0,0.5,1.0,3,0.08),new THREE.MeshStandardMaterial({color:0x223152,roughness:0.5,metalness:0.4,envMapIntensity:0.7})); cokol.position.y=0.25; g.add(cokol);
+    const podst=new THREE.Mesh(new THREE.CylinderGeometry(0.34,0.34,0.05,24),new THREE.MeshStandardMaterial({color:0x101a30,emissive:kolor,emissiveIntensity:0.7,roughness:0.5})); podst.position.y=0.53; g.add(podst);
+    const mech=new THREE.Mesh(new THREE.SphereGeometry(0.2,16,12),new THREE.MeshStandardMaterial({color:0x2f7d4f,roughness:0.9})); mech.scale.y=0.6; mech.position.y=0.6; g.add(mech);
+    // szkło "na tanio": przezroczyste + niska szorstkość + odbicia z IBL
+    const szklo=new THREE.Mesh(new THREE.SphereGeometry(0.36,24,16,0,Math.PI*2,0,Math.PI*0.55),
+      new THREE.MeshStandardMaterial({color:0xbfe0ff,roughness:0.08,metalness:0.1,transparent:true,opacity:0.22,envMapIntensity:1.4})); szklo.position.y=0.55; g.add(szklo);
+    g.position.set(x,0.3,z); cienie(g); swiat.add(g); return g;
+  }
+  // Lampka biurkowa z ciepłym światłem
+  function lampka(x,z,rot=0){
+    const g=new THREE.Group();
+    const baza=new THREE.Mesh(new THREE.CylinderGeometry(0.16,0.18,0.06,16),metalMat()); g.add(baza);
+    const ramie=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,0.9,8),metalMat()); ramie.position.set(0,0.45,0); ramie.rotation.z=0.4; g.add(ramie);
+    const klosz=new THREE.Mesh(new THREE.ConeGeometry(0.16,0.22,16,1,true),new THREE.MeshStandardMaterial({color:0x2a3550,roughness:0.4,metalness:0.7,side:THREE.DoubleSide})); klosz.position.set(0.32,0.8,0); klosz.rotation.z=-0.9; g.add(klosz);
+    const zar=new THREE.Mesh(new THREE.SphereGeometry(0.06,12,12),new THREE.MeshStandardMaterial({color:0x1a1206,emissive:0xffcf7a,emissiveIntensity:2.2})); zar.position.set(0.34,0.74,0); g.add(zar);
+    const swiatlo=new THREE.PointLight(0xffcf7a,8,5,2); swiatlo.position.set(0.4,0.7,0); g.add(swiatlo);
+    g.position.set(x,0.3,z); g.rotation.y=rot; cienie(g); swiat.add(g); return g;
+  }
+  // Fotel biurowy
+  function fotel(x,z,rot=0,kolor=0x2a3550){
+    const g=new THREE.Group();
+    const m=new THREE.MeshStandardMaterial({color:kolor,roughness:0.6,metalness:0.2,envMapIntensity:0.5});
+    const sied=new THREE.Mesh(new RoundedBoxGeometry(0.9,0.18,0.9,3,0.08),m); sied.position.y=0.9; g.add(sied);
+    const opar=new THREE.Mesh(new RoundedBoxGeometry(0.9,1.0,0.16,3,0.08),m); opar.position.set(0,1.4,-0.4); g.add(opar);
+    const slup=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,0.8,10),metalMat()); slup.position.y=0.45; g.add(slup);
+    for(let i=0;i<5;i++){ const a=i/5*Math.PI*2; const noga=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,0.5,8),metalMat());
+      noga.rotation.z=Math.PI/2; noga.position.set(Math.cos(a)*0.28,0.06,Math.sin(a)*0.28); noga.rotation.y=-a; g.add(noga); }
+    g.position.set(x,0.3,z); g.rotation.y=rot; cienie(g); swiat.add(g); return g;
+  }
+
+  // Rozmieszczenie detali
+  roslina(-13.5,-13.5,1.2); roslina(13,-13,1.1); roslina(-13.5,12.5,1.15); roslina(12.5,12.5,1.0);
+  roslina(-3.5,3.0,0.8); roslina(4.0,-4.5,0.85);
+  terrarium(-2.0,-12.2,KOLOR.zielony); terrarium(4.6,-12.2,KOLOR.niebieski);
+  lampka(1.6,0.6,-0.6); lampka(-13.6,-9,1.2);
+  fotel(0,4.4,Math.PI,0x223152);        // za centralnym biurkiem
+  fotel(-12.5,-9.5,0.7); fotel(12.0,8.5,-2.2);
+  // kubek na biurku
+  (function(){ const k=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.1,0.22,16),new THREE.MeshStandardMaterial({color:0xeaf1ff,roughness:0.3,envMapIntensity:0.8}));
+    k.position.set(-1.3,1.55,0.2); cienie(k); swiat.add(k); })();
 
   // ===========================================================================
   // KOPERTY CV + INBOX (klikalny)
@@ -418,14 +519,20 @@
     const gl=new THREE.Mesh(new THREE.PlaneGeometry(1.0,0.8),new THREE.MeshBasicMaterial({color:KOLOR.niebieski,transparent:true,opacity:0.18})); gl.position.z=-0.06; g.add(gl);
     cienie(b); return g; }
   const koperty=[]; for(let i=0;i<3;i++){ const k=zrobKoperte(); k.userData={t:i*0.34,speed:0.05+Math.random()*0.01}; swiat.add(k); koperty.push(k); }
-  const matchEl=()=>document.getElementById('matchVal'); let ostatniMatch=0;
+  const matchEl=()=>document.getElementById('matchVal'); let ostatniMatch=0; let wybranyMatch=null;
+
+  // Koperta "na żądanie": leci INBOX -> Recruiting Desk po kliknięciu karty kandydata
+  const flyCurve=new THREE.CatmullRomCurve3([ new THREE.Vector3(-14,0.9,8), new THREE.Vector3(-7,3.2,4), new THREE.Vector3(0,1.9,0.6) ]);
+  const flyCV=zrobKoperte(); flyCV.visible=false; flyCV.scale.set(1.2,1.2,1.2); swiat.add(flyCV);
+  let flyAnim=null;
+  function leciKoperta(match){ flyCV.visible=true; flyAnim={ t0:performance.now(), dur:1500, match }; }
 
   // ===========================================================================
   // POSTPROCESSING
   // ===========================================================================
   let composer=null,bloom=null;
-  try{ composer=new EffectComposer(renderer); composer.addPass(new RenderPass(scene,camera));
-    bloom=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),0.62,0.85,0.22); composer.addPass(bloom); composer.addPass(new OutputPass());
+  try{ composer=new EffectComposer(renderer); composer.setPixelRatio(1); composer.addPass(new RenderPass(scene,camera));
+    bloom=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),0.55,0.8,0.25); composer.addPass(bloom); composer.addPass(new OutputPass());
   }catch(e){ console.warn('Bloom niedostępny — emissive wystarczy.',e); composer=null; }
 
   // ===========================================================================
@@ -456,9 +563,19 @@
       card.innerHTML=`<div class="cvAva" style="background:${hex(c.match>=85?KOLOR.zielony:c.match>=75?KOLOR.bursztyn:KOLOR.czerwony)}">${inicjaly(c.imie)}</div>
         <div class="cvInfo"><div class="cvName">${c.imie}</div><div class="cvRole">${c.rola} · ${c.miasto}</div>
           <div class="cvBarWrap"><div class="cvBar" style="width:${c.match}%;background:${hex(c.match>=85?KOLOR.zielony:c.match>=75?KOLOR.bursztyn:KOLOR.czerwony)}"></div></div></div>
-        <div class="cvRight"><div class="cvPct">${c.match}%</div><div class="cvPill" style="background:${hex(sk)}22;color:${hex(sk)};border:1px solid ${hex(sk)}55">${c.status}</div></div>`;
-      card.addEventListener('click',()=>{ blip(620,0.07); pokazSzczegoly(idx); });
+        <div class="cvRight"><div class="cvPct">${c.match}%</div><div class="cvPill" style="background:${hex(sk)}22;color:${hex(sk)};border:1px solid ${hex(sk)}55">${c.status}</div><button class="cvMore">szczegóły</button></div>`;
+      card.addEventListener('click',()=>wybierzKandydata(idx,card));
+      card.querySelector('.cvMore').addEventListener('click',e=>{ e.stopPropagation(); blip(620,0.07); pokazSzczegoly(idx); });
       cvList.appendChild(card); });
+  }
+  // Klik karty kandydata: podświetla kartę, wysyła kopertę CV do Recruiting Desk, dopisuje log
+  function wybierzKandydata(idx,card){ const c=KANDYDACI[idx]; blip(560,0.08);
+    cvList.querySelectorAll('.cvCard').forEach(el=>el.classList.remove('sel')); if(card) card.classList.add('sel');
+    leciKoperta(c.match); wybranyMatch=c.match;
+    logAkcja('screening','SUCCESS','CV ocenione: '+c.imie);
+    logAkcja('scorer','SUCCESS','Dopasowanie kandydata: '+c.match+'%');
+    logAkcja('compliance','INFO','Zgodność z RODO: OK');
+    logAkcja('human','SUCCESS','Decyzja u człowieka');
   }
   function pokazSzczegoly(idx){ const c=KANDYDACI[idx]; const sk=STATUS_KOLOR[c.status]; const mk=c.match>=85?KOLOR.zielony:c.match>=75?KOLOR.bursztyn:KOLOR.czerwony;
     cvDetailBody.innerHTML=`
@@ -482,6 +599,47 @@
   function otworzCV(){ blip(560,0.1); budujListeCV(); cvPanel.classList.add('open'); controls.autoRotate=false; }
   function zamknijCV(){ cvPanel.classList.remove('open'); cvDetail.classList.remove('open'); controls.autoRotate=true; }
 
+  // ----- Panel AGENTA (klik robota) -----
+  const agentModal=document.getElementById('agentModal'), agentBody=document.getElementById('agentBody');
+  function zamknijAgenta(){ agentModal.classList.remove('open'); if(!cvPanel.classList.contains('open')) controls.autoRotate=true; }
+  function otworzAgenta(idx){ const a=AGENCI[idx]; if(!a) return; const k=hex(a.kolor); const sk=a.status==='Pracuje'?KOLOR.bursztyn:KOLOR.zielony;
+    agentBody.innerHTML=`
+      <div class="dHead"><div class="dAva" style="background:${k}">🤖</div>
+        <div><div class="dName">${a.imie}</div><div class="dRole">${a.rola}</div></div>
+        <button class="dClose" id="aClose">✕</button></div>
+      <div class="dRing" style="background:${k}14;border-color:${k}33"><div><div class="big" style="color:${k}">${a.status}</div><div class="lbl">Status agenta</div></div>
+        <div style="margin-left:auto;text-align:right"><div class="cvPill" style="background:${hex(sk)}22;color:${hex(sk)};border:1px solid ${hex(sk)}55">● aktywny</div></div></div>
+      <div class="dStats"><div class="statTile"><div class="v" style="color:${k}">${a.przetworzone}</div><div class="l">Przetworzone</div></div>
+        <div class="statTile"><div class="v">${a.dokladnosc}</div><div class="l">Dokładność</div></div>
+        <div class="statTile"><div class="v">${a.czas}</div><div class="l">Śr. czas</div></div></div>
+      <div class="dSection"><h4>Możliwości</h4><div class="chips">${a.cap.map(c=>`<span class="chip">${c}</span>`).join('')}</div></div>
+      <div class="dSection"><h4>Aktualne zadania</h4>${a.zadania.map(z=>`<div class="dRow"><span>▸ ${z}</span><span style="color:${k}">w toku</span></div>`).join('')}</div>
+      <div class="dAI"><b>Rola:</b> ${a.opis}</div>
+      <div class="dRODO">⚖️ Agent wykonuje rutynę i przygotowuje rekomendacje. Decyzje o ludziach podejmuje człowiek (RODO art. 22, AI Act).</div>
+      <div class="dBtns"><button class="dBtn ghost" id="aClose2">Zamknij</button></div>`;
+    agentModal.classList.add('open'); controls.autoRotate=false; blip(560,0.09);
+    document.getElementById('aClose').addEventListener('click',zamknijAgenta);
+    document.getElementById('aClose2').addEventListener('click',zamknijAgenta);
+  }
+
+  // ----- Karta detali STANOWISKA (klik w scenie 3D) -----
+  const stationModal=document.getElementById('stationModal'), stationBody=document.getElementById('stationBody');
+  function zamknijStacje(){ stationModal.classList.remove('open'); if(!cvPanel.classList.contains('open')) controls.autoRotate=true; }
+  function otworzStacje(s){ const k=hex(s.kolor);
+    stationBody.innerHTML=`
+      <div class="dHead"><div class="dAva" style="background:${k}"><span style="filter:brightness(0.2)">●</span></div>
+        <div><div class="dName">${s.tytul}</div><div class="dRole">${s.sub}</div></div>
+        <button class="dClose" id="sClose">✕</button></div>
+      <div class="dRing" style="background:${k}14;border-color:${k}33"><div><div class="big" style="color:${k}">Aktywne</div><div class="lbl">Status stanowiska</div></div>
+        <div style="margin-left:auto;text-align:right"><div class="cvPill" style="background:${k}22;color:${k};border:1px solid ${k}55">● online</div></div></div>
+      <div class="dAI"><b>Opis:</b> ${s.opis}</div>
+      <div class="dRODO">⚖️ Stanowisko obsługiwane przez agenta — przygotowuje dane i rekomendacje. Decyzje podejmuje człowiek (RODO art. 22, AI Act).</div>
+      <div class="dBtns"><button class="dBtn ghost" id="sClose2">Zamknij</button></div>`;
+    stationModal.classList.add('open'); controls.autoRotate=false; blip(480,0.09);
+    document.getElementById('sClose').addEventListener('click',zamknijStacje);
+    document.getElementById('sClose2').addEventListener('click',zamknijStacje);
+  }
+
   // ===========================================================================
   // RAYCASTER — hover + klik na obiektach 3D
   // ===========================================================================
@@ -499,8 +657,8 @@
     aktualizujMysz(e); ray.setFromCamera(mysz,camera); const hit=ray.intersectObjects(interaktywne,true)[0]; if(!hit) return;
     const root=znajdzKorzen(hit.object); if(!root) return;
     if(root.userData.kind==='inbox'){ otworzCV(); }
-    else if(root.userData.kind==='stacja'){ const s=root.userData.s; blip(480,0.09); skupKamere(new THREE.Vector3(s.x,1.6,s.z),1.5); toast(`📍 ${s.tytul} — ${s.opis}`); }
-    else if(root.userData.kind==='robot'){ blip(700,0.07,'triangle'); root.userData.hop=1.0; toast('🤖 Cześć! Asystent gotowy do pracy.'); }
+    else if(root.userData.kind==='stacja'){ const s=root.userData.s; skupKamere(new THREE.Vector3(s.x,1.6,s.z),1.5); otworzStacje(s); logAkcja(s.id,'INFO',s.tytul+' — otwarto detale'); }
+    else if(root.userData.kind==='robot'){ blip(700,0.07,'triangle'); root.userData.hop=1.0; otworzAgenta(root.userData.agentIdx); }
   });
 
   // ===========================================================================
@@ -520,10 +678,10 @@
   // ===========================================================================
   let jasny=false; const themeBtn=document.getElementById('themeBtn');
   function ustawMotyw(j){ jasny=j;
-    if(j){ scene.background.setHex(0x141d30); scene.fog.color.setHex(0x1a2440); ambient.intensity=0.85; hemi.intensity=1.0; key.intensity=2.6; renderer.toneMappingExposure=1.25;
+    if(j){ scene.background.setHex(0x141d30); scene.fog.color.setHex(0x1a2440); ambient.intensity=0.85; hemi.intensity=1.0; key.intensity=2.6; renderer.toneMappingExposure=1.3; scene.environmentIntensity=0.95;
       podlogaMat.color.setHex(0x9fb0cf); platMat.color.setHex(0x46557a); szkloMat.opacity=0.35; if(bloom) bloom.strength=0.45; document.getElementById('vignette').style.opacity=0.4; themeBtn.textContent='🌙 Ciemny'; }
-    else{ scene.background.setHex(0x0b1220); scene.fog.color.setHex(0x070b14); ambient.intensity=0.4; hemi.intensity=0.6; key.intensity=2.2; renderer.toneMappingExposure=1.05;
-      podlogaMat.color.setHex(0x22304f); platMat.color.setHex(0x141d33); szkloMat.opacity=0.5; if(bloom) bloom.strength=0.62; document.getElementById('vignette').style.opacity=1; themeBtn.textContent='☀️ Jasny'; } }
+    else{ scene.background.setHex(0x0b1220); scene.fog.color.setHex(0x070b14); ambient.intensity=0.4; hemi.intensity=0.6; key.intensity=2.2; renderer.toneMappingExposure=1.15; scene.environmentIntensity=0.55;
+      podlogaMat.color.setHex(0x1c2a47); platMat.color.setHex(0x141d33); szkloMat.opacity=0.5; if(bloom) bloom.strength=0.62; document.getElementById('vignette').style.opacity=1; themeBtn.textContent='☀️ Jasny'; } }
   themeBtn.addEventListener('click',()=>{ ustawMotyw(!jasny); blip(500,0.08); }); ustawMotyw(false);
 
   // ===========================================================================
@@ -531,10 +689,17 @@
   // ===========================================================================
   const logEl=document.getElementById('log');
   const ZDARZENIA=[ {who:'recruiter',typ:'INFO',msg:'Nowe CV: 3'},{who:'screening',typ:'SUCCESS',msg:'CV ocenione'},{who:'matcher',typ:'INFO',msg:'Dopasowanie kandydata: 87%'},{who:'compliance',typ:'INFO',msg:'Zgodność z RODO'},{who:'kanban',typ:'SUCCESS',msg:'Karta -> In Progress'},{who:'human',typ:'SUCCESS',msg:'Decyzja u człowieka'},{who:'recruiter',typ:'WARN',msg:'Brak danych w 1 CV'} ];
-  let logIdx=0; function dodajLog(){ const z=ZDARZENIA[logIdx%ZDARZENIA.length]; logIdx++; const l=document.createElement('div'); l.className='line';
-    const cz=new Date().toLocaleTimeString('pl-PL',{hour12:false}); l.innerHTML=`<span style="color:#56688f">${cz}</span> <span class="who">${z.who}</span> <span class="${z.typ}">[${z.typ}]</span> ${z.msg}`;
+  function logAkcja(who,typ,msg){ const l=document.createElement('div'); l.className='line';
+    const cz=new Date().toLocaleTimeString('pl-PL',{hour12:false}); l.innerHTML=`<span style="color:#56688f">${cz}</span> <span class="who">${who}</span> <span class="${typ}">[${typ}]</span> ${msg}`;
     logEl.appendChild(l); while(logEl.children.length>6) logEl.removeChild(logEl.firstChild); }
+  let logIdx=0; function dodajLog(){ const z=ZDARZENIA[logIdx%ZDARZENIA.length]; logIdx++; logAkcja(z.who,z.typ,z.msg); }
   dodajLog(); setInterval(dodajLog,1900);
+
+  // Zegar/data w pasku systemowym
+  const clockEl=document.getElementById('clock');
+  function tikZegar(){ const d=new Date();
+    clockEl.textContent=d.toLocaleDateString('pl-PL',{weekday:'short',day:'2-digit',month:'short'})+'  ·  '+d.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+  tikZegar(); setInterval(tikZegar,1000);
 
   // ===========================================================================
   // PĘTLA ANIMACJI
@@ -571,7 +736,13 @@
     // koperty CV
     for(const k of koperty){ k.userData.t+=k.userData.speed*0.016; if(k.userData.t>1) k.userData.t=0; const tt=k.userData.t, p=trasaCurve.getPointAt(tt);
       k.position.copy(p); k.position.y=p.y+Math.sin(t*3+tt*10)*0.12; const tan=trasaCurve.getTangentAt(tt); k.lookAt(p.clone().add(tan)); k.rotation.z=Math.sin(t*2+tt*8)*0.1;
-      if(tt>0.45&&tt<0.52){ const el=matchEl(); if(el){ const v=72+Math.floor(Math.abs(Math.sin(t*1.3))*26); if(v!==ostatniMatch){ el.textContent=`Dopasowanie: ${v}%`; ostatniMatch=v; } } } }
+      if(wybranyMatch===null && tt>0.45&&tt<0.52){ const el=matchEl(); if(el){ const v=72+Math.floor(Math.abs(Math.sin(t*1.3))*26); if(v!==ostatniMatch){ el.textContent=`Dopasowanie: ${v}%`; ostatniMatch=v; } } } }
+
+    // Lecąca koperta CV (po kliknięciu kandydata) -> dymek nad Recruiting Desk
+    if(flyAnim){ const p=Math.min(1,(performance.now()-flyAnim.t0)/flyAnim.dur), e=easeIO(p);
+      flyCV.position.copy(flyCurve.getPointAt(e)); const tan=flyCurve.getTangentAt(e); flyCV.lookAt(flyCV.position.clone().add(tan)); flyCV.rotation.z=Math.sin(t*6)*0.15;
+      if(p>=1){ flyCV.visible=false; const el=matchEl(); if(el){ el.textContent=`Dopasowanie: ${flyAnim.match}%`; el.style.transition='transform .2s'; el.style.transform='scale(1.25)'; el.style.display='inline-block'; setTimeout(()=>el.style.transform='',420); }
+        logAkcja('kanban','SUCCESS','Karta → In Progress'); flyAnim=null; } }
 
     // cząsteczki — powolne unoszenie
     if(window.__particles){ const a=window.__particles.geometry.attributes.position; for(let i=0;i<a.count;i++){ let y=a.getY(i)+0.006; if(y>14) y=0; a.setY(i,y); } a.needsUpdate=true; }
@@ -593,7 +764,7 @@
   function onResize(){ aspect=window.innerWidth/window.innerHeight; camera.left=-FRUSTUM*aspect; camera.right=FRUSTUM*aspect; camera.top=FRUSTUM; camera.bottom=-FRUSTUM; camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth,window.innerHeight); labelRenderer.setSize(window.innerWidth,window.innerHeight); if(composer) composer.setSize(window.innerWidth,window.innerHeight); }
   window.addEventListener('resize',onResize);
-  window.addEventListener('keydown',e=>{ if(e.key==='Escape') zamknijCV(); });
+  window.addEventListener('keydown',e=>{ if(e.key==='Escape'){ zamknijCV(); zamknijAgenta(); zamknijStacje(); } });
 
   requestAnimationFrame(()=>document.getElementById('loader').classList.add('hide'));
   </script>

@@ -238,7 +238,7 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
       )}
 
       {/* Charts Row */}
-      <Reveal className="bento bento-3" style={{ marginBottom: 16 }}>
+      <Reveal className="bento bento-3 charts-bento" style={{ marginBottom: 16 }}>
         {/* Monthly trend */}
         <div className="card col-span-2">
           <div className="section-header">
@@ -268,18 +268,29 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
           <div className="section-title" style={{ marginBottom: 16 }}>Kategorie</div>
           {categoryData.length > 0 ? (
             <>
-              <MeasuredChart height={160}>
-                {(w) => (
-                <PieChart width={w} height={160}>
-                  <Pie data={categoryData} cx="50%" cy="50%" innerRadius={45} outerRadius={70} dataKey="value" paddingAngle={3}>
-                    {categoryData.map((entry, i) => (
-                      <Cell key={i} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(v: any) => fmt(v)} />
-                </PieChart>
-                )}
-              </MeasuredChart>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <MeasuredChart height={260}>
+                  {(w) => {
+                    const outer = Math.max(70, Math.min(w / 2 - 16, 110));
+                    const inner = Math.round(outer * 0.62);
+                    return (
+                    <PieChart width={w} height={260}>
+                      <Pie data={categoryData} cx="50%" cy="50%" innerRadius={inner} outerRadius={outer} dataKey="value" paddingAngle={3}>
+                        {categoryData.map((entry, i) => (
+                          <Cell key={i} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(v: any) => fmt(v)}
+                        allowEscapeViewBox={{ x: false, y: false }}
+                        wrapperStyle={{ zIndex: 20, outline: 'none' }}
+                        contentStyle={{ borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)' }}
+                      />
+                    </PieChart>
+                    );
+                  }}
+                </MeasuredChart>
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8, maxHeight: 180, overflowY: 'auto', paddingRight: 4 }}>
                 {categoryData.map((c, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13 }}>

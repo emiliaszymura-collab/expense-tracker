@@ -814,6 +814,11 @@ body {
     gap: 10px;
   }
 
+  /* Charts row: full-width cards on phones so the pie chart isn't cut off */
+  .charts-bento {
+    grid-template-columns: 1fr;
+  }
+
   .bento-2 {
     grid-template-columns: 1fr 1fr;
     gap: 10px;

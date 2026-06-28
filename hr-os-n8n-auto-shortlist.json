@@ -1,0 +1,255 @@
+{
+  "name": "HR-OS — Auto-Shortlist (Screening CV)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🟦 HR-OS — Auto-Shortlist\n\n**Co robi:** przyjmuje CV + opis wakatu, Claude ocenia dopasowanie (match %), zapisuje wynik i zwraca go do dashboardu. Człowiek podejmuje decyzję.\n\n**Wejście (POST JSON):**\n```\n{\n  \"candidateName\": \"Anna Kowalska\",\n  \"jobTitle\": \"Frontend Developer\",\n  \"jobDescription\": \"React, TypeScript...\",\n  \"cvText\": \"treść CV...\",\n  \"consent\": true\n}\n```\n\n**Test (curl):**\ncurl -X POST <URL_WEBHOOKA> -H \"Content-Type: application/json\" -d '{...}'",
+        "height": 420,
+        "width": 420,
+        "color": 5
+      },
+      "id": "sticky-intro",
+      "name": "Notatka — Start",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-460, 80]
+    },
+    {
+      "parameters": {
+        "content": "## 🤖 Konfiguracja Claude\n\n1. Ustaw zmienną środowiskową **ANTHROPIC_API_KEY** w n8n (Settings → Variables/Env).\n2. Model: `claude-opus-4-8` (najwyższa jakość). Dla dużych wolumenów i niższego kosztu zmień w węźle \"Buduj zapytanie\" na `claude-haiku-4-5` lub `claude-sonnet-4-6`.\n3. Używamy **structured outputs** (`output_config.format`) — Claude zwraca gwarantowany, czysty JSON.\n\n⚖️ Scoring ignoruje dane wrażliwe (RODO art. 22, AI Act). To rekomendacja, nie decyzja.",
+        "height": 360,
+        "width": 420,
+        "color": 4
+      },
+      "id": "sticky-claude",
+      "name": "Notatka — Claude",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [600, -320]
+    },
+    {
+      "parameters": {
+        "content": "## 🔌 Do podłączenia (opcjonalne)\n\n**Airtable** i **Slack** są wyłączone (disabled) — włącz je, gdy dodasz dane logowania:\n- Airtable: baza + tabela `Kandydaci` (przechowuje wyniki / talent pool).\n- Slack: kanał rekrutacji + przyciski ZATWIERDŹ/ODRZUĆ (human-in-the-loop).\n\nDopóki są wyłączone, workflow i tak zwraca pełny wynik (działa demo).\n\n**Następne workflowy:** Scheduling (Cal.com), Onboarding, Compliance/audyt.",
+        "height": 360,
+        "width": 420,
+        "color": 6
+      },
+      "id": "sticky-next",
+      "name": "Notatka — Integracje",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1500, -320]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "auto-shortlist",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook",
+      "name": "Webhook — Nowe CV",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 300],
+      "webhookId": "hr-os-auto-shortlist"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-consent",
+              "leftValue": "={{ $json.body.consent }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-consent",
+      "name": "Zgoda RODO?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Buduje zapytanie do Claude (Anthropic) + przenosi dane kandydata\nconst b = $json.body || {};\nconst schema = {\n  type: \"object\",\n  properties: {\n    match: { type: \"integer\" },\n    summary: { type: \"string\" },\n    strengths: { type: \"array\", items: { type: \"string\" } },\n    risks: { type: \"array\", items: { type: \"string\" } },\n    redFlags: { type: \"array\", items: { type: \"string\" } },\n    recommendation: { type: \"string\", enum: [\"Do rozmowy\", \"Do weryfikacji\", \"Słabe dopasowanie\"] }\n  },\n  required: [\"match\", \"summary\", \"strengths\", \"risks\", \"redFlags\", \"recommendation\"],\n  additionalProperties: false\n};\nconst prompt = \"CV KANDYDATA: \" + (b.cvText || \"\") + \"  ||  STANOWISKO: \" + (b.jobTitle || \"\") + \" — \" + (b.jobDescription || \"\");\nreturn [{ json: {\n  candidate: { name: b.candidateName || \"—\", jobTitle: b.jobTitle || \"—\", consent: b.consent === true },\n  anthropic: {\n    model: \"claude-opus-4-8\",\n    max_tokens: 1024,\n    system: \"Oceniasz dopasowanie kandydata do stanowiska na podstawie CV i opisu roli. Oceniasz wyłącznie kompetencje i doświadczenie zawodowe. Ignorujesz wiek, płeć, pochodzenie, zdjęcie i inne dane wrażliwe (RODO art. 22, AI Act). Twoja ocena to rekomendacja dla człowieka, nie decyzja.\",\n    messages: [{ role: \"user\", content: prompt }],\n    output_config: { format: { type: \"json_schema\", schema: schema } }\n  }\n}}];"
+      },
+      "id": "node-build",
+      "name": "Buduj zapytanie",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "={{ $env.ANTHROPIC_API_KEY }}" },
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.anthropic) }}",
+        "options": {}
+      },
+      "id": "node-claude",
+      "name": "Claude — Scoring",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parsuje odpowiedź Claude i strukturyzuje wynik dla dashboardu/bazy\nlet raw = \"\";\ntry { raw = ($json.content && $json.content[0] && $json.content[0].text) || \"\"; } catch (e) { raw = \"\"; }\nraw = String(raw).trim();\nif (raw.indexOf(\"```\") === 0) { raw = raw.split(\"```json\").join(\"\").split(\"```\").join(\"\").trim(); }\nlet data;\ntry { data = JSON.parse(raw); } catch (e) { data = { match: 0, summary: \"Nie udało się odczytać odpowiedzi modelu\", strengths: [], risks: [], redFlags: [], recommendation: \"Do weryfikacji\" }; }\nconst cand = $('Buduj zapytanie').item.json.candidate;\nconst match = Math.max(0, Math.min(100, Number(data.match) || 0));\nconst ocena = match >= 85 ? \"Wysokie dopasowanie\" : (match >= 70 ? \"Do weryfikacji\" : \"Niskie dopasowanie\");\nreturn [{ json: {\n  kandydat: cand.name,\n  stanowisko: cand.jobTitle,\n  dopasowanie: match,\n  ocena: ocena,\n  rekomendacja: data.recommendation || \"Do weryfikacji\",\n  podsumowanie: data.summary || \"\",\n  mocneStrony: data.strengths || [],\n  ryzyka: data.risks || [],\n  flagi: data.redFlags || [],\n  zgodaRODO: cand.consent === true,\n  decyzja: \"oczekuje na decyzję człowieka\",\n  utworzono: new Date().toISOString()\n}}];"
+      },
+      "id": "node-parse",
+      "name": "Parsuj wynik",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [960, 200]
+    },
+    {
+      "parameters": {
+        "resource": "record",
+        "operation": "create",
+        "base": { "__rl": true, "mode": "id", "value": "YOUR_BASE_ID" },
+        "table": { "__rl": true, "mode": "name", "value": "Kandydaci" },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": []
+        },
+        "options": {}
+      },
+      "id": "node-airtable",
+      "name": "Zapis do Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [1180, 200],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "select": "channel",
+        "channelId": { "__rl": true, "mode": "name", "value": "#rekrutacja" },
+        "text": "=Nowy kandydat: {{ $json.kandydat }} — {{ $json.stanowisko }}\\nDopasowanie: {{ $json.dopasowanie }}% ({{ $json.ocena }})\\nRekomendacja AI: {{ $json.rekomendacja }}\\nDecyzja należy do człowieka — ZATWIERDŹ / ODRZUĆ",
+        "otherOptions": {}
+      },
+      "id": "node-slack",
+      "name": "Powiadom rekrutera (Slack)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1400, 200],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json, null, 2) }}",
+        "options": {}
+      },
+      "id": "node-respond-ok",
+      "name": "Odpowiedź — Wynik",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1620, 200]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "a1", "name": "status", "value": "odrzucone", "type": "string" },
+            { "id": "a2", "name": "powod", "value": "Brak zgody na przetwarzanie danych (RODO art. 6)", "type": "string" },
+            { "id": "a3", "name": "kandydat", "value": "={{ $json.body.candidateName || '—' }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-noconsent",
+      "name": "Brak zgody",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [480, 460]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json, null, 2) }}",
+        "options": { "responseCode": 422 }
+      },
+      "id": "node-respond-noconsent",
+      "name": "Odpowiedź — Brak zgody",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [720, 460]
+    }
+  ],
+  "connections": {
+    "Webhook — Nowe CV": {
+      "main": [
+        [ { "node": "Zgoda RODO?", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Zgoda RODO?": {
+      "main": [
+        [ { "node": "Buduj zapytanie", "type": "main", "index": 0 } ],
+        [ { "node": "Brak zgody", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Buduj zapytanie": {
+      "main": [
+        [ { "node": "Claude — Scoring", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Claude — Scoring": {
+      "main": [
+        [ { "node": "Parsuj wynik", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Parsuj wynik": {
+      "main": [
+        [ { "node": "Zapis do Airtable", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Zapis do Airtable": {
+      "main": [
+        [ { "node": "Powiadom rekrutera (Slack)", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Powiadom rekrutera (Slack)": {
+      "main": [
+        [ { "node": "Odpowiedź — Wynik", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Brak zgody": {
+      "main": [
+        [ { "node": "Odpowiedź — Brak zgody", "type": "main", "index": 0 } ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "tags": [ { "name": "HR-OS" } ]
+}

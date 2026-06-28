@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>HR-OS — Hiring Loop System OS</title>
+<!--
+  HR-OS — wersja "hero": tłem jest grafika 3D (hr-os-tlo.png), a na wierzchu
+  działa interaktywne UI: pasek systemowy, INBOX z CV (klik → szczegóły),
+  terminal z event logiem i pływające etykiety. Otwórz przez dwuklik.
+  Plik hr-os-tlo.png musi leżeć obok tego pliku.
+-->
+<style>
+  :root{
+    --niebieski:#4aa3ff; --zielony:#46d17f; --fiolet:#9b6bff; --bursztyn:#ffb43e; --czerwony:#ff5d6c;
+    --tekst:#e7eefb; --przygas:#8ea2c4; --navy:#0a1120;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ width:100%; height:100%; overflow:hidden; background:var(--navy); }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--tekst); -webkit-font-smoothing:antialiased; touch-action:none; }
+
+  /* Scena (obraz) — wyśrodkowana, z zachowaniem proporcji; etykiety pozycjonowane względem niej */
+  /* Współczynnik powiększenia sceny — zwiększ, by diorama była większa (przycina marginesy). */
+  #stage{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(142vw, calc(142vh * 1376 / 768)); height:min(142vh, calc(142vw * 768 / 1376)); }
+  #stage img{ width:100%; height:100%; object-fit:cover; display:block; }
+  #vignette{ position:fixed; inset:0; pointer-events:none; z-index:2;
+    background:radial-gradient(120% 95% at 50% 42%, rgba(0,0,0,0) 55%, rgba(4,8,16,0.6) 100%); }
+
+  /* Pływające etykiety nad sceną */
+  .pin{ position:absolute; z-index:3; transform:translate(-50%,-100%); pointer-events:none;
+    background:rgba(12,20,38,0.78); border:1px solid rgba(120,160,220,0.28); backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px); border-radius:11px; padding:7px 11px; min-width:120px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.5); white-space:nowrap; }
+  .pin:after{ content:""; position:absolute; left:50%; bottom:-6px; width:10px; height:10px; transform:translateX(-50%) rotate(45deg);
+    background:rgba(12,20,38,0.78); border-right:1px solid rgba(120,160,220,0.28); border-bottom:1px solid rgba(120,160,220,0.28); }
+  .pin .row{ display:flex; align-items:center; gap:7px; } .pin .dot{ width:8px; height:8px; border-radius:50%; box-shadow:0 0 10px currentColor; }
+  .pin .t{ font-size:12.5px; font-weight:650; } .pin .s{ font-size:10.5px; color:var(--przygas); margin-top:2px; }
+  .pin .m{ font-size:10.5px; font-weight:700; color:var(--zielony); margin-top:4px; transition:transform .2s; display:inline-block; }
+
+  /* Pasek systemowy */
+  #sysbar{ position:fixed; top:0; left:0; right:0; height:32px; z-index:11; display:flex; align-items:center; gap:8px;
+    padding:0 16px; font-size:12px; color:var(--przygas); background:rgba(6,10,20,0.82); border-bottom:1px solid rgba(120,160,220,0.14);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+  #sysbar .os{ display:flex; align-items:center; gap:7px; color:var(--tekst); font-weight:600; }
+  #sysbar .ic{ width:13px; height:13px; border-radius:4px; background:linear-gradient(135deg,#4aa3ff,#9b6bff); box-shadow:0 0 8px rgba(74,163,255,.6); }
+  #sysbar .clock{ margin-left:auto; font-variant-numeric:tabular-nums; }
+
+  .ui{ position:fixed; z-index:10; }
+  #topleft{ top:46px; left:22px; }
+  .brandline{ display:flex; align-items:center; gap:10px; }
+  .logo{ font-weight:800; font-size:22px; letter-spacing:.5px; background:linear-gradient(90deg,#bcd6ff,#4aa3ff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .badge{ display:inline-flex; align-items:center; gap:7px; font-size:12px; color:var(--przygas); background:rgba(12,20,38,0.6); border:1px solid rgba(120,160,220,0.2); border-radius:999px; padding:4px 10px; }
+  .badge .live{ width:8px; height:8px; border-radius:50%; background:var(--zielony); box-shadow:0 0 10px var(--zielony); animation:pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.35} }
+  #thesis{ margin-top:16px; max-width:380px; }
+  #thesis h1{ font-size:clamp(26px,3.6vw,42px); font-weight:800; line-height:1.05; text-shadow:0 2px 24px rgba(0,0,0,.6); }
+  #thesis h1 .blue{ color:var(--niebieski); }
+  #thesis p{ margin-top:10px; font-size:14px; color:#cdd9f2; text-shadow:0 1px 10px rgba(0,0,0,.6); }
+  #thesis .open{ margin-top:12px; cursor:pointer; pointer-events:auto; background:var(--niebieski); color:#06121f; border:none; font-weight:700; font-size:13px; padding:9px 16px; border-radius:10px; box-shadow:0 8px 22px rgba(74,163,255,.4); }
+
+  /* Terminal */
+  #terminal{ bottom:16px; left:50%; transform:translateX(-50%); width:min(560px,calc(100vw - 40px)); pointer-events:auto;
+    background:rgba(8,13,26,0.86); border:1px solid rgba(120,160,220,0.18); border-radius:14px; backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px); box-shadow:0 18px 50px rgba(0,0,0,.5); overflow:hidden; }
+  #terminal .bar{ display:flex; align-items:center; gap:8px; padding:9px 12px; border-bottom:1px solid rgba(120,160,220,0.14); font-size:12px; color:var(--przygas); }
+  #terminal .tabs{ display:flex; gap:14px; } #terminal .tabs span{ opacity:.6 } #terminal .tabs span.on{ opacity:1; color:var(--tekst); }
+  #terminal .dots{ margin-left:auto; display:flex; gap:6px; } #terminal .dots i{ width:10px; height:10px; border-radius:50%; display:block; }
+  #log{ height:104px; overflow:hidden; padding:9px 12px; font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; font-size:11.5px; line-height:1.6; }
+  #log .line{ opacity:0; animation:fadein .35s ease forwards; }
+  #log .who{ color:#7fa6e0; } #log .INFO{ color:#7fb3ff; } #log .SUCCESS{ color:var(--zielony); } #log .WARN{ color:var(--bursztyn); }
+  @keyframes fadein{ from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none} }
+
+  #footer{ bottom:18px; right:22px; text-align:right; font-size:12px; color:var(--przygas); max-width:34vw; text-shadow:0 1px 8px rgba(0,0,0,.7); }
+
+  /* INBOX panel */
+  #cvPanel{ position:fixed; top:0; right:0; height:100%; width:min(400px,92vw); z-index:40;
+    background:linear-gradient(180deg, rgba(11,18,34,0.97), rgba(8,12,24,0.98)); border-left:1px solid rgba(120,160,220,0.22);
+    box-shadow:-20px 0 60px rgba(0,0,0,.55); transform:translateX(105%); transition:transform .45s cubic-bezier(.2,.8,.2,1); display:flex; flex-direction:column; }
+  #cvPanel.open{ transform:translateX(0); }
+  .cvHead{ display:flex; align-items:center; gap:10px; padding:18px 18px 14px; border-bottom:1px solid rgba(120,160,220,0.14); }
+  .cvHead .ttl{ font-size:16px; font-weight:750; } .cvHead .cnt{ font-size:11.5px; color:var(--przygas); margin-top:2px; }
+  .cvHead .x{ margin-left:auto; cursor:pointer; font-size:18px; color:var(--przygas); background:none; border:none; padding:4px 8px; }
+  #cvList{ overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:10px; }
+  .cvCard{ display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; background:rgba(22,33,58,0.6); border:1px solid rgba(120,160,220,0.14); transition:all .2s; }
+  .cvCard:hover{ border-color:rgba(120,160,220,0.4); transform:translateX(-3px); background:rgba(28,42,72,0.7); }
+  .cvCard.sel{ border-color:rgba(74,163,255,0.7); box-shadow:0 0 0 1px rgba(74,163,255,0.4); background:rgba(30,46,80,0.8); }
+  .cvAva{ width:42px; height:42px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; color:#06121f; }
+  .cvInfo{ flex:1; min-width:0; } .cvName{ font-size:14px; font-weight:650; } .cvRole{ font-size:11.5px; color:var(--przygas); margin-top:1px; }
+  .cvBarWrap{ margin-top:6px; height:5px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden; } .cvBar{ height:100%; border-radius:99px; }
+  .cvRight{ text-align:right; flex:0 0 auto; } .cvPct{ font-size:14px; font-weight:800; }
+  .cvPill{ font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:99px; margin-top:4px; display:inline-block; }
+  .cvMore{ margin-top:5px; cursor:pointer; font-size:9.5px; color:var(--niebieski); background:none; border:none; padding:0; text-decoration:underline; }
+
+  #cvDetail{ position:fixed; inset:0; z-index:45; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(3,6,14,0.6); backdrop-filter:blur(4px); }
+  #cvDetail.open{ display:flex; }
+  .cvCardBig{ width:min(440px,94vw); max-height:88vh; overflow-y:auto; background:linear-gradient(180deg, rgba(16,24,44,0.99), rgba(10,15,28,0.99)); border:1px solid rgba(120,160,220,0.25); border-radius:18px; box-shadow:0 30px 80px rgba(0,0,0,.6); padding:22px; transform:scale(.92); opacity:0; transition:all .3s ease; }
+  #cvDetail.open .cvCardBig{ transform:scale(1); opacity:1; }
+  .dHead{ display:flex; align-items:center; gap:14px; } .dAva{ width:60px; height:60px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:22px; color:#06121f; }
+  .dName{ font-size:19px; font-weight:780; } .dRole{ font-size:13px; color:var(--przygas); margin-top:2px; }
+  .dClose{ margin-left:auto; cursor:pointer; font-size:20px; color:var(--przygas); background:none; border:none; }
+  .dRing{ display:flex; align-items:center; gap:16px; margin:18px 0; padding:14px; border-radius:14px; background:rgba(74,163,255,0.08); border:1px solid rgba(74,163,255,0.18); }
+  .dRing .big{ font-size:34px; font-weight:850; } .dRing .lbl{ font-size:12px; color:var(--przygas); }
+  .dSection{ margin-top:16px; } .dSection h4{ font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--przygas); margin-bottom:8px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; } .chip{ font-size:12px; padding:5px 11px; border-radius:99px; background:rgba(120,160,220,0.14); border:1px solid rgba(120,160,220,0.2); }
+  .dRow{ display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid rgba(120,160,220,0.1); } .dRow span:first-child{ color:var(--przygas); }
+  .dAI{ margin-top:16px; padding:14px; border-radius:12px; background:rgba(70,209,127,0.08); border:1px solid rgba(70,209,127,0.2); font-size:13px; line-height:1.5; } .dAI b{ color:var(--zielony); }
+  .dRODO{ margin-top:12px; padding:11px 13px; border-radius:10px; background:rgba(155,107,255,0.1); border:1px solid rgba(155,107,255,0.25); font-size:11.5px; color:#c9b8ff; line-height:1.5; }
+  .dBtns{ display:flex; gap:10px; margin-top:18px; } .dBtn{ flex:1; cursor:pointer; padding:11px; border-radius:11px; font-size:13px; font-weight:650; border:1px solid transparent; transition:all .2s; }
+  .dBtn.primary{ background:var(--zielony); color:#06140c; } .dBtn.ghost{ background:rgba(120,160,220,0.12); border-color:rgba(120,160,220,0.25); color:var(--tekst); }
+
+  #toast{ position:fixed; bottom:140px; left:50%; transform:translateX(-50%) translateY(20px); z-index:30; background:rgba(12,20,38,0.92); border:1px solid rgba(120,160,220,0.3); border-radius:12px; padding:10px 16px; font-size:13px; opacity:0; pointer-events:none; transition:all .35s ease; box-shadow:0 10px 30px rgba(0,0,0,.5); }
+  #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  @media (max-width:680px){ #footer{ display:none; } #thesis{ max-width:70vw; } .pin{ display:none; } }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <img src="hr-os-tlo.png" alt="HR-OS — izometryczne biuro" />
+    <!-- Pływające etykiety (pozycje % względem sceny; w razie potrzeby dostrój left/top) -->
+    <div class="pin" style="left:33%; top:30%;"><div class="row"><span class="dot" style="background:#4aa3ff;color:#4aa3ff"></span><span class="t">Kanban Wall</span></div><div class="s">Status rekrutacji</div></div>
+    <div class="pin" id="pinDesk" style="left:52%; top:55%;"><div class="row"><span class="dot" style="background:#46d17f;color:#46d17f"></span><span class="t">Recruiting Desk</span></div><div class="s">Screening CV</div><div class="m" id="deskMatch">Dopasowanie: —</div></div>
+    <div class="pin" style="left:70%; top:66%;"><div class="row"><span class="dot" style="background:#ff5d6c;color:#ff5d6c"></span><span class="t">Security Gate</span></div><div class="s">Zgodność / RODO</div></div>
+  </div>
+  <div id="vignette"></div>
+
+  <div id="sysbar">
+    <div class="os"><span class="ic"></span> Hiring Loop System OS</div>
+    <div class="clock" id="clock">—</div>
+  </div>
+
+  <div class="ui" id="topleft">
+    <div class="brandline"><div class="logo">HR-OS</div><div class="badge"><span class="live"></span> HR-OS: Online</div></div>
+    <div id="thesis">
+      <h1>Own your<br/><span class="blue">hiring loop</span></h1>
+      <p>System HR przejmuje rutynę. Człowiek trzyma decyzje.</p>
+      <button class="open" id="openInbox">📥 Otwórz INBOX — CV kandydatów</button>
+    </div>
+  </div>
+
+  <div class="ui" id="terminal">
+    <div class="bar"><div class="tabs"><span class="on">Terminal</span><span>Output</span><span>Event Log</span></div>
+      <div class="dots"><i style="background:#ff5d6c"></i><i style="background:#ffb43e"></i><i style="background:#46d17f"></i></div></div>
+    <div id="log"></div>
+  </div>
+
+  <div class="ui" id="footer">Ludzie wyznaczają kierunek. Agenci robią robotę.<br/>Decyzja zostaje przy człowieku.</div>
+
+  <div id="toast"></div>
+
+  <div id="cvPanel">
+    <div class="cvHead"><div><div class="ttl">📥 INBOX — CV kandydatów</div><div class="cnt" id="cvCount"></div></div><button class="x" id="cvClose">✕</button></div>
+    <div id="cvList"></div>
+  </div>
+  <div id="cvDetail"><div class="cvCardBig" id="cvDetailBody"></div></div>
+
+  <script>
+  const KOLOR={ niebieski:0x4aa3ff, zielony:0x46d17f, fiolet:0x9b6bff, bursztyn:0xffb43e, czerwony:0xff5d6c };
+  const hex=c=>'#'+c.toString(16).padStart(6,'0');
+
+  // ----- Dane kandydatów -----
+  const KANDYDACI=[
+    { imie:'Anna Kowalska',     rola:'Frontend Developer', match:94, status:'Nowy',         skills:['React','TypeScript','CSS','Testy'], exp:'5 lat', edu:'PW — Informatyka', miasto:'Warszawa', ai:'Bardzo silne dopasowanie do stacku zespołu. Doświadczenie w React i testach jednostkowych pokrywa wymagania.' },
+    { imie:'Piotr Nowak',       rola:'Backend Developer',  match:88, status:'W wątku',      skills:['Node.js','PostgreSQL','Docker','AWS'], exp:'7 lat', edu:'AGH — Informatyka', miasto:'Kraków', ai:'Mocny profil backendowy. Warto zweryfikować doświadczenie z mikroserwisami na rozmowie.' },
+    { imie:'Maria Wiśniewska',  rola:'UI/UX Engineer',     match:91, status:'Nowy',         skills:['Figma','Design System','Badania','Prototypy'], exp:'4 lata', edu:'ASP — Wzornictwo', miasto:'Wrocław', ai:'Portfolio spójne z naszym design systemem. Wysoka jakość prototypów.' },
+    { imie:'Tomasz Lewandowski',rola:'DevOps Engineer',    match:79, status:'W wątku',      skills:['Kubernetes','Terraform','CI/CD'], exp:'6 lat', edu:'PWr — Teleinformatyka', miasto:'Wrocław', ai:'Dobre kompetencje infra. Niższe dopasowanie do wymagań chmury GCP — do potwierdzenia.' },
+    { imie:'Katarzyna Zając',   rola:'Product Manager',    match:85, status:'W wątku',      skills:['Roadmapy','Analityka','Agile','Stakeholderzy'], exp:'8 lat', edu:'SGH — Zarządzanie', miasto:'Katowice', ai:'Silne kompetencje produktowe. Rekomendacja: rozmowa z Head of Product.' },
+    { imie:'Michał Wojak',      rola:'Data Analyst',       match:83, status:'Nowy',         skills:['SQL','Python','Power BI'], exp:'3 lata', edu:'UW — Matematyka', miasto:'Gdańsk', ai:'Solidne podstawy analityczne, mniejsze doświadczenie biznesowe.' },
+    { imie:'Aleksandra Mazur',  rola:'QA Engineer',        match:83, status:'Zaakceptowany', skills:['Cypress','Selenium','Manual QA'], exp:'5 lat', edu:'PG — Informatyka', miasto:'Gdańsk', ai:'Bardzo dobre dopasowanie do procesu QA. Zaakceptowana do dalszego etapu przez rekrutera.' },
+    { imie:'Jakub Krawiec',     rola:'Frontend Developer', match:61, status:'Odrzucony',    skills:['Vue','JavaScript'], exp:'2 lata', edu:'Bootcamp', miasto:'Rzeszów', ai:'Niższe dopasowanie do stacku (React vs Vue). Decyzja odrzucenia podjęta przez człowieka.' },
+  ];
+  const STATUS_KOLOR={ 'Nowy':KOLOR.niebieski, 'W wątku':KOLOR.bursztyn, 'Zaakceptowany':KOLOR.zielony, 'Odrzucony':KOLOR.czerwony };
+  const inicjaly=n=>n.split(' ').map(w=>w[0]).slice(0,2).join('');
+  const mkolor=m=>m>=85?KOLOR.zielony:(m>=75?KOLOR.bursztyn:KOLOR.czerwony);
+
+  // ----- Zegar -----
+  const clockEl=document.getElementById('clock');
+  function tikZegar(){ const d=new Date(); clockEl.textContent=d.toLocaleDateString('pl-PL',{weekday:'short',day:'2-digit',month:'short'})+'  ·  '+d.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+  tikZegar(); setInterval(tikZegar,1000);
+
+  // ----- Terminal -----
+  const logEl=document.getElementById('log');
+  function logAkcja(who,typ,msg){ const l=document.createElement('div'); l.className='line'; const cz=new Date().toLocaleTimeString('pl-PL',{hour12:false});
+    l.innerHTML='<span style="color:#56688f">'+cz+'</span> <span class="who">'+who+'</span> <span class="'+typ+'">['+typ+']</span> '+msg;
+    logEl.appendChild(l); while(logEl.children.length>5) logEl.removeChild(logEl.firstChild); }
+  const ZD=[['recruiter','INFO','Nowe CV: 3'],['screening','SUCCESS','CV ocenione'],['scorer','INFO','Dopasowanie kandydata: 87%'],['compliance','INFO','Zgodność z RODO: OK'],['kanban','SUCCESS','Karta → In Progress'],['human','SUCCESS','Decyzja u człowieka']];
+  let li=0; function tikLog(){ const z=ZD[li%ZD.length]; li++; logAkcja(z[0],z[1],z[2]); }
+  tikLog(); setInterval(tikLog,2000);
+
+  // ----- Toast -----
+  const toastEl=document.getElementById('toast'); let tTm;
+  function toast(m){ toastEl.textContent=m; toastEl.classList.add('show'); clearTimeout(tTm); tTm=setTimeout(()=>toastEl.classList.remove('show'),2600); }
+
+  // ----- INBOX -----
+  const cvPanel=document.getElementById('cvPanel'), cvList=document.getElementById('cvList'), cvDetail=document.getElementById('cvDetail'), cvDetailBody=document.getElementById('cvDetailBody');
+  document.getElementById('cvCount').textContent=KANDYDACI.length+' kandydatów · model rekomenduje, człowiek decyduje';
+  document.getElementById('cvClose').addEventListener('click',()=>cvPanel.classList.remove('open'));
+  document.getElementById('openInbox').addEventListener('click',()=>{ budujListe(); cvPanel.classList.add('open'); });
+
+  function budujListe(){ cvList.innerHTML='';
+    KANDYDACI.forEach((c,idx)=>{ const sk=STATUS_KOLOR[c.status]; const mk=mkolor(c.match);
+      const card=document.createElement('div'); card.className='cvCard';
+      card.innerHTML='<div class="cvAva" style="background:'+hex(mk)+'">'+inicjaly(c.imie)+'</div>'+
+        '<div class="cvInfo"><div class="cvName">'+c.imie+'</div><div class="cvRole">'+c.rola+' · '+c.miasto+'</div>'+
+        '<div class="cvBarWrap"><div class="cvBar" style="width:'+c.match+'%;background:'+hex(mk)+'"></div></div></div>'+
+        '<div class="cvRight"><div class="cvPct">'+c.match+'%</div><div class="cvPill" style="background:'+hex(sk)+'22;color:'+hex(sk)+';border:1px solid '+hex(sk)+'55">'+c.status+'</div><button class="cvMore">szczegóły</button></div>';
+      card.addEventListener('click',()=>wybierz(idx,card));
+      card.querySelector('.cvMore').addEventListener('click',e=>{ e.stopPropagation(); szczegoly(idx); });
+      cvList.appendChild(card); });
+  }
+  function wybierz(idx,card){ const c=KANDYDACI[idx];
+    cvList.querySelectorAll('.cvCard').forEach(el=>el.classList.remove('sel')); card.classList.add('sel');
+    const dm=document.getElementById('deskMatch'); dm.textContent='Dopasowanie: '+c.match+'%'; dm.style.transform='scale(1.25)'; setTimeout(()=>dm.style.transform='',400);
+    logAkcja('screening','SUCCESS','CV ocenione: '+c.imie);
+    logAkcja('scorer','SUCCESS','Dopasowanie kandydata: '+c.match+'%');
+    logAkcja('compliance','INFO','Zgodność z RODO: OK');
+    logAkcja('human','SUCCESS','Decyzja u człowieka');
+  }
+  function szczegoly(idx){ const c=KANDYDACI[idx]; const sk=STATUS_KOLOR[c.status]; const mk=mkolor(c.match);
+    cvDetailBody.innerHTML='<div class="dHead"><div class="dAva" style="background:'+hex(mk)+'">'+inicjaly(c.imie)+'</div>'+
+      '<div><div class="dName">'+c.imie+'</div><div class="dRole">'+c.rola+'</div></div><button class="dClose" id="dClose">✕</button></div>'+
+      '<div class="dRing"><div><div class="big" style="color:'+hex(mk)+'">'+c.match+'%</div><div class="lbl">Dopasowanie (AI)</div></div>'+
+      '<div style="margin-left:auto;text-align:right"><div class="cvPill" style="background:'+hex(sk)+'22;color:'+hex(sk)+';border:1px solid '+hex(sk)+'55">'+c.status+'</div></div></div>'+
+      '<div class="dSection"><h4>Umiejętności</h4><div class="chips">'+c.skills.map(s=>'<span class="chip">'+s+'</span>').join('')+'</div></div>'+
+      '<div class="dSection"><div class="dRow"><span>Doświadczenie</span><span>'+c.exp+'</span></div>'+
+      '<div class="dRow"><span>Wykształcenie</span><span>'+c.edu+'</span></div><div class="dRow"><span>Lokalizacja</span><span>'+c.miasto+'</span></div></div>'+
+      '<div class="dAI"><b>Rekomendacja AI:</b> '+c.ai+'</div>'+
+      '<div class="dRODO">⚖️ Zgodnie z RODO (art. 22) i AI Act: ocena AI jest tylko rekomendacją. Ostateczną decyzję podejmuje człowiek.</div>'+
+      '<div class="dBtns"><button class="dBtn primary" id="dHuman">Przekaż do człowieka</button><button class="dBtn ghost" id="dBack">Wróć do listy</button></div>';
+    cvDetail.classList.add('open');
+    document.getElementById('dClose').addEventListener('click',()=>cvDetail.classList.remove('open'));
+    document.getElementById('dBack').addEventListener('click',()=>cvDetail.classList.remove('open'));
+    document.getElementById('dHuman').addEventListener('click',()=>{ toast('✅ '+c.imie+' — przekazano do decyzji człowieka'); cvDetail.classList.remove('open'); });
+  }
+  window.addEventListener('keydown',e=>{ if(e.key==='Escape'){ cvPanel.classList.remove('open'); cvDetail.classList.remove('open'); } });
+  </script>
+</body>
+</html>
