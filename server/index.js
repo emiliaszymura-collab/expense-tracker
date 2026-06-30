@@ -7,6 +7,7 @@ const gc = require('./gocardless');
 const eb = require('./enablebanking');
 const db = require('./db');
 const auth = require('./auth');
+const anthropic = require('./anthropic');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -23,6 +24,75 @@ app.use(express.static(path.join(__dirname, 'public'), {
     if (filePath.endsWith('index.html')) res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   },
 }));
+
+// ════════════════════════════════════════════════════════════
+//  AI proxy — keeps the Anthropic API key on the backend only.
+//  Frontend calls these instead of api.anthropic.com directly.
+// ════════════════════════════════════════════════════════════
+app.get('/api/ai/health', (req, res) => res.json({ configured: anthropic.configured() }));
+
+// Chat with the financial advisor. Body: { messages:[{role,content}], system? }
+app.post('/api/ai-chat', async (req, res) => {
+  try {
+    if (!anthropic.configured()) return res.status(503).json({ error: 'AI nie jest skonfigurowane na serwerze' });
+    const { messages, system } = req.body || {};
+    if (!Array.isArray(messages) || messages.length === 0) return res.status(400).json({ error: 'Brak wiadomości' });
+    if (messages.length > 40) return res.status(400).json({ error: 'Za długa konwersacja' });
+    const safe = messages
+      .filter(m => (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim())
+      .map(m => ({ role: m.role, content: m.content.slice(0, 8000) }));
+    if (!safe.length) return res.status(400).json({ error: 'Nieprawidłowe wiadomości' });
+    const { text } = await anthropic.createMessage({
+      system: typeof system === 'string' ? system.slice(0, 12000) : undefined,
+      messages: safe,
+      max_tokens: 1024,
+    });
+    res.json({ text });
+  } catch (err) {
+    const status = err.response?.status || 500;
+    console.error('[ai-chat]', status, err.response?.data?.error?.message || err.message);
+    res.status(status >= 400 && status < 600 && status !== 401 ? status : 500).json({ error: 'Asystent AI jest chwilowo niedostępny' });
+  }
+});
+
+// Scan a receipt image. Body: { image: dataURL|base64, categories:[names] }
+app.post('/api/scan-receipt', async (req, res) => {
+  try {
+    if (!anthropic.configured()) return res.status(503).json({ error: 'AI nie jest skonfigurowane na serwerze' });
+    const { image, categories } = req.body || {};
+    if (!image || typeof image !== 'string') return res.status(400).json({ error: 'Brak obrazu' });
+    const base64 = image.includes(',') ? image.split(',')[1] : image;
+    const mediaType = image.startsWith('data:') ? image.split(';')[0].split(':')[1] : 'image/jpeg';
+    if (!base64 || base64.length > 8_000_000) return res.status(400).json({ error: 'Nieprawidłowy obraz' });
+    const catNames = Array.isArray(categories) ? categories.join(', ') : '';
+    const today = new Date().toISOString().split('T')[0];
+    const prompt = `Przeanalizuj ten paragon. Odpowiedz TYLKO w formacie JSON (bez markdown):
+{"store": "nazwa sklepu", "total": 45.50, "date": "${today}", "category": "Jedzenie", "notes": "", "items": [{"name": "Mleko 2%", "price": 3.49}, {"name": "Chleb", "price": 4.20}]}
+
+Zasady:
+- "store": nazwa sklepu/firmy z paragonu
+- "total": suma do zapłaty (liczba PLN)
+- "date": data zakupu z paragonu (format YYYY-MM-DD); jeśli brak, użyj ${today}
+- "category": jedna z: ${catNames}
+- "items": lista WSZYSTKICH produktów z paragonu (nazwa + cena jeśli widoczna).
+- "notes": dodatkowe info (np. nr paragonu) lub pusty string`;
+    const { text } = await anthropic.createMessage({
+      max_tokens: 1024,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+          { type: 'text', text: prompt },
+        ],
+      }],
+    });
+    res.json({ text });
+  } catch (err) {
+    const status = err.response?.status || 500;
+    console.error('[scan-receipt]', status, err.response?.data?.error?.message || err.message);
+    res.status(status >= 400 && status < 600 && status !== 401 ? status : 500).json({ error: 'Nie udało się rozpoznać paragonu' });
+  }
+});
 
 // In-memory token store (w produkcji: baza danych)
 const tokenStore = {}; // userId → { access_token, refresh_token, expires_at }
