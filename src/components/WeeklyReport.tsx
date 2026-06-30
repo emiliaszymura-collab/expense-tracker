@@ -3,8 +3,11 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Expense } from '../types';
 import { categorize, spendingOnly } from '../categorize';
+import { authHeader } from '../authToken';
 
-interface Props { expenses: Expense[]; apiKey: string; }
+const SERVER = process.env.REACT_APP_SERVER_URL || '';
+
+interface Props { expenses: Expense[]; }
 
 function fmt(n: number) {
   return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(n);
@@ -14,7 +17,7 @@ function friendlyError(raw: string): string {
   const m = (raw || '').toLowerCase();
   if (/credit balance|billing|insufficient|quota/.test(m)) return '⚠️ Asystent AI jest chwilowo niedostępny. Spróbuj ponownie później.';
   if (/rate limit|overloaded|429|529/.test(m)) return '⚠️ Asystent AI jest teraz przeciążony. Spróbuj za chwilę.';
-  if (/authentication|invalid.*api.?key|x-api-key|401|permission/.test(m)) return '⚠️ Problem z kluczem API — sprawdź klucz w ustawieniach.';
+  if (/authentication|invalid.*api.?key|x-api-key|401|permission/.test(m)) return '⚠️ Asystent AI jest chwilowo niedostępny. Spróbuj ponownie później.';
   return '⚠️ Asystent AI jest chwilowo niedostępny. Spróbuj ponownie później.';
 }
 
@@ -26,7 +29,7 @@ function weekKey(): string {
   return `weeklyReport_${monday.toISOString().split('T')[0]}`;
 }
 
-export default function WeeklyReport({ expenses, apiKey }: Props) {
+export default function WeeklyReport({ expenses }: Props) {
   const [report, setReport] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -61,7 +64,6 @@ export default function WeeklyReport({ expenses, apiKey }: Props) {
   }, [expenses]);
 
   const generate = async () => {
-    if (!apiKey) { setError('⚠️ Dodaj klucz API Anthropic w ustawieniach, aby wygenerować raport.'); return; }
     setLoading(true); setError('');
     try {
       const lines = comparison.rows.slice(0, 8).map(r => {
@@ -78,27 +80,18 @@ ${lines || 'brak danych'}
 
 Zasady: ton motywujący ale szczery; użyj KONKRETNYCH liczb i % zmian; wskaż 1 rzecz, która poszła dobrze i 1 do poprawy; zakończ krótką zachętą. Bez nagłówków i list - płynny tekst.`;
 
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch(`${SERVER}/api/ai-chat`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 600,
-          messages: [{ role: 'user', content: prompt }],
-        }),
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
+        body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
       });
       if (!res.ok) {
         let raw = `status ${res.status}`;
-        try { const e = await res.json(); raw = e.error?.message || e.error?.type || raw; } catch {}
+        try { const e = await res.json(); raw = e.error || raw; } catch {}
         throw new Error(friendlyError(raw));
       }
       const data = await res.json();
-      const text = (data.content[0].text || '').trim();
+      const text = (data.text || '').trim();
       setReport(text);
       localStorage.setItem(weekKey(), text);
     } catch (err: any) {

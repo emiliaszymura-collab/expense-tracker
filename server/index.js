@@ -29,10 +29,46 @@ app.use(express.static(path.join(__dirname, 'public'), {
 //  AI proxy — keeps the Anthropic API key on the backend only.
 //  Frontend calls these instead of api.anthropic.com directly.
 // ════════════════════════════════════════════════════════════
+
+// ── Simple in-memory rate limiter: max 20 requests / minute / IP ──
+const AI_WINDOW_MS = 60 * 1000;
+const AI_MAX_PER_WINDOW = 20;
+const aiHits = new Map(); // ip → [timestamps]
+let aiRequestCount = 0;   // total AI requests since boot (cost control)
+
+function clientIp(req) {
+  return (req.headers['x-forwarded-for'] || req.ip || req.connection?.remoteAddress || 'unknown').split(',')[0].trim();
+}
+
+function aiRateLimit(req, res, next) {
+  const ip = clientIp(req);
+  const now = Date.now();
+  const hits = (aiHits.get(ip) || []).filter(t => now - t < AI_WINDOW_MS);
+  if (hits.length >= AI_MAX_PER_WINDOW) {
+    console.warn(`[ai-limit] ${ip} przekroczył limit (${hits.length}/${AI_MAX_PER_WINDOW} w 60s)`);
+    res.setHeader('Retry-After', '60');
+    return res.status(429).json({ error: 'Za dużo zapytań — odczekaj chwilę i spróbuj ponownie.' });
+  }
+  hits.push(now);
+  aiHits.set(ip, hits);
+  aiRequestCount++;
+  console.log(`[ai] #${aiRequestCount} ${req.path} ip:${ip} (${hits.length}/${AI_MAX_PER_WINDOW} w oknie 60s)`);
+  next();
+}
+
+// Periodically prune stale IP buckets so the map doesn't grow unbounded
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, hits] of aiHits) {
+    const fresh = hits.filter(t => now - t < AI_WINDOW_MS);
+    if (fresh.length) aiHits.set(ip, fresh); else aiHits.delete(ip);
+  }
+}, 5 * 60 * 1000);
+
 app.get('/api/ai/health', (req, res) => res.json({ configured: anthropic.configured() }));
 
 // Chat with the financial advisor. Body: { messages:[{role,content}], system? }
-app.post('/api/ai-chat', async (req, res) => {
+app.post('/api/ai-chat', aiRateLimit, async (req, res) => {
   try {
     if (!anthropic.configured()) return res.status(503).json({ error: 'AI nie jest skonfigurowane na serwerze' });
     const { messages, system } = req.body || {};
@@ -56,7 +92,7 @@ app.post('/api/ai-chat', async (req, res) => {
 });
 
 // Scan a receipt image. Body: { image: dataURL|base64, categories:[names] }
-app.post('/api/scan-receipt', async (req, res) => {
+app.post('/api/scan-receipt', aiRateLimit, async (req, res) => {
   try {
     if (!anthropic.configured()) return res.status(503).json({ error: 'AI nie jest skonfigurowane na serwerze' });
     const { image, categories } = req.body || {};

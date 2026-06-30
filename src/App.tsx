@@ -50,7 +50,6 @@ function App() {
   const [expenses, setExpenses] = useLocalStorage<Expense[]>('expenses', []);
   const [categories, setCategories] = useLocalStorage<Category[]>('categories', DEFAULT_CATEGORIES);
   const [goals, setGoals] = useLocalStorage<SavingsGoal[]>('goals', []);
-  const [apiKey, setApiKey] = useLocalStorage<string>('anthropicApiKey', '');
   const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('theme', 'light');
   const [budget, setBudget] = useLocalStorage<number>('monthlyBudget', 0);
   const [accent, setAccent] = useLocalStorage<string>('accent', '#0071e3');
@@ -81,15 +80,15 @@ function App() {
   const renderView = () => {
     switch (view) {
       case 'dashboard':
-        return <Dashboard expenses={expenses} categories={categories} goals={goals} onNavigate={setView} budget={budget} onSetBudget={setBudget} apiKey={apiKey} onImport={importExpenses} />;
+        return <Dashboard expenses={expenses} categories={categories} goals={goals} onNavigate={setView} budget={budget} onSetBudget={setBudget} onImport={importExpenses} />;
       case 'expenses':
         return <ExpenseList expenses={expenses} categories={categories} onDelete={deleteExpense} onAdd={() => setView('add')} />;
       case 'add':
         return <AddExpense categories={categories} onAdd={exp => { addExpense(exp); setView('expenses'); }} onBack={() => setView('expenses')} />;
       case 'scanner':
-        return <ReceiptScanner categories={categories} onAdd={exp => { addExpense(exp); setView('expenses'); }} apiKey={apiKey} />;
+        return <ReceiptScanner categories={categories} onAdd={exp => { addExpense(exp); setView('expenses'); }} />;
       case 'advisor':
-        return <AIAdvisor expenses={expenses} categories={categories} goals={goals} apiKey={apiKey} />;
+        return <AIAdvisor expenses={expenses} categories={categories} goals={goals} />;
       case 'categories':
         return <Categories categories={categories} onAdd={addCategory} onDelete={deleteCategory} />;
       case 'goals':
@@ -115,7 +114,7 @@ function App() {
       >
         {theme === 'dark' ? <Sun size={20} strokeWidth={1.9} /> : <Moon size={20} strokeWidth={1.9} />}
       </MotionButton>
-      <Navigation currentView={view} onNavigate={setView} apiKey={apiKey} onApiKeyChange={setApiKey} accent={accent} onAccentChange={setAccent} />
+      <Navigation currentView={view} onNavigate={setView} accent={accent} onAccentChange={setAccent} />
       <main className="main-content">
         <AnimatePresence mode="wait">
           <motion.div

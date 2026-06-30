@@ -5,8 +5,6 @@ import { ViewIcon, Plus } from '../icons';
 interface Props {
   currentView: View;
   onNavigate: (view: View) => void;
-  apiKey: string;
-  onApiKeyChange: (key: string) => void;
   accent: string;
   onAccentChange: (c: string) => void;
 }
@@ -66,8 +64,7 @@ const toolItems: NavItem[] = [
 ];
 
 
-export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyChange, accent, onAccentChange }: Props) {
-  const [showKey, setShowKey] = useState(false);
+export default function Navigation({ currentView, onNavigate, accent, onAccentChange }: Props) {
   const [moreOpen, setMoreOpen] = useState(false);
 
   // Bottom tabs: 4 items + "Więcej" = 5 total, so the center "+" sits exactly in the middle
@@ -129,20 +126,6 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
         ))}
 
         <div className="nav-bottom">
-          <span className="api-key-label">Anthropic API Key</span>
-          <input
-            type={showKey ? 'text' : 'password'}
-            className="api-key-input"
-            placeholder="sk-ant-..."
-            value={apiKey}
-            onChange={e => onApiKeyChange(e.target.value)}
-            onFocus={() => setShowKey(true)}
-            onBlur={() => setShowKey(false)}
-          />
-          {apiKey
-            ? <div style={{ fontSize: 11, color: 'var(--success)', marginTop: 6 }}>✓ Klucz ustawiony</div>
-            : <div style={{ fontSize: 11, color: 'var(--text2)', marginTop: 6 }}>Wymagany dla OCR i AI</div>
-          }
           <AccentPicker accent={accent} onAccentChange={onAccentChange} />
         </div>
       </nav>
@@ -199,21 +182,6 @@ export default function Navigation({ currentView, onNavigate, apiKey, onApiKeyCh
             ))}
 
             <div style={{ borderTop: '1px solid var(--border)', marginTop: 12, paddingTop: 16 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text2)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 10 }}>
-                Anthropic API Key
-              </div>
-              <input
-                type="password"
-                className="api-key-input"
-                style={{ fontSize: 15, padding: '12px 14px', borderRadius: 12 }}
-                placeholder="sk-ant-..."
-                value={apiKey}
-                onChange={e => onApiKeyChange(e.target.value)}
-              />
-              {apiKey
-                ? <div style={{ fontSize: 13, color: 'var(--success)', marginTop: 8 }}>✓ Klucz ustawiony</div>
-                : <div style={{ fontSize: 13, color: 'var(--text2)', marginTop: 8 }}>Wymagany dla Skanowania i AI</div>
-              }
               <AccentPicker accent={accent} onAccentChange={onAccentChange} />
             </div>
           </div>

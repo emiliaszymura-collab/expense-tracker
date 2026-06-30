@@ -3,6 +3,9 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Expense, Category, SavingsGoal } from '../types';
 import { categorize, spendingOnly } from '../categorize';
+import { authHeader } from '../authToken';
+
+const SERVER = process.env.REACT_APP_SERVER_URL || '';
 
 // Map raw (English) API errors to a friendly Polish message; never expose technical/billing details.
 function friendlyError(raw: string): string {
@@ -12,7 +15,7 @@ function friendlyError(raw: string): string {
   if (/rate limit|overloaded|too many|429|529/.test(m))
     return '⚠️ Asystent AI jest teraz przeciążony. Spróbuj za chwilę.';
   if (/authentication|invalid.*api.?key|x-api-key|401|permission/.test(m))
-    return '⚠️ Problem z kluczem API — sprawdź klucz w ustawieniach.';
+    return '⚠️ Asystent AI jest chwilowo niedostępny. Spróbuj ponownie później.';
   return '⚠️ Asystent AI jest chwilowo niedostępny. Spróbuj ponownie później.';
 }
 
@@ -20,7 +23,6 @@ interface Props {
   expenses: Expense[];
   categories: Category[];
   goals: SavingsGoal[];
-  apiKey: string;
 }
 
 interface Message {
@@ -72,7 +74,7 @@ Dane użytkownika (${now.toLocaleDateString('pl-PL', { month: 'long', year: 'num
 Udzielaj konkretnych, spersonalizowanych porad na podstawie powyższych danych.`;
 }
 
-export default function AIAdvisor({ expenses, categories, goals, apiKey }: Props) {
+export default function AIAdvisor({ expenses, categories, goals }: Props) {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: 'Cześć! Jestem Twoim AI doradcą finansowym 👋 Przeanalizowałem Twoje wydatki i jestem gotowy pomóc. Możesz mi zadać pytanie lub wybrać jedno z sugestii poniżej.' },
   ]);
@@ -87,7 +89,6 @@ export default function AIAdvisor({ expenses, categories, goals, apiKey }: Props
 
   const send = async (text: string) => {
     if (!text.trim()) return;
-    if (!apiKey) { setError('Wprowadź klucz API Anthropic w panelu bocznym'); return; }
 
     const userMsg: Message = { role: 'user', content: text };
     setMessages(prev => [...prev, userMsg]);
@@ -100,17 +101,10 @@ export default function AIAdvisor({ expenses, categories, goals, apiKey }: Props
         .filter(m => m.role === 'user' || m.role === 'assistant')
         .map(m => ({ role: m.role, content: m.content }));
 
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch(`${SERVER}/api/ai-chat`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1024,
           system: buildContext(expenses, categories, goals),
           messages: history,
         }),
@@ -118,12 +112,12 @@ export default function AIAdvisor({ expenses, categories, goals, apiKey }: Props
 
       if (!res.ok) {
         let raw = `status ${res.status}`;
-        try { const err = await res.json(); raw = err.error?.message || err.error?.type || raw; } catch {}
+        try { const err = await res.json(); raw = err.error || raw; } catch {}
         throw new Error(friendlyError(raw));
       }
 
       const data = await res.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.content[0].text }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: data.text }]);
     } catch (err: any) {
       // Network errors or thrown friendly messages — keep it user-friendly and Polish
       const msg = typeof err?.message === 'string' && err.message.startsWith('⚠️')

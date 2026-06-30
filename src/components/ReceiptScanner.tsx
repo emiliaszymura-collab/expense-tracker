@@ -6,7 +6,6 @@ import { ReceiptText } from '../icons';
 interface Props {
   categories: Category[];
   onAdd: (expense: Expense) => void;
-  apiKey: string;
 }
 
 interface ReceiptItem { name: string; price?: number }
@@ -56,7 +55,7 @@ function resizeImage(dataUrl: string, maxDim = 1568, quality = 0.8): Promise<str
   });
 }
 
-export default function ReceiptScanner({ categories, onAdd, apiKey }: Props) {
+export default function ReceiptScanner({ categories, onAdd }: Props) {
   const [image, setImage] = useState<string | null>(null);
   const [imageName, setImageName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -102,47 +101,17 @@ export default function ReceiptScanner({ categories, onAdd, apiKey }: Props) {
     if (file) handleFile(file);
   };
 
-  // Core Vision call — parse one receipt image into structured data
+  // Core Vision call — parse one receipt image into structured data (via backend)
   const callVision = async (img: string): Promise<ParsedReceipt> => {
-    const base64 = img.split(',')[1];
-    const mediaType = img.split(';')[0].split(':')[1];
-    const catNames = categories.map(c => c.name).join(', ');
     const today = new Date().toISOString().split('T')[0];
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(`${SERVER}/api/scan-receipt`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1024,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-            {
-              type: 'text',
-              text: `Przeanalizuj ten paragon. Odpowiedz TYLKO w formacie JSON (bez markdown):
-{"store": "nazwa sklepu", "total": 45.50, "date": "${today}", "category": "Jedzenie", "notes": "", "items": [{"name": "Mleko 2%", "price": 3.49}, {"name": "Chleb", "price": 4.20}]}
-
-Zasady:
-- "store": nazwa sklepu/firmy z paragonu
-- "total": suma do zapłaty (liczba PLN)
-- "date": data zakupu z paragonu (format YYYY-MM-DD); jeśli brak, użyj ${today}
-- "category": jedna z: ${catNames}
-- "items": lista WSZYSTKICH produktów z paragonu (nazwa + cena jeśli widoczna).
-- "notes": dodatkowe info (np. nr paragonu) lub pusty string`,
-            },
-          ],
-        }],
-      }),
+      headers: { 'Content-Type': 'application/json', ...authHeader() },
+      body: JSON.stringify({ image: img, categories: categories.map(c => c.name) }),
     });
     if (!res.ok) throw new Error('scan-failed');
     const data = await res.json();
-    const text = (data.content[0].text || '').trim().replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    const text = (data.text || '').trim().replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     const result = JSON.parse(text) as ParsedReceipt;
     result.items = Array.isArray(result.items) ? result.items : [];
     if (!result.date) result.date = today;
@@ -152,12 +121,11 @@ Zasady:
 
   const scanReceipt = async () => {
     if (!image) return;
-    if (!apiKey) { setError('Wprowadź klucz API Anthropic w panelu (menu „Więcej")'); return; }
     setLoading(true); setError(''); setSaved('');
     try {
       setParsed(await callVision(image));
     } catch (err: any) {
-      setError('⚠️ Nie udało się rozpoznać paragonu (sprawdź klucz API/środki lub spróbuj wyraźniejsze zdjęcie).');
+      setError('⚠️ Nie udało się rozpoznać paragonu (spróbuj wyraźniejsze zdjęcie).');
     } finally { setLoading(false); }
   };
 
@@ -167,7 +135,6 @@ Zasady:
   const [batchRunning, setBatchRunning] = useState(false);
 
   const handleBatchFiles = async (files: FileList) => {
-    if (!apiKey) { setError('Wprowadź klucz API Anthropic w panelu (menu „Więcej")'); return; }
     setError(''); setSaved('');
     const imgs: string[] = [];
     for (const f of Array.from(files)) {

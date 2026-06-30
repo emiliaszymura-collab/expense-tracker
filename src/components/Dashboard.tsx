@@ -19,7 +19,6 @@ interface Props {
   onNavigate: (view: View) => void;
   budget: number;
   onSetBudget: (b: number) => void;
-  apiKey: string;
   onImport: (expenses: Expense[]) => void;
 }
 
@@ -107,7 +106,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBudget, apiKey, onImport }: Props) {
+export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBudget, onImport }: Props) {
   const [editBudget, setEditBudget] = React.useState(false);
   const [budgetInput, setBudgetInput] = React.useState(String(budget || ''));
 
@@ -315,7 +314,7 @@ export default function Dashboard({ expenses, goals, onNavigate, budget, onSetBu
 
       {/* Weekly AI report */}
       <Reveal>
-        <WeeklyReport expenses={expenses} apiKey={apiKey} />
+        <WeeklyReport expenses={expenses} />
       </Reveal>
 
       {/* Balance forecast */}
