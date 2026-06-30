@@ -88,18 +88,34 @@ async function getBalances(accountUid) {
   } catch (_) { return null; }
 }
 
-async function getTransactions(accountUid, dateFrom, psu) {
+async function getTransactions(accountUid, dateFrom, psu, dateTo) {
+  // date_to MUST be today (inclusive) so today's transactions are returned.
+  const today = new Date().toISOString().split('T')[0];
+  const to = dateTo || today;
   let all = [];
   let continuationKey = null;
+  let pages = 0;
   do {
     const params = new URLSearchParams();
     if (dateFrom) params.set('date_from', dateFrom);
+    if (to) params.set('date_to', to);
     if (continuationKey) params.set('continuation_key', continuationKey);
     const url = `${BASE}/accounts/${accountUid}/transactions${params.toString() ? '?' + params.toString() : ''}`;
     const res = await axios.get(url, { headers: headers(psu) });
-    all = all.concat(res.data?.transactions || []);
+    const batch = res.data?.transactions || [];
+    all = all.concat(batch);
     continuationKey = res.data?.continuation_key || null;
+    pages++;
+    // ── Diagnostics: what exactly the bank API returns (helps debug sandbox delays) ──
+    console.log(`[EB tx] ${accountUid.slice(0, 8)} page ${pages} | range ${dateFrom || '—'}..${to} | +${batch.length} (total ${all.length}) | more: ${continuationKey ? 'yes' : 'no'}`);
+    if (batch[0]) {
+      const t = batch[0];
+      console.log(`[EB tx] sample → status:${t.transaction_status || t.status || '?'} ind:${t.credit_debit_indicator} amount:${t.transaction_amount?.amount} booking:${t.booking_date || '-'} value:${t.value_date || '-'}`);
+    }
   } while (continuationKey && all.length < 1000);
+  // Surface how many of the returned transactions are dated today
+  const todays = all.filter(t => (t.booking_date || t.value_date || '').startsWith(today)).length;
+  console.log(`[EB tx] ${accountUid.slice(0, 8)} DONE | ${all.length} tx total, ${todays} z dzisiaj (${today})`);
   return all;
 }
 

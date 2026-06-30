@@ -358,6 +358,9 @@ async function refreshBank(psu, fromDate) {
   const seen = new Set();
   expenses = expenses.filter(e => (seen.has(e.id) ? false : seen.add(e.id)));
   const added = await db.saveTransactions(expenses);
+  const today = new Date().toISOString().split('T')[0];
+  const todays = expenses.filter(e => (e.date || '').startsWith(today)).length;
+  console.log(`[sync] zmapowano ${expenses.length} wydatków (${todays} z dzisiaj), zapisano ${added} nowych | konta: ${allEbAccounts().length}`);
   ebLastSync = new Date().toISOString();
   await db.setKV('eb_last_sync', ebLastSync);
   await db.setKV('eb_sessions', ebSessions); // persist refreshed balances
