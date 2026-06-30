@@ -3,23 +3,24 @@
   "name": "Wydatki — śledzenie wydatków",
   "icons": [
     {
-      "src": "favicon-64.png",
+      "src": "favicon-64.png?v=2",
       "sizes": "64x64",
       "type": "image/png"
     },
     {
-      "src": "apple-touch-icon.png",
+      "src": "apple-touch-icon.png?v=2",
       "sizes": "180x180",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "logo192.png",
+      "src": "logo192.png?v=2",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "logo512.png",
+      "src": "logo512.png?v=2",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
@@ -27,6 +28,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1e2234",
+  "background_color": "#1e2234"
 }
