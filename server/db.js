@@ -45,7 +45,21 @@ async function init() {
       created_at TIMESTAMPTZ DEFAULT now()
     );
   `);
+  // Per-user isolation columns (idempotent — safe to run on every boot)
+  await pool.query(`ALTER TABLE bank_transactions ADD COLUMN IF NOT EXISTS user_id TEXT;`);
+  await pool.query(`ALTER TABLE receipts ADD COLUMN IF NOT EXISTS user_id TEXT;`);
   ready = true;
+}
+
+// Assign any pre-multi-user rows (user_id IS NULL) to the migrated legacy account.
+async function assignOrphansToUser(userId) {
+  if (hasPg) {
+    await pool.query(`UPDATE bank_transactions SET user_id=$1 WHERE user_id IS NULL`, [userId]);
+    await pool.query(`UPDATE receipts SET user_id=$1 WHERE user_id IS NULL`, [userId]);
+  } else {
+    for (const v of mem.tx.values()) if (v._uid == null) v._uid = userId;
+    for (const v of mem.receipts.values()) if (v._uid == null) v._uid = userId;
+  }
 }
 
 // ── Key/value (used for the active bank session) ──
@@ -70,32 +84,32 @@ async function getKV(key) {
   return mem.kv.get(key) ?? null;
 }
 
-// ── Bank transactions (deduped by id) ──
-async function saveTransactions(list) {
+// ── Bank transactions (deduped by id, scoped per user) ──
+async function saveTransactions(userId, list) {
   if (!list || !list.length) return 0;
   if (hasPg) {
     let added = 0;
     for (const e of list) {
       const r = await pool.query(
-        `INSERT INTO bank_transactions(id,amount,description,category,date,notes)
-         VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT(id) DO NOTHING`,
-        [e.id, e.amount, e.description, e.category, e.date, e.notes || null]
+        `INSERT INTO bank_transactions(id,amount,description,category,date,notes,user_id)
+         VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(id) DO NOTHING`,
+        [e.id, e.amount, e.description, e.category, e.date, e.notes || null, userId]
       );
       added += r.rowCount;
     }
     return added;
   }
   let added = 0;
-  for (const e of list) { if (!mem.tx.has(e.id)) { mem.tx.set(e.id, e); added++; } }
+  for (const e of list) { if (!mem.tx.has(e.id)) { mem.tx.set(e.id, { ...e, _uid: userId }); added++; } }
   return added;
 }
 
-async function loadTransactions() {
+async function loadTransactions(userId) {
   if (hasPg) {
-    const r = await pool.query(`SELECT id,amount,description,category,date,notes FROM bank_transactions ORDER BY date DESC`);
+    const r = await pool.query(`SELECT id,amount,description,category,date,notes FROM bank_transactions WHERE user_id=$1 ORDER BY date DESC`, [userId]);
     return r.rows.map(row => ({ ...row, amount: Number(row.amount), notes: row.notes || undefined }));
   }
-  return Array.from(mem.tx.values());
+  return Array.from(mem.tx.values()).filter(v => v._uid === userId).map(({ _uid, ...e }) => e);
 }
 
 // ── Receipts (scanned receipt archive, searchable by store/product) ──
@@ -104,53 +118,54 @@ function receiptSearchText(r) {
     .filter(Boolean).join(' ').toLowerCase();
 }
 
-async function saveReceipt(r) {
+async function saveReceipt(userId, r) {
   const search = receiptSearchText(r);
   if (hasPg) {
     await pool.query(
-      `INSERT INTO receipts(id,date,store,total,items,category,notes,image,search,created_at)
-       VALUES($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,now()) ON CONFLICT(id) DO NOTHING`,
-      [r.id, r.date, r.store, r.total, JSON.stringify(r.items || []), r.category, r.notes || null, r.image || null, search]
+      `INSERT INTO receipts(id,date,store,total,items,category,notes,image,search,user_id,created_at)
+       VALUES($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,$10,now()) ON CONFLICT(id) DO NOTHING`,
+      [r.id, r.date, r.store, r.total, JSON.stringify(r.items || []), r.category, r.notes || null, r.image || null, search, userId]
     );
   } else {
-    mem.receipts.set(r.id, { ...r, search });
+    mem.receipts.set(r.id, { ...r, search, _uid: userId });
   }
   return r.id;
 }
 
 // List receipt metadata (no image) with optional search by store/product/notes
-async function listReceipts(q) {
+async function listReceipts(userId, q) {
   if (hasPg) {
     const rows = q
-      ? (await pool.query(`SELECT id,date,store,total,items,category,notes FROM receipts WHERE search LIKE $1 ORDER BY date DESC NULLS LAST`, ['%' + q.toLowerCase() + '%'])).rows
-      : (await pool.query(`SELECT id,date,store,total,items,category,notes FROM receipts ORDER BY date DESC NULLS LAST`)).rows;
+      ? (await pool.query(`SELECT id,date,store,total,items,category,notes FROM receipts WHERE user_id=$1 AND search LIKE $2 ORDER BY date DESC NULLS LAST`, [userId, '%' + q.toLowerCase() + '%'])).rows
+      : (await pool.query(`SELECT id,date,store,total,items,category,notes FROM receipts WHERE user_id=$1 ORDER BY date DESC NULLS LAST`, [userId])).rows;
     return rows.map(r => ({ ...r, total: r.total != null ? Number(r.total) : null }));
   }
-  let arr = Array.from(mem.receipts.values());
+  let arr = Array.from(mem.receipts.values()).filter(r => r._uid === userId);
   if (q) arr = arr.filter(r => (r.search || '').includes(q.toLowerCase()));
   arr.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-  return arr.map(({ image, search, ...meta }) => meta);
+  return arr.map(({ image, search, _uid, ...meta }) => meta);
 }
 
-// Full receipt incl. image
-async function getReceipt(id) {
+// Full receipt incl. image (scoped to the owner)
+async function getReceipt(userId, id) {
   if (hasPg) {
-    const r = (await pool.query(`SELECT id,date,store,total,items,category,notes,image FROM receipts WHERE id=$1`, [id])).rows[0];
+    const r = (await pool.query(`SELECT id,date,store,total,items,category,notes,image FROM receipts WHERE id=$1 AND user_id=$2`, [id, userId])).rows[0];
     return r ? { ...r, total: r.total != null ? Number(r.total) : null } : null;
   }
   const r = mem.receipts.get(id);
-  if (!r) return null;
-  const { search, ...rest } = r;
+  if (!r || r._uid !== userId) return null;
+  const { search, _uid, ...rest } = r;
   return rest;
 }
 
-async function deleteReceipt(id) {
-  if (hasPg) await pool.query(`DELETE FROM receipts WHERE id=$1`, [id]);
-  else mem.receipts.delete(id);
+async function deleteReceipt(userId, id) {
+  if (hasPg) await pool.query(`DELETE FROM receipts WHERE id=$1 AND user_id=$2`, [id, userId]);
+  else { const r = mem.receipts.get(id); if (r && r._uid === userId) mem.receipts.delete(id); }
 }
 
 module.exports = {
   init, setKV, getKV, saveTransactions, loadTransactions,
   saveReceipt, listReceipts, getReceipt, deleteReceipt,
+  assignOrphansToUser,
   get durable() { return hasPg; }, get ready() { return ready; },
 };

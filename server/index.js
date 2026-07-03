@@ -356,58 +356,59 @@ function rpInfo(req) {
   return { origin, rpID };
 }
 
-// Gate is only enforced once a PIN has been configured (non-breaking rollout)
+// Every protected endpoint requires a valid token → resolves to a user.
 async function requireAuth(req, res, next) {
   try {
-    if (!(await auth.isConfigured())) return next();
-    if (await auth.verifyToken(req.headers['x-auth-token'])) return next();
-    return res.status(401).json({ error: 'unauthorized' });
+    const user = await auth.userFromToken(req.headers['x-auth-token']);
+    if (!user) return res.status(401).json({ error: 'unauthorized' });
+    req.userId = user.id;
+    req.user = user;
+    return next();
   } catch (e) { return res.status(500).json({ error: e.message }); }
 }
 
 app.get('/api/auth/status', async (req, res) => {
   try {
+    const user = await auth.userFromToken(req.headers['x-auth-token']);
     res.json({
-      configured: await auth.isConfigured(),
-      hasPasskey: await auth.hasCredentials(),
-      authed: await auth.verifyToken(req.headers['x-auth-token']),
+      authed: !!user,
+      username: user?.username || null,
+      hasPasskey: !!(user?.passkeys && user.passkeys.length),
     });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// First-time PIN setup (only when not yet configured), or PIN login
-app.post('/api/auth/setup', async (req, res) => {
+// Create a new account (username + PIN)
+app.post('/api/auth/register', async (req, res) => {
   try {
-    if (await auth.isConfigured()) return res.status(400).json({ error: 'PIN już ustawiony' });
-    await auth.setPin(req.body.pin);
-    res.json({ token: await auth.issueToken() });
+    const user = await auth.register(req.body.username, req.body.pin);
+    res.json({ token: await auth.issueToken(user.id), username: user.username });
   } catch (e) { res.status(400).json({ error: e.message }); }
 });
 
-app.post('/api/auth/pin', async (req, res) => {
+// Log in to an existing account
+app.post('/api/auth/login', async (req, res) => {
   try {
-    if (!(await auth.verifyPin(req.body.pin))) return res.status(401).json({ error: 'Błędny PIN' });
-    res.json({ token: await auth.issueToken() });
+    const user = await auth.login(req.body.username, req.body.pin);
+    if (!user) return res.status(401).json({ error: 'Błędna nazwa lub PIN' });
+    res.json({ token: await auth.issueToken(user.id), username: user.username });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Register a passkey on this device (requires a valid session: PIN login or existing passkey)
+// Register a passkey on this device (must be logged in)
 app.post('/api/auth/passkey/register/options', requireAuth, async (req, res) => {
-  try {
-    if (!(await auth.verifyToken(req.headers['x-auth-token']))) return res.status(401).json({ error: 'Zaloguj PIN-em najpierw' });
-    res.json(await auth.registrationOptions(rpInfo(req).rpID));
-  } catch (e) { res.status(500).json({ error: e.message }); }
+  try { res.json(await auth.registrationOptions(req.userId, rpInfo(req).rpID)); }
+  catch (e) { res.status(500).json({ error: e.message }); }
 });
 app.post('/api/auth/passkey/register/verify', requireAuth, async (req, res) => {
   try {
-    if (!(await auth.verifyToken(req.headers['x-auth-token']))) return res.status(401).json({ error: 'Zaloguj PIN-em najpierw' });
     const { origin, rpID } = rpInfo(req);
-    const ok = await auth.verifyRegistration(rpID, origin, req.body.response);
+    const ok = await auth.verifyRegistration(req.userId, rpID, origin, req.body.response);
     res.json({ verified: ok });
   } catch (e) { res.status(400).json({ error: e.message }); }
 });
 
-// Passkey login (Face ID / fingerprint)
+// Passkey login (usernameless / discoverable → resolves to the credential's owner)
 app.post('/api/auth/passkey/login/options', async (req, res) => {
   try { res.json(await auth.authenticationOptions(rpInfo(req).rpID)); }
   catch (e) { res.status(500).json({ error: e.message }); }
@@ -415,9 +416,10 @@ app.post('/api/auth/passkey/login/options', async (req, res) => {
 app.post('/api/auth/passkey/login/verify', async (req, res) => {
   try {
     const { origin, rpID } = rpInfo(req);
-    const ok = await auth.verifyAuthentication(rpID, origin, req.body.response);
-    if (!ok) return res.status(401).json({ error: 'Nie udało się zweryfikować' });
-    res.json({ token: await auth.issueToken() });
+    const uid = await auth.verifyAuthentication(rpID, origin, req.body.response);
+    if (!uid) return res.status(401).json({ error: 'Nie udało się zweryfikować' });
+    const user = await auth.getUserById(uid);
+    res.json({ token: await auth.issueToken(uid), username: user?.username || null });
   } catch (e) { res.status(400).json({ error: e.message }); }
 });
 
@@ -428,29 +430,34 @@ app.use('/api/eb', requireAuth);
 //  Enable Banking — real PL banks for individuals (Restricted Production)
 // ════════════════════════════════════════════════════════════
 const ebStates = {};
-// Multiple bank connections at once. Each: { bank, sessionId, accounts:[{uid,name,iban,currency,balance,bank}] }
-let ebSessions = [];
-// Timestamp (ISO) of the last successful bank refresh — shown in the UI.
-let ebLastSync = null;
-
-function allEbAccounts() {
-  return ebSessions.flatMap(s => s.accounts);
+// Per-user bank state: uid → { sessions:[{bank,sessionId,accounts:[...]}], lastSync:ISO|null }
+const ebByUser = new Map();
+function ebState(uid) {
+  let s = ebByUser.get(uid);
+  if (!s) { s = { sessions: [], lastSync: null }; ebByUser.set(uid, s); }
+  return s;
+}
+function accountsOf(uid) {
+  return ebState(uid).sessions.flatMap(s => s.accounts);
+}
+async function persistUserBank(uid) {
+  const s = ebState(uid);
+  await db.setKV(`eb_sessions:${uid}`, s.sessions);
+  await db.setKV(`eb_last_sync:${uid}`, s.lastSync);
 }
 
-// Pull recent transactions for ALL linked accounts across ALL banks and persist them (deduped).
-// Also refreshes each account's LIVE balance so the UI shows the current amount.
-// psu = optional {ip,userAgent} for user-triggered requests (lifts bank rate limits).
-async function refreshBank(psu, fromDate) {
+// Pull recent transactions for ONE user's linked accounts and persist them (deduped, per-user).
+// Also refreshes each account's LIVE balance. psu = optional {ip,userAgent} for user-triggered requests.
+async function refreshBank(uid, psu, fromDate) {
   const from = fromDate || new Date(Date.now() - 90 * 864e5).toISOString().split('T')[0];
   let expenses = [];
-  for (const acc of allEbAccounts()) {
+  for (const acc of accountsOf(uid)) {
     try {
       const txs = await eb.getTransactions(acc.uid, from, psu);
       expenses = expenses.concat(txs.map(t => eb.mapTransaction(t, null)).filter(Boolean));
     } catch (e) {
       console.error(`[refresh ${acc.bank || ''} ${acc.uid}]`, e.response?.data?.message || e.message);
     }
-    // Always refresh the live balance, even if a transaction fetch failed.
     try {
       const bal = await eb.getBalances(acc.uid);
       if (bal && typeof bal.amount === 'number') {
@@ -463,18 +470,18 @@ async function refreshBank(psu, fromDate) {
   }
   const seen = new Set();
   expenses = expenses.filter(e => (seen.has(e.id) ? false : seen.add(e.id)));
-  const added = await db.saveTransactions(expenses);
+  const added = await db.saveTransactions(uid, expenses);
   const today = new Date().toISOString().split('T')[0];
   const todays = expenses.filter(e => (e.date || '').startsWith(today)).length;
-  console.log(`[sync] zmapowano ${expenses.length} wydatków (${todays} z dzisiaj), zapisano ${added} nowych | konta: ${allEbAccounts().length}`);
-  ebLastSync = new Date().toISOString();
-  await db.setKV('eb_last_sync', ebLastSync);
-  await db.setKV('eb_sessions', ebSessions); // persist refreshed balances
-  return { expenses, added, lastSync: ebLastSync, accounts: allEbAccounts() };
+  console.log(`[sync ${uid.slice(0, 8)}] zmapowano ${expenses.length} (${todays} z dzisiaj), zapisano ${added} nowych | konta: ${accountsOf(uid).length}`);
+  ebState(uid).lastSync = new Date().toISOString();
+  await persistUserBank(uid);
+  return { expenses, added, lastSync: ebState(uid).lastSync, accounts: accountsOf(uid) };
 }
 
 app.get('/api/eb/health', (req, res) => {
-  res.json({ configured: eb.configured(), connected: ebSessions.length > 0, banks: ebSessions.map(s => s.bank), durable: db.durable });
+  const st = ebState(req.userId);
+  res.json({ configured: eb.configured(), connected: st.sessions.length > 0, banks: st.sessions.map(s => s.bank), durable: db.durable });
 });
 
 // List Polish banks
@@ -495,8 +502,7 @@ app.post('/api/eb/connect', async (req, res) => {
     const { aspspName, country } = req.body;
     if (!aspspName) return res.status(400).json({ error: 'aspspName required' });
     const state = `et_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    ebStates[state] = { aspspName, country: country || 'PL' };
-    // Enable Banking stores redirect URLs WITH a trailing slash — match exactly or /auth is rejected
+    ebStates[state] = { aspspName, country: country || 'PL', userId: req.userId };
     const redirectUrl = (req.headers.origin || FRONTEND_URL).replace(/\/$/, '') + '/';
     const { url } = await eb.startAuth(aspspName, country, redirectUrl, state);
     res.json({ url, state });
@@ -506,12 +512,13 @@ app.post('/api/eb/connect', async (req, res) => {
   }
 });
 
-// Complete authorization with the callback code → store session + accounts
+// Complete authorization with the callback code → store session + accounts (for this user)
 app.post('/api/eb/session', async (req, res) => {
   try {
     if (!eb.configured()) return res.status(400).json({ error: 'Enable Banking nie skonfigurowany' });
     const { code } = req.body;
     if (!code) return res.status(400).json({ error: 'code required' });
+    const uid = req.userId;
 
     const session = await eb.createSession(code);
     const bank = session.aspsp?.name || 'Bank';
@@ -526,32 +533,32 @@ app.post('/api/eb/session', async (req, res) => {
         bank,
       };
     }));
-    // Replace any existing connection for the same bank, then add this one
-    ebSessions = ebSessions.filter(s => s.bank !== bank);
-    ebSessions.push({ bank, sessionId: session.session_id, accounts });
-    await db.setKV('eb_sessions', ebSessions);
-    // Kick off an initial background import so transactions appear automatically
-    refreshBank().then(r => console.log(`[eb] initial import +${r.added}`)).catch(e => console.error('[eb initial]', e.message));
-    res.json({ connected: true, accounts: allEbAccounts() });
+    const st = ebState(uid);
+    st.sessions = st.sessions.filter(s => s.bank !== bank);
+    st.sessions.push({ bank, sessionId: session.session_id, accounts });
+    await persistUserBank(uid);
+    refreshBank(uid).then(r => console.log(`[eb] initial import +${r.added}`)).catch(e => console.error('[eb initial]', e.message));
+    res.json({ connected: true, accounts: accountsOf(uid) });
   } catch (err) {
     console.error('[eb/session]', err.response?.data || err.message);
     res.status(500).json({ error: err.response?.data?.message || err.message });
   }
 });
 
-// Current accounts across all connected banks (+ last sync time)
+// Current accounts for this user (+ last sync time)
 app.get('/api/eb/accounts', (req, res) => {
-  if (!ebSessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
-  res.json({ connected: true, accounts: allEbAccounts(), lastSync: ebLastSync });
+  const st = ebState(req.userId);
+  if (!st.sessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
+  res.json({ connected: true, accounts: accountsOf(req.userId), lastSync: st.lastSync });
 });
 
 // Manual "Synchronizuj teraz": refresh transactions + live balances, return how many were added
 app.post('/api/eb/sync', async (req, res) => {
   try {
     if (!eb.configured()) return res.status(400).json({ error: 'Enable Banking nie skonfigurowany' });
-    if (!ebSessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
+    if (!ebState(req.userId).sessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
     const psu = { ip: (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0].trim(), userAgent: req.headers['user-agent'] };
-    const r = await refreshBank(psu, req.body?.fromDate);
+    const r = await refreshBank(req.userId, psu, req.body?.fromDate);
     res.json({ added: r.added, expenses: r.expenses, lastSync: r.lastSync, accounts: r.accounts });
   } catch (err) {
     console.error('[eb/sync]', err.response?.data || err.message);
@@ -559,24 +566,23 @@ app.post('/api/eb/sync', async (req, res) => {
   }
 });
 
-// Pull transactions for all linked accounts → mapped expenses
+// Pull transactions for this user's linked accounts → mapped expenses
 app.get('/api/eb/transactions', async (req, res) => {
   try {
     if (!eb.configured()) return res.status(400).json({ error: 'Enable Banking nie skonfigurowany' });
-    if (!ebSessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
+    if (!ebState(req.userId).sessions.length) return res.status(400).json({ error: 'Brak połączenia — połącz bank' });
     const { fromDate, categories } = req.query;
     const catList = categories ? categories.split(',') : null;
-    // This request is user-triggered → send PSU headers so the bank lifts background limits
     const psu = { ip: (req.headers['x-forwarded-for'] || req.ip || '').split(',')[0].trim(), userAgent: req.headers['user-agent'] };
 
     let expenses = [];
-    for (const acc of allEbAccounts()) {
+    for (const acc of accountsOf(req.userId)) {
       const txs = await eb.getTransactions(acc.uid, fromDate, psu);
       expenses = expenses.concat(txs.map(t => eb.mapTransaction(t, catList)).filter(Boolean));
     }
     const seen = new Set();
     expenses = expenses.filter(e => (seen.has(e.id) ? false : seen.add(e.id)));
-    await db.saveTransactions(expenses); // keep the persistent store in sync
+    await db.saveTransactions(req.userId, expenses);
     res.json({ expenses, total: expenses.length });
   } catch (err) {
     console.error('[eb/transactions]', err.response?.data || err.message);
@@ -584,10 +590,10 @@ app.get('/api/eb/transactions', async (req, res) => {
   }
 });
 
-// All transactions the server has imported & stored (auto-refresh + manual)
+// All transactions the server has imported & stored for this user
 app.get('/api/eb/stored', async (req, res) => {
   try {
-    res.json({ expenses: await db.loadTransactions() });
+    res.json({ expenses: await db.loadTransactions(req.userId) });
   } catch (err) {
     console.error('[eb/stored]', err.message);
     res.status(500).json({ error: err.message });
@@ -604,7 +610,7 @@ app.post('/api/receipts', async (req, res) => {
     const r = req.body || {};
     if (!r.image && !r.store) return res.status(400).json({ error: 'Brak danych paragonu' });
     const id = r.id || `rc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    await db.saveReceipt({
+    await db.saveReceipt(req.userId, {
       id,
       date: r.date || new Date().toISOString().split('T')[0],
       store: r.store || 'Paragon',
@@ -623,7 +629,7 @@ app.post('/api/receipts', async (req, res) => {
 
 app.get('/api/receipts', async (req, res) => {
   try {
-    res.json({ receipts: await db.listReceipts(req.query.q) });
+    res.json({ receipts: await db.listReceipts(req.userId, req.query.q) });
   } catch (err) {
     console.error('[receipts/list]', err.message);
     res.status(500).json({ error: err.message });
@@ -632,7 +638,7 @@ app.get('/api/receipts', async (req, res) => {
 
 app.get('/api/receipts/:id', async (req, res) => {
   try {
-    const r = await db.getReceipt(req.params.id);
+    const r = await db.getReceipt(req.userId, req.params.id);
     if (!r) return res.status(404).json({ error: 'Nie znaleziono' });
     res.json(r);
   } catch (err) {
@@ -642,7 +648,7 @@ app.get('/api/receipts/:id', async (req, res) => {
 
 app.delete('/api/receipts/:id', async (req, res) => {
   try {
-    await db.deleteReceipt(req.params.id);
+    await db.deleteReceipt(req.userId, req.params.id);
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -655,27 +661,44 @@ app.get(/^(?!\/(api|health)).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Initialize persistence, restore any active bank session, and start the 6h auto-refresh
+// Initialize persistence, migrate the legacy single-user, restore per-user bank state, start auto-refresh
 db.init()
   .then(async () => {
     console.log(`   Baza: ${db.durable ? '✅ PostgreSQL (trwała)' : '⚠️  pamięć (dodaj PostgreSQL na Railway dla trwałości)'}`);
-    const saved = await db.getKV('eb_sessions');
-    if (Array.isArray(saved) && saved.length) {
-      ebSessions = saved;
-      console.log(`   Bank: ✅ przywrócono ${saved.length} połączeń (${allEbAccounts().length} kont)`);
-    } else {
-      // Migrate any old single-session key
-      const legacy = await db.getKV('eb_session');
-      if (legacy && legacy.accounts) { ebSessions = [{ bank: 'Bank', ...legacy }]; }
+
+    // One-time: fold the old single-user PIN into a real account and claim its data
+    const legacyUid = await auth.migrateLegacy();
+    if (legacyUid) {
+      const oldSessions = await db.getKV('eb_sessions');
+      const oldLastSync = await db.getKV('eb_last_sync');
+      if (Array.isArray(oldSessions) && oldSessions.length) {
+        await db.setKV(`eb_sessions:${legacyUid}`, oldSessions);
+        await db.setKV(`eb_last_sync:${legacyUid}`, oldLastSync || null);
+      }
+      await db.assignOrphansToUser(legacyUid);
+      console.log(`   Migracja: istniejące dane przypisane do konta ${legacyUid.slice(0, 8)}`);
     }
-    // Restore last sync timestamp
-    ebLastSync = (await db.getKV('eb_last_sync')) || null;
-    // Automatyczne odświeżanie co 1h (transakcje + salda na żywo)
+
+    // Restore each user's bank connections into memory
+    for (const u of await auth.listUsers()) {
+      const sessions = await db.getKV(`eb_sessions:${u.id}`);
+      if (Array.isArray(sessions) && sessions.length) {
+        const st = ebState(u.id);
+        st.sessions = sessions;
+        st.lastSync = (await db.getKV(`eb_last_sync:${u.id}`)) || null;
+      }
+    }
+    const totalAccounts = [...ebByUser.values()].reduce((n, s) => n + s.sessions.flatMap(x => x.accounts).length, 0);
+    console.log(`   Bank: przywrócono ${ebByUser.size} użytkowników z połączeniami (${totalAccounts} kont)`);
+
+    // Automatyczne odświeżanie co 1h dla KAŻDEGO użytkownika z połączonym bankiem
     setInterval(() => {
-      if (!ebSessions.length) return;
-      refreshBank()
-        .then(r => r.added && console.log(`[auto-refresh] +${r.added} nowych transakcji`))
-        .catch(e => console.error('[auto-refresh]', e.message));
+      for (const [uid, st] of ebByUser) {
+        if (!st.sessions.length) continue;
+        refreshBank(uid)
+          .then(r => r.added && console.log(`[auto-refresh ${uid.slice(0, 8)}] +${r.added} nowych`))
+          .catch(e => console.error('[auto-refresh]', e.message));
+      }
     }, 60 * 60 * 1000);
   })
   .catch(e => console.error('[db init]', e.message));

@@ -1,5 +1,6 @@
-// Passkey (WebAuthn / Face ID) login with a PIN as master credential + multi-device recovery.
-// Non-breaking: the app gate is only "active" once a PIN has been set.
+// Multi-user auth: each person registers their own account (username + PIN),
+// optionally adds a passkey (Face ID) per device. Tokens carry the userId, and
+// all server-side data is isolated per user.
 const crypto = require('crypto');
 const db = require('./db');
 
@@ -11,8 +12,6 @@ async function wa() {
 }
 
 const RP_NAME = 'Spendli';
-const USER_ID = Buffer.from('emilia-owner'); // single-user app
-const USER_NAME = 'emilia';
 const TOKEN_TTL = 30 * 864e5; // 30 days
 
 // ── PIN (scrypt) ───────────────────────────────────────────
@@ -28,108 +27,159 @@ function checkPin(pin, rec) {
   return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
 
-async function isConfigured() {
-  return !!(await db.getKV('auth_pin'));
+// ── User store (KV 'users' = array of {id, username, salt, hash, passkeys:[]}) ──
+async function listUsers() {
+  return (await db.getKV('users')) || [];
 }
-async function setPin(pin) {
-  if (!pin || String(pin).length < 4) throw new Error('PIN musi mieć min. 4 znaki');
-  await db.setKV('auth_pin', hashPin(pin));
+async function saveUsers(users) {
+  await db.setKV('users', users);
 }
-async function verifyPin(pin) {
-  return checkPin(pin, await db.getKV('auth_pin'));
+function normName(u) {
+  return String(u || '').trim().toLowerCase();
+}
+async function getUserById(id) {
+  return (await listUsers()).find(u => u.id === id) || null;
+}
+async function getUserByName(username) {
+  const n = normName(username);
+  return (await listUsers()).find(u => normName(u.username) === n) || null;
 }
 
-// ── Session token (stateless HMAC) ─────────────────────────
+function validUsername(u) {
+  return /^[a-zA-Z0-9_.-]{3,24}$/.test(String(u || '').trim());
+}
+
+async function register(username, pin) {
+  if (!validUsername(username)) throw new Error('Nazwa: 3–24 znaki (litery, cyfry, _ . -)');
+  if (!pin || String(pin).length < 4) throw new Error('PIN musi mieć min. 4 znaki');
+  if (await getUserByName(username)) throw new Error('Ta nazwa jest już zajęta');
+  const users = await listUsers();
+  const user = {
+    id: crypto.randomUUID(),
+    username: String(username).trim(),
+    ...hashPin(pin),
+    passkeys: [],
+    createdAt: new Date().toISOString(),
+  };
+  users.push(user);
+  await saveUsers(users);
+  return user;
+}
+
+async function login(username, pin) {
+  const user = await getUserByName(username);
+  if (!user || !checkPin(pin, user)) return null;
+  return user;
+}
+
+// ── Session token (stateless HMAC over {uid, exp}) ─────────
 async function secret() {
   if (process.env.AUTH_SECRET) return process.env.AUTH_SECRET;
   let s = await db.getKV('auth_secret');
   if (!s) { s = crypto.randomBytes(32).toString('hex'); await db.setKV('auth_secret', s); }
   return s;
 }
-async function issueToken() {
-  const body = Buffer.from(JSON.stringify({ exp: Date.now() + TOKEN_TTL })).toString('base64url');
+async function issueToken(uid) {
+  const body = Buffer.from(JSON.stringify({ uid, exp: Date.now() + TOKEN_TTL })).toString('base64url');
   const mac = crypto.createHmac('sha256', await secret()).update(body).digest('base64url');
   return `${body}.${mac}`;
 }
+// Returns the payload {uid, exp} if valid, otherwise null.
 async function verifyToken(token) {
-  if (!token || typeof token !== 'string') return false;
+  if (!token || typeof token !== 'string') return null;
   const [body, mac] = token.split('.');
-  if (!body || !mac) return false;
+  if (!body || !mac) return null;
   const exp = crypto.createHmac('sha256', await secret()).update(body).digest('base64url');
   const a = Buffer.from(mac), b = Buffer.from(exp);
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return false;
-  try { const p = JSON.parse(Buffer.from(body, 'base64url').toString()); return !(p.exp && Date.now() > p.exp); }
-  catch { return false; }
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
+  try {
+    const p = JSON.parse(Buffer.from(body, 'base64url').toString());
+    if (p.exp && Date.now() > p.exp) return null;
+    return p;
+  } catch { return null; }
+}
+// Resolve a token to a live user (or null).
+async function userFromToken(token) {
+  const p = await verifyToken(token);
+  if (!p || !p.uid) return null;
+  return getUserById(p.uid);
 }
 
-// ── Stored passkey credentials ─────────────────────────────
-async function getCredentials() {
-  return (await db.getKV('auth_credentials')) || [];
-}
-async function hasCredentials() {
-  return (await getCredentials()).length > 0;
+// ── Passkey credential index (credId → uid) for usernameless login ──
+async function passkeyIndex() {
+  return (await db.getKV('passkey_index')) || {};
 }
 
-// ── WebAuthn: registration ─────────────────────────────────
-async function registrationOptions(rpID) {
+// ── WebAuthn: registration (must be logged in → uid) ───────
+async function registrationOptions(uid, rpID) {
+  const user = await getUserById(uid);
+  if (!user) throw new Error('Brak użytkownika');
   const { generateRegistrationOptions } = await wa();
-  const creds = await getCredentials();
   const opts = await generateRegistrationOptions({
     rpName: RP_NAME,
     rpID,
-    userID: USER_ID,
-    userName: USER_NAME,
+    userID: Buffer.from(user.id),
+    userName: user.username,
     attestationType: 'none',
-    excludeCredentials: creds.map(c => ({ id: c.id, transports: c.transports })),
+    excludeCredentials: (user.passkeys || []).map(c => ({ id: c.id, transports: c.transports })),
     authenticatorSelection: { residentKey: 'preferred', userVerification: 'preferred' },
   });
-  await db.setKV('auth_challenge', { challenge: opts.challenge, type: 'reg' });
+  await db.setKV(`auth_challenge:${uid}`, opts.challenge);
   return opts;
 }
-async function verifyRegistration(rpID, origin, response) {
+async function verifyRegistration(uid, rpID, origin, response) {
   const { verifyRegistrationResponse } = await wa();
-  const saved = await db.getKV('auth_challenge');
+  const challenge = await db.getKV(`auth_challenge:${uid}`);
   const verification = await verifyRegistrationResponse({
     response,
-    expectedChallenge: saved?.challenge,
+    expectedChallenge: challenge,
     expectedOrigin: origin,
     expectedRPID: rpID,
   });
   if (!verification.verified || !verification.registrationInfo) return false;
   const c = verification.registrationInfo.credential;
-  const creds = await getCredentials();
-  creds.push({
+  const users = await listUsers();
+  const user = users.find(u => u.id === uid);
+  if (!user) return false;
+  user.passkeys = user.passkeys || [];
+  user.passkeys.push({
     id: c.id,
     publicKey: Buffer.from(c.publicKey).toString('base64url'),
     counter: c.counter,
     transports: response.response?.transports || [],
   });
-  await db.setKV('auth_credentials', creds);
-  await db.setKV('auth_challenge', null);
+  await saveUsers(users);
+  const idx = await passkeyIndex();
+  idx[c.id] = uid;
+  await db.setKV('passkey_index', idx);
+  await db.setKV(`auth_challenge:${uid}`, null);
   return true;
 }
 
-// ── WebAuthn: authentication ───────────────────────────────
+// ── WebAuthn: usernameless authentication (discoverable credentials) ──
 async function authenticationOptions(rpID) {
   const { generateAuthenticationOptions } = await wa();
-  const creds = await getCredentials();
   const opts = await generateAuthenticationOptions({
     rpID,
-    allowCredentials: creds.map(c => ({ id: c.id, transports: c.transports })),
+    allowCredentials: [], // discoverable → device picks the passkey, resolves to its user
     userVerification: 'preferred',
   });
-  await db.setKV('auth_challenge', { challenge: opts.challenge, type: 'auth' });
+  await db.setKV('auth_challenge_login', opts.challenge);
   return opts;
 }
+// Returns the uid on success, otherwise null.
 async function verifyAuthentication(rpID, origin, response) {
   const { verifyAuthenticationResponse } = await wa();
-  const saved = await db.getKV('auth_challenge');
-  const creds = await getCredentials();
-  const cred = creds.find(c => c.id === response.id);
-  if (!cred) return false;
+  const idx = await passkeyIndex();
+  const uid = idx[response.id];
+  if (!uid) return null;
+  const user = await getUserById(uid);
+  const cred = (user?.passkeys || []).find(c => c.id === response.id);
+  if (!cred) return null;
+  const challenge = await db.getKV('auth_challenge_login');
   const verification = await verifyAuthenticationResponse({
     response,
-    expectedChallenge: saved?.challenge,
+    expectedChallenge: challenge,
     expectedOrigin: origin,
     expectedRPID: rpID,
     credential: {
@@ -139,17 +189,47 @@ async function verifyAuthentication(rpID, origin, response) {
       transports: cred.transports,
     },
   });
-  if (!verification.verified) return false;
-  cred.counter = verification.authenticationInfo.newCounter;
-  await db.setKV('auth_credentials', creds);
-  await db.setKV('auth_challenge', null);
-  return true;
+  if (!verification.verified) return null;
+  const users = await listUsers();
+  const u = users.find(x => x.id === uid);
+  const cc = u.passkeys.find(c => c.id === response.id);
+  cc.counter = verification.authenticationInfo.newCounter;
+  await saveUsers(users);
+  await db.setKV('auth_challenge_login', null);
+  return uid;
+}
+
+// ── One-time migration: fold the old single-user (auth_pin) into a real account ──
+// Returns the legacy user's id if a migration happened, else null.
+async function migrateLegacy() {
+  const users = await listUsers();
+  if (users.length) return null;
+  const legacyPin = await db.getKV('auth_pin');
+  if (!legacyPin) return null;
+  const legacyCreds = (await db.getKV('auth_credentials')) || [];
+  const user = {
+    id: crypto.randomUUID(),
+    username: 'emilia',
+    salt: legacyPin.salt,
+    hash: legacyPin.hash,
+    passkeys: legacyCreds,
+    createdAt: new Date().toISOString(),
+  };
+  await saveUsers([user]);
+  if (legacyCreds.length) {
+    const idx = {};
+    for (const c of legacyCreds) idx[c.id] = user.id;
+    await db.setKV('passkey_index', idx);
+  }
+  console.log(`[auth] migrated legacy single-user PIN → account "${user.username}" (${user.id})`);
+  return user.id;
 }
 
 module.exports = {
-  isConfigured, setPin, verifyPin,
-  issueToken, verifyToken,
-  getCredentials, hasCredentials,
+  register, login,
+  issueToken, verifyToken, userFromToken,
   registrationOptions, verifyRegistration,
   authenticationOptions, verifyAuthentication,
+  getUserById, getUserByName, listUsers,
+  migrateLegacy,
 };

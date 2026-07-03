@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View } from '../types';
 import { ViewIcon, Plus } from '../icons';
+import { clearToken } from '../authToken';
+
+const logout = () => { clearToken(); window.location.reload(); };
 
 interface Props {
   currentView: View;
@@ -127,6 +130,7 @@ export default function Navigation({ currentView, onNavigate, accent, onAccentCh
 
         <div className="nav-bottom">
           <AccentPicker accent={accent} onAccentChange={onAccentChange} />
+          <button className="btn btn-secondary btn-sm" style={{ width: '100%', marginTop: 12 }} onClick={logout}>Wyloguj</button>
         </div>
       </nav>
 
@@ -183,6 +187,7 @@ export default function Navigation({ currentView, onNavigate, accent, onAccentCh
 
             <div style={{ borderTop: '1px solid var(--border)', marginTop: 12, paddingTop: 16 }}>
               <AccentPicker accent={accent} onAccentChange={onAccentChange} />
+              <button className="btn btn-secondary" style={{ width: '100%', marginTop: 14 }} onClick={logout}>Wyloguj</button>
             </div>
           </div>
         </>

@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { startRegistration, startAuthentication, browserSupportsWebAuthn } from '@simplewebauthn/browser';
-import { setToken, clearToken, authHeader } from '../authToken';
+import { getToken, setToken, authHeader } from '../authToken';
 
 const SERVER = process.env.REACT_APP_SERVER_URL || '';
 
-type Status = { configured: boolean; hasPasskey: boolean; authed: boolean };
+type Status = { authed: boolean; username: string | null; hasPasskey: boolean };
+type Mode = 'login' | 'register';
 
 export default function LoginGate({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<Status | null>(null);
+  const [mode, setMode] = useState<Mode>('login');
+  const [username, setUsername] = useState('');
   const [pin, setPin] = useState('');
   const [pin2, setPin2] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [offerPasskey, setOfferPasskey] = useState(false);
-  // Passkeys are per-device — track whether THIS device has registered one
   const [pkHere, setPkHere] = useState(localStorage.getItem('pkRegistered') === '1');
 
   const supportsPasskey = browserSupportsWebAuthn();
@@ -26,9 +28,11 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
       setStatus(s);
       return s;
     } catch {
-      // If the auth service is unreachable, fail open (don't lock the user out of a working app)
-      setStatus({ configured: false, hasPasskey: false, authed: true });
-      return null;
+      // If the auth service is unreachable: honour an existing token optimistically,
+      // otherwise require login (don't silently unlock a shared device).
+      const s: Status = { authed: !!getToken(), username: null, hasPasskey: false };
+      setStatus(s);
+      return s;
     }
   }, []);
 
@@ -45,36 +49,36 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
     return data;
   };
 
-  // First-time PIN setup
-  const doSetup = async () => {
+  const afterAuth = async () => {
+    setPin(''); setPin2(''); setError('');
+    await refresh();
+    if (supportsPasskey && !pkHere) setOfferPasskey(true);
+  };
+
+  const doRegister = async () => {
     setError('');
+    if (username.trim().length < 3) { setError('Nazwa musi mieć min. 3 znaki'); return; }
     if (pin.length < 4) { setError('PIN musi mieć min. 4 cyfry'); return; }
     if (pin !== pin2) { setError('PIN-y nie są takie same'); return; }
     setBusy(true);
     try {
-      const { token } = await post('/api/auth/setup', { pin });
+      const { token } = await post('/api/auth/register', { username: username.trim(), pin });
       setToken(token);
-      setPin(''); setPin2('');
-      await refresh();
-      if (supportsPasskey && !pkHere) setOfferPasskey(true);
+      await afterAuth();
     } catch (e: any) { setError(e.message); } finally { setBusy(false); }
   };
 
-  // PIN login (this device / recovery)
-  const doPinLogin = async () => {
+  const doLogin = async () => {
     setError('');
+    if (!username.trim()) { setError('Podaj nazwę użytkownika'); return; }
     setBusy(true);
     try {
-      const { token } = await post('/api/auth/pin', { pin });
+      const { token } = await post('/api/auth/login', { username: username.trim(), pin });
       setToken(token);
-      setPin('');
-      await refresh();
-      // Offer Face ID whenever THIS device hasn't registered one yet (per-device)
-      if (supportsPasskey && !pkHere) setOfferPasskey(true);
+      await afterAuth();
     } catch (e: any) { setError(e.message); } finally { setBusy(false); }
   };
 
-  // Passkey (Face ID) login
   const doPasskeyLogin = async () => {
     setError('');
     setBusy(true);
@@ -86,11 +90,10 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
       markPkHere();
       await refresh();
     } catch (e: any) {
-      setError('Nie rozpoznano twarzy/odcisku — zaloguj się PIN-em, a potem włącz Face ID na tym urządzeniu.');
+      setError('Nie rozpoznano — zaloguj się nazwą i PIN-em, potem włącz Face ID.');
     } finally { setBusy(false); }
   };
 
-  // Enable passkey on this device (after logging in)
   const enablePasskey = async () => {
     setError('');
     setBusy(true);
@@ -103,8 +106,6 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
       await refresh();
     } catch (e: any) { setError(e.message || 'Nie udało się włączyć Face ID'); } finally { setBusy(false); }
   };
-
-  const logout = () => { clearToken(); refresh(); };
 
   // ── Loading ──
   if (!status) {
@@ -134,41 +135,66 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // ── Not configured → first-time PIN setup ──
-  if (!status.configured) {
-    return (
-      <div style={wrap}>
-        <div style={card}>
-          <div style={{ fontSize: 44, marginBottom: 8 }}>🔒</div>
-          <h2 style={h2}>Zabezpiecz aplikację</h2>
-          <p style={sub}>Ustaw PIN. To pierwszy raz — będzie chronił Twoje dane bankowe.</p>
-          {error && <div style={err}>{error}</div>}
-          <input style={input} type="password" inputMode="numeric" placeholder="PIN (min. 4 cyfry)" value={pin} onChange={e => setPin(e.target.value)} />
-          <input style={input} type="password" inputMode="numeric" placeholder="Powtórz PIN" value={pin2} onChange={e => setPin2(e.target.value)} />
-          <button style={btnPrimary} onClick={doSetup} disabled={busy}>{busy ? '…' : 'Ustaw PIN'}</button>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Configured, not authed → unlock ──
+  // ── Not authed → login / register ──
+  const submit = mode === 'register' ? doRegister : doLogin;
   return (
     <div style={wrap}>
       <div style={card}>
-        <div style={{ fontSize: 44, marginBottom: 8 }}>🔐</div>
-        <h2 style={h2}>Odblokuj</h2>
-        <p style={sub}>Twoje dane są chronione.</p>
+        <img src="/logo.png?v=2" alt="" width={56} height={56} style={{ borderRadius: 14, marginBottom: 12 }} />
+        <h2 style={h2}>{mode === 'register' ? 'Załóż konto' : 'Zaloguj się'}</h2>
+        <p style={sub}>
+          {mode === 'register'
+            ? 'Wybierz nazwę i PIN. Twoje dane będą prywatne i chronione.'
+            : 'Wpisz swoją nazwę i PIN, aby wejść do aplikacji.'}
+        </p>
         {error && <div style={err}>{error}</div>}
-        {supportsPasskey && (pkHere || status.hasPasskey) && (
-          <button style={btnPrimary} onClick={doPasskeyLogin} disabled={busy}>
+
+        {supportsPasskey && (
+          <button style={btnSecondary} onClick={doPasskeyLogin} disabled={busy}>
             {busy ? '…' : '🙂  Zaloguj przez Face ID'}
           </button>
         )}
-        <input style={input} type="password" inputMode="numeric" placeholder="PIN" value={pin} onChange={e => setPin(e.target.value)} onKeyDown={e => e.key === 'Enter' && doPinLogin()} />
-        <button style={status.hasPasskey ? btnSecondary : btnPrimary} onClick={doPinLogin} disabled={busy}>
-          {busy ? '…' : 'Zaloguj PIN-em'}
+
+        <input
+          style={input}
+          type="text"
+          autoCapitalize="none"
+          autoCorrect="off"
+          placeholder="Nazwa użytkownika"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+        />
+        <input
+          style={input}
+          type="password"
+          inputMode="numeric"
+          placeholder={mode === 'register' ? 'PIN (min. 4 cyfry)' : 'PIN'}
+          value={pin}
+          onChange={e => setPin(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && mode === 'login' && submit()}
+        />
+        {mode === 'register' && (
+          <input
+            style={input}
+            type="password"
+            inputMode="numeric"
+            placeholder="Powtórz PIN"
+            value={pin2}
+            onChange={e => setPin2(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && submit()}
+          />
+        )}
+
+        <button style={btnPrimary} onClick={submit} disabled={busy}>
+          {busy ? '…' : (mode === 'register' ? 'Utwórz konto' : 'Zaloguj się')}
         </button>
-        <button style={btnText} onClick={logout}>Wyloguj / reset tokenu</button>
+
+        <button
+          style={btnText}
+          onClick={() => { setMode(mode === 'register' ? 'login' : 'register'); setError(''); }}
+        >
+          {mode === 'register' ? 'Masz już konto? Zaloguj się' : 'Nie masz konta? Załóż nowe'}
+        </button>
       </div>
     </div>
   );
