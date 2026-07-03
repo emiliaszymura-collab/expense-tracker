@@ -91,14 +91,14 @@ export default function Navigation({ currentView, onNavigate, accent, onAccentCh
       {/* ── Mobile Top Bar (logo) ── */}
       <header className="mobile-topbar">
         <img src="/logo.png?v=2" alt="" width={32} height={32} style={{ borderRadius: 8, objectFit: 'contain', flexShrink: 0, display: 'block' }} />
-        <span className="mobile-topbar-title">Wydatki<span>.</span></span>
+        <span className="mobile-topbar-title">spendli<span>.</span></span>
       </header>
 
       {/* ── Desktop Sidebar ── */}
       <nav className="nav">
         <div className="nav-logo">
           <img src="/logo.png?v=2" alt="" width={32} height={32} style={{ borderRadius: 8, objectFit: 'contain', flexShrink: 0, display: 'block' }} />
-          <div>Wydatki<span>.</span></div>
+          <div>spendli<span>.</span></div>
         </div>
 
         <div className="nav-section-title">Główne</div>

@@ -10,7 +10,7 @@ async function wa() {
   return _wa;
 }
 
-const RP_NAME = 'Wydatki';
+const RP_NAME = 'Spendli';
 const USER_ID = Buffer.from('emilia-owner'); // single-user app
 const USER_NAME = 'emilia';
 const TOKEN_TTL = 30 * 864e5; // 30 days
