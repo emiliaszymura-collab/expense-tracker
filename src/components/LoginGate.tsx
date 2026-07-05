@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { startRegistration, startAuthentication, browserSupportsWebAuthn } from '@simplewebauthn/browser';
+import { startRegistration, startAuthentication, browserSupportsWebAuthn, platformAuthenticatorIsAvailable } from '@simplewebauthn/browser';
 import { getToken, setToken, authHeader } from '../authToken';
 
 const SERVER = process.env.REACT_APP_SERVER_URL || '';
@@ -17,9 +17,15 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState('');
   const [offerPasskey, setOfferPasskey] = useState(false);
   const [pkHere, setPkHere] = useState(localStorage.getItem('pkRegistered') === '1');
+  // Whether this device has a biometric platform authenticator (Face ID / Touch ID / Windows Hello)
+  const [canBio, setCanBio] = useState(false);
 
   const supportsPasskey = browserSupportsWebAuthn();
   const markPkHere = () => { localStorage.setItem('pkRegistered', '1'); setPkHere(true); };
+
+  useEffect(() => {
+    if (supportsPasskey) platformAuthenticatorIsAvailable().then(setCanBio).catch(() => {});
+  }, [supportsPasskey]);
 
   const refresh = useCallback(async () => {
     try {
@@ -149,7 +155,7 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
         </p>
         {error && <div style={err}>{error}</div>}
 
-        {supportsPasskey && pkHere && (
+        {supportsPasskey && (canBio || pkHere) && (
           <button style={btnSecondary} onClick={doPasskeyLogin} disabled={busy}>
             {busy ? '…' : '🙂  Zaloguj przez Face ID'}
           </button>
