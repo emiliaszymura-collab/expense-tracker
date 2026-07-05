@@ -4,6 +4,11 @@
 const crypto = require('crypto');
 const db = require('./db');
 
+// @simplewebauthn (WebAuthn/Face ID) needs a WebCrypto instance on globalThis.
+// Some Node versions don't expose it by default → provide it, or passkeys fail with
+// "An instance of the Crypto API could not be located".
+if (!globalThis.crypto) globalThis.crypto = crypto.webcrypto;
+
 // @simplewebauthn/server v13 is ESM-only → load via dynamic import and cache it.
 let _wa = null;
 async function wa() {
