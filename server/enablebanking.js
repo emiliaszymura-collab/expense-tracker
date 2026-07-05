@@ -83,7 +83,20 @@ async function getSession(sessionId) {
 async function getBalances(accountUid) {
   try {
     const res = await axios.get(`${BASE}/accounts/${accountUid}/balances`, { headers: headers() });
-    const b = res.data?.balances?.[0]?.balance_amount;
+    const balances = res.data?.balances || [];
+    if (!balances.length) return null;
+    // Diagnostics: show every balance type the bank returns
+    console.log(`[balance ${accountUid.slice(0, 8)}] ${balances.map(b => `${b.balance_type}=${b.balance_amount?.amount}`).join(' | ')}`);
+    // Prefer the "available to spend" balance (what the user sees in their banking app),
+    // not the booked balance which ignores pending/authorised transactions.
+    const pref = ['interimAvailable', 'ITAV', 'expected', 'XPCD', 'closingAvailable', 'CLAV', 'available', 'forwardAvailable', 'FWAV', 'interimBooked', 'ITBD'];
+    let chosen = null;
+    for (const type of pref) {
+      chosen = balances.find(b => String(b.balance_type).toLowerCase() === type.toLowerCase());
+      if (chosen) break;
+    }
+    if (!chosen) chosen = balances[0]; // fallback: first (usually closingBooked)
+    const b = chosen.balance_amount;
     return b ? { amount: Number(b.amount), currency: b.currency } : null;
   } catch (_) { return null; }
 }
