@@ -149,7 +149,7 @@ export default function LoginGate({ children }: { children: React.ReactNode }) {
         </p>
         {error && <div style={err}>{error}</div>}
 
-        {supportsPasskey && (
+        {supportsPasskey && pkHere && (
           <button style={btnSecondary} onClick={doPasskeyLogin} disabled={busy}>
             {busy ? '…' : '🙂  Zaloguj przez Face ID'}
           </button>

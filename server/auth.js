@@ -122,7 +122,8 @@ async function registrationOptions(uid, rpID) {
     userName: user.username,
     attestationType: 'none',
     excludeCredentials: (user.passkeys || []).map(c => ({ id: c.id, transports: c.transports })),
-    authenticatorSelection: { residentKey: 'preferred', userVerification: 'preferred' },
+    // residentKey 'required' → the passkey is discoverable, so usernameless Face ID login works
+    authenticatorSelection: { residentKey: 'required', requireResidentKey: true, userVerification: 'preferred' },
   });
   await db.setKV(`auth_challenge:${uid}`, opts.challenge);
   return opts;
