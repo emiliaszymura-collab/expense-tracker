@@ -503,7 +503,11 @@ app.post('/api/eb/connect', async (req, res) => {
     if (!aspspName) return res.status(400).json({ error: 'aspspName required' });
     const state = `et_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     ebStates[state] = { aspspName, country: country || 'PL', userId: req.userId };
-    const redirectUrl = (req.headers.origin || FRONTEND_URL).replace(/\/$/, '') + '/';
+    // The redirect URL must EXACTLY match one registered in the Enable Banking app.
+    // Pin it via EB_REDIRECT_URL so a custom domain works regardless of request origin.
+    const redirectUrl = process.env.EB_REDIRECT_URL
+      ? process.env.EB_REDIRECT_URL.replace(/\/$/, '') + '/'
+      : (req.headers.origin || FRONTEND_URL).replace(/\/$/, '') + '/';
     const { url } = await eb.startAuth(aspspName, country, redirectUrl, state);
     res.json({ url, state });
   } catch (err) {
