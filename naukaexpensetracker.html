@@ -418,6 +418,65 @@ server/        <span class="c"># BACKEND (Node + Express)</span>
     </div>
   </div>
 
+  <div class="module" id="m10">
+    <div class="head"><span class="num">10</span><h2>Automatyzacja firm z n8n</h2><span class="done-tag">✓ przeczytane</span><span class="chev">›</span></div>
+    <div class="body">
+      <p>To rozdział pod Twój cel: <b>automatyzacja firm</b>. Spendli nauczyło Cię, jak łączyć programy przez API — a <b>n8n</b> pozwala robić dokładnie to, ale <b>bez pisania całego kodu</b>, „klikając" przepływy. To jedna z najbardziej dochodowych umiejętności dla firm.</p>
+
+      <h3>Co to jest n8n</h3>
+      <p><b>n8n</b> to narzędzie <b>low-code</b> do automatyzacji. Budujesz <b>workflow</b> (przepływ) z klocków zwanych <b>nodami</b>, które łączysz strzałkami. Każdy node coś robi: pobiera dane, przetwarza je, wysyła dalej. To jak schemat blokowy, który naprawdę działa.</p>
+      <div class="analogy"><b>Analogia:</b> n8n to taśma produkcyjna. Na jednym końcu wchodzi „zdarzenie" (np. nowy e-mail), przechodzi przez kolejne stanowiska (klocki: odczytaj → oceń → zapisz), a na końcu wychodzi efekt (np. wpis w tabeli + powiadomienie).</div>
+
+      <h3>Trzy pojęcia, które musisz znać</h3>
+      <ul>
+        <li><b>Trigger (wyzwalacz)</b> — początek przepływu. Coś się dzieje → workflow rusza. Np. „nowy wiersz w arkuszu", „przyszedł e-mail", „ktoś wysłał formularz", „codziennie o 9:00".</li>
+        <li><b>Node akcji</b> — krok, który coś robi: wyśle e-mail, zapisze do bazy, zawoła API (np. Claude/AI), doda wydarzenie w kalendarzu.</li>
+        <li><b>Webhook</b> — specjalny adres URL. Gdy ktoś na niego „zapuka" (wyśle dane), workflow startuje. To most między Twoją apką a n8n.</li>
+      </ul>
+
+      <h3>Jak to się łączy z tym, co już umiesz</h3>
+      <p>W Spendli backend wołał API Anthropic i Enable Banking. W n8n robisz to samo <b>klockiem HTTP Request</b> albo gotowym nodem — bez pisania serwera od zera. Ta sama idea (API, JSON, tokeny), inne narzędzie. Dlatego rozumiejąc Spendli, rozumiesz też automatyzację.</p>
+
+      <h3>Przykład: automatyzacja rekrutacji (jak Twój HR-OS)</h3>
+      <pre><span class="c"># Workflow w n8n:</span>
+[Trigger: nowe CV w skrzynce / formularzu]
+        │
+[Node: odczytaj plik CV (tekst)]
+        │
+[Node: HTTP Request → Claude AI]
+   <span class="c"># prompt: "oceń kandydata, zwróć JSON: dopasowanie, mocne strony"</span>
+        │
+[Node: zapisz wynik do Arkusza / bazy]
+        │
+[Node: jeśli dopasowanie > 80% → wyślij powiadomienie]</pre>
+      <div class="tip"><b>To dokładnie Twój projekt HR-OS:</b> n8n + Claude do wstępnej selekcji kandydatów. Klienci (agencje) płacą za taką automatyzację, bo oszczędza godziny ręcznej pracy. Spendli to Twój „dowód", że rozumiesz API i AI — a n8n to narzędzie, którym te automatyzacje sprzedasz.</div>
+
+      <h3>Gdzie n8n bije przewagę nad zwykłym kodem</h3>
+      <ul>
+        <li>Szybko — gotowe klocki do setek usług (Gmail, Slack, Sheets, Notion, banki, AI).</li>
+        <li>Widać cały przepływ na jednym ekranie — łatwo pokazać klientowi.</li>
+        <li>Można hostować u siebie (self-host) → dane zostają pod Twoją kontrolą (ważne przy RODO).</li>
+      </ul>
+      <div class="tip"><b>Kiedy jednak kod (jak w Spendli)?</b> Gdy potrzebujesz własnego interfejsu dla użytkownika, pełnej kontroli i produktu z logowaniem. Najlepsi łączą oba: <b>aplikacja (kod) + automatyzacje w tle (n8n)</b>.</div>
+
+      <div class="quiz" data-correct="1">
+        <div class="q">Czym jest <b>trigger</b> w n8n?</div>
+        <button class="opt">Ostatnim krokiem, który wysyła e-mail</button>
+        <button class="opt">Zdarzeniem, które uruchamia cały przepływ (np. nowy e-mail, nowy wiersz)</button>
+        <button class="opt">Bazą danych</button>
+        <div class="explain">✅ Trigger to start workflow — „coś się stało, więc rusz". Reszta klocków (akcje) wykonuje się po nim.</div>
+      </div>
+      <div class="quiz" data-correct="2">
+        <div class="q">Co łączy Spendli i n8n?</div>
+        <button class="opt">Nic, to zupełnie różne światy</button>
+        <button class="opt">Oba to bazy danych</button>
+        <button class="opt">Oba łączą programy przez API (JSON, tokeny) — tylko n8n robi to „klockami"</button>
+        <div class="explain">✅ Ta sama idea: rozmowa programów przez API. W Spendli pisałaś kod, w n8n układasz gotowe klocki. Rozumiejąc jedno, rozumiesz drugie.</div>
+      </div>
+      <div class="mark"><button onclick="toggleDone('m10')">Oznacz jako przeczytane ✓</button></div>
+    </div>
+  </div>
+
   <h3 style="margin-top:30px">📖 Mini-słowniczek</h3>
   <table>
     <tr><th>Termin</th><th>Znaczenie w skrócie</th></tr>
@@ -450,12 +509,12 @@ server/        <span class="c"># BACKEND (Node + Express)</span>
 <a href="#" class="top" title="Do góry">↑</a>
 
 <script>
-  var MODULES = ['m1','m2','m3','m4','m5','m6','m7','m8','m9'];
+  var MODULES = ['m1','m2','m3','m4','m5','m6','m7','m8','m9','m10'];
 
   // ── Table of contents ──
   var titles = {m1:['1','Jak to działa'],m2:['2','Podstawy programowania'],m3:['3','Frontend / React'],
     m4:['4','Backend / Node'],m5:['5','Baza danych / SQL'],m6:['6','Bezpieczeństwo'],
-    m7:['7','AI i banki'],m8:['8','Wdrożenie'],m9:['9','Architektura + test']};
+    m7:['7','AI i banki'],m8:['8','Wdrożenie'],m9:['9','Architektura + test'],m10:['10','Automatyzacja n8n']};
   var toc = document.getElementById('toc');
   MODULES.forEach(function(id){
     var a=document.createElement('a'); a.href='#'+id;
