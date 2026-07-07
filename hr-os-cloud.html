@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HR-OS — System rekrutacyjny (chmura)</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0a1120" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<!--
+  HR-OS CLOUD — ATS z logowaniem i bazą w chmurze (Supabase)
+  ==========================================================================
+  1) Przy pierwszym otwarciu: wklej klucz "anon/public" z Supabase (URL już wpisany).
+  2) Załóż konto (e-mail + hasło) i zaloguj się.
+  3) Dane trzymane są w chmurze — dostępne z każdego urządzenia po zalogowaniu.
+  Reguły RLS w bazie sprawiają, że każdy widzi tylko swoje dane.
+  ==========================================================================
+-->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+<style>
+  :root{ --bg:#0a1120; --panel:#101a30; --panel2:#16223c; --line:rgba(120,160,220,.16);
+    --tekst:#e7eefb; --przygas:#8ea2c4; --niebieski:#4aa3ff; --zielony:#46d17f; --fiolet:#9b6bff; --bursztyn:#ffb43e; --czerwony:#ff5d6c; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{ background:radial-gradient(120% 90% at 50% 0%, #0e1830, #070b14); color:var(--tekst);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; -webkit-font-smoothing:antialiased; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+  button{ font-family:inherit; cursor:pointer; } .muted{ color:var(--przygas); }
+  .logo{ font-weight:800; font-size:19px; background:linear-gradient(90deg,#bcd6ff,#4aa3ff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .btn{ font-size:13px; font-weight:600; color:var(--tekst); background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:8px 13px; }
+  .btn:hover{ border-color:rgba(120,160,220,.45); }
+  .btn.primary{ background:var(--niebieski); color:#06121f; border-color:transparent; } .btn.primary:hover{ filter:brightness(1.08); }
+  .btn.ghost{ background:transparent; } .btn.sm{ padding:5px 9px; font-size:12px; }
+  input,textarea,select{ width:100%; background:var(--panel2); border:1px solid var(--line); border-radius:9px; color:var(--tekst); font-size:13.5px; padding:9px 11px; font-family:inherit; }
+  textarea{ min-height:90px; resize:vertical; } label.f{ display:block; font-size:12px; color:var(--przygas); margin:12px 0 5px; }
+
+  /* Ekrany startowe (konfiguracja + logowanie) */
+  #gate{ flex:1; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .gcard{ width:min(430px,95vw); background:var(--panel); border:1px solid rgba(120,160,220,.22); border-radius:18px; box-shadow:0 30px 80px rgba(0,0,0,.55); padding:26px; }
+  .gcard .logo{ font-size:24px; } .gcard h2{ font-size:17px; font-weight:700; margin:14px 0 4px; }
+  .gcard .hint{ font-size:12px; color:var(--przygas); line-height:1.5; }
+  .gcard .full{ width:100%; justify-content:center; margin-top:16px; padding:11px; } .gcard .row{ display:flex; gap:10px; margin-top:10px; }
+  .err{ color:var(--czerwony); font-size:12.5px; margin-top:10px; min-height:16px; }
+  .lnk{ color:var(--niebieski); cursor:pointer; text-decoration:underline; font-size:12.5px; }
+
+  /* Aplikacja */
+  header{ display:flex; align-items:center; gap:14px; padding:12px 18px; border-bottom:1px solid var(--line); background:rgba(8,13,26,.7); }
+  .badge{ display:inline-flex; align-items:center; gap:7px; font-size:12px; color:var(--przygas); background:rgba(12,20,38,.6); border:1px solid var(--line); border-radius:999px; padding:4px 10px; }
+  .badge .live{ width:8px;height:8px;border-radius:50%;background:var(--zielony);box-shadow:0 0 10px var(--zielony); }
+  header .sp{ flex:1; } header .who{ font-size:12px; color:var(--przygas); }
+  main{ flex:1; display:flex; min-height:0; }
+  #side{ width:280px; flex:0 0 auto; border-right:1px solid var(--line); display:flex; flex-direction:column; background:rgba(8,13,26,.4); }
+  #side .h{ display:flex; align-items:center; gap:8px; padding:14px 16px 8px; } #side .h .t{ font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--przygas); }
+  #jobs{ overflow-y:auto; padding:6px 10px 14px; display:flex; flex-direction:column; gap:8px; }
+  .jobCard{ border:1px solid var(--line); border-radius:11px; padding:11px 12px; background:var(--panel); cursor:pointer; transition:.15s; }
+  .jobCard:hover{ border-color:rgba(120,160,220,.4); } .jobCard.active{ border-color:var(--niebieski); box-shadow:0 0 0 1px rgba(74,163,255,.35) inset; background:var(--panel2); }
+  .jobCard .jt{ font-size:14px; font-weight:650; } .jobCard .jm{ font-size:11.5px; color:var(--przygas); margin-top:2px; } .jobCard .jc{ font-size:11px; color:var(--niebieski); margin-top:6px; }
+  #content{ flex:1; min-width:0; display:flex; flex-direction:column; }
+  #jobHead{ padding:16px 20px; border-bottom:1px solid var(--line); display:flex; align-items:flex-start; gap:14px; flex-wrap:wrap; }
+  #jobHead h1{ font-size:20px; font-weight:750; } #jobHead .sub{ font-size:13px; color:var(--przygas); margin-top:3px; }
+  #jobHead .chips{ display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; } .chip{ font-size:11.5px; padding:4px 10px; border-radius:999px; background:rgba(120,160,220,.12); border:1px solid var(--line); }
+  #jobHead .acts{ margin-left:auto; display:flex; gap:8px; }
+  #board{ flex:1; overflow-x:auto; overflow-y:hidden; display:flex; gap:12px; padding:16px 20px; }
+  .col{ width:236px; flex:0 0 auto; background:rgba(10,17,32,.55); border:1px solid var(--line); border-radius:13px; display:flex; flex-direction:column; max-height:100%; }
+  .col.drop{ outline:2px dashed rgba(74,163,255,.6); outline-offset:-3px; }
+  .col .ch{ display:flex; align-items:center; gap:8px; padding:11px 12px; border-bottom:1px solid var(--line); font-size:12.5px; font-weight:700; }
+  .col .ch .dot{ width:9px;height:9px;border-radius:50%; } .col .ch .cnt{ margin-left:auto; font-size:11px; color:var(--przygas); background:rgba(255,255,255,.05); padding:1px 8px; border-radius:99px; }
+  .col .list{ overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:9px; flex:1; }
+  .cand{ border:1px solid var(--line); border-radius:11px; padding:10px; background:var(--panel); cursor:pointer; transition:.15s; }
+  .cand:hover{ border-color:rgba(120,160,220,.45); transform:translateY(-1px); } .cand .top{ display:flex; align-items:center; gap:9px; }
+  .ava{ width:34px;height:34px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#06121f; }
+  .cand .nm{ font-size:13px; font-weight:650; line-height:1.1; } .cand .rl{ font-size:11px; color:var(--przygas); }
+  .cand .bar{ margin-top:8px; height:5px; background:rgba(255,255,255,.07); border-radius:99px; overflow:hidden; } .cand .bar i{ display:block; height:100%; border-radius:99px; }
+  .cand .mv{ display:flex; gap:5px; margin-top:9px; } .cand .mv button{ flex:1; font-size:10.5px; padding:4px; border-radius:7px; border:1px solid var(--line); background:transparent; color:var(--przygas); }
+  .cand .mv button:hover{ color:var(--tekst); border-color:rgba(120,160,220,.45); } .empty{ font-size:12px; color:var(--przygas); text-align:center; padding:16px 8px; }
+  .overlay{ position:fixed; inset:0; z-index:50; background:rgba(3,6,14,.6); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; padding:20px; } .overlay.open{ display:flex; }
+  .card{ width:min(540px,95vw); max-height:90vh; overflow-y:auto; background:var(--panel); border:1px solid rgba(120,160,220,.25); border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,.6); padding:22px; }
+  .card h2{ font-size:18px; font-weight:750; margin-bottom:4px; } .card .x{ float:right; background:none; border:none; color:var(--przygas); font-size:20px; }
+  .row2{ display:flex; gap:12px; } .row2>div{ flex:1; } .actions{ display:flex; gap:10px; margin-top:18px; } .actions .btn{ flex:1; justify-content:center; }
+  #drawer{ position:fixed; top:0; right:0; height:100%; width:min(440px,96vw); z-index:55; background:var(--panel); border-left:1px solid rgba(120,160,220,.22); box-shadow:-20px 0 60px rgba(0,0,0,.55); transform:translateX(106%); transition:transform .22s ease; overflow-y:auto; padding:22px; }
+  #drawer.open{ transform:translateX(0); }
+  .dHead{ display:flex; align-items:center; gap:13px; } .dHead .ava{ width:54px;height:54px;font-size:20px; } .dName{ font-size:18px; font-weight:750; } .dRole{ font-size:13px; color:var(--przygas); }
+  .stagePill{ display:inline-block; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; margin-top:8px; }
+  .sect{ margin-top:18px; } .sect h4{ font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--przygas); margin-bottom:8px; }
+  .kv{ display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid rgba(120,160,220,.1); } .kv span:first-child{ color:var(--przygas); }
+  .matchBig{ display:flex; align-items:center; gap:14px; padding:14px; border-radius:13px; background:rgba(74,163,255,.08); border:1px solid rgba(74,163,255,.18); }
+  .matchBig .v{ font-size:30px; font-weight:850; } .matchBig .l{ font-size:12px; color:var(--przygas); }
+  .ai{ padding:13px; border-radius:11px; background:rgba(70,209,127,.08); border:1px solid rgba(70,209,127,.2); font-size:13px; line-height:1.5; } .ai b{ color:var(--zielony); }
+  .rodo{ margin-top:12px; padding:11px 13px; border-radius:10px; background:rgba(155,107,255,.1); border:1px solid rgba(155,107,255,.25); font-size:11.5px; color:#c9b8ff; line-height:1.5; }
+  .stageBtns{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; } .stageBtns button{ font-size:12px; font-weight:600; padding:9px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); color:var(--tekst); }
+  .stageBtns button:hover{ border-color:rgba(120,160,220,.5); } .stageBtns button.cur{ outline:2px solid var(--niebieski); }
+  #toast{ position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px); z-index:80; background:rgba(12,20,38,.95); border:1px solid rgba(120,160,220,.3); border-radius:12px; padding:11px 18px; font-size:13px; opacity:0; pointer-events:none; transition:.3s; } #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .hint{ font-size:11.5px; color:var(--przygas); margin-top:6px; line-height:1.5; }
+  .hidden{ display:none !important; }
+
+  /* ===== Nowoczesny, bardziej zaokrąglony wygląd ===== */
+  .btn{ border-radius:12px; }
+  input,textarea,select{ border-radius:13px; padding:11px 13px; }
+  .card,.gcard{ border-radius:24px; padding:26px; }
+  #drawer{ border-radius:22px 0 0 22px; }
+  .col{ border-radius:18px; }
+  .cand{ border-radius:15px; padding:12px; }
+  .jobCard{ border-radius:15px; }
+  .chip,.badge,.stagePill,.cvPill{ border-radius:999px; }
+  .ava{ border-radius:50%; }
+  .matchBig,.ai,.rodo,.aDzis{ border-radius:15px; }
+  .stageBtns button,.cand .mv button{ border-radius:11px; }
+  header{ border-radius:0 0 18px 18px; }
+
+  /* ===== Motyw JASNY (biały) ===== */
+  body.light{ --bg:#eef3fb; --panel:#ffffff; --panel2:#f2f6fc; --line:rgba(20,40,80,.12); --tekst:#152037; --przygas:#5c6a86;
+    background:radial-gradient(120% 90% at 50% 0%, #ffffff, #e9eff8); }
+  body.light header{ background:rgba(255,255,255,.9); }
+  body.light #side{ background:rgba(245,248,253,.75); }
+  body.light .col{ background:rgba(240,245,252,.85); }
+  body.light .badge{ background:#eef3fb; }
+  body.light .cand,body.light .jobCard,body.light .card,body.light .gcard,body.light #drawer{ background:#ffffff; box-shadow:0 8px 26px rgba(20,40,80,.08); }
+  body.light #drawer{ box-shadow:-20px 0 60px rgba(20,40,80,.14); }
+  body.light input,body.light textarea,body.light select{ background:#f2f6fc; }
+  body.light .overlay{ background:rgba(20,40,80,.25); }
+  body.light .cand .bar{ background:rgba(20,40,80,.08); }
+  body.light .col .ch .cnt{ background:rgba(20,40,80,.06); }
+  body.light #toast{ background:#ffffff; color:#152037; box-shadow:0 10px 30px rgba(20,40,80,.18); }
+  body.light .cand .mv button,body.light .stageBtns button{ color:#152037; }
+
+  /* ===== Premium look „AI Visual Design" (gradienty, poświaty, szkło) ===== */
+  :root{ --grad:linear-gradient(135deg,#22d3ee 0%,#4aa3ff 35%,#9b6bff 70%,#e05bd6 100%); }
+
+  /* Tło z poświatami (tryb ciemny) */
+  body:not(.light){
+    background:
+      radial-gradient(55% 45% at 12% -5%, rgba(74,163,255,.16), transparent 60%),
+      radial-gradient(52% 46% at 106% 14%, rgba(155,107,255,.18), transparent 60%),
+      radial-gradient(46% 42% at 92% 112%, rgba(224,91,214,.14), transparent 60%),
+      #0a0e1a;
+    background-attachment:fixed;
+  }
+  /* Szkło na panelach (ciemny) */
+  body:not(.light) header, body:not(.light) #side{ background:rgba(12,17,30,.6); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+  body:not(.light) .col{ background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015)); border-color:rgba(255,255,255,.08); }
+  body:not(.light) .card, body:not(.light) .gcard, body:not(.light) #drawer{ background:linear-gradient(180deg, rgba(24,30,50,.94), rgba(14,18,32,.94)); border-color:rgba(255,255,255,.1); backdrop-filter:blur(16px); }
+  body:not(.light) .cand, body:not(.light) .jobCard{ background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border-color:rgba(255,255,255,.08); }
+  body:not(.light) input, body:not(.light) textarea, body:not(.light) select{ background:rgba(255,255,255,.045); border-color:rgba(255,255,255,.1); }
+  body:not(.light) .badge{ background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.12); }
+
+  /* Akcenty gradientowe (oba tryby) */
+  .logo{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; }
+  #jobHead h1{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; display:inline-block; }
+  .btn.primary{ background:var(--grad); color:#07101f; border:none; box-shadow:0 8px 26px rgba(74,163,255,.35); }
+  .btn.primary:hover{ filter:brightness(1.06) saturate(1.1); }
+
+  /* Poświaty na focus/hover/aktywne */
+  input:focus, textarea:focus, select:focus{ outline:none; border-color:rgba(74,163,255,.6); box-shadow:0 0 0 3px rgba(74,163,255,.16); }
+  body:not(.light) .jobCard.active{ border-color:rgba(74,163,255,.55); box-shadow:0 0 0 1px rgba(74,163,255,.35), 0 10px 34px rgba(74,163,255,.18); }
+  body:not(.light) .cand:hover{ border-color:rgba(155,107,255,.5); box-shadow:0 10px 28px rgba(155,107,255,.16); }
+
+  /* ===== Ikony SVG + płynne przejścia stron (Apple-like) ===== */
+  .i{ width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:0 0 auto; display:inline-block; vertical-align:-2.5px; }
+  header .btn, .btn{ display:inline-flex; align-items:center; gap:6px; }
+  body{ transition:opacity .5s cubic-bezier(.2,.8,.2,1), filter .5s cubic-bezier(.2,.8,.2,1); }
+  body.entering, body.leaving{ opacity:0; filter:blur(14px) saturate(1.25); }
+  #appRoot:not(.hidden), #gate{ animation:viewIn .55s cubic-bezier(.2,.8,.2,1); }
+  @keyframes viewIn{ from{ opacity:0; transform:translateY(14px) scale(.995); } }
+  .gmark{ display:flex; justify-content:center; margin-bottom:6px; }
+  @view-transition{ navigation:auto; }
+</style>
+</head>
+<body class="entering">
+  <!-- ====== EKRAN: konfiguracja / logowanie ====== -->
+  <div id="gate">
+    <!-- Konfiguracja połączenia -->
+    <div class="gcard" id="cfgCard">
+      <div class="gmark"><svg width="56" height="56" viewBox="0 0 60 60"><circle cx="30" cy="33" r="20" fill="#eef3fb"/><rect x="16" y="25" width="28" height="16" rx="8" fill="#0b1526"/><circle cx="25" cy="33" r="3" fill="#7ef0ff"/><circle cx="35" cy="33" r="3" fill="#7ef0ff"/><line x1="30" y1="9" x2="30" y2="13" stroke="#c9d6ea" stroke-width="3" stroke-linecap="round"/><circle cx="30" cy="7" r="3.4" fill="#4aa3ff"/></svg></div>
+      <div class="logo">HR-OS</div>
+      <h2>Połącz z chmurą (Supabase)</h2>
+      <div class="hint">Jednorazowo. Wklej klucz <b>anon / public</b> z Supabase (Settings → API). URL jest już wpisany — popraw, jeśli inny. Dane zapisują się tylko w tej przeglądarce.</div>
+      <label class="f">Project URL</label>
+      <input id="cfgUrl" value="https://rpkdvtnknwltsprlxsjy.supabase.co" />
+      <label class="f">Klucz anon / public</label>
+      <input id="cfgKey" placeholder="eyJhbGciOi... (długi klucz public)" />
+      <button class="btn primary full" id="cfgConnect">Połącz</button>
+      <div class="err" id="cfgErr"></div>
+      <div class="hint" style="margin-top:14px">Chcesz tylko szybkie demo bez logowania? <a class="lnk" href="hr-os-app.html">Otwórz demo lokalne →</a></div>
+    </div>
+
+    <!-- Logowanie -->
+    <div class="gcard hidden" id="authCard">
+      <div class="gmark"><svg width="56" height="56" viewBox="0 0 60 60"><circle cx="30" cy="33" r="20" fill="#eef3fb"/><rect x="16" y="25" width="28" height="16" rx="8" fill="#0b1526"/><circle cx="25" cy="33" r="3" fill="#7ef0ff"/><circle cx="35" cy="33" r="3" fill="#7ef0ff"/><line x1="30" y1="9" x2="30" y2="13" stroke="#c9d6ea" stroke-width="3" stroke-linecap="round"/><circle cx="30" cy="7" r="3.4" fill="#4aa3ff"/></svg></div>
+      <div class="logo">HR-OS</div>
+      <h2 id="authTitle">Zaloguj się</h2>
+      <div class="hint">System rekrutacyjny w chmurze. Zaloguj się lub załóż konto.</div>
+      <label class="f">E-mail</label>
+      <input id="authEmail" type="email" placeholder="ty@firma.pl" />
+      <label class="f">Hasło</label>
+      <input id="authPass" type="password" placeholder="min. 6 znaków" />
+      <button class="btn primary full" id="authBtn">Zaloguj</button>
+      <div class="err" id="authErr"></div>
+      <div class="hint" style="margin-top:12px">
+        <span id="authSwitch"><a class="lnk" id="toSignup">Nie masz konta? Załóż konto</a></span>
+        &nbsp;·&nbsp; <a class="lnk" id="cfgReset">Zmień połączenie</a>
+      </div>
+      <div class="hint" style="margin-top:8px">Po założeniu konta może być potrzebne potwierdzenie e-maila. Aby pominąć: Supabase → Authentication → Sign In / Providers → wyłącz „Confirm email".</div>
+    </div>
+  </div>
+
+  <!-- ====== APLIKACJA ====== -->
+  <div id="appRoot" class="hidden" style="flex:1; display:flex; flex-direction:column; min-height:0">
+    <header>
+      <span class="logo">HR-OS</span>
+      <span class="badge"><span class="live"></span> Chmura</span>
+      <span class="sp"></span>
+      <span class="who" id="whoami"></span>
+      <a href="hr-os.html" class="btn ghost sm" style="text-decoration:none"><svg class="i" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>Scena</a>
+      <button class="btn ghost sm" id="btnTheme"></button>
+      <button class="btn ghost sm" id="btnSettings"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9z"/></svg>AI</button>
+      <button class="btn primary" id="btnNewJob">＋ Stanowisko</button>
+      <button class="btn ghost sm" id="btnLogout">Wyloguj</button>
+    </header>
+    <main>
+      <aside id="side"><div class="h"><span class="t">Stanowiska</span></div><div id="jobs"></div></aside>
+      <section id="content"><div id="jobHead"></div><div id="board"></div></section>
+    </main>
+  </div>
+
+  <!-- Modal stanowisko -->
+  <div class="overlay" id="jobModal"><div class="card">
+    <button class="x" data-close>✕</button><h2 id="jobModalTitle">Nowe stanowisko</h2>
+    <label class="f">Nazwa stanowiska *</label><input id="jTitle" placeholder="np. Frontend Developer" />
+    <div class="row2"><div><label class="f">Miasto</label><input id="jLoc" placeholder="Warszawa" /></div>
+      <div><label class="f">Poziom</label><select id="jSen"><option>Junior</option><option selected>Mid</option><option>Senior</option><option>Lead</option></select></div></div>
+    <label class="f">Umiejętności (po przecinku)</label><input id="jSkills" placeholder="React, TypeScript, CSS" />
+    <label class="f">Opis / wymagania</label><textarea id="jDesc"></textarea>
+    <div class="actions"><button class="btn ghost" id="jDelete" style="flex:0 0 auto; color:var(--czerwony)">Usuń</button><button class="btn" data-close>Anuluj</button><button class="btn primary" id="jSave">Zapisz</button></div>
+  </div></div>
+
+  <!-- Modal kandydat -->
+  <div class="overlay" id="candModal"><div class="card">
+    <button class="x" data-close>✕</button><h2>Dodaj kandydata / CV</h2><div class="muted" id="candForJob" style="font-size:12.5px"></div>
+    <div class="row2"><div><label class="f">Imię i nazwisko *</label><input id="cName" /></div><div><label class="f">Miasto</label><input id="cLoc" /></div></div>
+    <div class="row2"><div><label class="f">Stanowisko (rola)</label><input id="cRole" /></div><div><label class="f">E-mail</label><input id="cEmail" /></div></div>
+    <label class="f">Treść CV</label>
+    <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px">
+      <button type="button" class="btn ghost sm" id="cvFileBtn"><svg class="i" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>Wczytaj CV z pliku (PDF / Word / TXT)</button>
+      <span class="hint" id="cvFileStatus" style="margin:0"></span>
+    </div>
+    <input type="file" id="cvFile" accept=".pdf,.doc,.docx,.txt,.md" style="display:none" />
+    <textarea id="cCv" placeholder="Wklej tekst CV albo wczytaj z pliku powyżej..."></textarea>
+    <label class="f">Dopasowanie % (puste = ocena AI)</label><input id="cMatch" type="number" min="0" max="100" />
+    <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:12.5px;color:var(--przygas)"><input type="checkbox" id="cConsent" checked style="width:auto" /> Zgoda na przetwarzanie danych (RODO)</label>
+    <div class="actions"><button class="btn" data-close>Anuluj</button><button class="btn primary" id="cSave">Dodaj</button></div>
+  </div></div>
+
+  <!-- Modal ustawienia AI -->
+  <div class="overlay" id="setModal"><div class="card">
+    <button class="x" data-close>✕</button><h2>Ustawienia AI (n8n)</h2>
+    <div class="hint">Wklej URL webhooka „Auto-Shortlist". Wtedy „⚡ Oceń AI" policzy dopasowanie.</div>
+    <label class="f">URL webhooka n8n</label><input id="setWebhook" />
+    <div class="actions"><button class="btn" data-close>Anuluj</button><button class="btn primary" id="setSave">Zapisz</button></div>
+  </div></div>
+
+  <div id="drawer"></div>
+  <div id="toast"></div>
+
+<script>
+// ============================================================================
+// HR-OS CLOUD — Supabase + logowanie + ATS
+// ============================================================================
+const ETAPY=[{id:'Nowy',kolor:'#4aa3ff'},{id:'Screening',kolor:'#ffb43e'},{id:'Rozmowa',kolor:'#9b6bff'},{id:'Oferta',kolor:'#5ad1a0'},{id:'Zatrudniony',kolor:'#46d17f'},{id:'Odrzucony',kolor:'#ff5d6c'}];
+// Profesjonalne ikony SVG (zamiast emotek)
+const IC={
+  shield:'<svg class="i" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  spark:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3l1.9 5.8 5.8 1.9-5.8 1.9L12 18.4l-1.9-5.8L4.3 10.7l5.8-1.9z"/></svg>',
+  sun:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  moon:'<svg class="i" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>',
+};
+const CFGKEY='hr-os-cloud-cfg';
+const ini=n=>(n||'?').trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const mkol=m=> m>=85?'#46d17f' : m>=70?'#ffb43e' : '#ff5d6c';
+const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let sb=null, jobs=[], cands=[], selJob=null, webhook=localStorage.getItem('hr-os-cloud-webhook')||'';
+let tTm; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tTm); tTm=setTimeout(()=>t.classList.remove('show'),2600); }
+const $=id=>document.getElementById(id);
+
+// ---------- Konfiguracja połączenia ----------
+function getCfg(){ try{ return JSON.parse(localStorage.getItem(CFGKEY)); }catch(e){ return null; } }
+function showCfg(){ $('cfgCard').classList.remove('hidden'); $('authCard').classList.add('hidden'); $('appRoot').classList.add('hidden'); $('gate').style.display='flex'; }
+function showAuth(){ $('cfgCard').classList.add('hidden'); $('authCard').classList.remove('hidden'); $('appRoot').classList.add('hidden'); $('gate').style.display='flex'; }
+function showApp(){ $('gate').style.display='none'; $('appRoot').classList.remove('hidden'); }
+
+$('cfgConnect').onclick=()=>{
+  const url=$('cfgUrl').value.trim(), key=$('cfgKey').value.trim();
+  if(!url||!key){ $('cfgErr').textContent='Podaj URL i klucz public.'; return; }
+  try{ sb=window.supabase.createClient(url,key); }catch(e){ $('cfgErr').textContent='Błędny URL/klucz.'; return; }
+  localStorage.setItem(CFGKEY, JSON.stringify({url,key}));
+  initAuth();
+};
+$('cfgReset').onclick=()=>{ localStorage.removeItem(CFGKEY); location.reload(); };
+
+// ---------- Logowanie ----------
+let signupMode=false;
+$('toSignup')&&($('toSignup').onclick=()=>{ signupMode=!signupMode; $('authTitle').textContent=signupMode?'Załóż konto':'Zaloguj się'; $('authBtn').textContent=signupMode?'Załóż konto':'Zaloguj'; $('toSignup').textContent=signupMode?'Masz już konto? Zaloguj się':'Nie masz konta? Załóż konto'; $('authErr').textContent=''; });
+$('authBtn').onclick=async()=>{
+  const email=$('authEmail').value.trim(), pass=$('authPass').value;
+  if(!email||!pass){ $('authErr').textContent='Podaj e-mail i hasło.'; return; }
+  $('authErr').textContent=''; $('authBtn').textContent='...';
+  try{
+    if(signupMode){
+      const {data,error}=await sb.auth.signUp({email,password:pass});
+      if(error) throw error;
+      if(!data.session){ $('authErr').style.color='var(--zielony)'; $('authErr').textContent='Konto utworzone. Potwierdź e-mail i zaloguj się.'; $('authBtn').textContent='Załóż konto'; return; }
+    } else {
+      const {error}=await sb.auth.signInWithPassword({email,password:pass});
+      if(error) throw error;
+    }
+  }catch(e){ $('authErr').style.color='var(--czerwony)'; $('authErr').textContent=e.message||'Błąd logowania.'; $('authBtn').textContent=signupMode?'Załóż konto':'Zaloguj'; }
+};
+$('btnLogout').onclick=async()=>{ await sb.auth.signOut(); location.reload(); };
+
+async function initAuth(){
+  const {data}=await sb.auth.getSession();
+  if(data.session){ enterApp(data.session); }
+  else{ showAuth(); }
+  sb.auth.onAuthStateChange((_e,session)=>{ if(session){ enterApp(session); } });
+}
+let entered=false;
+async function enterApp(session){ if(entered) return; entered=true; $('whoami').textContent=session.user.email; showApp(); await loadAll(); }
+
+// ---------- Wczytanie danych z chmury ----------
+async function loadAll(){
+  const jr=await sb.from('jobs').select('*').order('created_at',{ascending:true});
+  const cr=await sb.from('candidates').select('*').order('created_at',{ascending:true});
+  if(jr.error){ toast('Błąd wczytywania stanowisk'); }
+  if(cr.error){ toast('Błąd wczytywania kandydatów'); }
+  jobs=jr.data||[]; cands=cr.data||[];
+  if(!selJob && jobs[0]) selJob=jobs[0].id;
+  render();
+}
+
+// ---------- Render ----------
+function render(){ renderJobs(); renderContent(); }
+function renderJobs(){
+  const el=$('jobs'); el.innerHTML='';
+  if(!jobs.length){ el.innerHTML='<div class="empty">Brak stanowisk.<br/>Kliknij „＋ Stanowisko".</div>'; return; }
+  jobs.forEach(j=>{ const n=cands.filter(c=>c.job_id===j.id).length;
+    const d=document.createElement('div'); d.className='jobCard'+(selJob===j.id?' active':'');
+    d.innerHTML=`<div class="jt">${esc(j.title)}</div><div class="jm">${esc(j.loc||'—')} · ${esc(j.sen||'')}</div><div class="jc">${n} kandydatów</div>`;
+    d.onclick=()=>{ selJob=j.id; render(); }; el.appendChild(d); });
+}
+function renderContent(){
+  const head=$('jobHead'), board=$('board'); const job=jobs.find(j=>j.id===selJob);
+  if(!job){ head.innerHTML=''; board.innerHTML='<div class="empty" style="margin:auto">Wybierz stanowisko albo dodaj nowe.</div>'; return; }
+  const list=cands.filter(c=>c.job_id===job.id);
+  head.innerHTML=`<div><h1>${esc(job.title)}</h1><div class="sub">${esc(job.loc||'—')} · ${esc(job.sen||'')} · ${list.length} kandydatów</div>
+    <div class="chips">${(job.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join('')}</div></div>
+    <div class="acts"><button class="btn ghost sm" id="editJob">✎ Edytuj</button><button class="btn primary sm" id="addCand">＋ Dodaj kandydata</button></div>`;
+  $('editJob').onclick=()=>openJob(job.id); $('addCand').onclick=()=>openCand(job.id);
+  board.innerHTML='';
+  ETAPY.forEach(et=>{ const col=document.createElement('div'); col.className='col'; col.dataset.stage=et.id;
+    const inCol=list.filter(c=>c.stage===et.id);
+    col.innerHTML=`<div class="ch"><span class="dot" style="background:${et.kolor}"></span>${et.id}<span class="cnt">${inCol.length}</span></div><div class="list"></div>`;
+    const listEl=col.querySelector('.list'); if(!inCol.length) listEl.innerHTML='<div class="empty">—</div>';
+    inCol.forEach(c=>listEl.appendChild(candCard(c)));
+    col.addEventListener('dragover',e=>{ e.preventDefault(); col.classList.add('drop'); });
+    col.addEventListener('dragleave',()=>col.classList.remove('drop'));
+    col.addEventListener('drop',e=>{ e.preventDefault(); col.classList.remove('drop'); moveStage(e.dataTransfer.getData('id'), et.id); });
+    board.appendChild(col); });
+}
+function candCard(c){ const m=c.match_pct;
+  const d=document.createElement('div'); d.className='cand'; d.draggable=true;
+  d.innerHTML=`<div class="top"><div class="ava" style="background:${mkol(m||0)}">${esc(ini(c.name))}</div>
+    <div><div class="nm">${esc(c.name)}</div><div class="rl">${esc(c.role||'')}${c.loc?' · '+esc(c.loc):''}</div></div>
+    <div style="margin-left:auto;font-weight:800;font-size:14px">${m!=null?m+'%':'—'}</div></div>
+    <div class="bar"><i style="width:${m||0}%;background:${mkol(m||0)}"></i></div>
+    <div class="mv"><button data-a="back">‹ Cofnij</button><button data-a="fwd">Dalej ›</button></div>`;
+  d.querySelector('[data-a="fwd"]').onclick=e=>{ e.stopPropagation(); stepStage(c,1); };
+  d.querySelector('[data-a="back"]').onclick=e=>{ e.stopPropagation(); stepStage(c,-1); };
+  d.addEventListener('dragstart',e=>e.dataTransfer.setData('id',c.id)); d.onclick=()=>openDrawer(c.id); return d;
+}
+
+// ---------- Etapy (zapis do chmury) ----------
+function stepStage(c,dir){ let i=ETAPY.findIndex(e=>e.id===c.stage); i=Math.max(0,Math.min(ETAPY.length-1,i+dir)); moveStage(c.id,ETAPY[i].id); }
+async function moveStage(id,stage){ const c=cands.find(x=>x.id===id); if(!c) return;
+  const patch={stage}; if(stage==='Zatrudniony'||stage==='Odrzucony') patch.decided_by='człowiek';
+  Object.assign(c,patch); render(); if($('drawer').classList.contains('open')) openDrawer(id);
+  const {error}=await sb.from('candidates').update(patch).eq('id',id); if(error) toast('Błąd zapisu'); else toast(`${c.name} → ${stage}`);
+}
+
+// ---------- Drawer ----------
+async function openDrawer(id){ const c=cands.find(x=>x.id===id); if(!c) return; const job=jobs.find(j=>j.id===c.job_id); const et=ETAPY.find(e=>e.id===c.stage)||ETAPY[0]; const m=c.match_pct;
+  const dr=$('drawer');
+  dr.innerHTML=`<button class="btn ghost sm" style="float:right" onclick="document.getElementById('drawer').classList.remove('open')">✕</button>
+    <div class="dHead"><div class="ava" style="background:${mkol(m||0)}">${esc(ini(c.name))}</div>
+      <div><div class="dName">${esc(c.name)}</div><div class="dRole">${esc(c.role||'')}${c.loc?' · '+esc(c.loc):''}</div>
+      <span class="stagePill" style="background:${et.kolor}22;color:${et.kolor};border:1px solid ${et.kolor}55">${et.id}</span></div></div>
+    <div class="sect"><div class="matchBig"><div><div class="v" style="color:${mkol(m||0)}">${m!=null?m+'%':'—'}</div><div class="l">Dopasowanie (AI)</div></div>
+      <button class="btn sm" id="aiScore" style="margin-left:auto">${IC.spark}Oceń AI</button></div></div>
+    <div class="sect"><h4>Dane</h4>
+      <div class="kv"><span>Rola</span><span>${esc(c.role||'—')}</span></div><div class="kv"><span>Lokalizacja</span><span>${esc(c.loc||'—')}</span></div>
+      <div class="kv"><span>E-mail</span><span>${esc(c.email||'—')}</span></div><div class="kv"><span>Zgoda RODO</span><span>${c.consent?'✔ tak':'✘ brak'}</span></div>
+      <div class="kv"><span>Decyzja</span><span>${esc(c.decided_by||'—')}</span></div></div>
+    <div class="sect"><h4>Treść CV</h4><div class="muted" style="font-size:12.5px;white-space:pre-wrap;line-height:1.5">${esc(c.cv||'—')}</div></div>
+    ${c.ai?`<div class="sect"><h4>Rekomendacja AI</h4><div class="ai"><b>AI:</b> ${esc(c.ai)}</div></div>`:''}
+    <div class="sect"><h4>Etap (decyzję podejmuje człowiek)</h4><div class="stageBtns">${ETAPY.map(e=>`<button data-st="${e.id}" class="${e.id===c.stage?'cur':''}">${e.id}</button>`).join('')}</div></div>
+    <div class="sect"><h4>Notatki</h4><textarea id="cNotes">${esc(c.notes||'')}</textarea></div>
+    <div class="rodo">${IC.shield} Ocena AI to rekomendacja. Zgodnie z RODO (art. 22) i AI Act decyzję o kandydacie podejmuje człowiek.</div>
+    <div class="actions"><button class="btn ghost" id="delCand" style="color:var(--czerwony)">Usuń</button><button class="btn primary" id="saveNotes">Zapisz notatki</button></div>`;
+  dr.classList.add('open');
+  dr.querySelectorAll('.stageBtns button').forEach(b=>b.onclick=()=>moveStage(c.id,b.dataset.st));
+  $('aiScore').onclick=()=>scoreAI(c.id);
+  $('saveNotes').onclick=async()=>{ c.notes=$('cNotes').value; const {error}=await sb.from('candidates').update({notes:c.notes}).eq('id',c.id); toast(error?'Błąd':'Notatki zapisane'); };
+  $('delCand').onclick=async()=>{ if(confirm('Usunąć kandydata?')){ const {error}=await sb.from('candidates').delete().eq('id',c.id); if(error){ toast('Błąd'); return; } cands=cands.filter(x=>x.id!==c.id); $('drawer').classList.remove('open'); render(); toast('Usunięto'); } };
+}
+
+// ---------- Ocena AI (n8n webhook) ----------
+async function scoreAI(id){ const c=cands.find(x=>x.id===id); const job=jobs.find(j=>j.id===c.job_id);
+  if(!webhook){ toast('Ustaw URL webhooka (⚙ AI)'); return; } toast('Oceniam CV przez AI...');
+  try{ const res=await fetch(webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({candidateName:c.name,jobTitle:job.title,jobDescription:(job.descr||'')+' Wymagania: '+(job.skills||[]).join(', '),cvText:c.cv||'',consent:c.consent})});
+    const d=await res.json(); const patch={}; if(d.dopasowanie!=null) patch.match_pct=d.dopasowanie; patch.ai=d.podsumowanie||d.rekomendacja||'Oceniono.';
+    Object.assign(c,patch); await sb.from('candidates').update(patch).eq('id',id); render(); openDrawer(id); toast('AI: '+(c.match_pct)+'%');
+  }catch(e){ toast('Błąd połączenia z AI'); }
+}
+
+// ---------- Stanowiska ----------
+let editJobId=null;
+function openJob(id){ editJobId=id||null; const j=id?jobs.find(x=>x.id===id):null;
+  $('jobModalTitle').textContent=id?'Edytuj stanowisko':'Nowe stanowisko';
+  $('jTitle').value=j?j.title:''; $('jLoc').value=j?j.loc||'':''; $('jSen').value=j?j.sen||'Mid':'Mid';
+  $('jSkills').value=j?(j.skills||[]).join(', '):''; $('jDesc').value=j?j.descr||'':'';
+  $('jDelete').style.display=id?'block':'none'; openOverlay('jobModal'); }
+$('jSave').onclick=async()=>{ const title=$('jTitle').value.trim(); if(!title){ toast('Podaj nazwę'); return; }
+  const data={ title, loc:$('jLoc').value.trim(), sen:$('jSen').value, skills:$('jSkills').value.split(',').map(s=>s.trim()).filter(Boolean), descr:$('jDesc').value.trim() };
+  if(editJobId){ const {error}=await sb.from('jobs').update(data).eq('id',editJobId); if(error){toast('Błąd');return;} Object.assign(jobs.find(j=>j.id===editJobId),data); }
+  else{ const {data:row,error}=await sb.from('jobs').insert(data).select().single(); if(error){toast('Błąd zapisu: '+error.message);return;} jobs.push(row); selJob=row.id; }
+  closeOverlay('jobModal'); render(); toast('Zapisano stanowisko'); };
+$('jDelete').onclick=async()=>{ if(editJobId && confirm('Usunąć stanowisko i jego kandydatów?')){ const {error}=await sb.from('jobs').delete().eq('id',editJobId); if(error){toast('Błąd');return;} jobs=jobs.filter(j=>j.id!==editJobId); cands=cands.filter(c=>c.job_id!==editJobId); if(selJob===editJobId) selJob=jobs[0]?jobs[0].id:null; closeOverlay('jobModal'); render(); } };
+
+// ---------- Kandydaci ----------
+let candForJobId=null;
+function openCand(jobId){ candForJobId=jobId; const j=jobs.find(x=>x.id===jobId); $('candForJob').textContent='Na stanowisko: '+j.title;
+  $('cName').value='';$('cLoc').value='';$('cRole').value=j.title;$('cEmail').value='';$('cCv').value='';$('cMatch').value='';$('cConsent').checked=true; openOverlay('candModal'); }
+$('cSave').onclick=async()=>{ const name=$('cName').value.trim(); if(!name){ toast('Podaj imię i nazwisko'); return; }
+  const mv=$('cMatch').value.trim(); const data={ job_id:candForJobId, name, role:$('cRole').value.trim(), loc:$('cLoc').value.trim(), email:$('cEmail').value.trim(), cv:$('cCv').value.trim(), match_pct:mv===''?null:Math.max(0,Math.min(100,parseInt(mv)||0)), stage:'Nowy', consent:$('cConsent').checked, decided_by:'—' };
+  const {data:row,error}=await sb.from('candidates').insert(data).select().single(); if(error){ toast('Błąd zapisu: '+error.message); return; }
+  cands.push(row); closeOverlay('candModal'); render(); toast('Dodano kandydata'); };
+
+// ---------- Ustawienia AI ----------
+$('btnSettings').onclick=()=>{ $('setWebhook').value=webhook; openOverlay('setModal'); };
+$('setSave').onclick=()=>{ webhook=$('setWebhook').value.trim(); localStorage.setItem('hr-os-cloud-webhook',webhook); closeOverlay('setModal'); toast('Zapisano'); };
+
+// ---------- Overlay ----------
+function openOverlay(id){ $(id).classList.add('open'); } function closeOverlay(id){ $(id).classList.remove('open'); }
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.overlay').classList.remove('open'));
+document.querySelectorAll('.overlay').forEach(o=>o.onclick=e=>{ if(e.target===o) o.classList.remove('open'); });
+$('btnNewJob').onclick=()=>openJob(null);
+window.addEventListener('keydown',e=>{ if(e.key==='Escape'){ document.querySelectorAll('.overlay.open').forEach(o=>o.classList.remove('open')); $('drawer').classList.remove('open'); } });
+
+// ---------- Motyw jasny / ciemny ----------
+function applyTheme(light){ document.body.classList.toggle('light',light); localStorage.setItem('hr-os-theme',light?'light':'dark'); $('btnTheme').innerHTML=light?(IC.moon+'Ciemny'):(IC.sun+'Jasny'); }
+$('btnTheme').onclick=()=>applyTheme(!document.body.classList.contains('light'));
+applyTheme(localStorage.getItem('hr-os-theme')==='light');
+
+// ---------- Wczytywanie CV z pliku (PDF / Word / TXT) ----------
+if(window.pdfjsLib) window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+async function pdfToText(file){ const ab=await file.arrayBuffer(); const pdf=await window.pdfjsLib.getDocument({data:ab}).promise; let out='';
+  for(let i=1;i<=pdf.numPages;i++){ const pg=await pdf.getPage(i); const tc=await pg.getTextContent(); out+=tc.items.map(it=>it.str).join(' ')+'\n'; } return out; }
+$('cvFileBtn').onclick=()=>$('cvFile').click();
+$('cvFile').onchange=async e=>{ const f=e.target.files[0]; if(!f) return; const st=$('cvFileStatus'); st.textContent='wczytywanie...';
+  try{ const ext=(f.name.split('.').pop()||'').toLowerCase(); let text='';
+    if(ext==='pdf'){ text=await pdfToText(f); }
+    else if(ext==='docx'||ext==='doc'){ const ab=await f.arrayBuffer(); const r=await window.mammoth.extractRawText({arrayBuffer:ab}); text=r.value; }
+    else { text=await f.text(); }
+    $('cCv').value=(text||'').replace(/\n{3,}/g,'\n\n').trim();
+    if(!$('cName').value.trim()){ $('cName').value=f.name.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').trim(); }
+    st.textContent='✔ wczytano: '+f.name;
+  }catch(err){ st.textContent='✘ nie udało się odczytać pliku'; }
+  e.target.value=''; };
+
+// ---------- Start ----------
+(function start(){
+  const cfg=getCfg();
+  if(!cfg){ showCfg(); return; }
+  $('cfgUrl').value=cfg.url;
+  try{ sb=window.supabase.createClient(cfg.url,cfg.key); initAuth(); }
+  catch(e){ showCfg(); $('cfgErr').textContent='Zapisane połączenie nie działa — wpisz ponownie.'; }
+})();
+
+// ---------- Płynne przejścia między stronami (Apple-like) ----------
+if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){ navigator.serviceWorker.register('sw.js'); }
+const _wejscie=()=>document.body.classList.remove('entering');
+requestAnimationFrame(()=>requestAnimationFrame(_wejscie)); setTimeout(_wejscie,650);
+document.addEventListener('click',e=>{ const a=e.target.closest('a[href$=".html"]'); if(!a) return;
+  e.preventDefault(); document.body.classList.add('leaving'); setTimeout(()=>{ location.href=a.getAttribute('href'); },470); });
+</script>
+</body>
+</html>

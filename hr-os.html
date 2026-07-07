@@ -4,6 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>HR-OS — Hiring Loop System OS</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0a1120" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <!--
   HR-OS — wersja "hero": tłem jest grafika 3D (hr-os-tlo.png), a na wierzchu
   działa interaktywne UI: pasek systemowy, INBOX z CV (klik → szczegóły),
@@ -22,7 +27,7 @@
   /* Scena (obraz) — wyśrodkowana, z zachowaniem proporcji; etykiety pozycjonowane względem niej */
   /* Współczynnik powiększenia sceny — zwiększ, by diorama była większa (przycina marginesy). */
   #stage{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
-    width:min(142vw, calc(142vh * 1376 / 768)); height:min(142vh, calc(142vw * 768 / 1376)); }
+    width:min(112vw, calc(112vh * 2560 / 1440)); height:min(112vh, calc(112vw * 1440 / 2560)); }
   #stage img{ width:100%; height:100%; object-fit:cover; display:block; }
   #vignette{ position:fixed; inset:0; pointer-events:none; z-index:2;
     background:radial-gradient(120% 95% at 50% 42%, rgba(0,0,0,0) 55%, rgba(4,8,16,0.6) 100%); }
@@ -60,7 +65,7 @@
   #thesis .open{ margin-top:12px; cursor:pointer; pointer-events:auto; background:var(--niebieski); color:#06121f; border:none; font-weight:700; font-size:13px; padding:9px 16px; border-radius:10px; box-shadow:0 8px 22px rgba(74,163,255,.4); }
 
   /* Terminal */
-  #terminal{ bottom:16px; left:50%; transform:translateX(-50%); width:min(560px,calc(100vw - 40px)); pointer-events:auto;
+  #terminal{ bottom:16px; left:20px; width:min(460px,calc(100vw - 40px)); pointer-events:auto;
     background:rgba(8,13,26,0.86); border:1px solid rgba(120,160,220,0.18); border-radius:14px; backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px); box-shadow:0 18px 50px rgba(0,0,0,.5); overflow:hidden; }
   #terminal .bar{ display:flex; align-items:center; gap:8px; padding:9px 12px; border-bottom:1px solid rgba(120,160,220,0.14); font-size:12px; color:var(--przygas); }
@@ -112,17 +117,165 @@
   #toast{ position:fixed; bottom:140px; left:50%; transform:translateX(-50%) translateY(20px); z-index:30; background:rgba(12,20,38,0.92); border:1px solid rgba(120,160,220,0.3); border-radius:12px; padding:10px 16px; font-size:13px; opacity:0; pointer-events:none; transition:all .35s ease; box-shadow:0 10px 30px rgba(0,0,0,.5); }
   #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
-  @media (max-width:680px){ #footer{ display:none; } #thesis{ max-width:70vw; } .pin{ display:none; } }
+  /* ---- KROK 2: widoczne plakietki agentów nad robotami (klikalne) ---- */
+  .hotspot{ position:absolute; z-index:5; transform:translate(-50%,-118%); cursor:pointer; display:flex; align-items:center; gap:6px;
+    padding:5px 11px 5px 9px; border-radius:999px; white-space:nowrap; font-size:11.5px; font-weight:650; color:#eaf1ff;
+    background:rgba(10,17,32,.82); border:1px solid var(--c); box-shadow:0 5px 16px rgba(0,0,0,.5);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); transition:transform .16s ease, box-shadow .16s ease, background .16s ease; }
+  .hotspot .ic{ width:9px; height:9px; border-radius:50%; background:var(--c); box-shadow:0 0 9px var(--c); flex:0 0 auto; animation:blip 2.2s ease-in-out infinite; }
+  .hotspot:after{ content:""; position:absolute; left:50%; bottom:-5px; width:9px; height:9px; transform:translateX(-50%) rotate(45deg);
+    background:rgba(10,17,32,.82); border-right:1px solid var(--c); border-bottom:1px solid var(--c); }
+  .hotspot:hover{ transform:translate(-50%,-118%) scale(1.07); background:rgba(22,32,54,.96); box-shadow:0 8px 22px rgba(0,0,0,.55), 0 0 18px var(--c); }
+  @keyframes blip{ 0%,100%{ opacity:.6 } 50%{ opacity:1 } }
+
+  /* ---- Ożywienie: rozmowy agentów (dymki) + impulsy-wiadomości ---- */
+  .bubble{ position:absolute; z-index:7; transform:translate(-50%,-100%); pointer-events:none;
+    background:rgba(10,17,32,.92); border:1px solid var(--bc,#4aa3ff); color:#eaf1ff; border-radius:12px;
+    padding:7px 11px; font-size:12px; font-weight:600; white-space:nowrap; max-width:220px; text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.5), 0 0 18px var(--bc,#4aa3ff); backdrop-filter:blur(6px);
+    opacity:0; transition:opacity .3s ease, transform .3s ease; }
+  .bubble.show{ opacity:1; transform:translate(-50%,-108%); }
+  .bubble:after{ content:""; position:absolute; left:50%; bottom:-6px; width:10px; height:10px; transform:translateX(-50%) rotate(45deg);
+    background:rgba(10,17,32,.92); border-right:1px solid var(--bc,#4aa3ff); border-bottom:1px solid var(--bc,#4aa3ff); }
+  .pulse{ position:absolute; z-index:6; width:13px; height:13px; border-radius:50%; transform:translate(-50%,-50%); pointer-events:none; }
+  .hotspot.speaking{ transform:translate(-50%,-118%) scale(1.12); box-shadow:0 8px 22px rgba(0,0,0,.55), 0 0 26px var(--c); z-index:8; }
+  /* Kinowy „oddech" sceny — zachowuje wygląd i wyrównanie (skaluje całą scenę razem z etykietami) */
+  @keyframes kenburns{ 0%{ transform:translate(-50%,-50%) scale(1);} 100%{ transform:translate(-50%,-50%) scale(1.045);} }
+  #stage{ animation:kenburns 26s ease-in-out infinite alternate; }
+  /* Halo aktywności przy każdym agencie (pulsujący pierścień) */
+  .halo{ position:absolute; z-index:4; transform:translate(-50%,-50%); width:30px; height:30px; border-radius:50%; pointer-events:none; }
+  .halo:before{ content:""; position:absolute; inset:0; border-radius:50%; box-shadow:0 0 0 0 var(--hc); animation:haloPing 2.8s ease-out infinite; }
+  @keyframes haloPing{ 0%{ box-shadow:0 0 0 0 var(--hc); opacity:.8;} 100%{ box-shadow:0 0 0 16px transparent; opacity:0;} }
+
+  /* ---- KROK 3: panel agenta (czym się zajmuje) ---- */
+  #agentBackdrop{ position:fixed; inset:0; z-index:47; background:rgba(3,6,14,.5); backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:opacity .2s; }
+  #agentBackdrop.open{ opacity:1; pointer-events:auto; }
+  #agentPanel{ position:fixed; top:0; right:0; height:100%; width:min(380px,92vw); z-index:48; overflow-y:auto; padding:24px 22px;
+    background:rgba(14,22,40,.96); border-left:2px solid var(--ac,#4aa3ff); box-shadow:-20px 0 60px rgba(0,0,0,.55);
+    transform:translateX(106%); transition:transform .2s ease; }
+  #agentPanel.open{ transform:translateX(0); }
+  .aClose{ position:absolute; top:14px; right:16px; cursor:pointer; font-size:20px; color:var(--przygas); background:none; border:none; }
+  .aHead{ font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; display:flex; align-items:center; gap:9px; font-size:17px; font-weight:700; }
+  .aHead .dot{ width:11px; height:11px; border-radius:50%; background:var(--ac); box-shadow:0 0 12px var(--ac); flex:0 0 auto; }
+  .aRola{ font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; font-size:12px; color:var(--przygas); margin:4px 0 0 20px; }
+  .aBadge{ display:inline-flex; align-items:center; gap:7px; margin-top:14px; font-size:12px; font-weight:700; padding:5px 12px; border-radius:999px; border:1px solid var(--ac); color:var(--ac); background:rgba(255,255,255,.04); }
+  .aBadge .b{ width:8px; height:8px; border-radius:50%; background:var(--ac); }
+  .aBadge.pracuje .b{ box-shadow:0 0 10px var(--ac); animation:pulse 1.6s ease-in-out infinite; }
+  .aSekcja{ margin-top:18px; } .aSekcja h4{ font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--przygas); margin-bottom:9px; }
+  .aRobi{ list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .aRobi li{ position:relative; padding-left:20px; font-size:13.5px; line-height:1.4; }
+  .aRobi li:before{ content:"▸"; position:absolute; left:2px; color:var(--ac); }
+  .aDzis{ margin-top:16px; padding:12px 14px; border-radius:11px; background:rgba(255,255,255,.04); border:1px solid rgba(120,160,220,.18); font-size:13px; }
+  .aDzis b{ color:var(--ac); }
+  .aRODO{ margin-top:14px; padding:11px 13px; border-radius:10px; background:rgba(155,107,255,.1); border:1px solid rgba(155,107,255,.28); font-size:11.5px; color:#c9b8ff; line-height:1.5; }
+
+  /* ====== IKONY (profesjonalne SVG zamiast emotek) ====== */
+  .i{ width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:0 0 auto; display:inline-block; vertical-align:-2px; }
+
+  /* ====== Przyciski hero — szlif ====== */
+  #thesis .open{ display:inline-flex; align-items:center; gap:8px; margin-top:12px; cursor:pointer; pointer-events:auto;
+    font-weight:700; font-size:13px; padding:10px 16px; border-radius:12px; border:none; text-decoration:none;
+    transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s, filter .25s; }
+  #thesis .open.primary{ background:linear-gradient(135deg,#22d3ee,#4aa3ff 45%,#9b6bff); color:#06121f; box-shadow:0 10px 30px rgba(74,163,255,.42); }
+  #thesis .open.ghost{ background:rgba(12,20,38,.7); color:#e7eefb; border:1px solid rgba(120,160,220,.35); }
+  #thesis .open:hover{ transform:translateY(-2px) scale(1.02); filter:brightness(1.06); }
+  .cvHead .ttl{ display:flex; align-items:center; gap:8px; }
+
+  /* ====== BAJKOWA ANIMACJA: chodzące roboty ====== */
+  .walker{ position:absolute; width:0; height:0; pointer-events:none; will-change:left,top; opacity:1; }
+  .walker .inner{ position:absolute; left:0; top:0; transform-origin:50% 100%; }
+  .walker svg{ display:block; overflow:visible; filter:drop-shadow(0 5px 8px rgba(0,0,0,.45)); }
+  .walker g{ transform-box:fill-box; }
+  .walker .shadow{ position:absolute; left:50%; bottom:-3px; width:36px; height:9px; transform:translateX(-50%);
+    background:radial-gradient(ellipse, rgba(0,0,0,.45), transparent 70%); border-radius:50%; }
+  .walker.flip svg{ transform:scaleX(-1); }
+  .walker .legL{ transform-origin:50% 0; animation:legA .4s ease-in-out infinite alternate; }
+  .walker .legR{ transform-origin:50% 0; animation:legB .4s ease-in-out infinite alternate; }
+  .walker .armL{ transform-origin:50% 10%; animation:legB .4s ease-in-out infinite alternate; }
+  .walker .armR{ transform-origin:50% 10%; animation:legA .4s ease-in-out infinite alternate; }
+  .walker .core{ animation:bobW .4s ease-in-out infinite alternate; }
+  .walker.idle .legL,.walker.idle .legR,.walker.idle .armL,.walker.idle .armR{ animation:none; transform:none; }
+  .walker.idle .core{ animation:bobIdle 1.8s ease-in-out infinite alternate; }
+  @keyframes legA{ from{ transform:rotate(24deg);} to{ transform:rotate(-24deg);} }
+  @keyframes legB{ from{ transform:rotate(-24deg);} to{ transform:rotate(24deg);} }
+  @keyframes bobW{ from{ transform:translateY(0);} to{ transform:translateY(-3px);} }
+  @keyframes bobIdle{ from{ transform:translateY(0);} to{ transform:translateY(-2px);} }
+  .walker .wbubble{ position:absolute; left:50%; bottom:calc(100% + 12px); transform:translateX(-50%) scale(.6); opacity:0;
+    background:rgba(10,17,32,.94); border:1px solid var(--wc,#4aa3ff); color:#eaf1ff; border-radius:12px; padding:7px 12px;
+    font-size:12.5px; font-weight:600; white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.5), 0 0 18px var(--wc,#4aa3ff);
+    transition:opacity .3s ease, transform .35s cubic-bezier(.2,.9,.3,1.35); }
+  .walker .wbubble.on{ opacity:1; transform:translateX(-50%) scale(1); }
+  .walker .wbubble:after{ content:""; position:absolute; left:50%; bottom:-5px; width:9px; height:9px; transform:translateX(-50%) rotate(45deg);
+    background:rgba(10,17,32,.94); border-right:1px solid var(--wc); border-bottom:1px solid var(--wc); }
+
+  /* ====== ZBLIŻENIE NA TWARZ AGENTA (Apple-like) ====== */
+  #faceView{ position:fixed; inset:0; z-index:60; display:none; align-items:center; justify-content:center; padding:20px;
+    background:rgba(3,6,14,0); backdrop-filter:blur(0); -webkit-backdrop-filter:blur(0);
+    transition:background .45s ease, backdrop-filter .45s ease, -webkit-backdrop-filter .45s ease; }
+  #faceView.on{ display:flex; }
+  #faceView.open{ background:rgba(3,6,14,.55); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
+  .fvCard{ position:relative; width:min(380px,94vw); text-align:center; padding:30px 26px 24px; border-radius:28px;
+    background:linear-gradient(180deg, rgba(18,26,46,.97), rgba(10,15,28,.98)); border:1px solid rgba(120,160,220,.25);
+    box-shadow:0 40px 100px rgba(0,0,0,.65);
+    transform:scale(.42) translateY(26px); opacity:0;
+    transition:transform .62s cubic-bezier(.2,1.12,.25,1), opacity .32s ease; }
+  #faceView.open .fvCard{ transform:scale(1) translateY(0); opacity:1; }
+  .fvX{ position:absolute; top:14px; right:14px; background:rgba(255,255,255,.06); border:1px solid rgba(120,160,220,.25);
+    color:var(--przygas); width:32px; height:32px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.2s; }
+  .fvX:hover{ color:#fff; transform:rotate(90deg); }
+  #fvStage{ margin:4px auto 0; width:230px; height:230px; }
+  #fvStage .fvFloat{ animation:fvFloat 4.5s ease-in-out infinite alternate; }
+  @keyframes fvFloat{ from{ transform:translateY(0);} to{ transform:translateY(-8px);} }
+  #fvStage g{ transform-box:fill-box; transform-origin:center; }
+  #fvStage .ex{ opacity:0; transition:opacity .28s ease, transform .28s ease; transform:scale(.92); }
+  #fvStage .ex.onx{ opacity:1; transform:scale(1); }
+  #fvStage .fvAnt{ animation:pulse 2.2s ease-in-out infinite; }
+  .fvName{ font-size:21px; font-weight:800; margin-top:6px; }
+  .fvRole{ font-size:13px; color:var(--przygas); margin-top:2px; }
+  .fvBadge{ display:inline-flex; align-items:center; gap:7px; margin-top:10px; font-size:11.5px; font-weight:700; padding:4px 12px;
+    border-radius:999px; border:1px solid var(--fc,#4aa3ff); color:var(--fc,#4aa3ff); background:rgba(255,255,255,.04); }
+  .fvExpr{ display:flex; justify-content:center; gap:10px; margin-top:16px; }
+  .fvExpr button{ width:56px; height:44px; border-radius:14px; background:rgba(255,255,255,.05); border:1px solid rgba(120,160,220,.25);
+    cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .22s cubic-bezier(.2,.9,.3,1.3), border-color .2s, box-shadow .2s; }
+  .fvExpr button:hover{ transform:translateY(-3px) scale(1.06); border-color:var(--fc,#4aa3ff); }
+  .fvExpr button.sel{ border-color:var(--fc,#4aa3ff); box-shadow:0 0 16px var(--fc,#4aa3ff); background:rgba(255,255,255,.09); }
+  .fvBtns{ display:flex; gap:10px; margin-top:18px; }
+  .fvBtn{ flex:1; display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:11px; border-radius:13px;
+    font-size:13px; font-weight:650; cursor:pointer; text-decoration:none; border:1px solid rgba(120,160,220,.25);
+    color:var(--tekst); background:rgba(120,160,220,.1); transition:transform .2s, filter .2s; }
+  .fvBtn.primary{ background:var(--fc,#4aa3ff); color:#06121f; border-color:transparent; }
+  .fvBtn:hover{ transform:translateY(-2px); filter:brightness(1.07); }
+
+  /* ====== Płynne przejścia stron (Apple-like) ====== */
+  body{ transition:opacity .5s cubic-bezier(.2,.8,.2,1), filter .5s cubic-bezier(.2,.8,.2,1); }
+  body.entering, body.leaving{ opacity:0; filter:blur(14px) saturate(1.25); }
+  @view-transition{ navigation:auto; }
+
+  @media (max-width:680px){ #footer{ display:none; } #thesis{ max-width:70vw; } .pin{ display:none; }
+    /* Na telefonie panel agenta jako arkusz od dołu (nie zasłania terminala u góry) */
+    #agentPanel{ top:auto; bottom:0; right:0; left:0; width:100%; height:auto; max-height:78vh; border-left:none; border-top:2px solid var(--ac,#4aa3ff);
+      border-radius:18px 18px 0 0; transform:translateY(106%); }
+    #agentPanel.open{ transform:translateY(0); } }
 </style>
 </head>
-<body>
+<body class="entering">
   <div id="stage">
-    <img src="hr-os-tlo.png" alt="HR-OS — izometryczne biuro" />
+    <img src="office.jpg" alt="HR-OS — izometryczne biuro" />
     <!-- Pływające etykiety (pozycje % względem sceny; w razie potrzeby dostrój left/top) -->
-    <div class="pin" style="left:33%; top:30%;"><div class="row"><span class="dot" style="background:#4aa3ff;color:#4aa3ff"></span><span class="t">Kanban Wall</span></div><div class="s">Status rekrutacji</div></div>
-    <div class="pin" id="pinDesk" style="left:52%; top:55%;"><div class="row"><span class="dot" style="background:#46d17f;color:#46d17f"></span><span class="t">Recruiting Desk</span></div><div class="s">Screening CV</div><div class="m" id="deskMatch">Dopasowanie: —</div></div>
-    <div class="pin" style="left:70%; top:66%;"><div class="row"><span class="dot" style="background:#ff5d6c;color:#ff5d6c"></span><span class="t">Security Gate</span></div><div class="s">Zgodność / RODO</div></div>
+    <div class="pin" id="pinDesk" style="left:63%; top:20%;"><div class="row"><span class="dot" style="background:#4aa3ff;color:#4aa3ff"></span><span class="t">Recruiting Desk</span></div><div class="s">Screening CV</div><div class="m" id="deskMatch">Dopasowanie: 87%</div></div>
+
+    <!-- Plakietki agentów — pozycje skalibrowane pod puste biuro (anim1.webp) -->
+    <div class="hotspot" data-agent="recruiter"  style="left:63%; top:43%; --c:#4aa3ff;"><span class="ic"></span>Rekruter</div>
+    <div class="hotspot" data-agent="szkolenia"  style="left:40%; top:48%; --c:#9b6bff;"><span class="ic"></span>Szkolenia</div>
+    <div class="hotspot" data-agent="onboarding" style="left:26%; top:42%; --c:#46d17f;"><span class="ic"></span>Onboarding</div>
+    <div class="hotspot" data-agent="kultura"    style="left:52%; top:52%; --c:#ff5d6c;"><span class="ic"></span>Kultura</div>
+    <div class="hotspot" data-agent="compliance" style="left:34%; top:50%; --c:#4aa3ff;"><span class="ic"></span>Security Gate</div>
+    <div class="hotspot" data-agent="kadry"      style="left:66%; top:44%; --c:#ffb43e;"><span class="ic"></span>Kadry</div>
   </div>
+
+  <!-- KROK 3: panel agenta -->
+  <div id="agentBackdrop"></div>
+  <div id="agentPanel"><button class="aClose" id="aClose">✕</button><div id="agentBody"></div></div>
   <div id="vignette"></div>
 
   <div id="sysbar">
@@ -135,7 +288,10 @@
     <div id="thesis">
       <h1>Own your<br/><span class="blue">hiring loop</span></h1>
       <p>System HR przejmuje rutynę. Człowiek trzyma decyzje.</p>
-      <button class="open" id="openInbox">📥 Otwórz INBOX — CV kandydatów</button>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a href="hr-os-cloud.html" class="open primary"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>Wejdź do systemu rekrutacyjnego</a>
+        <button class="open ghost" id="openInbox"><svg class="i" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Podgląd CV</button>
+      </div>
     </div>
   </div>
 
@@ -150,14 +306,35 @@
   <div id="toast"></div>
 
   <div id="cvPanel">
-    <div class="cvHead"><div><div class="ttl">📥 INBOX — CV kandydatów</div><div class="cnt" id="cvCount"></div></div><button class="x" id="cvClose">✕</button></div>
+    <div class="cvHead"><div><div class="ttl"><svg class="i" viewBox="0 0 24 24" style="width:17px;height:17px"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>INBOX — CV kandydatów</div><div class="cnt" id="cvCount"></div></div><button class="x" id="cvClose">✕</button></div>
     <div id="cvList"></div>
   </div>
   <div id="cvDetail"><div class="cvCardBig" id="cvDetailBody"></div></div>
 
+  <!-- ZBLIŻENIE NA TWARZ AGENTA + wybór miny -->
+  <div id="faceView">
+    <div class="fvCard" id="fvCard">
+      <button class="fvX" id="fvX"><svg class="i" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <div id="fvStage"></div>
+      <div class="fvName" id="fvName"></div>
+      <div class="fvRole" id="fvRole"></div>
+      <span class="fvBadge" id="fvBadge"></span>
+      <div class="fvExpr" id="fvExpr"></div>
+      <div class="fvBtns">
+        <button class="fvBtn" id="fvProfile"><svg class="i" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil agenta</button>
+        <a class="fvBtn primary" id="fvOpen" href="hr-os-cloud.html"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Otwórz w systemie</a>
+      </div>
+    </div>
+  </div>
+
   <script>
   const KOLOR={ niebieski:0x4aa3ff, zielony:0x46d17f, fiolet:0x9b6bff, bursztyn:0xffb43e, czerwony:0xff5d6c };
   const hex=c=>'#'+c.toString(16).padStart(6,'0');
+  // Profesjonalne ikony SVG (zamiast emotek)
+  const IC={
+    shield:'<svg class="i" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    check:'<svg class="i" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>',
+  };
 
   // ----- Dane kandydatów -----
   const KANDYDACI=[
@@ -226,14 +403,490 @@
       '<div class="dSection"><div class="dRow"><span>Doświadczenie</span><span>'+c.exp+'</span></div>'+
       '<div class="dRow"><span>Wykształcenie</span><span>'+c.edu+'</span></div><div class="dRow"><span>Lokalizacja</span><span>'+c.miasto+'</span></div></div>'+
       '<div class="dAI"><b>Rekomendacja AI:</b> '+c.ai+'</div>'+
-      '<div class="dRODO">⚖️ Zgodnie z RODO (art. 22) i AI Act: ocena AI jest tylko rekomendacją. Ostateczną decyzję podejmuje człowiek.</div>'+
+      '<div class="dRODO">'+IC.shield+' Zgodnie z RODO (art. 22) i AI Act: ocena AI jest tylko rekomendacją. Ostateczną decyzję podejmuje człowiek.</div>'+
       '<div class="dBtns"><button class="dBtn primary" id="dHuman">Przekaż do człowieka</button><button class="dBtn ghost" id="dBack">Wróć do listy</button></div>';
     cvDetail.classList.add('open');
     document.getElementById('dClose').addEventListener('click',()=>cvDetail.classList.remove('open'));
     document.getElementById('dBack').addEventListener('click',()=>cvDetail.classList.remove('open'));
-    document.getElementById('dHuman').addEventListener('click',()=>{ toast('✅ '+c.imie+' — przekazano do decyzji człowieka'); cvDetail.classList.remove('open'); });
+    document.getElementById('dHuman').addEventListener('click',()=>{ toast(c.imie+' — przekazano do decyzji człowieka'); cvDetail.classList.remove('open'); });
   }
-  window.addEventListener('keydown',e=>{ if(e.key==='Escape'){ cvPanel.classList.remove('open'); cvDetail.classList.remove('open'); } });
+  // ===========================================================================
+  // KROK 1: dane agentów (kim jest robot i co robi)
+  // ===========================================================================
+  const AGENCI = [
+    { id:"recruiter", imie:"Rekruter",      kolor:"#4aa3ff", rola:"Screening CV",
+      robi:["Pobiera CV ze skrzynki","Czyta i wyciąga dane kandydata","Liczy dopasowanie do wymagań","Układa ranking kandydatów"], status:"Pracuje", dzis:"Ocenił 24 CV", rodo:true },
+    { id:"onboarding", imie:"Onboarding",   kolor:"#46d17f", rola:"Wdrażanie nowych",
+      robi:["Przygotowuje listę zadań na 1. dzień","Wysyła dokumenty do podpisu","Pilnuje kompletu danych"], status:"Czeka", dzis:"2 wdrożenia w toku" },
+    { id:"kadry", imie:"Kadry / Vault",     kolor:"#ffb43e", rola:"Akta i umowy",
+      robi:["Generuje umowy z szablonu","Pilnuje terminów i urlopów","Trzyma akta zgodnie z RODO"], status:"Czeka", dzis:"Brak zaległości" },
+    { id:"szkolenia", imie:"Szkolenia",     kolor:"#9b6bff", rola:"Rozwój zespołu",
+      robi:["Proponuje ścieżki rozwoju","Przypomina o szkoleniach","Zbiera oceny okresowe"], status:"Czeka", dzis:"Plan na Q3 gotowy" },
+    { id:"kultura", imie:"Kultura",         kolor:"#ff5d6c", rola:"Wellbeing",
+      robi:["Bada nastrój zespołu","Sygnalizuje ryzyko wypalenia","Proponuje działania integracyjne"], status:"Czeka", dzis:"Ankieta wysłana" },
+    { id:"compliance", imie:"Security Gate",kolor:"#46d17f", rola:"Zgodność / RODO",
+      robi:["Sprawdza zgodność profilowania z RODO","Pilnuje art. 22 (decyzja człowieka)","Loguje, kto miał dostęp do danych"], status:"Pracuje", dzis:"Wszystko zgodne", rodo:true },
+  ];
+
+  // ===========================================================================
+  // KROK 3: otwieranie / zamykanie panelu agenta
+  // ===========================================================================
+  const agentPanel=document.getElementById('agentPanel'), agentBody=document.getElementById('agentBody'), agentBackdrop=document.getElementById('agentBackdrop');
+  function otworzAgenta(id){
+    const a=AGENCI.find(x=>x.id===id); if(!a) return;
+    agentPanel.style.setProperty('--ac', a.kolor);
+    const pracuje = a.status==='Pracuje';
+    agentBody.innerHTML =
+      '<div class="aHead"><span class="dot"></span>'+a.imie+'</div>'+
+      '<div class="aRola">'+a.rola+'</div>'+
+      '<span class="aBadge '+(pracuje?'pracuje':'')+'"><span class="b"></span>'+a.status+'</span>'+
+      '<div class="aSekcja"><h4>Co robi</h4><ul class="aRobi">'+a.robi.map(r=>'<li>'+r+'</li>').join('')+'</ul></div>'+
+      '<div class="aDzis"><b>Dzisiaj:</b> '+a.dzis+'</div>'+
+      (a.rodo?'<div class="aRODO">'+IC.shield+' AI rekomenduje — decyzję podejmuje człowiek (RODO art. 22).</div>':'')+
+      '<a href="hr-os-cloud.html" style="display:block;text-align:center;margin-top:16px;padding:11px;border-radius:11px;background:var(--ac);color:#06121f;font-weight:700;font-size:13px;text-decoration:none;">Otwórz w systemie rekrutacyjnym →</a>';
+    agentPanel.classList.add('open'); agentBackdrop.classList.add('open');
+    // KROK 4: podświetl powiązaną etykietę w scenie
+    const pin = id==='recruiter' ? document.getElementById('pinDesk') : (id==='compliance' ? document.getElementById('pinGate') : null);
+    if(pin){ pin.style.transition='transform .2s'; pin.style.transform='translate(-50%,-100%) scale(1.12)'; setTimeout(()=>pin.style.transform='translate(-50%,-100%)',500); }
+  }
+  function zamknijAgenta(){ agentPanel.classList.remove('open'); agentBackdrop.classList.remove('open'); }
+  document.getElementById('aClose').addEventListener('click',zamknijAgenta);
+  agentBackdrop.addEventListener('click',zamknijAgenta);
+
+  // ===========================================================================
+  // ZBLIŻENIE NA TWARZ AGENTA — Apple-like zoom + wybór miny
+  // ===========================================================================
+  const faceView=document.getElementById('faceView'), fvCard=document.getElementById('fvCard'),
+        fvStage=document.getElementById('fvStage'), fvExpr=document.getElementById('fvExpr');
+  const EXPR_KEYS=[ ['happy','Uśmiech'], ['normal','Normalna'], ['sad','Smutna'], ['wink','Oczko'] ];
+  let EXPR={}; try{ EXPR=JSON.parse(localStorage.getItem('hr-os-expr')||'{}'); }catch(e){ EXPR={}; }
+  let fvId=null;
+
+  // Duża twarz robota (SVG) — wizjer to ekran, na którym rysujemy minę
+  function faceSVG(color){ return ''+
+    '<svg width="230" height="230" viewBox="0 0 230 230">'+
+    '<defs><radialGradient id="fvHead" cx="38%" cy="30%" r="85%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#d6e0f0"/></radialGradient>'+
+    '<filter id="fvGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+    '<g class="fvFloat">'+
+    '<line x1="115" y1="22" x2="115" y2="42" stroke="#c9d6ea" stroke-width="5" stroke-linecap="round"/>'+
+    '<circle class="fvAnt" cx="115" cy="17" r="8" fill="'+color+'"/>'+
+    '<rect x="16" y="96" width="18" height="42" rx="9" fill="'+color+'"/>'+
+    '<rect x="196" y="96" width="18" height="42" rx="9" fill="'+color+'"/>'+
+    '<circle cx="115" cy="118" r="82" fill="url(#fvHead)"/>'+
+    '<rect x="53" y="80" width="124" height="76" rx="34" fill="#0b1526"/>'+
+    '<g class="ex ex-normal" filter="url(#fvGlow)" stroke="#7ef0ff" stroke-width="7" stroke-linecap="round" fill="none">'+
+      '<line x1="93" y1="104" x2="93" y2="128"/><line x1="137" y1="104" x2="137" y2="128"/></g>'+
+    '<g class="ex ex-happy" filter="url(#fvGlow)" stroke="#7ef0ff" stroke-width="7" stroke-linecap="round" fill="none">'+
+      '<path d="M80 118 q11 -16 22 0"/><path d="M128 118 q11 -16 22 0"/><path d="M103 136 q12 10 24 0"/></g>'+
+    '<g class="ex ex-sad" filter="url(#fvGlow)" stroke="#7ef0ff" stroke-width="7" stroke-linecap="round" fill="none">'+
+      '<path d="M84 108 l16 10"/><path d="M146 108 l-16 10"/><path d="M103 142 q12 -10 24 0"/></g>'+
+    '<g class="ex ex-wink" filter="url(#fvGlow)" stroke="#7ef0ff" stroke-width="7" stroke-linecap="round" fill="none">'+
+      '<line x1="93" y1="104" x2="93" y2="128"/><path d="M126 116 h20"/><path d="M105 136 q14 9 24 -1"/></g>'+
+    '</g></svg>'; }
+
+  // Miniatura miny (do przycisków wyboru)
+  function miniFace(kind){ const oczy={
+    normal:'<line x1="12" y1="7" x2="12" y2="16"/><line x1="24" y1="7" x2="24" y2="16"/>',
+    happy:'<path d="M8 13 q4 -7 8 0"/><path d="M20 13 q4 -7 8 0"/><path d="M13 17 q5 4 10 0"/>',
+    sad:'<path d="M8 8 l6 5"/><path d="M28 8 l-6 5"/><path d="M13 19 q5 -4 10 0"/>',
+    wink:'<line x1="12" y1="7" x2="12" y2="16"/><path d="M20 12 h8"/><path d="M14 18 q6 3 10 -1"/>' };
+    return '<svg width="38" height="27" viewBox="0 0 36 24"><rect x="1" y="1" width="34" height="22" rx="11" fill="#0b1526" stroke="rgba(126,240,255,.3)"/><g stroke="#7ef0ff" stroke-width="2.6" stroke-linecap="round" fill="none">'+oczy[kind]+'</g></svg>'; }
+
+  function ustawMine(kind){
+    if(window.FV3D && window.FV3D.active){ window.FV3D.setExpr(kind); }
+    fvStage.querySelectorAll('.ex').forEach(g=>g.classList.toggle('onx', g.classList.contains('ex-'+kind)));
+    fvExpr.querySelectorAll('button').forEach(b=>b.classList.toggle('sel', b.dataset.k===kind));
+    if(fvId){ EXPR[fvId]=kind; localStorage.setItem('hr-os-expr', JSON.stringify(EXPR)); } }
+
+  function otworzTwarz(id,ev){ const a=AGENCI.find(x=>x.id===id); if(!a) return; fvId=id;
+    fvCard.style.setProperty('--fc', a.kolor);
+    fvCard.style.boxShadow='0 40px 100px rgba(0,0,0,.65), 0 0 70px '+a.kolor+'44';
+    if(window.FV3D){ window.FV3D.mount(fvStage, a.kolor, EXPR[id]||'normal'); }
+    else { fvStage.innerHTML=faceSVG(a.kolor); }
+    document.getElementById('fvName').textContent=a.imie;
+    document.getElementById('fvRole').textContent=a.rola;
+    document.getElementById('fvBadge').textContent=a.status==='Pracuje'?'● Pracuje':'● Czeka';
+    fvExpr.innerHTML=EXPR_KEYS.map(([k,lab])=>'<button data-k="'+k+'" title="'+lab+'">'+miniFace(k)+'</button>').join('');
+    fvExpr.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>ustawMine(b.dataset.k)));
+    faceView.classList.add('on');
+    // Apple-zoom: karta wyrasta z miejsca kliknięcia
+    const r=fvCard.getBoundingClientRect();
+    if(ev && ev.clientX){ fvCard.style.transformOrigin=(ev.clientX-r.left)+'px '+(ev.clientY-r.top)+'px'; }
+    let fired=false; const otworz=()=>{ if(fired) return; fired=true; faceView.classList.add('open'); ustawMine(EXPR[id]||'normal'); };
+    requestAnimationFrame(()=>requestAnimationFrame(otworz)); setTimeout(otworz,60);
+  }
+  function zamknijTwarz(){ faceView.classList.remove('open'); setTimeout(()=>faceView.classList.remove('on'),420); }
+  document.getElementById('fvX').addEventListener('click',zamknijTwarz);
+  faceView.addEventListener('click',e=>{ if(e.target===faceView) zamknijTwarz(); });
+  document.getElementById('fvProfile').addEventListener('click',()=>{ const id=fvId; zamknijTwarz(); setTimeout(()=>otworzAgenta(id),260); });
+  document.querySelectorAll('.hotspot').forEach(h=>h.addEventListener('click',e=>otworzTwarz(h.dataset.agent,e)));
+
+  window.addEventListener('keydown',e=>{ if(e.key==='Escape'){ cvPanel.classList.remove('open'); cvDetail.classList.remove('open'); zamknijAgenta(); zamknijTwarz(); } });
+
+  // ===========================================================================
+  // Płynne przejścia między stronami (Apple-like)
+  // ===========================================================================
+  const _wejscie=()=>document.body.classList.remove('entering');
+  requestAnimationFrame(()=>requestAnimationFrame(_wejscie)); setTimeout(_wejscie,650);
+  document.addEventListener('click',e=>{ const a=e.target.closest('a[href$=".html"]'); if(!a) return;
+    e.preventDefault(); document.body.classList.add('leaving'); setTimeout(()=>{ location.href=a.getAttribute('href'); },470); });
+
+  // ====== (wyłączone — zastąpione przez moduł PRAWDZIWEGO 3D na dole pliku) ======
+  (function agenciZyja(){ return;
+    const stage=document.getElementById('stage'); if(!stage) return;
+    const POS={ recruiter:[63,53], onboarding:[26,52], kadry:[66,54], szkolenia:[40,58], kultura:[52,62], compliance:[34,60] };
+    const COL={ recruiter:'#4aa3ff', onboarding:'#46d17f', kadry:'#ffb43e', szkolenia:'#9b6bff', kultura:'#ff5d6c', compliance:'#4aa3ff' };
+    const ROZMOWA=[
+      {from:'recruiter',  to:'compliance', text:'Nowe CV: 3 — sprawdź zgodność'},
+      {from:'compliance', to:'recruiter',  text:'RODO: wszystko zgodne'},
+      {from:'recruiter',  to:'onboarding', text:'Kandydatka 94% — przejmij'},
+      {from:'onboarding', to:'szkolenia',  text:'Plan wdrożenia gotowy'},
+      {from:'szkolenia',  to:'kadry',      text:'Poproszę o umowę'},
+      {from:'kadry',      to:'kultura',    text:'Umowa podpisana'},
+      {from:'kultura',    to:'recruiter',  text:'Zespół skompletowany'},
+    ];
+    const chip=a=>stage.querySelector('.hotspot[data-agent="'+a+'"]');
+    // Halo aktywności przy każdym agencie
+    Object.keys(POS).forEach(a=>{ const [x,y]=POS[a]; const h=document.createElement('div'); h.className='halo'; h.style.left=x+'%'; h.style.top=y+'%'; h.style.setProperty('--hc',COL[a]); stage.appendChild(h); });
+
+    // --- Sprite robota (wektorowy, animowane nogi/ręce) ---
+    function robotSVG(c){ return '<svg width="46" height="64" viewBox="0 -8 46 66">'
+      +'<g class="core">'
+      +'<line x1="23" y1="-3.5" x2="23" y2="2" stroke="#dfe7f5" stroke-width="2.4" stroke-linecap="round"/>'
+      +'<circle cx="23" cy="-5" r="2.6" fill="'+c+'"/>'
+      +'<g class="armL"><rect x="3.5" y="27" width="7" height="15" rx="3.5" fill="'+c+'"/></g>'
+      +'<g class="armR"><rect x="35.5" y="27" width="7" height="15" rx="3.5" fill="'+c+'"/></g>'
+      +'<rect x="10" y="23" width="26" height="23" rx="11.5" fill="'+c+'"/>'
+      +'<circle cx="23" cy="13" r="11.5" fill="#eef3fb"/>'
+      +'<rect x="13.5" y="8" width="19" height="10.5" rx="5.2" fill="#0b1526"/>'
+      +'<circle cx="19.6" cy="13.2" r="2" fill="#7ef0ff"/><circle cx="26.4" cy="13.2" r="2" fill="#7ef0ff"/>'
+      +'</g>'
+      +'<g class="legL"><rect x="14.5" y="44" width="7" height="13" rx="3.5" fill="#dfe7f5"/></g>'
+      +'<g class="legR"><rect x="24.5" y="44" width="7" height="13" rx="3.5" fill="#dfe7f5"/></g>'
+      +'</svg>'; }
+    function mkWalker(color,mul){ const el=document.createElement('div'); el.className='walker';
+      el.innerHTML='<div class="inner">'+robotSVG(color)+'<div class="shadow"></div><div class="wbubble"></div></div>';
+      el.style.setProperty('--wc',color); el.dataset.mul=mul||1; el.style.opacity='0'; stage.appendChild(el); return el; }
+    function place(el,x,y){ el.style.left=x+'%'; el.style.top=y+'%'; el.style.zIndex=5+Math.round(y/6);
+      const s=(0.58+y/100*0.9)*(parseFloat(el.dataset.mul)||1);
+      el.querySelector('.inner').style.transform='translate(-50%,-97%) scale('+s+')'; }
+    function walk(el,from,to,dur){ return new Promise(res=>{ el.classList.remove('idle');
+      el.classList.toggle('flip', to[0]<from[0]);
+      const inner=el.querySelector('.inner');
+      el.style.transition='opacity .35s ease'; inner.style.transition='none';
+      place(el,from[0],from[1]); void el.offsetWidth;
+      el.style.transition='left '+dur+'ms cubic-bezier(.45,.08,.3,1), top '+dur+'ms cubic-bezier(.45,.08,.3,1), opacity .35s ease';
+      inner.style.transition='transform '+dur+'ms cubic-bezier(.45,.08,.3,1)';
+      place(el,to[0],to[1]);
+      setTimeout(res,dur+40); }); }
+    const czekaj=ms=>new Promise(r=>setTimeout(r,ms));
+
+    // --- Dialog: robot-kurier idzie do adresata z wiadomością i wraca ---
+    let di=0, busy=false;
+    async function dialogKrok(){ if(busy||document.hidden) return; busy=true;
+      try{
+        const m=ROZMOWA[di++ % ROZMOWA.length];
+        const A=POS[m.from], B=POS[m.to];
+        const stop=[ A[0]+(B[0]-A[0])*0.82, A[1]+(B[1]-A[1])*0.82 ];
+        const w=mkWalker(COL[m.from]); const bub=w.querySelector('.wbubble'); bub.textContent=m.text;
+        const cF=chip(m.from), cT=chip(m.to);
+        place(w,A[0],A[1]); void w.offsetWidth; w.style.opacity='1';
+        if(cF) cF.classList.add('speaking');
+        const d=Math.hypot((stop[0]-A[0])*1.6, stop[1]-A[1]);
+        const dur=Math.max(1500, d*95);
+        await walk(w,A,stop,dur);
+        w.classList.add('idle'); bub.classList.add('on');
+        if(cF) cF.classList.remove('speaking'); if(cT) cT.classList.add('speaking');
+        await czekaj(2100);
+        bub.classList.remove('on'); if(cT) cT.classList.remove('speaking');
+        await walk(w,stop,A,dur);
+        w.style.opacity='0'; setTimeout(()=>w.remove(),420);
+      } finally { busy=false; }
+    }
+    setTimeout(dialogKrok,1300); setInterval(dialogKrok,8600);
+
+    // --- Spacerowicze: roboty krążące po biurze non stop (życie w tle) ---
+    function spacerowicz(color,startDelay){ const w=mkWalker(color,0.82);
+      const keys=Object.keys(POS); let cur=keys[Math.floor(Math.random()*keys.length)];
+      place(w,POS[cur][0],POS[cur][1]);
+      (async function(){ await czekaj(startDelay); w.style.opacity='.95';
+        for(;;){ if(document.hidden){ await czekaj(1500); continue; }
+          let nxt=keys[Math.floor(Math.random()*keys.length)];
+          if(nxt===cur) nxt=keys[(keys.indexOf(cur)+1)%keys.length];
+          const A=POS[cur], B=POS[nxt];
+          const d=Math.hypot((B[0]-A[0])*1.6, B[1]-A[1]);
+          await walk(w,A,B,Math.max(1800,d*115));
+          w.classList.add('idle');
+          await czekaj(900+Math.random()*1600);
+          cur=nxt; }
+      })(); }
+    spacerowicz('#46d17f',2600); spacerowicz('#9b6bff',6400);
+
+    // --- Przepływ danych: małe impulsy między biurkami ---
+    const AG=Object.keys(POS);
+    function impulsMaly(from,to){ const col=COL[to]||'#4aa3ff'; const p=document.createElement('div'); p.className='pulse';
+      p.style.width='8px'; p.style.height='8px'; p.style.opacity='.5'; p.style.background='radial-gradient(circle,#ffffff,'+col+')'; p.style.boxShadow='0 0 8px '+col;
+      const [x1,y1]=POS[from],[x2,y2]=POS[to]; p.style.left=x1+'%'; p.style.top=y1+'%'; stage.appendChild(p);
+      requestAnimationFrame(()=>{ p.style.transition='left 1.4s linear, top 1.4s linear, opacity .4s'; p.style.left=x2+'%'; p.style.top=y2+'%'; });
+      setTimeout(()=>p.style.opacity='0',1300); setTimeout(()=>p.remove(),1750); }
+    setInterval(()=>{ if(document.hidden) return; const a=AG[Math.floor(Math.random()*AG.length)]; let b=AG[Math.floor(Math.random()*AG.length)]; if(b===a) b=AG[(AG.indexOf(a)+1)%AG.length]; impulsMaly(a,b); }, 1500);
+  })();
+  if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){ navigator.serviceWorker.register('sw.js'); }
+  </script>
+
+  <script type="importmap">
+  { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+  </script>
+  <script type="module">
+  // ============================================================================
+  // PRAWDZIWE 3D (Three.js) — przezroczysta warstwa WebGL NA renderze:
+  //  • agenci = pełne obiekty 3D (winylowy materiał, odbicia, clearcoat)
+  //  • chodzą między biurkami (animowane nogi/ręce, obrót w kierunku marszu)
+  //  • kurier niesie wiadomość w dymku i wraca
+  //  • zbliżenie na agenta = duża głowa 3D z wyborem miny
+  // ============================================================================
+  import * as THREE from 'three';
+  import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+  const stage=document.getElementById('stage');
+  const POS={ recruiter:[63,53], onboarding:[26,52], kadry:[66,54], szkolenia:[40,58], kultura:[52,62], compliance:[34,60] };
+  const COLN={ recruiter:0x4aa3ff, onboarding:0x46d17f, kadry:0xffb43e, szkolenia:0x9b6bff, kultura:0xff5d6c, compliance:0x4aa3ff };
+  const COLS={ recruiter:'#4aa3ff', onboarding:'#46d17f', kadry:'#ffb43e', szkolenia:'#9b6bff', kultura:'#ff5d6c', compliance:'#4aa3ff' };
+  const ROZMOWA=[
+    {from:'recruiter',  to:'compliance', text:'Nowe CV: 3 — sprawdź zgodność'},
+    {from:'compliance', to:'recruiter',  text:'RODO: wszystko zgodne'},
+    {from:'recruiter',  to:'onboarding', text:'Kandydatka 94% — przejmij'},
+    {from:'onboarding', to:'szkolenia',  text:'Plan wdrożenia gotowy'},
+    {from:'szkolenia',  to:'kadry',      text:'Poproszę o umowę'},
+    {from:'kadry',      to:'kultura',    text:'Umowa podpisana'},
+    {from:'kultura',    to:'recruiter',  text:'Zespół skompletowany'},
+  ];
+  const chip=a=>stage.querySelector('.hotspot[data-agent="'+a+'"]');
+
+  // ---- Halo aktywności + impulsy danych (DOM) ----
+  Object.keys(POS).forEach(a=>{ const [x,y]=POS[a]; const h=document.createElement('div'); h.className='halo';
+    h.style.left=x+'%'; h.style.top=y+'%'; h.style.setProperty('--hc',COLS[a]); stage.appendChild(h); });
+  const AG=Object.keys(POS);
+  function impulsMaly(from,to){ const col=COLS[to]||'#4aa3ff'; const p=document.createElement('div'); p.className='pulse';
+    p.style.width='8px'; p.style.height='8px'; p.style.opacity='.5'; p.style.background='radial-gradient(circle,#ffffff,'+col+')'; p.style.boxShadow='0 0 8px '+col;
+    const [x1,y1]=POS[from],[x2,y2]=POS[to]; p.style.left=x1+'%'; p.style.top=y1+'%'; stage.appendChild(p);
+    requestAnimationFrame(()=>{ p.style.transition='left 1.4s linear, top 1.4s linear, opacity .4s'; p.style.left=x2+'%'; p.style.top=y2+'%'; });
+    setTimeout(()=>p.style.opacity='0',1300); setTimeout(()=>p.remove(),1750); }
+  setInterval(()=>{ if(document.hidden) return; const a=AG[Math.floor(Math.random()*AG.length)];
+    let b=AG[Math.floor(Math.random()*AG.length)]; if(b===a) b=AG[(AG.indexOf(a)+1)%AG.length]; impulsMaly(a,b); },1500);
+
+  // ---- Renderer nakładki (przezroczysty, wewnątrz #stage → dziedziczy kadr) ----
+  const cv=document.createElement('canvas');
+  cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;';
+  stage.appendChild(cv);
+  const R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true,powerPreference:'high-performance'});
+  R.setPixelRatio(Math.min(devicePixelRatio,1.75));
+  R.outputColorSpace=THREE.SRGBColorSpace; R.toneMapping=THREE.ACESFilmicToneMapping;
+  const scena=new THREE.Scene();
+  const pmrem=new THREE.PMREMGenerator(R); const ENV=pmrem.fromScene(new RoomEnvironment(),0.06).texture;
+  scena.environment=ENV;
+  const HP=56.25; // wysokość świata (tło office.jpg jest 16:9)
+  const cam=new THREE.OrthographicCamera(0,100,0,-HP,0.1,400); cam.position.z=120;
+  scena.add(new THREE.HemisphereLight(0xbdd7ff,0x1c2740,1.1));
+  const key=new THREE.DirectionalLight(0xffffff,2.0); key.position.set(-40,60,80); scena.add(key);
+  const rim=new THREE.DirectionalLight(0x5fa8ff,1.5); rim.position.set(60,30,-40); scena.add(rim);
+  function resize(){ R.setSize(stage.clientWidth,stage.clientHeight,false); }
+  resize(); addEventListener('resize',resize);
+
+  // Miękki cień-plamka pod stopami
+  function blobTex(){ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d');
+    const gr=g.createRadialGradient(64,64,4,64,64,62); gr.addColorStop(0,'rgba(0,0,0,.85)'); gr.addColorStop(1,'rgba(0,0,0,0)');
+    g.fillStyle=gr; g.fillRect(0,0,128,128); return new THREE.CanvasTexture(c); }
+  const SHTEX=blobTex();
+  const vinyl=c=>new THREE.MeshPhysicalMaterial({color:c,roughness:.32,metalness:.04,clearcoat:.85,clearcoatRoughness:.22,envMapIntensity:1.15});
+  const CYAN=0x86f2ff;
+  const glow=c=>{ const m=new THREE.MeshBasicMaterial({color:c}); m.toneMapped=false; return m; };
+
+  // ---- Robot 3D w stylu SAMS/AXIAL: cały w jednym kolorze, duża głowa,
+  //      ciemny wizjer-ekran ze świecącymi oczami, pulchny korpus, krótkie kończyny ----
+  function mkRobot3D(colorNum){
+    const g=new THREE.Group();
+    const body=vinyl(colorNum);
+    const dark=new THREE.MeshPhysicalMaterial({color:0x070e1b,roughness:.16,metalness:.1,clearcoat:1,clearcoatRoughness:.07});
+    // krótkie nóżki (kolor postaci)
+    function noga(px){ const p=new THREE.Group(); p.position.set(px,1.35,0);
+      const l=new THREE.Mesh(new THREE.CapsuleGeometry(.34,.55,6,12),body); l.position.y=-.6; p.add(l); g.add(p); return p; }
+    const legL=noga(-.62), legR=noga(.62);
+    // pulchny korpus-jajko
+    const torso=new THREE.Mesh(new THREE.SphereGeometry(1.25,26,20),body); torso.scale.set(1,1.12,.92); torso.position.y=2.45; g.add(torso);
+    // krótkie rączki
+    function ramie(px){ const p=new THREE.Group(); p.position.set(px,3.05,0);
+      const a=new THREE.Mesh(new THREE.CapsuleGeometry(.3,.72,6,12),body); a.position.y=-.55; p.add(a); g.add(p); return p; }
+    const armL=ramie(-1.35), armR=ramie(1.35);
+    // duża głowa w kolorze postaci (grupa — obraca się przy rozglądaniu)
+    const head=new THREE.Group(); head.position.y=5.0; g.add(head);
+    const skull=new THREE.Mesh(new THREE.SphereGeometry(1.95,30,24),body); skull.scale.set(1,.94,.96); head.add(skull);
+    // ciemny wizjer-ekran z przodu
+    const visor=new THREE.Mesh(new THREE.SphereGeometry(1.72,26,20),dark); visor.scale.set(.88,.68,.55); visor.position.set(0,-.05,.78); head.add(visor);
+    // świecące oczy (jasny cyjan, jak na referencji)
+    const eyeM=glow(0xd9fbff);
+    const e1=new THREE.Mesh(new THREE.CapsuleGeometry(.17,.34,4,10),eyeM); e1.position.set(-.52,-.02,1.66); head.add(e1);
+    const e2=e1.clone(); e2.position.x=.52; head.add(e2);
+    // cień-plamka
+    const sh=new THREE.Mesh(new THREE.PlaneGeometry(4.2,1.4),new THREE.MeshBasicMaterial({map:SHTEX,transparent:true,opacity:.5,depthWrite:false}));
+    sh.position.set(0,.1,-.7); g.add(sh);
+    g.userData={armL,armR,legL,legR,head};
+    return g;
+  }
+
+  // ============================================================================
+  // ŚWIAT AGENTÓW — motion design: waypointy, easing, kolizje, desynchronizacja
+  // ============================================================================
+  const clock=new THREE.Clock();
+  const world=new THREE.Group(); scena.add(world);
+  const walkers=[];
+  const easeIO=p=>-(Math.cos(Math.PI*p)-1)/2;            // ease-in-out (sine)
+  const easeIOd=p=>Math.PI/2*Math.sin(Math.PI*p);        // pochodna → chwilowe tempo
+  const lerpA=(a,b,f)=>{ let d=b-a; while(d>Math.PI)d-=2*Math.PI; while(d<-Math.PI)d+=2*Math.PI; return a+d*f; };
+  // ---- STALI AGENCI przy biurkach: siedzą/stoją, wstają, chodzą do siebie ----
+  const DOME={x:50,y:46,r:11};            // kopuła na środku — omijana przy marszu
+  const VIA=[50,64];                      // punkt obejścia (dolna alejka)
+  // seat = punkt na PODŁODZE przy stanowisku; sitOff = przesunięcie kotwicy NA SIEDZISKO
+  // (skalibrowane z siatki 2% na renderze — agent siada na krześle, nie w powietrzu)
+  // Wszyscy STOJĄ na podłodze przy swoim stanowisku (stopy na podłodze — bez lewitacji)
+  const AGENT_DEF=[
+    {id:'recruiter',  col:0x4aa3ff, seat:[63,53], yaw:-0.5, sits:0},   // wolna podłoga przed biurkiem (prawa)
+    {id:'szkolenia',  col:0x9b6bff, seat:[40,58], yaw: 0.3, sits:0},   // wolna podłoga przed tablicą (lewa-środek)
+    {id:'onboarding', col:0x46d17f, seat:[26,52], yaw:-0.4, sits:0},   // wolna podłoga przy lewym biurku
+    {id:'kultura',    col:0xff5d6c, seat:[52,62], yaw: 0.4, sits:0},   // wolna podłoga PRZED kanapą (środek-przód)
+    {id:'compliance', col:0x4aa3ff, seat:[34,60], yaw:-0.3, sits:0},   // wolna podłoga przed bramkami (lewa-dół)
+    {id:'kadry',      col:0xffb43e, seat:[66,54], yaw:-0.3, sits:0},   // wolna podłoga obok sejfu (prawa)
+  ];
+  const A3D={};
+  AGENT_DEF.forEach(def=>{ const g=mkRobot3D(def.col); world.add(g);
+    A3D[def.id]={ def, g, x:def.seat[0], y:def.seat[1], sit:def.sits, sitT:def.sits,
+      state:'home', legs:[], after:null, sx:0,sy:0,tx:0,ty:0,t0:0,dur:1, cad:Math.random()*6,
+      lookYaw:def.yaw, nextLook:1+Math.random()*3, faza:Math.random()*6.28,
+      speedMul:.85+Math.random()*.3, nod:0, lastS:1 }; });
+  window.__A3D=A3D;
+  // Czy prosta a→b wchodzi w okolicę kopuły?
+  function przezKopule(a,b){ const dx=b[0]-a[0],dy=b[1]-a[1]; const L2=dx*dx+dy*dy; if(!L2) return false;
+    let q=((DOME.x-a[0])*dx+(DOME.y-a[1])*dy)/L2; q=Math.max(0,Math.min(1,q));
+    const px=a[0]+dx*q-DOME.x, py=a[1]+dy*q-DOME.y; return px*px+py*py < DOME.r*DOME.r; }
+  function startLeg(a,pt){ a.sx=a.x; a.sy=a.y; a.tx=pt[0]; a.ty=pt[1]; a.t0=clock.elapsedTime;
+    a.dur=Math.min(6.5,Math.max(1.3, Math.hypot(pt[0]-a.sx,pt[1]-a.sy)/(7.5*a.speedMul))); }
+  function idz(a,cel,poDojsciu){ a.legs=przezKopule([a.x,a.y],cel)? [VIA.slice(),cel.slice()] : [cel.slice()];
+    a.after=poDojsciu; startLeg(a,a.legs.shift()); a.state='walk'; }
+
+  function updAgent(a,dt,t){
+    const u=a.g.userData;
+    a.sit+=(a.sitT-a.sit)*(1-Math.pow(.006,dt));        // płynne wstawanie / siadanie
+    let tempo=0;
+    if(a.state==='walk'){
+      const p=Math.min(1,(t-a.t0)/a.dur), e=easeIO(p);
+      a.x=a.sx+(a.tx-a.sx)*e; a.y=a.sy+(a.ty-a.sy)*e;
+      const D=Math.hypot(a.tx-a.sx,a.ty-a.sy);
+      tempo=easeIOd(p)*D/a.dur; a.cad+=tempo*dt*1.55;    // kadencja kroków ~ prędkość
+      a.lookYaw=(a.tx-a.sx)>=0? .55 : -.55;
+      if(p>=1){ if(a.legs.length){ startLeg(a,a.legs.shift()); }
+        else { a.state='idle'; const f=a.after; a.after=null; if(f) f(); } }
+    }
+    const krok=Math.min(1,tempo/9), stoi=1-a.sit, swing=Math.sin(a.cad)*krok*stoi;
+    u.legL.rotation.x=-1.35*a.sit + swing*.78;           // nogi: siad → zgięte do przodu
+    u.legR.rotation.x=-1.35*a.sit - swing*.78;
+    u.armL.rotation.x=-.85*a.sit - swing*.55 + Math.sin(t*1.7+a.faza)*.07*stoi;
+    u.armR.rotation.x=-.85*a.sit + swing*.55 - Math.sin(t*1.7+a.faza)*.07*stoi;
+    if(a.state!=='walk' && t>a.nextLook){ a.nextLook=t+1.6+Math.random()*2.4;
+      a.lookYaw=(a.state==='home'? a.def.yaw : a.lookYaw)+(Math.random()*.5-.25); }
+    a.g.rotation.y=lerpA(a.g.rotation.y,a.lookYaw,1-Math.pow(.03,dt));
+    a.g.rotation.z=Math.sin(a.cad)*.085*krok*stoi;       // waddle ±5° tylko w marszu
+    if(u.head){ u.head.rotation.x=a.nod>t? Math.sin((a.nod-t)*14)*.11 : 0; }
+    const bob=Math.abs(Math.sin(a.cad))*.17*krok*stoi + Math.sin(t*1.4+a.faza)*.05*stoi;
+    const breath=1+0.016*Math.sin(t*1.3+a.faza);         // oddychanie ±2%
+    const s=(0.8+(a.y/100)*.5)*0.6*breath; a.lastS=s;
+    a.g.scale.setScalar(s);
+    const ox=a.def.sitOff? a.def.sitOff[0]*a.sit : 0;   // kotwica wędruje na siedzisko
+    const oy=a.def.sitOff? a.def.sitOff[1]*a.sit : 0;
+    a.g.position.set(a.x+ox, -((a.y+oy)*HP/100)+bob - a.sit*1.05*s, a.y*.05);
+  }
+
+  // ---- WIZYTY: agent wstaje, idzie do kolegi (omijając kopułę), rozmawiają, wraca, siada ----
+  const bDesk=document.createElement('div'); bDesk.className='bubble'; stage.appendChild(bDesk); let bTrack=null;
+  function pokazDymek(a,text,colorCss){ bTrack=a; bDesk.style.setProperty('--bc',colorCss);
+    bDesk.style.borderColor=colorCss; bDesk.textContent=text; bDesk.classList.add('show'); }
+  function schowajDymek(){ bDesk.classList.remove('show'); bTrack=null; }
+  let di=0, wizyta=false;
+  function wizytaKrok(){ if(wizyta||document.hidden) return;
+    const m=ROZMOWA[di++%ROZMOWA.length];
+    const A=A3D[m.from], B=A3D[m.to];
+    if(!A||!B||A.state!=='home'||B.state!=='home') return;
+    wizyta=true;
+    const cF=chip(m.from), cT=chip(m.to);
+    let vx=50-B.x, vy=52-B.y; const L=Math.hypot(vx,vy)||1;   // punkt spotkania od strony alejki
+    const cel=[B.x+vx/L*7, B.y+vy/L*7];
+    A.sitT=0; if(cF) cF.classList.add('speaking');            // wstaje...
+    setTimeout(()=>{ idz(A,cel,()=>{                          // ...i idzie do kolegi
+      A.lookYaw=(B.x-A.x)>=0? .5 : -.5; A.nextLook=1e9;
+      B.lookYaw=(A.x-B.x)>=0? .5 : -.5; B.nextLook=1e9; B.nod=clock.elapsedTime+1.3;  // B odwraca się i kiwa głową
+      pokazDymek(A,m.text,COLS[m.from]); if(cT) cT.classList.add('speaking');
+      setTimeout(()=>{ schowajDymek();
+        if(cF) cF.classList.remove('speaking'); if(cT) cT.classList.remove('speaking');
+        B.nextLook=clock.elapsedTime+.8; A.nextLook=clock.elapsedTime+.8;
+        idz(A,A.def.seat.slice(),()=>{ A.lookYaw=A.def.yaw; A.sitT=A.def.sits; A.state='home'; wizyta=false; });
+      },2800);
+    }); },750);
+  }
+  setTimeout(wizytaKrok,6000); setInterval(wizytaKrok,10500);
+
+  // ============================================================================
+  // TWARZ 3D AGENTA (modal) — duża głowa z minami
+  // ============================================================================
+  const faceViewEl=document.getElementById('faceView');
+  let fr=null,fscene=null,fcam=null,fhead=null,fEyes=null,fColored=null,fCurExpr='normal',nextBlink=3,blinkUntil=0;
+  function caps(x,y,rot){ const m=new THREE.Mesh(new THREE.CapsuleGeometry(.17,.52,6,12),glow(CYAN)); m.position.set(x,y,0); m.rotation.z=rot||0; return m; }
+  function arcMesh(x,y,flip,r){ const t=new THREE.Mesh(new THREE.TorusGeometry(r||.45,.14,10,22,Math.PI),glow(CYAN));
+    t.position.set(x,y,0); if(flip) t.rotation.z=Math.PI; return t; }
+  function buildFace(){
+    fr=new THREE.WebGLRenderer({alpha:true,antialias:true}); fr.setPixelRatio(Math.min(devicePixelRatio,2)); fr.setSize(230,230);
+    fr.outputColorSpace=THREE.SRGBColorSpace; fr.toneMapping=THREE.ACESFilmicToneMapping;
+    fscene=new THREE.Scene(); fscene.environment=ENV;
+    fscene.add(new THREE.HemisphereLight(0xcfe0ff,0x1c2740,1.1));
+    const k1=new THREE.DirectionalLight(0xffffff,2.2); k1.position.set(-3,4,6); fscene.add(k1);
+    const k2=new THREE.DirectionalLight(0x6fb0ff,1.4); k2.position.set(4,1,-4); fscene.add(k2);
+    fcam=new THREE.PerspectiveCamera(32,1,.1,60); fcam.position.set(0,.35,11.5);
+    fhead=new THREE.Group(); fscene.add(fhead);
+    const skullMat=vinyl(0x4aa3ff);
+    const skull=new THREE.Mesh(new THREE.SphereGeometry(2.6,40,32),skullMat); skull.scale.set(1,.95,.97); fhead.add(skull);
+    const visor=new THREE.Mesh(new THREE.SphereGeometry(2.24,32,26),
+      new THREE.MeshPhysicalMaterial({color:0x081020,roughness:.1,metalness:.1,clearcoat:1,clearcoatRoughness:.06}));
+    visor.scale.set(.92,.72,.55); visor.position.set(0,.1,1.25); fhead.add(visor);
+    fColored={skullMat};
+    const grp=()=>{ const g=new THREE.Group(); g.position.set(0,.18,2.62); fhead.add(g); return g; };
+    fEyes={};
+    let g=grp(); g.add(caps(-.72,0,0)); g.add(caps(.72,0,0)); fEyes.normal=g;
+    g=grp(); g.add(arcMesh(-.72,.05)); g.add(arcMesh(.72,.05)); g.add(arcMesh(0,-.8,true,.55)); fEyes.happy=g;
+    g=grp(); g.add(caps(-.72,0,.5)); g.add(caps(.72,0,-.5)); g.add(arcMesh(0,-1.05,false,.5)); fEyes.sad=g;
+    g=grp(); g.add(caps(-.72,0,0)); g.add(caps(.76,0,Math.PI/2)); g.add(arcMesh(.1,-.8,true,.5)); fEyes.wink=g;
+  }
+  const FV={active:false};
+  FV.mount=function(container,colorCss,expr){ if(!fr) buildFace();
+    const c=new THREE.Color(colorCss);
+    fColored.skullMat.color.copy(c);
+    container.innerHTML=''; container.appendChild(fr.domElement); FV.active=true; FV.setExpr(expr||'normal'); };
+  FV.setExpr=function(k){ fCurExpr=k; Object.entries(fEyes).forEach(([key,g])=>{ g.visible=(key===k); }); };
+  window.FV3D=FV;
+
+  // ---- Pętla renderowania ----
+  (function loop(){ requestAnimationFrame(loop);
+    const dt=Math.min(clock.getDelta(),.05), t=clock.elapsedTime;
+    if(document.hidden) return;
+    for(const k in A3D) updAgent(A3D[k],dt,t);
+    if(bTrack){ bDesk.style.left=bTrack.x+'%'; bDesk.style.top=(bTrack.y-8.5*bTrack.lastS)+'%'; }
+    R.render(scena,cam);
+    if(FV.active && fr && faceViewEl.classList.contains('on')){
+      fhead.rotation.y=Math.sin(t*.55)*.28; fhead.position.y=Math.sin(t*1.3)*.14;
+      if(t>nextBlink){ blinkUntil=t+.12; nextBlink=t+2.4+Math.random()*2.6; }
+      const g=fEyes[fCurExpr]; if(g) g.scale.y=(t<blinkUntil)?.12:1;
+      fr.render(fscene,fcam);
+    }
+  })();
   </script>
 </body>
 </html>
