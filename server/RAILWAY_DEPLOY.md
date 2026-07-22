@@ -13,11 +13,17 @@
 ## Krok 3 — Wdróż serwer
 1. Na Railway kliknij "New Project" → "Deploy from GitHub"
 2. Wybierz repozytorium expense-tracker
-3. Railway spyta o root directory → wpisz: **server**
+3. Root directory zostaw **puste** (główny katalog repo).
+   Plik `railway.json` w roocie sam uruchomi serwer przez `node index.js`.
+   (Możesz też ustawić root directory na `server` — działa tak samo.)
 4. Dodaj zmienne środowiskowe (Variables):
-   - SALTEDGE_APP_ID = (twój App-id z Salt Edge)
-   - SALTEDGE_SECRET = (twój Secret z Salt Edge)
    - FRONTEND_URL = https://neon-baklava-de6d2d.netlify.app
+   - AUTH_SECRET = (dowolny długi losowy ciąg — dzięki temu logowanie
+     przetrwa restarty; bez tego sesje resetują się po każdym redeployu)
+   - (opcjonalnie, dla banków/AI) SALTEDGE_APP_ID, SALTEDGE_SECRET,
+     ANTHROPIC_API_KEY, GC_SECRET_ID, GC_SECRET_KEY, EB_APP_ID, EB_PRIVATE_KEY
+   - (opcjonalnie) dodaj usługę **PostgreSQL** — Railway wstrzyknie DATABASE_URL
+     i dane przetrwają restarty (bez tego działa pamięć ulotna)
 5. Kliknij Deploy
 
 ## Krok 4 — Zaktualizuj URL serwera w aplikacji
