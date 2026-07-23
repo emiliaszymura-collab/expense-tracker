@@ -50,7 +50,11 @@
   }
 
   // ---------- state ----------
-  var favs={}, alerts={}, activeCat="Wszystkie", activeIdx=-1, curSug=[];
+  // Ulubione i alerty sa trwale: localStorage przezywa restart aplikacji.
+  function loadStore(key){ try { return JSON.parse(localStorage.getItem(key)||"{}"); } catch(e){ return {}; } }
+  function saveStore(key,obj){ try { localStorage.setItem(key, JSON.stringify(obj)); } catch(e){} }
+  var favs=loadStore("blask.favs"), alerts=loadStore("blask.alerts");
+  var favMode=false, activeCat="Wszystkie", activeIdx=-1, curSug=[];
   var homeEl=document.getElementById("home"), pdpEl=document.getElementById("pdp");
   var qEl=document.getElementById("q"), sugEl=document.getElementById("suggest");
   var root=document.documentElement;
@@ -69,7 +73,7 @@
     var b=document.createElement("button");
     b.className="catlink"+(c===activeCat?" on":""); b.type="button"; b.textContent=c;
     b.addEventListener("click", function(){
-      activeCat=c;
+      activeCat=c; favMode=false;
       Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x.textContent===c);});
       goHome(); renderGrid();
     });
@@ -81,7 +85,10 @@
   sortEl.addEventListener("change", renderGrid);
 
   function gridList(){
-    var list=DATA.filter(function(d){return activeCat==="Wszystkie"||d.cat===activeCat;});
+    var list=DATA.filter(function(d){
+      if(favMode) return !!favs[d.id];
+      return activeCat==="Wszystkie"||d.cat===activeCat;
+    });
     var s=sortEl.value;
     list.sort(function(a,b){
       if(s==="pop")return b.pop-a.pop;
@@ -112,10 +119,13 @@
 
   function renderGrid(){
     var list=gridList();
-    document.getElementById("gridTitle").childNodes[0].nodeValue = activeCat==="Wszystkie"?"Bestsellery":activeCat;
+    document.getElementById("gridTitle").childNodes[0].nodeValue =
+      favMode ? "Ulubione" : (activeCat==="Wszystkie"?"Bestsellery":activeCat);
     document.getElementById("gridRes").textContent=" · "+list.length+" "+plural(list.length,"produkt","produkty","produktów");
     gridEl.innerHTML = list.length ? list.map(cardHTML).join("")
-      : '<div class="empty"><div class="t">Brak produktów</div>Zmień kategorię lub wyszukaj coś innego.</div>';
+      : (favMode
+        ? '<div class="empty"><div class="t">Nie masz jeszcze ulubionych</div>Kliknij ♥ na dowolnym produkcie, a znajdziesz go tutaj — zapamiętamy go na stałe.</div>'
+        : '<div class="empty"><div class="t">Brak produktów</div>Zmień kategorię lub wyszukaj coś innego.</div>');
   }
 
   function bindCardEvents(container){
@@ -140,17 +150,21 @@
     fEl.hidden=!fc; fEl.textContent=fc; aEl.hidden=!ac; aEl.textContent=ac;
   }
   function toggleFav(id){
-    favs[id]=!favs[id]; syncCounts();
-    toast(favs[id]?"Dodano do ulubionych ♥":"Usunięto z ulubionych");
+    favs[id]=!favs[id]; if(!favs[id]) delete favs[id];
+    saveStore("blask.favs",favs); syncCounts();
+    toast(favs[id]?"Zapisano w ulubionych ♥":"Usunięto z ulubionych");
     renderGrid(); if(pdpEl.style.display==="block"&&curPdp===id) paintPdpMini(id);
   }
   function toggleAlert(id){
-    alerts[id]=!alerts[id]; syncCounts();
+    alerts[id]=!alerts[id]; if(!alerts[id]) delete alerts[id];
+    saveStore("blask.alerts",alerts); syncCounts();
     toast(alerts[id]?"Alert cenowy ustawiony 🔔":"Alert wyłączony");
     if(pdpEl.style.display==="block"&&curPdp===id) paintPdpMini(id);
   }
   document.getElementById("favBtnTop").addEventListener("click", function(){
-    var n=count(favs); toast(n?("Ulubione: "+n+" "+plural(n,"produkt","produkty","produktów")):"Nie masz jeszcze ulubionych — kliknij ♥ na produkcie");
+    favMode=true; activeCat="Wszystkie";
+    Array.prototype.forEach.call(catnav.children,function(x){x.classList.remove("on");});
+    goHome(); renderGrid();
   });
   document.getElementById("alertBtnTop").addEventListener("click", function(){
     var n=count(alerts); toast(n?("Aktywne alerty: "+n):"Nie masz alertów — ustaw je na stronie produktu");
@@ -285,9 +299,9 @@
 
   document.getElementById("crumbs").addEventListener("click", function(e){
     var b=e.target.closest("button"); if(!b) return;
-    if(b.hasAttribute("data-home")){ goHome(); }
+    if(b.hasAttribute("data-home")){ showHome(); }
     else if(b.hasAttribute("data-cat")){
-      activeCat=b.getAttribute("data-cat");
+      activeCat=b.getAttribute("data-cat"); favMode=false;
       Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x.textContent===activeCat);});
       goHome(); renderGrid();
     }
@@ -297,8 +311,9 @@
     pdpEl.style.display="none"; homeEl.style.display="block"; curPdp=null;
     qEl.value=""; closeSug(); window.scrollTo({top:0,behavior:"auto"});
   }
-  document.getElementById("logoBtn").addEventListener("click", goHome);
-  document.getElementById("logoBtn2").addEventListener("click", goHome);
+  function showHome(){ favMode=false; goHome(); renderGrid(); }
+  document.getElementById("logoBtn").addEventListener("click", showHome);
+  document.getElementById("logoBtn2").addEventListener("click", showHome);
 
   // ---------- theme ----------
   document.getElementById("themeBtn").addEventListener("click", function(){
