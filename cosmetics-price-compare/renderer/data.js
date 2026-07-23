@@ -18,9 +18,7 @@ var STORES = {
   "Amazon.pl":  { c:"#FF9900", url:"https://www.amazon.pl",        search:"https://www.amazon.pl/s?k={q}",                            dl:"marketplace", mkt:true },
   "Empik":      { c:"#2B2B2B", url:"https://www.empik.com",        search:"https://www.empik.com/szukaj/produkt?q={q}",               dl:"Empik Place", mkt:true },
   "Ceneo":      { c:"#F47820", url:"https://www.ceneo.pl",         search:"https://www.ceneo.pl/;szukaj-{q}",                         dl:"porównywarka", mkt:true },
-  "Erli":       { c:"#8E24AA", url:"https://erli.pl",              search:"https://erli.pl/szukaj?phrase={q}",                        dl:"marketplace", mkt:true },
-  "Vinted":     { c:"#09B1BA", url:"https://www.vinted.pl",        search:"https://www.vinted.pl/catalog?search_text={q}",            dl:"od osób prywatnych", mkt:true },
-  "OLX":        { c:"#023A3F", url:"https://www.olx.pl",           search:"https://www.olx.pl/oferty/q-{q}/",                         dl:"od osób prywatnych", mkt:true }
+  "Erli":       { c:"#8E24AA", url:"https://erli.pl",              search:"https://erli.pl/szukaj?phrase={q}",                        dl:"marketplace", mkt:true }
 };
 
 var CATS = ["Wszystkie","Pielęgnacja twarzy","Makijaż","Pielęgnacja ciała","Włosy","Zapachy"];
