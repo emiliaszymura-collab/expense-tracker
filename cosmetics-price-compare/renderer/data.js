@@ -357,6 +357,59 @@ var RAW = [
   ["Giorgio Armani","Acqua di Giò woda toaletowa","Z","100 ml",420,82]
 ];
 
+// ---------- rejestr marek polskiego rynku drogeryjnego ----------
+// Kazda marka jest rozpoznawana przez wyszukiwarke; marka bez produktow
+// w bazie cen dostaje strone z wyszukiwaniem jej oferty we wszystkich sklepach.
+var BRANDS = [
+  // polska pielegnacja
+  "Ziaja","Bielenda","Eveline","AA","Lirene","Tołpa","Soraya","Perfecta","Dax Cosmetics","Miraculum",
+  "Pani Walewska","Bandi","Clarena","Farmona","Dr Irena Eris","Pharmaceris","Emotopic","Emolium","Oillan",
+  "Iwostin","Vis Plantis","Green Pharmacy","Barwa","Biały Jeleń","4organic","Yope","OnlyBio","Nacomi",
+  "Resibo","BasicLab","Iossi","Mokosh","FaceBoom","BodyBoom","Sylveco","Vianek","Ministerstwo Dobrego Mydła",
+  "Hagi","Cztery Szpaki","Orientana","Fluff","Bielenda Professional","Under Twenty","Flos-Lek","Floslek",
+  // polski makijaz i paznokcie
+  "Inglot","Wibo","Lovely","Bell","Paese","Pierre René","Claresa","NeoNail","Semilac","Delia","Miyo",
+  "Hean","Joko","Ingrid","Vipera","AA Wings of Color",
+  // miedzynarodowa pielegnacja masowa i dermo
+  "Nivea","Garnier","L'Oréal Paris","Olay","Neutrogena","Mixa","Diadermine","Vichy","La Roche-Posay",
+  "CeraVe","Bioderma","Avène","Eucerin","Cetaphil","Uriage","SVR","Noreva","Mustela","Bepanthen","Sudocrem",
+  "Oilatum","Aveeno","Dove","Vaseline","Johnson's","Bambino","Bobini","Dermedic","Ducray","A-Derma",
+  "Embryolisse","Lierac","Filorga","Institut Esthederm","Nuxe","Caudalie","Clarins","Clinique","Estée Lauder",
+  "Lancôme","Shiseido","Kiehl's","Origins","Fresh","La Mer","Sisley","Guerlain","Darphin",
+  // kosmetyka azjatycka
+  "COSRX","Anua","Skin1004","Round Lab","Torriden","Purito","Mixsoon","Some By Mi","Beauty of Joseon",
+  "Mizon","Holika Holika","Tony Moly","It's Skin","Missha","Innisfree","Etude","Laneige","Klairs","Benton",
+  "Pyunkang Yul","Isntree","Haruharu Wonder","Ma:nyo","Medicube","VT Cosmetics","Hada Labo","Sulwhasoo",
+  // zachodnie marki aktywne
+  "The Ordinary","The Inkey List","Paula's Choice","Revolution Skincare","Q+A","Byoma","Bubble","Naturium",
+  "Geek & Gorgeous","Dermalogica","Murad","REN","Youth To The People","Drunk Elephant","Glow Recipe",
+  "Summer Fridays","Sol de Janeiro","Tree Hut","Mario Badescu",
+  // makijaz masowy
+  "Maybelline","NYX","Essence","Catrice","Rimmel","Max Factor","Bourjois","Revlon","Wet n Wild",
+  "Makeup Revolution","Revolution Pro","I Heart Revolution","Sleek","Milani","e.l.f.","Flormar","LAMEL",
+  "Kiko Milano","Golden Rose","Astor",
+  // makijaz premium
+  "MAC","Benefit","Too Faced","Urban Decay","NARS","Huda Beauty","Fenty Beauty","Rare Beauty",
+  "Charlotte Tilbury","Anastasia Beverly Hills","Tarte","KVD Beauty","Milk Makeup","Laura Mercier",
+  "Bobbi Brown","Hourglass","Natasha Denona","Makeup By Mario","ONE/SIZE","Haus Labs","Sephora Collection",
+  "Danessa Myricks","Yves Saint Laurent","Dior","Chanel","Giorgio Armani","Givenchy",
+  // wlosy
+  "Olaplex","Kérastase","L'Oréal Professionnel","Wella","Wella Professionals","Schwarzkopf","Gliss","Syoss",
+  "Taft","got2b","Pantene","Head & Shoulders","Herbal Essences","Aussie","OGX","John Frieda","Batiste",
+  "Moroccanoil","Nanoil","Anwen","L'biotica","Biovax","Joanna","Kallos","Marion","K18","Redken","Matrix",
+  "Elseve","Fructis","Klorane",
+  // zapachy
+  "Paco Rabanne","Versace","Carolina Herrera","Calvin Klein","Hugo Boss","Chloé","Mugler",
+  "Jean Paul Gaultier","Valentino","Prada","Hermès","Burberry","Dolce & Gabbana","Gucci","Tom Ford",
+  "Montblanc","Azzaro","Cacharel","Coach","DKNY","Escada","Lacoste","Mexx","Davidoff","Bruno Banani",
+  "Adidas","La Rive","Bi-es","Lattafa","Armaf","Al Haramain","Kayali","Juliette Has a Gun",
+  // higiena, deo, golenie, jama ustna, slonce
+  "Rexona","Old Spice","Axe","Fa","STR8","Garnier Mineral","Palmolive","Le Petit Marseillais","Luksja",
+  "Gillette","Gillette Venus","Wilkinson","Veet","Nair","Carmex","Labello","EOS","Blistex",
+  "Colgate","Sensodyne","Elmex","Blend-a-med","Meridol","Lacalut","Curaprox","Listerine",
+  "Hawaiian Tropic","Piz Buin","Ambre Solaire","Isana","Balea","Cien"
+];
+
 // ---------- generator ofert (deterministyczny) ----------
 function _hash(s){
   var h=5381;

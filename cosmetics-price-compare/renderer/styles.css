@@ -357,6 +357,7 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
 }
 .sug-sec:first-child { border-top: none; }
 .sug-all { color: var(--blue); font-weight: 500; font-size: 13.5px; justify-content: center; }
+.brand-thumb { font-weight: 700; font-size: 14px; color: var(--muted); letter-spacing: .02em; }
 
 /* Link modal (fallback gdy środowisko blokuje otwarcie sklepu) */
 .lmodal {

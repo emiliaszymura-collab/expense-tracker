@@ -120,6 +120,14 @@
   }
 
   var HAS_FEED = typeof FEED_P!=="undefined" && FEED_P.length>0;
+
+  // Pelny rejestr marek: lista z data.js + marki produktow z bazy cen.
+  var BRAND_ALL = (function(){
+    var set={};
+    (typeof BRANDS!=="undefined"?BRANDS:[]).forEach(function(b){ set[b]=1; });
+    P.forEach(function(p){ set[p.brand]=1; });
+    return Object.keys(set).sort(function(a,b){return a.localeCompare(b,"pl");});
+  })();
   var DATA = P.map(function(p,i){
     var offers = Object.keys(p.o).map(function(s){ return { store:s, price:p.o[s].p, was:p.o[s].w||null, url:p.o[s].u||null, inStock:true }; });
     if(!HAS_FEED && i%9===4 && offers.length>3){ offers.slice().sort(function(a,b){return a.price-b.price;})[0].inStock=false; }
@@ -213,10 +221,10 @@
   var stores={}; DATA.forEach(function(d){d.offers.forEach(function(o){stores[o.store]=1;});});
   var avgPct=Math.round(DATA.reduce(function(s,d){return s+d.savePct;},0)/DATA.length);
   document.getElementById("bandStats").innerHTML =
+    '<span>'+BRAND_ALL.length+' marek</span><span class="dot"></span>'+
     '<span>'+DATA.length+' produktów z cenami</span><span class="dot"></span>'+
     '<span>'+Object.keys(stores).length+' sklepów</span><span class="dot"></span>'+
-    '<span>średnia różnica cen '+avgPct+'%</span><span class="dot"></span>'+
-    '<span>pełny katalog w wyszukiwarce</span>';
+    '<span>średnia różnica cen '+avgPct+'%</span>';
 
   // ---------- category nav ----------
   var catnav=document.getElementById("catnav");
@@ -401,8 +409,18 @@
 
   var genericImg={ img:{ form:"bottle", body:"#E9E9EE", cap:"#C9C9CE" } };
   function rowsHTML(q){
-    var qn=slug(q), html="", firstCat=true;
+    var qn=slug(q), html="", firstCat=true, firstBrand=true;
     sugRows.forEach(function(r,i){
+      if(r.t==="brand"){
+        if(firstBrand){ html+='<div class="sug-sec">Marki</div>'; firstBrand=false; }
+        var st=BRAND_STYLE[r.b];
+        html+='<div class="sug-item" role="option" data-i="'+i+'">'+
+          '<div class="sug-thumb brand-thumb"'+(st?' style="color:'+st[1]+'"':'')+'>'+
+            esc(r.b.split(/\s+/).map(function(w){return w[0]||"";}).join("").slice(0,2).toUpperCase())+'</div>'+
+          '<div class="sug-body"><div class="sug-name">'+hl(r.b,qn)+'</div>'+
+          '<div class="sug-meta">marka · pełna oferta w sklepach</div></div></div>';
+        return;
+      }
       if(r.t==="local"){
         var d=r.d;
         html+='<div class="sug-item" role="option" data-i="'+i+'">'+
@@ -430,6 +448,10 @@
     if(q.length<2){ closeSug(); return; }
     var local=search(q).slice(0,5);
     sugRows=local.map(function(d){ return {t:"local", d:d}; });
+    var qn0=slug(q);
+    BRAND_ALL.filter(function(b){ return norm(b).indexOf(qn0)>=0; }).slice(0,2).forEach(function(b){
+      sugRows.push({t:"brand", b:b});
+    });
     sugRows.push({t:"all", q:q});
     activeIdx=-1;
     sugEl.innerHTML=rowsHTML(q);
@@ -458,6 +480,7 @@
     var r=sugRows[i]; if(!r) return;
     if(r.t==="local") openPDP(r.d.id);
     else if(r.t==="cat") openCatalog(r.item);
+    else if(r.t==="brand") openCatalog({ isBrand:true, name:r.b });
     else openCatalog({ query:true, name:r.q||qEl.value.trim() });
   }
 
@@ -506,20 +529,30 @@
   // z wyszukiwaniem w sklepach zamiast tabeli cen.
   function openCatalog(item){
     curPdp=null; closeSug(); qEl.blur();
-    var isQuery=!!item.query;
+    var isQuery=!!item.query, isBrand=!!item.isBrand;
     document.getElementById("crumbs").innerHTML=
       '<button type="button" data-home>Strona główna</button><span class="sep">›</span>'+
-      '<span>'+(isQuery?"Wyszukiwanie":"Katalog kosmetyków")+'</span>';
+      '<span>'+(isBrand?"Marki":(isQuery?"Wyszukiwanie":"Katalog kosmetyków"))+'</span>';
     var vis=document.getElementById("pdpVis");
     vis.classList.add("pv"); vis.removeAttribute("data-pid");
-    vis.innerHTML=productSVG(genericImg)+
+    var bStyle=isBrand?BRAND_STYLE[item.name]:null;
+    vis.innerHTML=productSVG(bStyle?{img:{form:"bottle",body:bStyle[0],cap:bStyle[1],accent:bStyle[1],
+        l1:item.name.toUpperCase().slice(0,14)}}:genericImg)+
       (item.img?'<img class="pphoto" alt="" src="'+esc(item.img)+'">':'');
-    document.getElementById("pdpBrand").textContent=item.brand||"";
+    document.getElementById("pdpBrand").textContent=isBrand?"Marka":(item.brand||"");
     document.getElementById("pdpName").textContent=item.name;
     document.getElementById("pdpSub").textContent=
-      (item.qty?item.qty+" · ":"")+(isQuery?"Twoje wyszukiwanie":"z otwartego katalogu kosmetyków");
+      (item.qty?item.qty+" · ":"")+(isBrand?"wszystkie produkty tej marki znajdziesz w sklepach poniżej"
+        :(isQuery?"Twoje wyszukiwanie":"z otwartego katalogu kosmetyków"));
     document.getElementById("pdpRating").innerHTML="";
     setTracked(false);
+    document.getElementById("catPanelHead").textContent = isBrand
+      ? "Pełna oferta marki "+item.name
+      : (isQuery ? "Sprawdź „"+item.name+"” bezpośrednio w sklepach"
+                 : "Tego produktu nie ma jeszcze w porównywarce cen Blask");
+    document.getElementById("catPanelSub").textContent = isBrand
+      ? "Zobacz wszystkie produkty tej marki w poszczególnych drogeriach — jednym kliknięciem:"
+      : "Sprawdź cenę bezpośrednio w sklepach — jednym kliknięciem:";
 
     var q=((item.brand?item.brand+" ":"")+item.name).trim();
     document.getElementById("catShops").innerHTML=Object.keys(STORES).map(function(s){
