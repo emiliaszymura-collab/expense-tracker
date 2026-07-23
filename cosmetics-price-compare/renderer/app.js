@@ -381,6 +381,19 @@
   // kosmetykow), na koncu wyszukiwanie frazy bezposrednio w sklepach.
   var sugRows=[], catCache={}, sugTimer=null, sugSeq=0;
 
+  // Lokalny katalog realnych produktow (z sync/import-catalog.mjs).
+  // Przeszukiwany offline; uzupelnia produkty z bazy cen o pelny katalog marek.
+  var CATALOG = (typeof FEED_CATALOG!=="undefined") ? FEED_CATALOG.map(function(it){
+    return { item:it, hay:slug((it.brand||"")+" "+it.name) };
+  }) : [];
+  function searchCatalog(q){
+    var qn=slug(q); if(qn.length<2||!CATALOG.length) return [];
+    var toks=qn.split(" ").filter(Boolean);
+    return CATALOG.filter(function(c){
+      return toks.every(function(t){ return c.hay.indexOf(t)>=0; });
+    }).slice(0,5).map(function(c){ return c.item; });
+  }
+
   function hl(text,qn){
     var out=esc(text);
     qn.split(" ").filter(function(t){return t.length>1;}).forEach(function(t){
@@ -453,12 +466,19 @@
     BRAND_ALL.filter(function(b){ return norm(b).indexOf(qn0)>=0; }).slice(0,2).forEach(function(b){
       sugRows.push({t:"brand", b:b});
     });
+    // lokalny katalog (offline) — realne produkty marek
+    var localKeys0={};
+    local.forEach(function(d){ localKeys0[compact(d.brand+d.name)]=1; });
+    searchCatalog(q).forEach(function(it){
+      if(!localKeys0[compact((it.brand||"")+it.name)]) sugRows.push({t:"cat", item:it});
+    });
     sugRows.push({t:"all", q:q});
     activeIdx=-1;
     sugEl.innerHTML=rowsHTML(q);
     openSug();
 
-    // katalog: doładuj z opóźnieniem, tylko jeśli fraza się nie zmieniła
+    // katalog online: doładuj z opóźnieniem tylko gdy lokalny nie wystarczył
+    if(sugRows.filter(function(r){return r.t==="cat";}).length>=3){ return; }
     clearTimeout(sugTimer);
     var seq=++sugSeq;
     sugTimer=setTimeout(function(){

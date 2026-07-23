@@ -43,6 +43,18 @@ adresy lokalnie. Bez dostępu do sieci karty pokazują wektorowe ilustracje.
 W wersji produkcyjnej zdjęcia pochodziłyby z oficjalnych feedów sklepów
 (sieci afiliacyjne udostępniają je partnerom wraz z cenami).
 
+## Masowy import katalogu produktów (Open Beauty Facts)
+
+`sync/import-catalog.mjs` pobiera realne produkty marek z otwartej bazy
+Open Beauty Facts (ODbL) — nazwy, marki, zdjęcia, kody EAN — i zapisuje je do
+`renderer/catalog.js`. Dzięki temu wyszukiwarka zna tysiące prawdziwych
+produktów offline (ceny dokłada synchronizacja feedów). Wymaga internetu.
+
+```bash
+node sync/import-catalog.mjs                  # wszystkie marki z rejestru
+node sync/import-catalog.mjs "Ziaja" "CeraVe" # wybrane marki
+```
+
 ## Automatyczna codzienna synchronizacja (zalecane)
 
 `sync/sync.mjs` to narzędzie, które codziennie pobiera feedy sklepów i
