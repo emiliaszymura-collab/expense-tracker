@@ -407,7 +407,42 @@ var BRANDS = [
   "Rexona","Old Spice","Axe","Fa","STR8","Garnier Mineral","Palmolive","Le Petit Marseillais","Luksja",
   "Gillette","Gillette Venus","Wilkinson","Veet","Nair","Carmex","Labello","EOS","Blistex",
   "Colgate","Sensodyne","Elmex","Blend-a-med","Meridol","Lacalut","Curaprox","Listerine",
-  "Hawaiian Tropic","Piz Buin","Ambre Solaire","Isana","Balea","Cien"
+  "Hawaiian Tropic","Piz Buin","Ambre Solaire","Isana","Balea","Cien",
+  // marki wlasne sieci
+  "Alterra","Rival de Loop","Hebe Cosmetics","Kobo Professional","Alverde","Yves Rocher",
+  // polska pielegnacja i makijaz — druga fala
+  "Ava Laboratorium","Dermika","Bioliq","Yonelle","Annabelle Minerals","Pixie Cosmetics","Ecocera",
+  "Venita","Prosalon","Chantal","Stapiz","Victoria Vynn","Indigo Nails","GLOV","Donegal","Dzidziuś",
+  "On Line","Bohoboco","Flagolie","Celia","Gracja",
+  // naturalne / niemieckie
+  "Weleda","Lavera","Sante","Logona","Dr. Hauschka",
+  // masowe zagraniczne
+  "Simple","Clean & Clear","Clearasil","St. Ives","Byphasse","Lumene","Physicians Formula","IsaDora",
+  "Pupa Milano","Deborah Milano","Artdeco","Gosh Copenhagen","Note Cosmetics",
+  // dermokosmetyki hiszpanskie i kliniczne
+  "Sesderma","ISDIN","Heliocare","Martiderm","Medik8","SkinCeuticals",
+  // K-beauty i J-beauty — druga fala
+  "Heimish","Banila Co","Neogen","I'm From","By Wishtrend","Dr. Jart+","Dr. Ceuracle","AXIS-Y",
+  "Numbuzin","Abib","Goodal","Mary&May","Jumiso","TIRTIR","Rom&nd","Peripera","Clio","La'dor","DHC",
+  // zachodnie aktywne — uzupelnienia
+  "The Purest Solutions","Ole Henriksen","First Aid Beauty",
+  // pielegnacja premium
+  "La Prairie","Payot","Biotherm","Helena Rubinstein","Perricone MD","Elemis","Rituals","The Body Shop",
+  "Korres","Ahava","Apivita","Collistar","Sensai","Erborian","Augustinus Bader",
+  // makijaz i akcesoria — uzupelnienia
+  "Zoeva","Morphe","Iconic London","Pat McGrath Labs","Real Techniques","EcoTools",
+  // wlosy — profesjonalne i pielegnacja fal
+  "Tigi","Fanola","Alfaparf","Londa Professional","Goldwell","Paul Mitchell","CHI","Cantu",
+  "Shea Moisture","Curlsmith","TRESemmé","Color Wow","Davines",
+  // zapachy — pelna sciana perfumeryjna
+  "Zadig & Voltaire","Marc Jacobs","Michael Kors","Ralph Lauren","Tommy Hilfiger","Trussardi","Bvlgari",
+  "Cartier","Narciso Rodriguez","Issey Miyake","Kenzo","Salvatore Ferragamo","Moschino","Police","Diesel",
+  "Joop!","Playboy","Ariana Grande","Billie Eilish","Britney Spears","Naomi Campbell","Jennifer Lopez",
+  "Antonio Banderas","Shakira","Tous","Roberto Cavalli","Montale","Mancera","Nishane","Amouage",
+  "Maison Margiela","Jo Malone London","Creed","Parfums de Marly","Xerjoff","Chopard",
+  // higiena, jama ustna, slonce, mezczyzni
+  "8x4","Borotalco","Aquafresh","Signal","Parodontax","Marvis","Splat","Jordan","Oral-B",
+  "Australian Gold","Proraso","American Crew","Arko","Palmer's","Bio-Oil"
 ];
 
 // ---------- generator ofert (deterministyczny) ----------
