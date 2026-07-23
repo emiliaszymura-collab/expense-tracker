@@ -1,3 +1,5 @@
 node_modules/
 dist/
 feeds/
+sync/feeds.config.local.json
+sync/data/

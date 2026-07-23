@@ -414,6 +414,9 @@ var BRANDS = [
   "Ava Laboratorium","Dermika","Bioliq","Yonelle","Annabelle Minerals","Pixie Cosmetics","Ecocera",
   "Venita","Prosalon","Chantal","Stapiz","Victoria Vynn","Indigo Nails","GLOV","Donegal","Dzidziuś",
   "On Line","Bohoboco","Flagolie","Celia","Gracja",
+  "Yoskine","Miya Cosmetics","Lift4Skin","Oceanic","Rich","Clochee","Make Me Bio","Phenomé","Fitomed",
+  "Lavo","Nova Kosmetyki","Ziołolek","Cera+","Dermovix","Pharma Vitae","Skinlab","Vollare","Bingospa",
+  "Eoliia","Nesti Dante","Cztery Pory Roku",
   // naturalne / niemieckie
   "Weleda","Lavera","Sante","Logona","Dr. Hauschka",
   // masowe zagraniczne

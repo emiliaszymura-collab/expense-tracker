@@ -125,6 +125,7 @@
   var BRAND_ALL = (function(){
     var set={};
     (typeof BRANDS!=="undefined"?BRANDS:[]).forEach(function(b){ set[b]=1; });
+    (typeof FEED_BRANDS!=="undefined"?FEED_BRANDS:[]).forEach(function(b){ set[b]=1; }); // marki z feedow (auto)
     P.forEach(function(p){ set[p.brand]=1; });
     return Object.keys(set).sort(function(a,b){return a.localeCompare(b,"pl");});
   })();

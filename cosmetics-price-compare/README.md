@@ -43,6 +43,20 @@ adresy lokalnie. Bez dostępu do sieci karty pokazują wektorowe ilustracje.
 W wersji produkcyjnej zdjęcia pochodziłyby z oficjalnych feedów sklepów
 (sieci afiliacyjne udostępniają je partnerom wraz z cenami).
 
+## Automatyczna codzienna synchronizacja (zalecane)
+
+`sync/sync.mjs` to narzędzie, które codziennie pobiera feedy sklepów i
+generuje `renderer/feed.js` (produkty, ceny, promocje, linki, zdjęcia) oraz
+`renderer/brands.js` (pełna lista marek wyciągana automatycznie z feedów —
+nowa marka w sklepie pojawia się w aplikacji sama). Wykrywa też nowe i
+zakończone promocje względem poprzedniego dnia. Konfiguracja adresów feedów:
+`sync/feeds.config.json`; harmonogram (cron / Harmonogram zadań / GitHub
+Action): `sync/README-cron.md`.
+
+```bash
+node sync/sync.mjs      # jednorazowo
+```
+
 ## Import prawdziwej bazy sklepów (feedy produktowe)
 
 Pełne katalogi sklepów (nazwa, marka, cena, link partnerski, zdjęcie, EAN)
