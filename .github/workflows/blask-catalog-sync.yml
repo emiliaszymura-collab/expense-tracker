@@ -1,0 +1,49 @@
+name: Blask — synchronizacja katalogu
+
+# Pobiera prawdziwe produkty marek z Open Beauty Facts i (jeśli podasz feedy
+# afiliacyjne w Secrets) ceny/promocje ze sklepów, a wynik commituje do repo.
+# Uruchamia się w chmurze GitHuba — Twój komputer nie musi być włączony.
+
+on:
+  workflow_dispatch:        # przycisk "Run workflow" w zakładce Actions
+  schedule:
+    - cron: "0 4 * * 1"     # co poniedziałek 04:00 UTC
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cosmetics-price-compare
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Import katalogu produktów (Open Beauty Facts)
+        env:
+          BLASK_MAX_PER_BRAND: "60"
+        run: node sync/import-catalog.mjs
+
+      - name: Synchronizacja cen i promocji z feedów (opcjonalnie)
+        # Uruchom tylko, jeśli w Secrets repo masz włączone feedy afiliacyjne.
+        continue-on-error: true
+        run: |
+          if [ -f sync/feeds.config.json ]; then node sync/sync.mjs || true; fi
+
+      - name: Commit wygenerowanych danych
+        run: |
+          git config user.name "blask-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add renderer/catalog.js renderer/feed.js renderer/brands.js 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Brak zmian w katalogu — nic do commitowania."
+          else
+            git commit -m "chore: automatyczna synchronizacja katalogu Blask [skip ci]"
+            git push
+          fi
