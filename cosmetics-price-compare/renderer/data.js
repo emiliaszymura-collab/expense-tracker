@@ -12,7 +12,15 @@ var STORES = {
   "Sephora":    { c:"#7A4CC9", url:"https://www.sephora.pl",       search:"https://www.sephora.pl/szukaj?q={q}",                      dl:"od 13,99 zł · darmowa od 200 zł" },
   "Superpharm": { c:"#0072CE", url:"https://www.superpharm.pl",    search:"https://www.superpharm.pl/catalogsearch/result/?q={q}",    dl:"od 10,99 zł · darmowa od 129 zł" },
   "Ezebra":     { c:"#E09112", url:"https://www.ezebra.com.pl",    search:"https://www.ezebra.com.pl/search.php?text={q}",            dl:"od 8,90 zł · darmowa od 99 zł" },
-  "e.Leclerc":  { c:"#0068B4", url:"https://www.zakupy.leclerc",   search:null,                                                       dl:"odbiór w sklepie" }
+  "e.Leclerc":  { c:"#0068B4", url:"https://www.zakupy.leclerc",   search:null,                                                       dl:"odbiór w sklepie" },
+  // Marketplace'y — wyszukiwanie (ceny z feedow/API mozna podpiac pozniej)
+  "Allegro":    { c:"#FF5A00", url:"https://allegro.pl",           search:"https://allegro.pl/listing?string={q}",                    dl:"wielu sprzedawców", mkt:true },
+  "Amazon.pl":  { c:"#FF9900", url:"https://www.amazon.pl",        search:"https://www.amazon.pl/s?k={q}",                            dl:"marketplace", mkt:true },
+  "Empik":      { c:"#2B2B2B", url:"https://www.empik.com",        search:"https://www.empik.com/szukaj/produkt?q={q}",               dl:"Empik Place", mkt:true },
+  "Ceneo":      { c:"#F47820", url:"https://www.ceneo.pl",         search:"https://www.ceneo.pl/;szukaj-{q}",                         dl:"porównywarka", mkt:true },
+  "Erli":       { c:"#8E24AA", url:"https://erli.pl",              search:"https://erli.pl/szukaj?phrase={q}",                        dl:"marketplace", mkt:true },
+  "Vinted":     { c:"#09B1BA", url:"https://www.vinted.pl",        search:"https://www.vinted.pl/catalog?search_text={q}",            dl:"od osób prywatnych", mkt:true },
+  "OLX":        { c:"#023A3F", url:"https://www.olx.pl",           search:"https://www.olx.pl/oferty/q-{q}/",                         dl:"od osób prywatnych", mkt:true }
 };
 
 var CATS = ["Wszystkie","Pielęgnacja twarzy","Makijaż","Pielęgnacja ciała","Włosy","Zapachy"];

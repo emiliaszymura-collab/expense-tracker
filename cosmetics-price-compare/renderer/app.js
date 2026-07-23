@@ -595,6 +595,12 @@
         action+'</div>';
     }).join("");
 
+    document.getElementById("mktStrip").innerHTML='<span class="lbl">Porównaj też na:</span>'+
+      Object.keys(STORES).filter(function(s){return STORES[s].mkt&&STORES[s].search;}).map(function(s){
+        return '<a class="buy" href="'+esc(searchUrl(s,shopQ))+'" target="_blank" rel="noopener noreferrer">'+
+          '<span class="store-dot" style="background:'+STORES[s].c+'"></span>'+s+'</a>';
+      }).join("");
+
     document.getElementById("relatedHead").textContent="Podobne produkty";
     var rel=DATA.filter(function(x){return x.cat===d.cat&&x.id!==d.id;}).sort(function(a,b){return b.pop-a.pop;}).slice(0,4);
     document.getElementById("related").innerHTML=rel.map(cardHTML).join("");

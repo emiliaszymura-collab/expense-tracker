@@ -341,6 +341,10 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
 .sug-thumb .pphoto { padding: 3px; }
 .pdp-visual .pphoto { padding: 28px; }
 
+/* Marketplace strip pod tabela ofert */
+.mkt-strip { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.mkt-strip .lbl { font-size: 12px; color: var(--faint); margin-right: 2px; }
+
 /* Catalog panel (produkt spoza porównywarki) */
 .catpanel { border-radius: 18px; background: var(--panel); padding: 22px; margin-bottom: 14px; }
 .catpanel-head { font-size: 15px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 4px; }
