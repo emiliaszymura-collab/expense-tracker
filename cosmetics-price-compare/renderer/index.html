@@ -9,55 +9,44 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="ustrip">
-  <div class="wrap ustrip-inner">
-    <span>✓ Porównujemy 8 drogerii</span>
-    <span>✓ Ceny aktualizowane codziennie</span>
-    <span>✓ Darmowe alerty cenowe</span>
-  </div>
-</div>
 
 <header class="main">
   <div class="wrap head-row">
-    <button class="logo" id="logoBtn" aria-label="Blask — strona główna">
-      <span class="logo-mark">B</span>
-      <span class="logo-name">blask<i>.</i></span>
-    </button>
+    <button class="logo" id="logoBtn" type="button" aria-label="Blask — strona główna">blask<i>.</i></button>
     <div class="hsearch">
       <div class="hsearch-box">
-        <input id="q" type="search" placeholder="Szukaj: produkt, marka… np. Cicaplast B5" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest" aria-label="Szukaj kosmetyku">
+        <svg class="mag" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+        <input id="q" type="search" placeholder="Szukaj produktu lub marki" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest" aria-label="Szukaj kosmetyku">
         <button class="hsearch-btn" id="goBtn" type="button" aria-label="Szukaj">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
       </div>
       <div class="suggest" id="suggest" role="listbox" aria-label="Podpowiedzi"></div>
     </div>
     <div class="head-actions">
       <button class="hact" id="favBtnTop" type="button">
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg>
         Ulubione<span class="cnt" id="favCnt" hidden>0</span>
       </button>
       <button class="hact" id="alertBtnTop" type="button">
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
         Alerty<span class="cnt" id="alertCnt" hidden>0</span>
       </button>
     </div>
   </div>
   <nav class="catnav" aria-label="Kategorie">
-    <div class="wrap catnav-inner" id="catnav"></div>
+    <div class="catnav-inner" id="catnav"></div>
   </nav>
 </header>
 
 <main>
   <!-- ======== HOME ======== -->
   <div id="home">
-    <section class="band">
-      <div class="wrap band-inner">
-        <div>
-          <h1>Ten sam kosmetyk. <i>Nawet o 25% taniej.</i></h1>
-          <p>Porównujemy ceny w Rossmannie, Hebe, Notino, Douglasie, Sephorze i innych — Ty tylko wybierasz najtańszą.</p>
-        </div>
-        <div class="band-stats" id="bandStats"></div>
+    <section class="hero">
+      <div class="wrap">
+        <h1>Ten sam kosmetyk.<br><i>Najniższa cena.</i></h1>
+        <p class="sub">Blask porównuje ceny w ośmiu drogeriach i perfumeriach, żebyś nigdy nie przepłacała za swoje ulubione produkty.</p>
+        <div class="hero-stats" id="bandStats"></div>
       </div>
     </section>
 
@@ -65,7 +54,7 @@
       <div class="toolbar">
         <h2 id="gridTitle">Bestsellery<span class="res" id="gridRes"></span></h2>
         <div class="sort-wrap">
-          <label for="sort">Sortuj:</label>
+          <label for="sort">Sortuj</label>
           <select class="sort" id="sort">
             <option value="pop">Popularność</option>
             <option value="save">Największa oszczędność</option>
@@ -99,7 +88,7 @@
               </div>
               <a class="cta" id="bbCta" href="#" target="_blank" rel="noopener noreferrer">
                 Kup najtaniej
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
               </a>
             </div>
             <div id="bbSave"></div>
@@ -116,13 +105,13 @@
       </div>
 
       <div class="offers-head">
-        <h2>Porównanie cen <span class="res" id="offCnt"></span></h2>
+        <h2>Porównanie cen<span class="res" id="offCnt"></span></h2>
         <span class="hint">od najtańszej</span>
       </div>
       <div class="offers" id="offers"></div>
       <div class="pdp-note">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-        <span>Wersja demonstracyjna — ceny przykładowe. W wersji produkcyjnej ceny aktualizują się z ofert sklepów, a przyciski prowadzą do konkretnego produktu.</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span>Wersja demonstracyjna — ceny przykładowe, ilustracje poglądowe. W wersji produkcyjnej ceny aktualizują się z ofert sklepów, a przyciski prowadzą do konkretnego produktu.</span>
       </div>
 
       <h2 class="related-head">Podobne produkty</h2>
@@ -134,20 +123,20 @@
 <section class="trust">
   <div class="wrap trust-inner">
     <div class="titem">
-      <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
-      <div><h4>Jedno wyszukiwanie</h4><p>Wszystkie drogerie w jednym miejscu, zamiast pięciu kart w przeglądarce.</p></div>
+      <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+      <h4>Jedno wyszukiwanie</h4><p>Wszystkie drogerie w jednym miejscu, zamiast pięciu kart w przeglądarce.</p>
     </div>
     <div class="titem">
-      <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-      <div><h4>Realne oszczędności</h4><p>Różnice cen między sklepami sięgają 25% na tym samym produkcie.</p></div>
+      <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <h4>Realne oszczędności</h4><p>Różnice cen między sklepami sięgają 25% na tym samym produkcie.</p>
     </div>
     <div class="titem">
-      <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
-      <div><h4>Alerty cenowe</h4><p>Powiadomimy Cię, gdy Twój ulubiony kosmetyk stanieje.</p></div>
+      <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+      <h4>Alerty cenowe</h4><p>Powiadomimy Cię, gdy Twój ulubiony kosmetyk stanieje.</p>
     </div>
     <div class="titem">
-      <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-      <div><h4>Zawsze bezpłatnie</h4><p>Porównywarka jest darmowa — zarabiamy na prowizji od sklepów, nie od Ciebie.</p></div>
+      <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h4>Zawsze bezpłatnie</h4><p>Zarabiamy na prowizji od sklepów — nigdy od Ciebie.</p>
     </div>
   </div>
 </section>
@@ -156,10 +145,7 @@
   <div class="wrap">
     <div class="foot-inner">
       <div class="foot-brand">
-        <button class="logo" id="logoBtn2" aria-label="Blask — strona główna">
-          <span class="logo-mark">B</span>
-          <span class="logo-name">blask<i>.</i></span>
-        </button>
+        <button class="logo" id="logoBtn2" type="button" aria-label="Blask — strona główna">blask<i>.</i></button>
         <p>Niezależna porównywarka cen kosmetyków. Pomagamy kupować mądrzej, a sklepom docierać do klientów gotowych na zakup.</p>
       </div>
       <div class="foot-cols">
@@ -183,10 +169,7 @@
         </div>
       </div>
     </div>
-    <div class="foot-legal">
-      <span>© 2026 Blask — prototyp produktu. Ceny i linki demonstracyjne.</span>
-      <button class="theme-toggle" id="themeBtn" type="button">Motyw</button>
-    </div>
+    <div class="foot-legal">© 2026 Blask — prototyp produktu. Ceny i linki demonstracyjne, ilustracje produktów poglądowe.</div>
   </div>
 </footer>
 

@@ -8,7 +8,6 @@
   function compact(s){ return norm(s).replace(/[^a-z0-9]+/g,""); }
   function money(n){ return n.toLocaleString("pl-PL",{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function esc(s){ return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
-  function initials(b){ var p=slug(b).split(" ").filter(Boolean); return p.length===1?p[0].slice(0,2).toUpperCase():(p[0][0]+p[1][0]).toUpperCase(); }
   function volMl(v){ var m=v.replace(",",".").match(/([\d.]+)\s*ml/); return m?parseFloat(m[1]):null; }
   function starsHTML(r){
     var full=Math.round(r), out="";
@@ -16,6 +15,109 @@
     return '<span class="stars" aria-hidden="true">'+out+'</span>';
   }
   function plural(n,one,few,many){ if(n===1)return one; var t=n%10,h=n%100; if(t>=2&&t<=4&&!(h>=12&&h<=14))return few; return many; }
+
+  // ---------- product illustrations ----------
+  // Rysowane wektorowo sylwetki opakowan (tubka, sloik, pipeta, flakon...),
+  // zamiast zdjec: podglad musi byc samowystarczalny, bez zewnetrznych hostow.
+  function productSVG(d){
+    var im = d.img || { form:"bottle", body:"#EEEEF0", cap:"#C9C9CE" };
+    var tx = im.tx || im.accent || "#1D1D1F";
+    var stroke = 'stroke="rgba(29,29,31,.07)" stroke-width="1"';
+    var parts = [];
+
+    function label(y){
+      var out = "";
+      if(im.l1){
+        var f1 = im.l1.length>12 ? 5.6 : (im.l1.length>8 ? 6.6 : 8.5);
+        var ls = im.l1.length>8 ? 0.4 : 1;
+        out += '<text x="70" y="'+y+'" text-anchor="middle" font-size="'+f1+'" font-weight="700" letter-spacing="'+ls+'" fill="'+tx+'">'+esc(im.l1)+'</text>';
+      }
+      if(im.l2){
+        var f2 = im.l2.length>13 ? 5.4 : 6.6;
+        out += '<text x="70" y="'+(y+10)+'" text-anchor="middle" font-size="'+f2+'" font-weight="500" fill="'+tx+'" opacity=".72">'+esc(im.l2)+'</text>';
+      }
+      return out;
+    }
+    function shine(x,y,h){ return '<rect x="'+x+'" y="'+y+'" width="6" height="'+h+'" rx="3" fill="#FFFFFF" opacity=".45"/>'; }
+
+    switch(im.form){
+      case "tube":
+        parts.push('<rect x="42" y="24" width="56" height="7" rx="3" fill="'+im.cap+'" opacity=".85"/>');
+        parts.push('<rect x="40" y="31" width="60" height="102" rx="12" fill="'+im.body+'" '+stroke+'/>');
+        parts.push('<rect x="52" y="133" width="36" height="24" rx="7" fill="'+im.cap+'"/>');
+        parts.push(shine(46,40,84));
+        parts.push(label(80));
+        break;
+      case "pump":
+        parts.push('<rect x="65" y="30" width="28" height="10" rx="4" fill="'+im.cap+'"/>');
+        parts.push('<rect x="65" y="36" width="10" height="14" fill="'+im.cap+'"/>');
+        parts.push('<rect x="58" y="46" width="24" height="12" rx="3" fill="'+im.cap+'" opacity=".85"/>');
+        parts.push('<rect x="44" y="56" width="52" height="100" rx="10" fill="'+im.body+'" '+stroke+'/>');
+        parts.push(shine(50,64,84));
+        parts.push(label(102));
+        break;
+      case "dropper":
+        parts.push('<rect x="62" y="24" width="16" height="10" rx="5" fill="'+im.cap+'"/>');
+        parts.push('<rect x="58" y="32" width="24" height="34" rx="8" fill="'+im.cap+'"/>');
+        parts.push('<rect x="48" y="64" width="44" height="92" rx="9" fill="'+im.body+'" '+stroke+'/>');
+        parts.push(shine(53,72,76));
+        parts.push(label(106));
+        break;
+      case "jar":
+        parts.push('<rect x="38" y="58" width="64" height="22" rx="9" fill="'+im.cap+'" '+stroke+'/>');
+        parts.push('<rect x="42" y="80" width="56" height="76" rx="12" fill="'+im.body+'" '+stroke+'/>');
+        parts.push(shine(48,88,60));
+        parts.push(label(114));
+        break;
+      case "mascara":
+        parts.push('<rect x="56" y="28" width="28" height="44" rx="9" fill="'+im.cap+'"/>');
+        parts.push('<rect x="59" y="72" width="22" height="84" rx="8" fill="'+im.body+'" '+stroke+'/>');
+        parts.push(shine(62,78,72));
+        break;
+      case "glass":
+        parts.push('<rect x="60" y="26" width="30" height="8" rx="4" fill="'+im.cap+'"/>');
+        parts.push('<rect x="60" y="32" width="20" height="14" rx="3" fill="'+im.cap+'"/>');
+        parts.push('<rect x="58" y="44" width="24" height="10" fill="'+im.cap+'" opacity=".82"/>');
+        parts.push('<rect x="46" y="54" width="48" height="102" rx="10" fill="'+im.body+'" '+stroke+'/>');
+        parts.push(shine(52,62,86));
+        parts.push(label(112));
+        break;
+      case "gloss":
+        parts.push('<rect x="58" y="28" width="24" height="54" rx="7" fill="'+im.cap+'"/>');
+        parts.push('<rect x="55" y="82" width="30" height="74" rx="9" fill="'+im.body+'" '+stroke+'/>');
+        parts.push(shine(59,88,60));
+        break;
+      case "spray":
+        parts.push('<rect x="58" y="34" width="24" height="20" rx="5" fill="'+im.cap+'"/>');
+        parts.push('<rect x="48" y="54" width="44" height="102" rx="9" fill="'+im.body+'" '+stroke+'/>');
+        parts.push(shine(54,62,86));
+        parts.push(label(110));
+        break;
+      case "perfume":
+        parts.push('<rect x="55" y="26" width="30" height="26" rx="7" fill="'+im.cap+'"/>');
+        parts.push('<rect x="62" y="50" width="16" height="12" fill="'+im.cap+'" opacity=".7"/>');
+        parts.push('<rect x="38" y="62" width="64" height="94" rx="12" fill="'+im.body+'" '+stroke+'/>');
+        parts.push('<rect x="46" y="70" width="8" height="78" rx="4" fill="#FFFFFF" opacity=".32"/>');
+        parts.push(label(116));
+        break;
+      case "toner":
+        parts.push('<rect x="56" y="26" width="28" height="18" rx="5" fill="'+im.cap+'"/>');
+        parts.push('<rect x="48" y="44" width="44" height="112" rx="10" fill="'+im.body+'" '+stroke+'/>');
+        parts.push(shine(53,52,96));
+        parts.push(label(106));
+        break;
+      default: // bottle
+        parts.push('<rect x="54" y="30" width="32" height="20" rx="6" fill="'+im.cap+'"/>');
+        parts.push('<rect x="44" y="50" width="52" height="106" rx="16" fill="'+im.body+'" '+stroke+'/>');
+        parts.push(shine(50,58,90));
+        parts.push(label(108));
+    }
+
+    return '<svg viewBox="0 0 140 176" role="img" aria-hidden="true" '+
+      'style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif">'+
+      '<ellipse cx="70" cy="164" rx="34" ry="5" fill="#1D1D1F" opacity=".05"/>'+
+      parts.join("")+'</svg>';
+  }
 
   var DATA = P.map(function(p,i){
     var offers = Object.keys(p.o).map(function(s){ return { store:s, price:p.o[s].p, was:p.o[s].w||null, inStock:true }; });
@@ -25,7 +127,7 @@
     offers.sort(function(a,b){ if(a.inStock!==b.inStock)return a.inStock?-1:1; return a.price-b.price; });
     return {
       id:i, brand:p.brand, name:p.name, cat:p.cat, vol:p.vol, ml:volMl(p.vol),
-      pop:p.pop, rate:p.rate, votes:p.votes,
+      pop:p.pop, rate:p.rate, votes:p.votes, img:p.img,
       offers:offers, low:low, high:high, lowStore:avail[0].store,
       save:+(high-low).toFixed(2), savePct:Math.round((high-low)/high*100),
       hay:slug(p.brand+" "+p.name+" "+p.kw+" "+p.cat), hayc:compact(p.brand+" "+p.name+" "+p.kw)
@@ -57,15 +159,14 @@
   var favMode=false, activeCat="Wszystkie", activeIdx=-1, curSug=[];
   var homeEl=document.getElementById("home"), pdpEl=document.getElementById("pdp");
   var qEl=document.getElementById("q"), sugEl=document.getElementById("suggest");
-  var root=document.documentElement;
 
-  // ---------- band stats ----------
+  // ---------- hero stats ----------
   var stores={}; DATA.forEach(function(d){d.offers.forEach(function(o){stores[o.store]=1;});});
   var avgPct=Math.round(DATA.reduce(function(s,d){return s+d.savePct;},0)/DATA.length);
   document.getElementById("bandStats").innerHTML =
-    '<div class="bstat"><div class="v">'+DATA.length+'</div><div class="k">produktów</div></div>'+
-    '<div class="bstat"><div class="v">'+Object.keys(stores).length+'</div><div class="k">sklepów</div></div>'+
-    '<div class="bstat"><div class="v">'+avgPct+'%</div><div class="k">śr. różnica cen</div></div>';
+    '<span>'+DATA.length+' produktów</span><span class="dot"></span>'+
+    '<span>'+Object.keys(stores).length+' sklepów</span><span class="dot"></span>'+
+    '<span>średnia różnica cen '+avgPct+'%</span>';
 
   // ---------- category nav ----------
   var catnav=document.getElementById("catnav");
@@ -101,12 +202,11 @@
   }
 
   function cardHTML(d){
-    var g=GRAD[d.cat];
     return '<div class="pcard" role="button" tabindex="0" data-id="'+d.id+'">'+
       (d.savePct>=15?'<span class="badge">−'+d.savePct+'%</span>':'')+
       '<button class="fav'+(favs[d.id]?" on":"")+'" data-fav="'+d.id+'" type="button" aria-label="Dodaj do ulubionych">'+
-        '<svg width="15" height="15" viewBox="0 0 24 24" fill="'+(favs[d.id]?"currentColor":"none")+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg></button>'+
-      '<div class="pimg" style="background:linear-gradient(150deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="'+(favs[d.id]?"currentColor":"none")+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg></button>'+
+      '<div class="pimg">'+productSVG(d)+'</div>'+
       '<div class="pbrand">'+esc(d.brand)+'</div>'+
       '<div class="pname">'+esc(d.name)+'</div>'+
       '<div class="prating">'+starsHTML(d.rate)+' '+d.rate.toFixed(1)+' ('+d.votes.toLocaleString("pl-PL")+')</div>'+
@@ -187,9 +287,8 @@
     }
     var qn=slug(q);
     sugEl.innerHTML=curSug.map(function(d,i){
-      var g=GRAD[d.cat];
       return '<div class="sug-item" role="option" data-id="'+d.id+'" data-i="'+i+'">'+
-        '<div class="sug-thumb" style="background:linear-gradient(150deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
+        '<div class="sug-thumb">'+productSVG(d)+'</div>'+
         '<div class="sug-body"><div class="sug-name">'+hl(d.brand+" "+d.name,qn)+'</div>'+
         '<div class="sug-meta">'+d.cat+' · '+d.vol+'</div></div>'+
         '<div class="sug-price">od<b>'+money(d.low)+' zł</b></div></div>';
@@ -235,15 +334,14 @@
   var curPdp=null;
   function openPDP(id){
     curPdp=id;
-    var d=DATA[id], g=GRAD[d.cat];
+    var d=DATA[id];
     closeSug(); qEl.blur();
 
     document.getElementById("crumbs").innerHTML=
-      '<button type="button" data-home>Strona główna</button><span class="sep">/</span>'+
-      '<button type="button" data-cat="'+esc(d.cat)+'">'+esc(d.cat)+'</button><span class="sep">/</span>'+
+      '<button type="button" data-home>Strona główna</button><span class="sep">›</span>'+
+      '<button type="button" data-cat="'+esc(d.cat)+'">'+esc(d.cat)+'</button><span class="sep">›</span>'+
       '<span>'+esc(d.brand)+'</span>';
-    document.getElementById("pdpVis").style.background='linear-gradient(150deg,'+g[0]+','+g[1]+')';
-    document.getElementById("pdpVis").textContent=initials(d.brand);
+    document.getElementById("pdpVis").innerHTML=productSVG(d);
     document.getElementById("pdpBrand").textContent=d.brand;
     document.getElementById("pdpName").textContent=d.name;
     document.getElementById("pdpSub").textContent=d.cat+" · "+d.vol;
@@ -258,17 +356,16 @@
     paintPdpMini(id);
 
     document.getElementById("offCnt").textContent=" · "+d.offers.length+" "+plural(d.offers.length,"sklep","sklepy","sklepów");
-    document.getElementById("offers").innerHTML=d.offers.map(function(o,idx){
+    document.getElementById("offers").innerHTML=d.offers.map(function(o){
       var st=STORES[o.store]||{c:"#999",url:"#",dl:""};
       var best=o.inStock&&o.price===d.low&&o.store===d.lowStore;
       var action=o.inStock
         ? '<a class="buy" href="'+st.url+'" target="_blank" rel="noopener noreferrer">'+(best?"Kup najtaniej":"Do sklepu")+
-          ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'
-        : '<span class="oos-pill">Niedostępny</span>';
+          ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'
+        : '<span class="oos-pill">Chwilowo niedostępny</span>';
       return '<div class="offer'+(best?" best":"")+(o.inStock?"":" oos")+'">'+
-        '<div class="rank">'+(idx+1)+'</div>'+
         '<div class="offer-store"><span class="store-dot" style="background:'+st.c+'"></span>'+
-        '<div><div class="nm">'+o.store+(best?'<span class="bflag">najtaniej</span>':'')+'</div>'+
+        '<div><div class="nm">'+o.store+(best?'<span class="bflag">najniższa cena</span>':'')+'</div>'+
         '<div class="dl">'+st.dl+'</div></div></div>'+
         '<div class="offer-price"><span class="now">'+money(o.price)+' zł</span>'+
         (o.was?'<span class="was">'+money(o.was)+' zł</span>':'')+
@@ -284,7 +381,6 @@
   }
 
   function paintPdpMini(id){
-    var d=DATA[id];
     var f=document.getElementById("pdpFav"), a=document.getElementById("pdpAlert");
     f.className="mini"+(favs[id]?" on":"");
     f.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="'+(favs[id]?"currentColor":"none")+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg> '+
@@ -314,13 +410,6 @@
   function showHome(){ favMode=false; goHome(); renderGrid(); }
   document.getElementById("logoBtn").addEventListener("click", showHome);
   document.getElementById("logoBtn2").addEventListener("click", showHome);
-
-  // ---------- theme ----------
-  document.getElementById("themeBtn").addEventListener("click", function(){
-    var cur=root.getAttribute("data-theme");
-    if(!cur) cur=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
-    root.setAttribute("data-theme",cur==="dark"?"light":"dark");
-  });
 
   renderGrid();
   syncCounts();

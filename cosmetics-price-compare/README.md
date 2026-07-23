@@ -30,7 +30,7 @@ macOS: `.dmg`, Linux: AppImage) w katalogu `dist/`.
 ```
 main.js              — proces główny Electrona (okno, otwieranie linków zewnętrznych)
 renderer/index.html  — struktura strony
-renderer/styles.css  — style (motyw jasny i ciemny)
+renderer/styles.css  — style (jasny design inspirowany Apple)
 renderer/data.js     — dane demonstracyjne: sklepy, kategorie, produkty
 renderer/app.js      — logika: wyszukiwarka, filtry, strona produktu, ulubione, alerty
 ```
