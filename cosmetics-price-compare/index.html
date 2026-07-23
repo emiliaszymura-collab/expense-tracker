@@ -7,14 +7,15 @@
     --ink: #2A2024;
     --ink-soft: #6B5B62;
     --ink-faint: #9A8A90;
-    --line: #EADFDA;
-    --line-strong: #DCCEC8;
+    --line: #ECE2DD;
+    --line-strong: #DDCEC8;
     --berry: #B5476A;
     --berry-deep: #8E2F4F;
     --berry-tint: #F7E6EC;
-    --gold: #C89B6E;
+    --gold: #B98E5E;
     --good: #2F7D5B;
     --good-tint: #E4F0EA;
+    --warn: #B4741F;
 
     --bg: var(--porcelain);
     --surface: var(--card);
@@ -30,31 +31,25 @@
     --best: var(--good);
     --best-tint: var(--good-tint);
 
-    --shadow: 0 1px 2px rgba(42, 32, 36, .04), 0 8px 24px rgba(42, 32, 36, .06);
-    --shadow-lift: 0 2px 6px rgba(42, 32, 36, .06), 0 18px 44px rgba(42, 32, 36, .12);
+    --shadow: 0 1px 2px rgba(42,32,36,.04), 0 10px 30px rgba(42,32,36,.07);
+    --shadow-lift: 0 2px 8px rgba(42,32,36,.07), 0 24px 60px rgba(42,32,36,.14);
+    --shadow-pop: 0 12px 40px rgba(42,32,36,.16);
 
     --serif: Georgia, 'Times New Roman', 'Iowan Old Style', serif;
     --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --radius: 16px;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #171116;
-      --surface: #221A20;
-      --surface-2: #1E1720;
-      --text: #F3EAE6;
-      --muted: #B7A6AD;
-      --faint: #8B7A82;
-      --border: #342A31;
-      --border-2: #40333B;
-      --accent: #E4779A;
-      --accent-deep: #F0A6BE;
-      --accent-tint: #38222C;
-      --best: #62C79A;
-      --best-tint: #1E2E27;
-      --gold: #D9B487;
-      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
-      --shadow-lift: 0 2px 6px rgba(0,0,0,.4), 0 18px 44px rgba(0,0,0,.5);
+      --bg: #161015; --surface: #221A20; --surface-2: #1D161C;
+      --text: #F3EAE6; --muted: #B7A6AD; --faint: #8B7A82;
+      --border: #33272F; --border-2: #40323B;
+      --accent: #E77E9E; --accent-deep: #F2AAC0; --accent-tint: #38222C;
+      --best: #63C99B; --best-tint: #1D2E27; --gold: #D3AC7C; --warn: #D69A4A;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+      --shadow-lift: 0 2px 8px rgba(0,0,0,.45), 0 24px 60px rgba(0,0,0,.55);
+      --shadow-pop: 0 12px 40px rgba(0,0,0,.6);
     }
   }
   :root[data-theme="light"] {
@@ -62,297 +57,403 @@
     --text: var(--ink); --muted: var(--ink-soft); --faint: var(--ink-faint);
     --border: var(--line); --border-2: var(--line-strong);
     --accent: var(--berry); --accent-deep: var(--berry-deep); --accent-tint: var(--berry-tint);
-    --best: var(--good); --best-tint: var(--good-tint); --gold: #C89B6E;
-    --shadow: 0 1px 2px rgba(42,32,36,.04), 0 8px 24px rgba(42,32,36,.06);
-    --shadow-lift: 0 2px 6px rgba(42,32,36,.06), 0 18px 44px rgba(42,32,36,.12);
+    --best: var(--good); --best-tint: var(--good-tint); --gold: #B98E5E; --warn: #B4741F;
+    --shadow: 0 1px 2px rgba(42,32,36,.04), 0 10px 30px rgba(42,32,36,.07);
+    --shadow-lift: 0 2px 8px rgba(42,32,36,.07), 0 24px 60px rgba(42,32,36,.14);
+    --shadow-pop: 0 12px 40px rgba(42,32,36,.16);
   }
   :root[data-theme="dark"] {
-    --bg: #171116; --surface: #221A20; --surface-2: #1E1720;
+    --bg: #161015; --surface: #221A20; --surface-2: #1D161C;
     --text: #F3EAE6; --muted: #B7A6AD; --faint: #8B7A82;
-    --border: #342A31; --border-2: #40333B;
-    --accent: #E4779A; --accent-deep: #F0A6BE; --accent-tint: #38222C;
-    --best: #62C79A; --best-tint: #1E2E27; --gold: #D9B487;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
-    --shadow-lift: 0 2px 6px rgba(0,0,0,.4), 0 18px 44px rgba(0,0,0,.5);
+    --border: #33272F; --border-2: #40323B;
+    --accent: #E77E9E; --accent-deep: #F2AAC0; --accent-tint: #38222C;
+    --best: #63C99B; --best-tint: #1D2E27; --gold: #D3AC7C; --warn: #D69A4A;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+    --shadow-lift: 0 2px 8px rgba(0,0,0,.45), 0 24px 60px rgba(0,0,0,.55);
+    --shadow-pop: 0 12px 40px rgba(0,0,0,.6);
   }
 
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.5;
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--sans); -webkit-font-smoothing: antialiased; line-height: 1.5;
   }
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  a { color: inherit; }
 
-  /* ---------- Masthead ---------- */
-  header.masthead {
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, var(--surface-2), var(--bg));
+  /* ---------- Header ---------- */
+  header.top {
+    position: sticky; top: 0; z-index: 60;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
   }
-  .masthead-inner {
-    display: flex; align-items: baseline; justify-content: space-between;
-    gap: 20px; padding: 26px 0 22px;
-  }
-  .brand { display: flex; align-items: baseline; gap: 14px; }
+  .top-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 0; }
+  .brand { display: flex; align-items: baseline; gap: 12px; cursor: pointer; }
   .wordmark {
-    font-family: var(--serif);
-    font-weight: 700;
-    font-size: 30px;
-    letter-spacing: .22em;
-    color: var(--text);
-    line-height: 1;
-    text-transform: uppercase;
+    font-family: var(--serif); font-weight: 700; font-size: 23px; letter-spacing: .2em;
+    text-transform: uppercase; line-height: 1;
   }
   .wordmark .dot { color: var(--accent); }
-  .tagline {
-    font-size: 12.5px; color: var(--muted);
-    letter-spacing: .04em; border-left: 1px solid var(--border-2);
-    padding-left: 14px;
+  .top-nav { display: flex; align-items: center; gap: 8px; }
+  .nav-link {
+    font-size: 13px; color: var(--muted); text-decoration: none; padding: 8px 12px; border-radius: 8px;
+    transition: color .15s, background .15s;
   }
+  .nav-link:hover { color: var(--accent); }
   .theme-toggle {
     appearance: none; border: 1px solid var(--border-2); background: var(--surface);
-    color: var(--muted); font-family: var(--sans); font-size: 12px; letter-spacing: .08em;
+    color: var(--muted); font-family: var(--sans); font-size: 12px; letter-spacing: .06em;
     text-transform: uppercase; padding: 8px 14px; border-radius: 999px; cursor: pointer;
-    transition: color .15s, border-color .15s, background .15s;
+    transition: color .15s, border-color .15s;
   }
   .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
-  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .theme-toggle:focus-visible, .nav-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  /* ---------- Intro / stats ---------- */
-  .lede { padding: 34px 0 12px; max-width: 640px; }
-  .lede h1 {
-    font-family: var(--serif); font-weight: 700; letter-spacing: -.01em;
-    font-size: clamp(28px, 4.4vw, 44px); line-height: 1.08; margin: 0 0 14px;
+  /* ---------- Hero + search ---------- */
+  .hero {
+    text-align: center; padding: 58px 0 30px;
+    background:
+      radial-gradient(120% 80% at 50% -10%, var(--accent-tint), transparent 60%);
+  }
+  .eyebrow {
+    font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold);
+    font-weight: 600; margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 700; letter-spacing: -.015em;
+    font-size: clamp(30px, 5.2vw, 52px); line-height: 1.06; margin: 0 auto 16px; max-width: 15ch;
     text-wrap: balance;
   }
-  .lede h1 em { font-style: italic; color: var(--accent); }
-  .lede p { font-size: 16px; color: var(--muted); margin: 0; max-width: 56ch; }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero .sub { font-size: 17px; color: var(--muted); max-width: 52ch; margin: 0 auto 30px; }
 
-  .stats {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-    background: var(--border); border: 1px solid var(--border);
-    border-radius: 14px; overflow: hidden; margin: 26px 0 8px;
+  .search-shell { max-width: 620px; margin: 0 auto; position: relative; z-index: 40; }
+  .search-box {
+    display: flex; align-items: center; gap: 12px; background: var(--surface);
+    border: 1.5px solid var(--border-2); border-radius: 16px; padding: 6px 6px 6px 18px;
+    box-shadow: var(--shadow); transition: border-color .18s, box-shadow .18s;
   }
-  .stat { background: var(--surface); padding: 18px 20px; }
-  .stat .k { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
-  .stat .v {
-    font-family: var(--serif); font-size: 27px; margin-top: 6px; font-variant-numeric: tabular-nums;
-    letter-spacing: -.01em;
+  .search-box.focused { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-tint), var(--shadow-lift); }
+  .search-box svg.mag { color: var(--faint); flex: none; }
+  #q {
+    flex: 1; border: none; background: transparent; font-family: var(--sans); font-size: 16.5px;
+    color: var(--text); padding: 14px 0;
   }
-  .stat .v .u { font-size: 15px; color: var(--muted); font-family: var(--sans); margin-left: 3px; }
-  .stat.hi .v { color: var(--best); }
+  #q:focus { outline: none; }
+  #q::placeholder { color: var(--faint); }
+  .go-btn {
+    appearance: none; border: none; cursor: pointer; background: var(--accent); color: #fff;
+    font-family: var(--sans); font-weight: 600; font-size: 14.5px; padding: 12px 22px; border-radius: 11px;
+    transition: background .15s, transform .1s;
+  }
+  .go-btn:hover { background: var(--accent-deep); }
+  .go-btn:active { transform: scale(.98); }
+  .go-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  /* ---------- Controls ---------- */
-  .controls {
-    position: sticky; top: 0; z-index: 20;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 0; margin-top: 26px;
+  /* ---------- Autocomplete ---------- */
+  .suggest {
+    position: absolute; left: 0; right: 0; top: calc(100% + 8px);
+    background: var(--surface); border: 1px solid var(--border-2); border-radius: 14px;
+    box-shadow: var(--shadow-pop); overflow: hidden; display: none; text-align: left;
   }
-  .controls-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-  .search {
-    position: relative; flex: 1 1 280px; min-width: 220px;
+  .suggest.show { display: block; }
+  .sug-item {
+    display: flex; align-items: center; gap: 13px; padding: 11px 16px; cursor: pointer;
+    border-top: 1px solid var(--border);
   }
-  .search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--faint); }
-  .search input {
-    width: 100%; padding: 11px 14px 11px 40px; font-size: 14.5px; font-family: var(--sans);
-    color: var(--text); background: var(--surface); border: 1px solid var(--border-2);
-    border-radius: 10px; transition: border-color .15s, box-shadow .15s;
-  }
-  .search input::placeholder { color: var(--faint); }
-  .search input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
-
-  .sort-wrap { display: flex; align-items: center; gap: 8px; }
-  .sort-wrap label { font-size: 11px; text-transform: uppercase; letter-spacing: .09em; color: var(--faint); }
-  select.sort {
-    appearance: none; font-family: var(--sans); font-size: 13.5px; color: var(--text);
-    background: var(--surface); border: 1px solid var(--border-2); border-radius: 10px;
-    padding: 10px 34px 10px 12px; cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239A8A90' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 12px center;
-  }
-  select.sort:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
-
-  .chips { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 0 2px; }
-  .chip {
-    appearance: none; font-family: var(--sans); font-size: 13px; letter-spacing: .01em;
-    color: var(--muted); background: transparent; border: 1px solid var(--border-2);
-    padding: 7px 15px; border-radius: 999px; cursor: pointer;
-    transition: all .15s;
-  }
-  .chip:hover { color: var(--text); border-color: var(--accent); }
-  .chip[aria-pressed="true"] {
-    background: var(--accent); border-color: var(--accent); color: #fff;
-  }
-  .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-  .count-line { font-size: 13px; color: var(--muted); padding: 16px 0 4px; }
-  .count-line b { color: var(--text); font-variant-numeric: tabular-nums; }
-
-  /* ---------- Product grid ---------- */
-  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; padding: 8px 0 60px; }
-
-  .card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-    box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column;
-    transition: box-shadow .2s, transform .2s, border-color .2s;
-  }
-  .card:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); border-color: var(--border-2); }
-
-  .card-top { display: flex; gap: 16px; padding: 18px 18px 14px; }
-  .thumb {
-    width: 66px; height: 66px; border-radius: 12px; flex: none;
-    display: grid; place-items: center; font-family: var(--serif); font-weight: 700;
-    font-size: 22px; color: #fff; letter-spacing: .02em;
+  .sug-item:first-child { border-top: none; }
+  .sug-item:hover, .sug-item.active { background: var(--surface-2); }
+  .sug-thumb {
+    width: 40px; height: 40px; border-radius: 9px; flex: none; display: grid; place-items: center;
+    font-family: var(--serif); font-weight: 700; font-size: 14px; color: #fff;
     box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
   }
-  .card-head { min-width: 0; flex: 1; }
-  .cat-tag {
-    display: inline-block; font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 5px; font-weight: 600;
-  }
-  .p-name {
-    font-family: var(--serif); font-size: 17.5px; line-height: 1.2; margin: 0; color: var(--text);
-    text-wrap: balance;
-  }
-  .p-brand { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
-  .p-vol { color: var(--faint); }
+  .sug-body { min-width: 0; flex: 1; }
+  .sug-name { font-size: 14.5px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sug-name b { color: var(--accent); font-weight: 700; }
+  .sug-meta { font-size: 12px; color: var(--faint); }
+  .sug-price { font-size: 13px; color: var(--muted); text-align: right; white-space: nowrap; }
+  .sug-price b { color: var(--best); font-variant-numeric: tabular-nums; }
+  .sug-empty { padding: 18px 16px; color: var(--muted); font-size: 14px; text-align: center; }
 
-  .price-block {
-    padding: 4px 18px 16px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
+  .pop-line { margin: 22px auto 0; max-width: 620px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; align-items: center; }
+  .pop-line .lbl { font-size: 12px; color: var(--faint); letter-spacing: .04em; }
+  .pop-chip {
+    appearance: none; border: 1px solid var(--border-2); background: var(--surface); cursor: pointer;
+    font-family: var(--sans); font-size: 12.5px; color: var(--muted); padding: 6px 13px; border-radius: 999px;
+    transition: all .15s;
   }
-  .best-price { display: flex; flex-direction: column; gap: 2px; }
-  .best-label { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
-  .best-amt {
-    font-family: var(--serif); font-size: 30px; line-height: 1; color: var(--text);
-    font-variant-numeric: tabular-nums; letter-spacing: -.01em;
-  }
-  .best-amt .cur { font-size: 15px; color: var(--muted); margin-left: 4px; font-family: var(--sans); }
-  .best-store { font-size: 12.5px; color: var(--muted); margin-top: 5px; }
-  .best-store b { color: var(--text); }
+  .pop-chip:hover { color: var(--accent); border-color: var(--accent); }
 
-  .save-badge {
-    text-align: right; background: var(--best-tint); border: 1px solid transparent;
-    border-radius: 10px; padding: 8px 12px;
-  }
-  .save-badge .amt { font-size: 15px; font-weight: 700; color: var(--best); font-variant-numeric: tabular-nums; }
-  .save-badge .lbl { font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--best); opacity: .85; margin-top: 1px; }
+  /* ---------- Value props ---------- */
+  .props { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 44px 0 8px; }
+  .prop { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+  .prop .ic { width: 40px; height: 40px; border-radius: 11px; background: var(--accent-tint); color: var(--accent); display: grid; place-items: center; margin-bottom: 14px; }
+  .prop h3 { font-family: var(--serif); font-size: 17px; margin: 0 0 6px; }
+  .prop p { font-size: 13.5px; color: var(--muted); margin: 0; }
 
-  .expander {
-    border-top: 1px solid var(--border); margin-top: auto;
-  }
-  .exp-btn {
-    width: 100%; appearance: none; background: transparent; border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 18px; font-family: var(--sans); font-size: 12.5px; color: var(--muted);
-    letter-spacing: .03em;
-  }
-  .exp-btn:hover { color: var(--accent); }
-  .exp-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-  .exp-btn .chev { transition: transform .2s; }
-  .card.open .exp-btn .chev { transform: rotate(180deg); }
+  /* ---------- Section heading ---------- */
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 50px 0 18px; }
+  .sec-head h2 { font-family: var(--serif); font-size: 24px; margin: 0; letter-spacing: -.01em; }
+  .sec-head .hint { font-size: 13px; color: var(--faint); }
 
-  .price-list {
-    display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease;
+  /* ---------- Trending grid ---------- */
+  .tgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .tcard {
+    text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; cursor: pointer; box-shadow: var(--shadow); display: flex; gap: 14px; align-items: center;
+    transition: transform .18s, box-shadow .18s, border-color .18s; font-family: var(--sans);
   }
-  .card.open .price-list { grid-template-rows: 1fr; }
-  .price-list-inner { overflow: hidden; }
-  .price-list ul { list-style: none; margin: 0; padding: 0 18px 16px; }
-  .price-list li {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    padding: 9px 0; border-top: 1px solid var(--border);
-    font-size: 14px;
-  }
-  .price-list li:first-child { border-top: none; }
-  .store-name { display: flex; align-items: center; gap: 9px; color: var(--text); }
-  .store-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-  .store-meta { font-size: 11.5px; color: var(--faint); }
-  .row-price { font-variant-numeric: tabular-nums; color: var(--text); font-weight: 500; }
-  .price-list li.lowest .store-name { font-weight: 600; }
-  .price-list li.lowest .row-price { color: var(--best); font-weight: 700; }
-  .pin {
-    font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--best);
-    background: var(--best-tint); padding: 2px 7px; border-radius: 999px; margin-left: 8px;
-  }
-  .oos { color: var(--faint); text-decoration: line-through; }
-  .oos-tag { font-size: 10.5px; color: var(--faint); margin-left: 8px; }
+  .tcard:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); border-color: var(--border-2); }
+  .tcard:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tcard .sug-thumb { width: 52px; height: 52px; font-size: 17px; }
+  .tcard .tc-name { font-family: var(--serif); font-size: 15.5px; line-height: 1.15; }
+  .tcard .tc-brand { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .tcard .tc-from { font-size: 12px; color: var(--faint); margin-top: 7px; }
+  .tcard .tc-from b { color: var(--best); font-variant-numeric: tabular-nums; font-size: 14px; }
 
-  .empty {
-    grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--muted);
+  /* ---------- How it works ---------- */
+  .how { background: var(--surface-2); border: 1px solid var(--border); border-radius: 20px; padding: 34px; margin-top: 30px; }
+  .how h2 { font-family: var(--serif); font-size: 23px; margin: 0 0 24px; text-align: center; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step { text-align: center; }
+  .step .num {
+    width: 44px; height: 44px; margin: 0 auto 14px; border-radius: 50%; display: grid; place-items: center;
+    font-family: var(--serif); font-size: 19px; font-weight: 700; color: #fff; background: var(--accent);
   }
-  .empty .big { font-family: var(--serif); font-size: 22px; color: var(--text); margin-bottom: 8px; }
+  .step h4 { font-size: 15px; margin: 0 0 5px; }
+  .step p { font-size: 13px; color: var(--muted); margin: 0; }
+  .step-line { display: none; }
 
-  footer {
-    border-top: 1px solid var(--border); padding: 26px 0 40px; color: var(--faint); font-size: 12px;
+  /* ---------- Comparison view ---------- */
+  #compare { display: none; padding-top: 14px; }
+  .back-btn {
+    appearance: none; border: 1px solid var(--border-2); background: var(--surface); cursor: pointer;
+    font-family: var(--sans); font-size: 13px; color: var(--muted); padding: 8px 15px 8px 11px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 6px; transition: all .15s; margin-bottom: 22px;
   }
-  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  footer b { color: var(--muted); font-weight: 500; }
+  .back-btn:hover { color: var(--accent); border-color: var(--accent); }
 
-  @media (max-width: 720px) {
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .grid { grid-template-columns: 1fr; }
-    .masthead-inner { flex-wrap: wrap; }
+  .cmp-hero {
+    display: grid; grid-template-columns: 96px 1fr auto; gap: 22px; align-items: center;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px;
+    box-shadow: var(--shadow);
   }
-  @media (prefers-reduced-motion: reduce) {
-    * { transition: none !important; }
+  .cmp-thumb {
+    width: 96px; height: 96px; border-radius: 16px; display: grid; place-items: center;
+    font-family: var(--serif); font-weight: 700; font-size: 30px; color: #fff;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
   }
+  .cmp-cat { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+  .cmp-name { font-family: var(--serif); font-size: 26px; line-height: 1.12; margin: 5px 0 4px; text-wrap: balance; }
+  .cmp-brand { font-size: 14px; color: var(--muted); }
+  .cmp-brand .vol { color: var(--faint); }
+  .cmp-bestbox { text-align: right; }
+  .cmp-bestbox .lbl { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--faint); }
+  .cmp-bestbox .amt { font-family: var(--serif); font-size: 38px; line-height: 1; color: var(--best); font-variant-numeric: tabular-nums; margin: 5px 0 4px; }
+  .cmp-bestbox .amt .cur { font-size: 17px; color: var(--muted); font-family: var(--sans); margin-left: 4px; }
+  .cmp-bestbox .store { font-size: 13px; color: var(--muted); }
+  .cmp-bestbox .store b { color: var(--text); }
+
+  .cmp-summary { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0 4px; }
+  .pill { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border-2); background: var(--surface); color: var(--muted); }
+  .pill b { color: var(--text); }
+  .pill.save { background: var(--best-tint); border-color: transparent; color: var(--best); }
+  .pill.save b { color: var(--best); }
+  .pill.alert { cursor: pointer; transition: all .15s; }
+  .pill.alert:hover { border-color: var(--accent); color: var(--accent); }
+  .pill.alert.on { background: var(--accent-tint); border-color: transparent; color: var(--accent); }
+
+  .offers { margin-top: 22px; border: 1px solid var(--border); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
+  .offer {
+    display: grid; grid-template-columns: 30px 1fr auto auto; gap: 16px; align-items: center;
+    padding: 16px 20px; border-top: 1px solid var(--border); background: var(--surface);
+  }
+  .offer:first-child { border-top: none; }
+  .offer.best { background: linear-gradient(90deg, var(--best-tint), var(--surface) 70%); }
+  .offer .rank { font-family: var(--serif); font-size: 16px; color: var(--faint); font-variant-numeric: tabular-nums; text-align: center; }
+  .offer.best .rank { color: var(--best); }
+  .offer-store { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .store-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .offer-store .nm { font-weight: 600; font-size: 15px; }
+  .offer-store .dl { font-size: 12px; color: var(--faint); margin-top: 1px; }
+  .best-flag { font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: var(--best); background: var(--best-tint); padding: 2px 8px; border-radius: 999px; margin-left: 8px; vertical-align: middle; }
+  .offer-price { text-align: right; }
+  .offer-price .now { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .offer.best .offer-price .now { color: var(--best); }
+  .offer-price .was { font-size: 12.5px; color: var(--faint); text-decoration: line-through; font-variant-numeric: tabular-nums; }
+  .offer-price .ppu { font-size: 11px; color: var(--faint); }
+  .buy {
+    appearance: none; border: 1px solid var(--border-2); background: var(--surface); color: var(--text);
+    font-family: var(--sans); font-weight: 600; font-size: 13.5px; padding: 10px 16px; border-radius: 10px;
+    cursor: pointer; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;
+    transition: all .15s;
+  }
+  .buy:hover { border-color: var(--accent); color: var(--accent); }
+  .offer.best .buy { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .offer.best .buy:hover { background: var(--accent-deep); }
+  .offer.oos { opacity: .6; }
+  .offer.oos .offer-price .now { color: var(--faint); text-decoration: line-through; }
+  .oos-pill { font-size: 11px; color: var(--warn); border: 1px solid var(--warn); padding: 8px 14px; border-radius: 10px; white-space: nowrap; }
+
+  .cmp-note { font-size: 12px; color: var(--faint); margin: 16px 2px 0; display: flex; gap: 8px; align-items: flex-start; }
+
+  .related { margin-top: 44px; }
+
+  /* ---------- Footer ---------- */
+  footer { border-top: 1px solid var(--border); margin-top: 60px; padding: 34px 0 44px; }
+  .foot-inner { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .foot-brand .wordmark { font-size: 18px; }
+  .foot-brand p { font-size: 12.5px; color: var(--faint); margin: 10px 0 0; max-width: 34ch; }
+  .foot-cols { display: flex; gap: 48px; flex-wrap: wrap; }
+  .foot-col h5 { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin: 0 0 12px; }
+  .foot-col a { display: block; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 8px; }
+  .foot-col a:hover { color: var(--accent); }
+  .foot-legal { border-top: 1px solid var(--border); margin-top: 28px; padding-top: 18px; font-size: 11.5px; color: var(--faint); }
+
+  @media (max-width: 860px) {
+    .props, .tgrid, .steps { grid-template-columns: 1fr; }
+    .cmp-hero { grid-template-columns: 72px 1fr; }
+    .cmp-thumb { width: 72px; height: 72px; font-size: 24px; }
+    .cmp-bestbox { grid-column: 1 / -1; text-align: left; border-top: 1px solid var(--border); padding-top: 16px; }
+  }
+  @media (max-width: 560px) {
+    .offer { grid-template-columns: 1fr auto; row-gap: 4px; }
+    .offer .rank { display: none; }
+    .offer .buy, .offer .oos-pill { grid-column: 1 / -1; justify-content: center; }
+    .go-btn { padding: 12px 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto; } }
 </style>
 
-<header class="masthead">
-  <div class="wrap masthead-inner">
-    <div class="brand">
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="brand" id="homeBtn" role="button" tabindex="0" aria-label="Strona główna Blask">
       <span class="wordmark">Blask<span class="dot">.</span></span>
-      <span class="tagline">porównywarka cen kosmetyków</span>
     </div>
-    <button class="theme-toggle" id="themeBtn" type="button">Motyw</button>
+    <nav class="top-nav">
+      <a class="nav-link" href="#jak">Jak to działa</a>
+      <a class="nav-link" href="#partnerzy">Dla sklepów</a>
+      <button class="theme-toggle" id="themeBtn" type="button">Motyw</button>
+    </nav>
   </div>
 </header>
 
 <main>
-  <div class="wrap">
-    <section class="lede">
-      <h1>Ten sam kosmetyk, <em>najniższa cena</em>.</h1>
-      <p>Zestawiamy ceny popularnych kosmetyków w polskich drogeriach i perfumeriach. Zobacz, gdzie kupisz taniej — i ile realnie zaoszczędzisz.</p>
-    </section>
+  <!-- ============ DEFAULT / HOME ============ -->
+  <div id="home">
+    <section class="hero">
+      <div class="wrap">
+        <div class="eyebrow">Porównywarka cen kosmetyków</div>
+        <h1>Twój ulubiony kosmetyk. <em>Zawsze najtaniej.</em></h1>
+        <p class="sub">Wpisz nazwę produktu, a my w sekundę sprawdzimy cenę w Rossmannie, Hebe, Notino, Douglasie i innych sklepach. Koniec z szukaniem po pół godzinie.</p>
 
-    <section class="stats" id="stats" aria-label="Podsumowanie"></section>
-  </div>
-
-  <div class="controls">
-    <div class="wrap">
-      <div class="controls-row">
-        <div class="search">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
-          <input id="search" type="search" placeholder="Szukaj produktu lub marki…" autocomplete="off" aria-label="Szukaj">
+        <div class="search-shell">
+          <div class="search-box" id="searchBox">
+            <svg class="mag" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+            <input id="q" type="search" placeholder="np. La Roche-Posay Cicaplast B5…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest" aria-label="Szukaj kosmetyku">
+            <button class="go-btn" id="goBtn" type="button">Porównaj</button>
+          </div>
+          <div class="suggest" id="suggest" role="listbox" aria-label="Podpowiedzi"></div>
         </div>
-        <div class="sort-wrap">
-          <label for="sort">Sortuj</label>
-          <select class="sort" id="sort">
-            <option value="save">Największa oszczędność</option>
-            <option value="low">Najniższa cena</option>
-            <option value="high">Najwyższa cena</option>
-            <option value="name">Nazwa A–Z</option>
-          </select>
+
+        <div class="pop-line">
+          <span class="lbl">Popularne:</span>
+          <button class="pop-chip" type="button">CeraVe krem</button>
+          <button class="pop-chip" type="button">Cicaplast B5</button>
+          <button class="pop-chip" type="button">The Ordinary niacynamid</button>
+          <button class="pop-chip" type="button">Lash Sensational</button>
+          <button class="pop-chip" type="button">La Vie Est Belle</button>
         </div>
       </div>
-      <div class="chips" id="chips" role="group" aria-label="Kategorie"></div>
+    </section>
+
+    <div class="wrap">
+      <section class="props">
+        <div class="prop">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <h3>Realna oszczędność</h3>
+          <p>Na jednym produkcie różnica między sklepami sięga nawet 25%. My znajdujemy tę najniższą za Ciebie.</p>
+        </div>
+        <div class="prop">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
+          <h3>Jedno wyszukiwanie</h3>
+          <p>Zamiast otwierać pięć kart w przeglądarce, wpisujesz nazwę raz i widzisz wszystkie ceny obok siebie.</p>
+        </div>
+        <div class="prop">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <h3>Prosto do sklepu</h3>
+          <p>Klikasz „Kup" i trafiasz od razu do właściwego produktu w wybranej drogerii. Bez szukania na nowo.</p>
+        </div>
+      </section>
+
+      <section class="trending">
+        <div class="sec-head">
+          <h2>Najczęściej porównywane</h2>
+          <span class="hint">Kliknij, aby zobaczyć ceny</span>
+        </div>
+        <div class="tgrid" id="tgrid"></div>
+      </section>
+
+      <section class="how" id="jak">
+        <h2>Jak to działa</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="num">1</div>
+            <h4>Wpisz produkt</h4>
+            <p>Wystarczy nazwa albo sama marka. Podpowiemy resztę, nawet jeśli zrobisz literówkę.</p>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <h4>Porównaj ceny</h4>
+            <p>Widzisz wszystkie sklepy uszeregowane od najtańszego, z dostawą i dostępnością.</p>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <h4>Kup taniej</h4>
+            <p>Jeden klik prowadzi Cię prosto do produktu w wybranej drogerii.</p>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 
-  <div class="wrap">
-    <div class="count-line" id="countLine"></div>
-    <section class="grid" id="grid"></section>
+  <!-- ============ COMPARISON ============ -->
+  <div class="wrap" id="compare">
+    <button class="back-btn" id="backBtn" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Nowe wyszukiwanie
+    </button>
+    <div id="cmpBody"></div>
   </div>
 </main>
 
-<footer>
+<footer id="partnerzy">
   <div class="wrap">
-    <span>Blask — dane demonstracyjne, ceny przykładowe.</span>
-    <span>Aktualizacja: <b>23 lipca 2026</b> · <b id="storeCount"></b> sklepów</span>
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <span class="wordmark">Blask<span class="dot">.</span></span>
+        <p>Niezależna porównywarka cen kosmetyków. Pomagamy kupować mądrzej, a sklepom — docierać do kupujących gotowych na zakup.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h5>Kupujący</h5>
+          <a href="#jak">Jak to działa</a>
+          <a href="#">Alerty cenowe</a>
+          <a href="#">Kategorie</a>
+        </div>
+        <div class="foot-col">
+          <h5>Dla sklepów</h5>
+          <a href="#">Zostań partnerem</a>
+          <a href="#">Program afiliacyjny</a>
+          <a href="#">Kontakt</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-legal">
+      Blask to prototyp produktu. Prezentowane ceny i linki mają charakter demonstracyjny — w wersji produkcyjnej pochodziłyby z aktualnych ofert sklepów i partnerskich linków afiliacyjnych. Ceny w sklepach mogą się różnić i zmieniać.
+    </div>
   </div>
 </footer>
 
@@ -360,21 +461,17 @@
 (function () {
   "use strict";
 
-  // Retailers with a signature colour dot
   var STORES = {
-    "Rossmann":   "#E4032E",
-    "Hebe":       "#00A9A7",
-    "Notino":     "#E5006D",
-    "Douglas":    "#2A2024",
-    "Sephora":    "#7A4CC9",
-    "Superpharm": "#0072CE",
-    "Ezebra":     "#F0A500",
-    "e.Leclerc":  "#0068B4"
+    "Rossmann":   { c: "#E4032E", url: "https://www.rossmann.pl", dl: "od 9,99 zł / za darmo od 99 zł" },
+    "Hebe":       { c: "#00A9A7", url: "https://www.hebe.pl",     dl: "od 8,99 zł / za darmo od 99 zł" },
+    "Notino":     { c: "#E5006D", url: "https://www.notino.pl",   dl: "od 9,90 zł / za darmo od 150 zł" },
+    "Douglas":    { c: "#6E4A5B", url: "https://www.douglas.pl",  dl: "od 12,90 zł / za darmo od 150 zł" },
+    "Sephora":    { c: "#7A4CC9", url: "https://www.sephora.pl",  dl: "od 13,99 zł / za darmo od 200 zł" },
+    "Superpharm": { c: "#0072CE", url: "https://www.superpharm.pl", dl: "od 10,99 zł / za darmo od 129 zł" },
+    "Ezebra":     { c: "#E09112", url: "https://www.ezebra.com.pl", dl: "od 8,90 zł / za darmo od 99 zł" },
+    "e.Leclerc":  { c: "#0068B4", url: "https://www.zakupy.leclerc", dl: "odbiór w sklepie" }
   };
 
-  var CATS = ["Wszystkie", "Pielęgnacja twarzy", "Makijaż", "Pielęgnacja ciała", "Włosy", "Zapachy"];
-
-  // Thumbnail gradient per category
   var CAT_GRAD = {
     "Pielęgnacja twarzy": ["#C86B8E", "#8E2F4F"],
     "Makijaż":            ["#B5476A", "#5E2138"],
@@ -383,232 +480,336 @@
     "Zapachy":            ["#5A9E86", "#2F5E4C"]
   };
 
-  var PRODUCTS = [
-    { brand: "CeraVe", name: "Krem nawilżający do twarzy i ciała", cat: "Pielęgnacja twarzy", vol: "340 ml",
-      prices: { "Rossmann": 54.99, "Hebe": 59.99, "Notino": 51.90, "Superpharm": 62.50, "Ezebra": 49.99 } },
-    { brand: "La Roche-Posay", name: "Effaclar Duo(+) M krem", cat: "Pielęgnacja twarzy", vol: "40 ml",
-      prices: { "Rossmann": 74.99, "Hebe": 72.99, "Notino": 69.90, "Superpharm": 79.99, "Douglas": 78.00 } },
-    { brand: "The Ordinary", name: "Niacinamide 10% + Zinc 1%", cat: "Pielęgnacja twarzy", vol: "30 ml",
-      prices: { "Notino": 34.90, "Sephora": 39.00, "Ezebra": 32.99, "Douglas": 38.50 } },
-    { brand: "Paula's Choice", name: "Skin Perfecting 2% BHA", cat: "Pielęgnacja twarzy", vol: "118 ml",
-      prices: { "Notino": 149.00, "Sephora": 159.00, "Douglas": 155.00, "Ezebra": 142.90 } },
-    { brand: "Maybelline", name: "Lash Sensational tusz do rzęs", cat: "Makijaż", vol: "9,5 ml",
-      prices: { "Rossmann": 44.99, "Hebe": 42.99, "Notino": 39.90, "Superpharm": 47.99, "Ezebra": 41.50 } },
-    { brand: "L'Oréal Paris", name: "Infaillible 24H podkład", cat: "Makijaż", vol: "35 ml",
-      prices: { "Rossmann": 59.99, "Hebe": 57.99, "Notino": 54.90, "Superpharm": 64.99, "Douglas": 62.00 } },
-    { brand: "Rare Beauty", name: "Soft Pinch róż w płynie", cat: "Makijaż", vol: "7,5 ml",
-      prices: { "Sephora": 115.00, "Notino": 119.00, "Douglas": 112.90 } },
-    { brand: "NYX", name: "Butter Gloss błyszczyk", cat: "Makijaż", vol: "8 ml",
-      prices: { "Rossmann": 27.99, "Hebe": 25.99, "Notino": 23.90, "Ezebra": 24.50, "Douglas": 29.00 } },
-    { brand: "Nivea", name: "Q10 balsam ujędrniający do ciała", cat: "Pielęgnacja ciała", vol: "400 ml",
-      prices: { "Rossmann": 32.99, "Hebe": 34.99, "Superpharm": 36.50, "e.Leclerc": 29.90, "Ezebra": 31.50 } },
-    { brand: "Sol de Janeiro", name: "Brazilian Bum Bum krem", cat: "Pielęgnacja ciała", vol: "240 ml",
-      prices: { "Sephora": 189.00, "Notino": 179.00, "Douglas": 185.00 } },
-    { brand: "Garnier", name: "Botanic Therapy odżywka Miód", cat: "Włosy", vol: "200 ml",
-      prices: { "Rossmann": 21.99, "Hebe": 23.49, "Superpharm": 24.99, "e.Leclerc": 19.90, "Ezebra": 20.50 } },
-    { brand: "Olaplex", name: "No.3 Hair Perfector kuracja", cat: "Włosy", vol: "100 ml",
-      prices: { "Notino": 99.90, "Sephora": 115.00, "Douglas": 109.00, "Ezebra": 94.99 } },
-    { brand: "Lancôme", name: "La Vie Est Belle woda perfumowana", cat: "Zapachy", vol: "50 ml",
-      prices: { "Notino": 349.00, "Douglas": 389.00, "Sephora": 385.00, "Ezebra": 329.00 } },
-    { brand: "Yves Saint Laurent", name: "Libre woda perfumowana", cat: "Zapachy", vol: "50 ml",
-      prices: { "Notino": 379.00, "Douglas": 419.00, "Sephora": 415.00 } },
-    { brand: "Bielenda", name: "Neuro Retinol krem na noc", cat: "Pielęgnacja twarzy", vol: "50 ml",
-      prices: { "Rossmann": 27.99, "Hebe": 29.99, "Superpharm": 32.99, "Ezebra": 25.90 } },
-    { brand: "Isana", name: "Żel micelarny do mycia twarzy", cat: "Pielęgnacja twarzy", vol: "200 ml",
-      prices: { "Rossmann": 12.99, "Hebe": 14.49, "Ezebra": 11.90 } }
+  // price = current price; was = pre-promo (optional); every product one currency (PLN)
+  var P = [
+    { brand:"La Roche-Posay", name:"Cicaplast Baume B5 balsam regenerujący", cat:"Pielęgnacja twarzy", vol:"40 ml",
+      kw:"b5 cicaplast baume balsam regenerujacy kojacy multinaprawczy",
+      o:{ "Rossmann":{p:44.99}, "Hebe":{p:42.99,w:49.99}, "Notino":{p:39.90}, "Superpharm":{p:47.99}, "Douglas":{p:46.00} } },
+    { brand:"La Roche-Posay", name:"Effaclar Duo(+) M krem", cat:"Pielęgnacja twarzy", vol:"40 ml",
+      kw:"effaclar duo tradzik niedoskonalosci",
+      o:{ "Rossmann":{p:74.99}, "Hebe":{p:72.99}, "Notino":{p:69.90}, "Superpharm":{p:79.99}, "Douglas":{p:78.00} } },
+    { brand:"CeraVe", name:"Krem nawilżający do twarzy i ciała", cat:"Pielęgnacja twarzy", vol:"340 ml",
+      kw:"cerave moisturising cream ceramidy sucha skora",
+      o:{ "Rossmann":{p:54.99}, "Hebe":{p:59.99}, "Notino":{p:51.90}, "Superpharm":{p:62.50}, "Ezebra":{p:49.99} } },
+    { brand:"CeraVe", name:"Pianka oczyszczająca do skóry normalnej i tłustej", cat:"Pielęgnacja twarzy", vol:"236 ml",
+      kw:"cerave foaming cleanser pianka myjaca zel",
+      o:{ "Rossmann":{p:47.99}, "Hebe":{p:44.99,w:52.99}, "Notino":{p:43.90}, "Superpharm":{p:49.99} } },
+    { brand:"The Ordinary", name:"Niacinamide 10% + Zinc 1% serum", cat:"Pielęgnacja twarzy", vol:"30 ml",
+      kw:"the ordinary niacynamid niacinamide cynk serum pory",
+      o:{ "Notino":{p:34.90}, "Sephora":{p:39.00}, "Ezebra":{p:32.99}, "Douglas":{p:38.50} } },
+    { brand:"The Ordinary", name:"Hyaluronic Acid 2% + B5 serum", cat:"Pielęgnacja twarzy", vol:"30 ml",
+      kw:"the ordinary kwas hialuronowy hyaluronic nawilzenie serum",
+      o:{ "Notino":{p:37.90}, "Sephora":{p:42.00}, "Ezebra":{p:35.99}, "Douglas":{p:41.00} } },
+    { brand:"Paula's Choice", name:"Skin Perfecting 2% BHA płyn złuszczający", cat:"Pielęgnacja twarzy", vol:"118 ml",
+      kw:"paulas choice bha kwas salicylowy zluszczanie peeling",
+      o:{ "Notino":{p:149.00}, "Sephora":{p:159.00}, "Douglas":{p:155.00}, "Ezebra":{p:142.90} } },
+    { brand:"Bioderma", name:"Sensibio H2O płyn micelarny", cat:"Pielęgnacja twarzy", vol:"500 ml",
+      kw:"bioderma sensibio plyn micelarny demakijaz cera wrazliwa",
+      o:{ "Rossmann":{p:64.99}, "Hebe":{p:62.99}, "Notino":{p:58.90}, "Superpharm":{p:69.99}, "Ezebra":{p:57.99} } },
+    { brand:"Vichy", name:"Minéral 89 booster nawilżający", cat:"Pielęgnacja twarzy", vol:"50 ml",
+      kw:"vichy mineral 89 booster kwas hialuronowy nawilzenie",
+      o:{ "Rossmann":{p:89.99}, "Hebe":{p:84.99,w:99.99}, "Notino":{p:79.90}, "Superpharm":{p:94.99}, "Douglas":{p:92.00} } },
+    { brand:"Pixi", name:"Glow Tonic tonik złuszczający", cat:"Pielęgnacja twarzy", vol:"250 ml",
+      kw:"pixi glow tonic tonik kwas glikolowy rozswietlenie",
+      o:{ "Sephora":{p:79.00}, "Notino":{p:72.90}, "Douglas":{p:76.00} } },
+    { brand:"Nivea", name:"Q10 balsam ujędrniający do ciała", cat:"Pielęgnacja ciała", vol:"400 ml",
+      kw:"nivea q10 balsam ujedrniajacy body cialo",
+      o:{ "Rossmann":{p:32.99}, "Hebe":{p:34.99}, "Superpharm":{p:36.50}, "e.Leclerc":{p:29.90}, "Ezebra":{p:31.50} } },
+    { brand:"Sol de Janeiro", name:"Brazilian Bum Bum krem do ciała", cat:"Pielęgnacja ciała", vol:"240 ml",
+      kw:"sol de janeiro bum bum krem cialo zapachowy",
+      o:{ "Sephora":{p:189.00}, "Notino":{p:179.00}, "Douglas":{p:185.00} } },
+    { brand:"CeraVe", name:"SA balsam wygładzający do ciała", cat:"Pielęgnacja ciała", vol:"473 ml",
+      kw:"cerave sa smoothing balsam cialo kwas salicylowy szorstka skora",
+      o:{ "Rossmann":{p:69.99}, "Hebe":{p:67.99}, "Notino":{p:64.90}, "Superpharm":{p:74.99} } },
+    { brand:"Maybelline", name:"Lash Sensational tusz do rzęs", cat:"Makijaż", vol:"9,5 ml",
+      kw:"maybelline lash sensational tusz mascara rzesy pogrubiajacy",
+      o:{ "Rossmann":{p:44.99}, "Hebe":{p:42.99}, "Notino":{p:39.90}, "Superpharm":{p:47.99}, "Ezebra":{p:41.50} } },
+    { brand:"L'Oréal Paris", name:"Infaillible 24H Fresh Wear podkład", cat:"Makijaż", vol:"30 ml",
+      kw:"loreal infaillible fresh wear podklad kryjacy dlugotrwaly",
+      o:{ "Rossmann":{p:59.99}, "Hebe":{p:57.99,w:64.99}, "Notino":{p:54.90}, "Superpharm":{p:64.99}, "Douglas":{p:62.00} } },
+    { brand:"Rare Beauty", name:"Soft Pinch Liquid Blush róż w płynie", cat:"Makijaż", vol:"7,5 ml",
+      kw:"rare beauty soft pinch roz blush plyn selena",
+      o:{ "Sephora":{p:115.00}, "Notino":{p:119.00}, "Douglas":{p:112.90} } },
+    { brand:"NYX", name:"Butter Gloss błyszczyk do ust", cat:"Makijaż", vol:"8 ml",
+      kw:"nyx butter gloss blyszczyk usta",
+      o:{ "Rossmann":{p:27.99}, "Hebe":{p:25.99,w:31.99}, "Notino":{p:23.90}, "Ezebra":{p:24.50}, "Douglas":{p:29.00} } },
+    { brand:"Charlotte Tilbury", name:"Airbrush Flawless Setting Spray", cat:"Makijaż", vol:"100 ml",
+      kw:"charlotte tilbury airbrush flawless setting spray utrwalajacy",
+      o:{ "Sephora":{p:189.00}, "Notino":{p:175.00}, "Douglas":{p:182.00} } },
+    { brand:"Olaplex", name:"No.3 Hair Perfector kuracja do włosów", cat:"Włosy", vol:"100 ml",
+      kw:"olaplex no 3 hair perfector kuracja wlosy regeneracja",
+      o:{ "Notino":{p:99.90}, "Sephora":{p:115.00}, "Douglas":{p:109.00}, "Ezebra":{p:94.99} } },
+    { brand:"Garnier", name:"Botanic Therapy odżywka Miód i Wosk", cat:"Włosy", vol:"200 ml",
+      kw:"garnier botanic therapy odzywka miod wosk wlosy zniszczone",
+      o:{ "Rossmann":{p:21.99}, "Hebe":{p:23.49}, "Superpharm":{p:24.99}, "e.Leclerc":{p:19.90}, "Ezebra":{p:20.50} } },
+    { brand:"Lancôme", name:"La Vie Est Belle woda perfumowana", cat:"Zapachy", vol:"50 ml",
+      kw:"lancome la vie est belle woda perfumowana perfumy edp",
+      o:{ "Notino":{p:349.00}, "Douglas":{p:389.00}, "Sephora":{p:385.00}, "Ezebra":{p:329.00} } },
+    { brand:"Yves Saint Laurent", name:"Libre woda perfumowana", cat:"Zapachy", vol:"50 ml",
+      kw:"ysl yves saint laurent libre woda perfumowana perfumy edp",
+      o:{ "Notino":{p:379.00}, "Douglas":{p:419.00}, "Sephora":{p:415.00} } },
+    { brand:"Dior", name:"Sauvage woda toaletowa", cat:"Zapachy", vol:"60 ml",
+      kw:"dior sauvage woda toaletowa perfumy meskie edt",
+      o:{ "Notino":{p:359.00}, "Douglas":{p:399.00}, "Sephora":{p:395.00} } },
+    { brand:"Bielenda", name:"Neuro Retinol krem-koncentrat na noc", cat:"Pielęgnacja twarzy", vol:"50 ml",
+      kw:"bielenda neuro retinol krem noc zmarszczki koncentrat",
+      o:{ "Rossmann":{p:27.99}, "Hebe":{p:29.99}, "Superpharm":{p:32.99}, "Ezebra":{p:25.90} } }
   ];
 
-  // Mark a couple of items out of stock at their cheapest store to show the feature
-  var OUT_OF_STOCK = { 2: "Ezebra", 7: "Notino" }; // product index -> store that's OOS
+  // ---------- helpers ----------
+  var DIAC = { "ł":"l","ó":"o","ą":"a","ę":"e","ś":"s","ż":"z","ź":"z","ć":"c","ń":"n","é":"e","è":"e","ô":"o","â":"a" };
+  function norm(s){ return s.toLowerCase().replace(/[łóąęśżźćńéèôâ]/g, function(m){return DIAC[m]||m;}); }
+  function slug(s){ return norm(s).replace(/[^a-z0-9]+/g," ").trim(); }
+  function compact(s){ return norm(s).replace(/[^a-z0-9]+/g,""); }
+  function money(n){ return n.toLocaleString("pl-PL",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function initials(brand){
+    var parts = slug(brand).split(" ").filter(Boolean);
+    if(parts.length===1) return parts[0].slice(0,2).toUpperCase();
+    return (parts[0][0]+parts[1][0]).toUpperCase();
+  }
+  function volMl(vol){ var m = vol.replace(",",".").match(/([\d.]+)\s*ml/); return m?parseFloat(m[1]):null; }
 
-  var money = function (n) {
-    return n.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  };
-  var initials = function (brand) {
-    var parts = brand.replace(/[^A-Za-zÀ-ž' ]/g, "").split(/\s+/).filter(Boolean);
-    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-    return (parts[0][0] + parts[1][0]).toUpperCase();
-  };
-
-  // Build enriched model
-  var DATA = PRODUCTS.map(function (p, i) {
-    var offers = Object.keys(p.prices).map(function (store) {
-      return {
-        store: store,
-        price: p.prices[store],
-        inStock: OUT_OF_STOCK[i] !== store
-      };
+  // enrich
+  var DATA = P.map(function(p,i){
+    var offers = Object.keys(p.o).map(function(s){
+      return { store:s, price:p.o[s].p, was:p.o[s].w||null, inStock:true };
     });
-    var available = offers.filter(function (o) { return o.inStock; });
-    available.sort(function (a, b) { return a.price - b.price; });
-    var low = available[0].price;
-    var high = available[available.length - 1].price;
-    offers.sort(function (a, b) {
-      if (a.inStock !== b.inStock) return a.inStock ? -1 : 1;
-      return a.price - b.price;
+    // demo: mark one cheap store out of stock occasionally to show the feature
+    if(i%9===4 && offers.length>3){ offers.slice().sort(function(a,b){return a.price-b.price;})[0].inStock=false; }
+    var avail = offers.filter(function(o){return o.inStock;}).sort(function(a,b){return a.price-b.price;});
+    var low = avail[0].price, high = avail[avail.length-1].price;
+    offers.sort(function(a,b){
+      if(a.inStock!==b.inStock) return a.inStock?-1:1;
+      return a.price-b.price;
     });
+    var hay = slug(p.brand+" "+p.name+" "+p.kw+" "+p.cat);
     return {
-      id: i, brand: p.brand, name: p.name, cat: p.cat, vol: p.vol,
-      offers: offers, low: low, high: high,
-      lowStore: available[0].store,
-      save: +(high - low).toFixed(2),
-      savePct: Math.round((high - low) / high * 100)
+      id:i, brand:p.brand, name:p.name, cat:p.cat, vol:p.vol, ml:volMl(p.vol),
+      offers:offers, low:low, high:high, lowStore:avail[0].store,
+      save:+(high-low).toFixed(2), savePct:Math.round((high-low)/high*100),
+      hay:hay, hayc:compact(p.brand+" "+p.name+" "+p.kw)
     };
   });
 
-  // ---------- Render stats ----------
-  var allStores = {};
-  DATA.forEach(function (d) { d.offers.forEach(function (o) { allStores[o.store] = true; }); });
-  var storeN = Object.keys(allStores).length;
-  var avgSave = DATA.reduce(function (s, d) { return s + d.save; }, 0) / DATA.length;
-  var avgPct = Math.round(DATA.reduce(function (s, d) { return s + d.savePct; }, 0) / DATA.length);
-  var bestDeal = DATA.slice().sort(function (a, b) { return b.save - a.save; })[0];
-
-  document.getElementById("stats").innerHTML =
-    statTile("Śledzonych produktów", DATA.length, "") +
-    statTile("Średnia oszczędność", money(avgSave), "zł", true) +
-    statTile("Średnia różnica cen", avgPct, "%") +
-    statTile("Porównywanych sklepów", storeN, "");
-  document.getElementById("storeCount").textContent = storeN;
-
-  function statTile(k, v, u, hi) {
-    return '<div class="stat' + (hi ? ' hi' : '') + '"><div class="k">' + k +
-      '</div><div class="v">' + v + (u ? '<span class="u">' + u + '</span>' : '') + '</div></div>';
-  }
-
-  // ---------- Chips ----------
-  var chipsEl = document.getElementById("chips");
-  var activeCat = "Wszystkie";
-  CATS.forEach(function (c) {
-    var b = document.createElement("button");
-    b.className = "chip"; b.type = "button"; b.textContent = c;
-    b.setAttribute("aria-pressed", c === activeCat ? "true" : "false");
-    b.addEventListener("click", function () {
-      activeCat = c;
-      Array.prototype.forEach.call(chipsEl.children, function (ch) {
-        ch.setAttribute("aria-pressed", ch.textContent === c ? "true" : "false");
+  function search(qRaw){
+    var q = slug(qRaw); if(!q) return [];
+    var toks = q.split(" ").filter(Boolean);
+    var qc = compact(qRaw);
+    return DATA.map(function(d){
+      var score=0, allTok=true;
+      toks.forEach(function(t){
+        if(d.hay.indexOf(t)>=0){ score += 3 + (d.hay.indexOf(t)<20?2:0); }
+        else if(d.hayc.indexOf(t)>=0){ score += 2; }
+        else allTok=false;
       });
-      render();
-    });
-    chipsEl.appendChild(b);
-  });
-
-  // ---------- Controls ----------
-  var searchEl = document.getElementById("search");
-  var sortEl = document.getElementById("sort");
-  searchEl.addEventListener("input", render);
-  sortEl.addEventListener("change", render);
-
-  var gridEl = document.getElementById("grid");
-  var countEl = document.getElementById("countLine");
-  var openSet = {}; // id -> bool
-
-  function currentList() {
-    var q = searchEl.value.trim().toLowerCase();
-    var list = DATA.filter(function (d) {
-      if (activeCat !== "Wszystkie" && d.cat !== activeCat) return false;
-      if (q && (d.name + " " + d.brand).toLowerCase().indexOf(q) === -1) return false;
-      return true;
-    });
-    var s = sortEl.value;
-    list.sort(function (a, b) {
-      if (s === "save") return b.save - a.save;
-      if (s === "low") return a.low - b.low;
-      if (s === "high") return b.low - a.low;
-      return a.brand.localeCompare(b.brand, "pl");
-    });
-    return list;
+      // whole-query compact match (handles "larochposay")
+      if(d.hayc.indexOf(qc)>=0 && qc.length>4) score += 4;
+      return { d:d, score: allTok?score:0 };
+    }).filter(function(x){return x.score>0;})
+      .sort(function(a,b){ return b.score-a.score || a.d.brand.localeCompare(b.d.brand,"pl"); })
+      .map(function(x){return x.d;});
   }
 
-  function render() {
-    var list = currentList();
-    countEl.innerHTML = "Znaleziono <b>" + list.length + "</b> " + plural(list.length, "produkt", "produkty", "produktów") +
-      (activeCat !== "Wszystkie" ? " w kategorii <b>" + activeCat + "</b>" : "");
+  // ---------- DOM refs ----------
+  var qEl = document.getElementById("q");
+  var boxEl = document.getElementById("searchBox");
+  var sugEl = document.getElementById("suggest");
+  var homeEl = document.getElementById("home");
+  var cmpEl = document.getElementById("compare");
+  var cmpBody = document.getElementById("cmpBody");
+  var root = document.documentElement;
+  var activeIdx = -1, curSug = [];
+  var watching = {};
 
-    if (!list.length) {
-      gridEl.innerHTML = '<div class="empty"><div class="big">Brak wyników</div>' +
-        '<div>Spróbuj innej frazy lub kategorii.</div></div>';
+  // ---------- Trending ----------
+  var trendIds = [0,2,4,13,20,7]; // Cicaplast, CeraVe, Ordinary, Lash, Lancome, Paula's
+  document.getElementById("tgrid").innerHTML = trendIds.map(function(id){
+    var d = DATA[id]; var g = CAT_GRAD[d.cat];
+    return '<button class="tcard" type="button" data-id="'+id+'">'+
+      '<div class="sug-thumb" style="background:linear-gradient(140deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
+      '<div><div class="tc-name">'+d.name.split(" ").slice(0,4).join(" ")+'</div>'+
+      '<div class="tc-brand">'+d.brand+' · '+d.vol+'</div>'+
+      '<div class="tc-from">od <b>'+money(d.low)+' zł</b> w '+d.offers.length+' sklepach</div></div></button>';
+  }).join("");
+
+  // ---------- Autocomplete render ----------
+  function renderSuggest(){
+    var q = qEl.value.trim();
+    if(q.length < 2){ closeSuggest(); return; }
+    curSug = search(q).slice(0,6);
+    activeIdx = -1;
+    if(!curSug.length){
+      sugEl.innerHTML = '<div class="sug-empty">Brak wyników dla „'+esc(q)+'". Spróbuj samej marki, np. „CeraVe".</div>';
+      openSuggest(); return;
+    }
+    var qn = slug(q);
+    sugEl.innerHTML = curSug.map(function(d,i){
+      var g = CAT_GRAD[d.cat];
+      return '<div class="sug-item" role="option" data-id="'+d.id+'" data-i="'+i+'">'+
+        '<div class="sug-thumb" style="background:linear-gradient(140deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
+        '<div class="sug-body"><div class="sug-name">'+hl(d.brand+" "+d.name, qn)+'</div>'+
+        '<div class="sug-meta">'+d.cat+' · '+d.vol+'</div></div>'+
+        '<div class="sug-price">od <b>'+money(d.low)+' zł</b><br>'+d.offers.length+' sklepów</div></div>';
+    }).join("");
+    openSuggest();
+  }
+  function esc(s){ return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function hl(text, qn){
+    var toks = qn.split(" ").filter(function(t){return t.length>1;});
+    var out = esc(text);
+    toks.forEach(function(t){
+      try{ out = out.replace(new RegExp("("+t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig"),"<b>$1</b>"); }catch(e){}
+    });
+    return out;
+  }
+  function openSuggest(){ sugEl.classList.add("show"); qEl.setAttribute("aria-expanded","true"); }
+  function closeSuggest(){ sugEl.classList.remove("show"); qEl.setAttribute("aria-expanded","false"); activeIdx=-1; }
+
+  qEl.addEventListener("input", renderSuggest);
+  qEl.addEventListener("focus", function(){ boxEl.classList.add("focused"); if(qEl.value.trim().length>=2) renderSuggest(); });
+  qEl.addEventListener("blur", function(){ boxEl.classList.remove("focused"); setTimeout(closeSuggest,150); });
+
+  qEl.addEventListener("keydown", function(e){
+    if(!sugEl.classList.contains("show") || !curSug.length){
+      if(e.key==="Enter") doSearch();
       return;
     }
-
-    gridEl.innerHTML = list.map(cardHTML).join("");
-
-    Array.prototype.forEach.call(gridEl.querySelectorAll(".exp-btn"), function (btn) {
-      btn.addEventListener("click", function () {
-        var id = +btn.getAttribute("data-id");
-        var card = btn.closest(".card");
-        var open = !card.classList.contains("open");
-        card.classList.toggle("open", open);
-        openSet[id] = open;
-        btn.setAttribute("aria-expanded", open ? "true" : "false");
-        btn.querySelector(".exp-label").textContent = open ? "Zwiń ceny" : "Pokaż wszystkie ceny";
-      });
+    if(e.key==="ArrowDown"){ e.preventDefault(); activeIdx=Math.min(activeIdx+1,curSug.length-1); paintActive(); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); activeIdx=Math.max(activeIdx-1,0); paintActive(); }
+    else if(e.key==="Enter"){ e.preventDefault(); if(activeIdx>=0) openProduct(curSug[activeIdx].id); else doSearch(); }
+    else if(e.key==="Escape"){ closeSuggest(); }
+  });
+  function paintActive(){
+    Array.prototype.forEach.call(sugEl.querySelectorAll(".sug-item"), function(el){
+      el.classList.toggle("active", +el.getAttribute("data-i")===activeIdx);
     });
   }
-
-  function plural(n, one, few, many) {
-    if (n === 1) return one;
-    var t = n % 10, h = n % 100;
-    if (t >= 2 && t <= 4 && !(h >= 12 && h <= 14)) return few;
-    return many;
-  }
-
-  function cardHTML(d) {
-    var g = CAT_GRAD[d.cat] || ["#B5476A", "#8E2F4F"];
-    var isOpen = !!openSet[d.id];
-    var rows = d.offers.map(function (o, idx) {
-      var lowest = o.inStock && o.price === d.low && o.store === d.lowStore;
-      var dot = STORES[o.store] || "#999";
-      return '<li class="' + (lowest ? "lowest" : "") + '">' +
-        '<span class="store-name"><span class="store-dot" style="background:' + dot + '"></span>' +
-        o.store +
-        (lowest ? '<span class="pin">Najlepsza cena</span>' : '') +
-        (!o.inStock ? '<span class="oos-tag">niedostępny</span>' : '') +
-        '</span>' +
-        '<span class="row-price ' + (!o.inStock ? "oos" : "") + '">' + money(o.price) + ' zł</span>' +
-      '</li>';
-    }).join("");
-
-    return '<article class="card' + (isOpen ? ' open' : '') + '">' +
-      '<div class="card-top">' +
-        '<div class="thumb" style="background:linear-gradient(140deg,' + g[0] + ',' + g[1] + ')">' + initials(d.brand) + '</div>' +
-        '<div class="card-head">' +
-          '<span class="cat-tag">' + d.cat + '</span>' +
-          '<h3 class="p-name">' + d.name + '</h3>' +
-          '<div class="p-brand">' + d.brand + ' · <span class="p-vol">' + d.vol + '</span></div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="price-block">' +
-        '<div class="best-price">' +
-          '<span class="best-label">Najniższa cena</span>' +
-          '<span class="best-amt">' + money(d.low) + '<span class="cur">zł</span></span>' +
-          '<span class="best-store">w <b>' + d.lowStore + '</b></span>' +
-        '</div>' +
-        (d.save > 0 ?
-          '<div class="save-badge"><div class="amt">−' + money(d.save) + ' zł</div>' +
-          '<div class="lbl">taniej o ' + d.savePct + '%</div></div>' : '') +
-      '</div>' +
-      '<div class="expander">' +
-        '<button class="exp-btn" type="button" data-id="' + d.id + '" aria-expanded="' + (isOpen ? "true" : "false") + '">' +
-          '<span class="exp-label">' + (isOpen ? "Zwiń ceny" : "Pokaż wszystkie ceny") + ' (' + d.offers.length + ')</span>' +
-          '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>' +
-        '</button>' +
-        '<div class="price-list"><div class="price-list-inner"><ul>' + rows + '</ul></div></div>' +
-      '</div>' +
-    '</article>';
-  }
-
-  // ---------- Theme toggle ----------
-  var root = document.documentElement;
-  var themeBtn = document.getElementById("themeBtn");
-  themeBtn.addEventListener("click", function () {
-    var cur = root.getAttribute("data-theme");
-    if (!cur) {
-      cur = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    }
-    root.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
+  sugEl.addEventListener("mousedown", function(e){
+    var it = e.target.closest(".sug-item");
+    if(it){ e.preventDefault(); openProduct(+it.getAttribute("data-id")); }
   });
 
-  render();
+  function doSearch(){
+    var res = search(qEl.value);
+    if(res.length){ openProduct(res[0].id); }
+    else { renderSuggest(); }
+  }
+  document.getElementById("goBtn").addEventListener("click", doSearch);
+
+  // popular chips
+  Array.prototype.forEach.call(document.querySelectorAll(".pop-chip"), function(c){
+    c.addEventListener("click", function(){ qEl.value=c.textContent; doSearch(); });
+  });
+  // trending cards
+  document.getElementById("tgrid").addEventListener("click", function(e){
+    var t = e.target.closest(".tcard"); if(t) openProduct(+t.getAttribute("data-id"));
+  });
+
+  // ---------- Comparison view ----------
+  function openProduct(id){
+    var d = DATA[id];
+    closeSuggest();
+    qEl.blur();
+    var g = CAT_GRAD[d.cat];
+    var isWatch = !!watching[id];
+
+    var rows = d.offers.map(function(o,idx){
+      var st = STORES[o.store]||{c:"#999",url:"#",dl:""};
+      var best = o.inStock && o.price===d.low && o.store===d.lowStore;
+      var ppu = d.ml ? '<div class="ppu">'+money(o.price/d.ml*100)+' zł / 100 ml</div>' : '';
+      var priceCell = '<div class="offer-price"><div class="now">'+money(o.price)+' zł</div>'+
+        (o.was?'<div class="was">'+money(o.was)+' zł</div>':'')+ppu+'</div>';
+      var action = o.inStock
+        ? '<a class="buy" href="'+st.url+'" target="_blank" rel="noopener noreferrer">'+(best?'Kup najtaniej':'Kup w '+o.store)+
+          ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'
+        : '<span class="oos-pill">Chwilowo niedostępny</span>';
+      return '<div class="offer'+(best?' best':'')+(o.inStock?'':' oos')+'">'+
+        '<div class="rank">'+(idx+1)+'</div>'+
+        '<div class="offer-store"><span class="store-dot" style="background:'+st.c+'"></span>'+
+          '<div><div class="nm">'+o.store+(best?'<span class="best-flag">najtaniej</span>':'')+'</div>'+
+          '<div class="dl">Dostawa: '+st.dl+'</div></div></div>'+
+        priceCell + action + '</div>';
+    }).join("");
+
+    cmpBody.innerHTML =
+      '<div class="cmp-hero">'+
+        '<div class="cmp-thumb" style="background:linear-gradient(140deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
+        '<div><div class="cmp-cat">'+d.cat+'</div>'+
+          '<h1 class="cmp-name">'+d.name+'</h1>'+
+          '<div class="cmp-brand">'+d.brand+' · <span class="vol">'+d.vol+'</span></div></div>'+
+        '<div class="cmp-bestbox"><div class="lbl">Najniższa cena</div>'+
+          '<div class="amt">'+money(d.low)+'<span class="cur">zł</span></div>'+
+          '<div class="store">w <b>'+d.lowStore+'</b></div></div>'+
+      '</div>'+
+      '<div class="cmp-summary">'+
+        (d.save>0?'<span class="pill save"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1 0-4h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg> Oszczędzasz do <b>'+money(d.save)+' zł</b> ('+d.savePct+'%)</span>':'')+
+        '<span class="pill">Porównano <b>'+d.offers.length+'</b> '+plural(d.offers.length,"sklep","sklepy","sklepów")+'</span>'+
+        (d.ml?'<span class="pill">Cena za 100 ml: od <b>'+money(d.low/d.ml*100)+' zł</b></span>':'')+
+        '<button class="pill alert'+(isWatch?' on':'')+'" type="button" id="alertBtn">'+
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="'+(isWatch?'currentColor':'none')+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg> '+
+          (isWatch?'Śledzisz cenę':'Ustaw alert cenowy')+'</button>'+
+      '</div>'+
+      '<div class="offers">'+rows+'</div>'+
+      '<div class="cmp-note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>'+
+        '<span>Ceny mają charakter demonstracyjny. W wersji produkcyjnej aktualizowałyby się automatycznie z ofert sklepów, a przyciski „Kup" prowadziłyby do konkretnego produktu przez linki partnerskie.</span></div>'+
+      relatedHTML(d);
+
+    document.getElementById("alertBtn").addEventListener("click", function(){
+      watching[id] = !watching[id];
+      openProduct(id);
+    });
+    cmpBody.querySelectorAll("[data-open]").forEach(function(el){
+      el.addEventListener("click", function(){ openProduct(+el.getAttribute("data-open")); });
+    });
+
+    homeEl.style.display = "none";
+    cmpEl.style.display = "block";
+    window.scrollTo({ top:0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth" });
+  }
+
+  function relatedHTML(d){
+    var rel = DATA.filter(function(x){return x.cat===d.cat && x.id!==d.id;}).slice(0,3);
+    if(!rel.length) return "";
+    return '<div class="related"><div class="sec-head"><h2>Podobne w kategorii</h2>'+
+      '<span class="hint">'+d.cat+'</span></div><div class="tgrid">'+
+      rel.map(function(r){ var g=CAT_GRAD[r.cat];
+        return '<button class="tcard" type="button" data-open="'+r.id+'">'+
+          '<div class="sug-thumb" style="background:linear-gradient(140deg,'+g[0]+','+g[1]+')">'+initials(r.brand)+'</div>'+
+          '<div><div class="tc-name">'+r.name.split(" ").slice(0,4).join(" ")+'</div>'+
+          '<div class="tc-brand">'+r.brand+'</div>'+
+          '<div class="tc-from">od <b>'+money(r.low)+' zł</b></div></div></button>';
+      }).join("")+'</div></div>';
+  }
+
+  function plural(n,one,few,many){
+    if(n===1) return one; var t=n%10,h=n%100;
+    if(t>=2&&t<=4&&!(h>=12&&h<=14)) return few; return many;
+  }
+
+  function goHome(){
+    cmpEl.style.display="none"; homeEl.style.display="block";
+    qEl.value=""; closeSuggest();
+    window.scrollTo({top:0, behavior:"auto"});
+  }
+  document.getElementById("backBtn").addEventListener("click", goHome);
+  function homeNav(){ goHome(); }
+  document.getElementById("homeBtn").addEventListener("click", homeNav);
+  document.getElementById("homeBtn").addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" ") homeNav(); });
+
+  // ---------- Theme ----------
+  document.getElementById("themeBtn").addEventListener("click", function(){
+    var cur = root.getAttribute("data-theme");
+    if(!cur) cur = matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light";
+    root.setAttribute("data-theme", cur==="dark"?"light":"dark");
+  });
+
+  // smooth-scroll for in-page anchors without leaving compare view awkwardly
+  document.querySelectorAll('a.nav-link[href^="#"]').forEach(function(a){
+    a.addEventListener("click", function(e){
+      var id=a.getAttribute("href").slice(1); var el=document.getElementById(id);
+      if(el && homeEl.style.display!=="none"){ e.preventDefault(); el.scrollIntoView({behavior:"smooth"}); }
+      else if(el){ goHome(); setTimeout(function(){el.scrollIntoView({behavior:"smooth"});},50); e.preventDefault(); }
+    });
+  });
 })();
 </script>
