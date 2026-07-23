@@ -596,9 +596,22 @@
       paintWish();
     };
 
-    document.getElementById("relatedHead").textContent="Popularne w Blask";
-    document.getElementById("related").innerHTML=
-      DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,4).map(cardHTML).join("");
+    // Produkty tej marki z bazy cen (jesli mamy) — pokazujemy je na stronie marki
+    var relHead=document.getElementById("relatedHead"), relEl=document.getElementById("related");
+    if(isBrand){
+      var mine=DATA.filter(function(d){ return d.brand===item.name; })
+                   .sort(function(a,b){ return b.pop-a.pop; });
+      if(mine.length){
+        relHead.textContent="Produkty marki "+item.name+" ("+mine.length+")";
+        relEl.innerHTML=mine.map(cardHTML).join("");
+      } else {
+        relHead.textContent="Popularne w Blask";
+        relEl.innerHTML=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,4).map(cardHTML).join("");
+      }
+    } else {
+      relHead.textContent="Popularne w Blask";
+      relEl.innerHTML=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,4).map(cardHTML).join("");
+    }
 
     homeEl.style.display="none"; pdpEl.style.display="block";
     window.scrollTo({top:0,behavior:"auto"});
