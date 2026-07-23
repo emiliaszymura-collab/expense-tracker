@@ -159,6 +159,54 @@
   var favMode=false, activeCat="Wszystkie", activeIdx=-1, curSug=[];
   var homeEl=document.getElementById("home"), pdpEl=document.getElementById("pdp");
   var qEl=document.getElementById("q"), sugEl=document.getElementById("suggest");
+  var IS_ELECTRON=/Electron/i.test(navigator.userAgent);
+
+  // ---------- prawdziwe zdjecia produktow ----------
+  // Zrodlo: Open Beauty Facts (otwarta baza zdjec realnych produktow).
+  // Adresy sa cache'owane w localStorage; gdy sieci brak (np. sandbox
+  // podgladu), na kartach zostaja wektorowe ilustracje.
+  var PHOTOS=loadStore("blask.photos");
+  function visualInner(d){
+    var url=PHOTOS[d.id];
+    return productSVG(d)+(url?'<img class="pphoto" alt="" loading="lazy" src="'+esc(url)+'">':'');
+  }
+  function injectPhoto(id){
+    var url=PHOTOS[id]; if(!url) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.pv[data-pid="'+id+'"]'),function(el){
+      if(el.querySelector("img.pphoto")) return;
+      var im=document.createElement("img");
+      im.className="pphoto"; im.alt=""; im.loading="lazy"; im.src=url;
+      el.appendChild(im);
+    });
+  }
+  // Uszkodzone/niedostepne zdjecie -> wracamy do ilustracji.
+  document.addEventListener("error",function(e){
+    var t=e.target;
+    if(t && t.classList && t.classList.contains("pphoto")){
+      var pv=t.closest(".pv");
+      if(pv){ PHOTOS[pv.getAttribute("data-pid")]=""; saveStore("blask.photos",PHOTOS); }
+      t.remove();
+    }
+  },true);
+  function loadPhotos(){
+    var queue=DATA.filter(function(d){ return !(d.id in PHOTOS); });
+    (function next(){
+      if(!queue.length){ saveStore("blask.photos",PHOTOS); return; }
+      var d=queue.shift();
+      var q=encodeURIComponent(d.brand+" "+d.name.split(" ").slice(0,3).join(" "));
+      fetch("https://world.openbeautyfacts.org/cgi/search.pl?search_terms="+q+
+            "&search_simple=1&action=process&json=1&page_size=5&sort_by=unique_scans_n&fields=image_front_url")
+        .then(function(r){ return r.json(); })
+        .then(function(js){
+          var hit=(js.products||[]).filter(function(x){return x.image_front_url;})[0];
+          PHOTOS[d.id]=hit?hit.image_front_url:"";
+          if(hit) injectPhoto(d.id);
+          saveStore("blask.photos",PHOTOS);
+          next();
+        })
+        .catch(function(){ next(); /* brak sieci - zostaje ilustracja, sprobujemy przy nastepnym starcie */ });
+    })();
+  }
 
   // ---------- hero stats ----------
   var stores={}; DATA.forEach(function(d){d.offers.forEach(function(o){stores[o.store]=1;});});
@@ -206,7 +254,7 @@
       (d.savePct>=15?'<span class="badge">−'+d.savePct+'%</span>':'')+
       '<button class="fav'+(favs[d.id]?" on":"")+'" data-fav="'+d.id+'" type="button" aria-label="Dodaj do ulubionych">'+
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="'+(favs[d.id]?"currentColor":"none")+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg></button>'+
-      '<div class="pimg">'+productSVG(d)+'</div>'+
+      '<div class="pimg pv" data-pid="'+d.id+'">'+visualInner(d)+'</div>'+
       '<div class="pbrand">'+esc(d.brand)+'</div>'+
       '<div class="pname">'+esc(d.name)+'</div>'+
       '<div class="prating">'+starsHTML(d.rate)+' '+d.rate.toFixed(1)+' ('+d.votes.toLocaleString("pl-PL")+')</div>'+
@@ -276,6 +324,46 @@
     clearTimeout(toastT); toastT=setTimeout(function(){toastEl.classList.remove("show");},2200);
   }
 
+  // ---------- otwieranie sklepow ----------
+  // W Electronie link przejmuje main.js (shell.openExternal -> systemowa
+  // przegladarka). W przegladarce probujemy window.open; jesli srodowisko
+  // (np. sandbox podgladu) je blokuje, pokazujemy link do skopiowania.
+  function fallbackCopy(t){
+    var ta=document.createElement("textarea");
+    ta.value=t; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    var ok=false; try{ ok=document.execCommand("copy"); }catch(e){}
+    ta.remove(); return ok;
+  }
+  function copyText(t,done){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){done(true);},function(){done(fallbackCopy(t));});
+    } else done(fallbackCopy(t));
+  }
+  var lmodal=document.getElementById("lmodal"), lmodalUrl=document.getElementById("lmodalUrl");
+  function showLinkModal(url){
+    lmodalUrl.textContent=url; lmodal.hidden=false;
+    document.getElementById("lmodalCopy").focus();
+  }
+  document.getElementById("lmodalClose").addEventListener("click", function(){ lmodal.hidden=true; });
+  lmodal.addEventListener("click", function(e){ if(e.target===lmodal) lmodal.hidden=true; });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape" && !lmodal.hidden) lmodal.hidden=true; });
+  document.getElementById("lmodalCopy").addEventListener("click", function(){
+    copyText(lmodalUrl.textContent, function(ok){
+      toast(ok?"Link skopiowany — wklej go w przeglądarce":"Nie udało się skopiować — zaznacz link ręcznie");
+      if(ok) lmodal.hidden=true;
+    });
+  });
+  document.addEventListener("click", function(e){
+    var a=e.target.closest("a.buy, a.cta");
+    if(!a || IS_ELECTRON) return;
+    e.preventDefault();
+    var url=a.getAttribute("href");
+    var w=null;
+    try{ w=window.open(url,"_blank","noopener"); }catch(err){}
+    if(!w) showLinkModal(url);
+  });
+
   // ---------- autocomplete ----------
   function renderSuggest(){
     var q=qEl.value.trim();
@@ -288,7 +376,7 @@
     var qn=slug(q);
     sugEl.innerHTML=curSug.map(function(d,i){
       return '<div class="sug-item" role="option" data-id="'+d.id+'" data-i="'+i+'">'+
-        '<div class="sug-thumb">'+productSVG(d)+'</div>'+
+        '<div class="sug-thumb pv" data-pid="'+d.id+'">'+visualInner(d)+'</div>'+
         '<div class="sug-body"><div class="sug-name">'+hl(d.brand+" "+d.name,qn)+'</div>'+
         '<div class="sug-meta">'+d.cat+' · '+d.vol+'</div></div>'+
         '<div class="sug-price">od<b>'+money(d.low)+' zł</b></div></div>';
@@ -341,7 +429,9 @@
       '<button type="button" data-home>Strona główna</button><span class="sep">›</span>'+
       '<button type="button" data-cat="'+esc(d.cat)+'">'+esc(d.cat)+'</button><span class="sep">›</span>'+
       '<span>'+esc(d.brand)+'</span>';
-    document.getElementById("pdpVis").innerHTML=productSVG(d);
+    var vis=document.getElementById("pdpVis");
+    vis.classList.add("pv"); vis.setAttribute("data-pid",d.id);
+    vis.innerHTML=visualInner(d);
     document.getElementById("pdpBrand").textContent=d.brand;
     document.getElementById("pdpName").textContent=d.name;
     document.getElementById("pdpSub").textContent=d.cat+" · "+d.vol;
@@ -390,7 +480,12 @@
       (alerts[id]?"Śledzisz cenę":"Alert cenowy");
     f.onclick=function(){toggleFav(id);};
     a.onclick=function(){toggleAlert(id);};
-    document.getElementById("pdpShare").onclick=function(){ toast("Link skopiowany do schowka"); };
+    document.getElementById("pdpShare").onclick=function(){
+      var d=DATA[id], url=(STORES[d.lowStore]||{}).url||"";
+      copyText(d.brand+" "+d.name+" — najtaniej "+money(d.low)+" zł w "+d.lowStore+": "+url, function(ok){
+        toast(ok?"Skopiowano do schowka":"Nie udało się skopiować");
+      });
+    };
   }
 
   document.getElementById("crumbs").addEventListener("click", function(e){
@@ -413,4 +508,5 @@
 
   renderGrid();
   syncCounts();
+  loadPhotos();
 })();

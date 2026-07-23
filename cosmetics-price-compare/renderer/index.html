@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'">
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; script-src 'self'; connect-src 'self' https://world.openbeautyfacts.org">
   <title>Blask — porównywarka cen kosmetyków</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -172,6 +172,18 @@
     <div class="foot-legal">© 2026 Blask — prototyp produktu. Ceny i linki demonstracyjne, ilustracje produktów poglądowe.</div>
   </div>
 </footer>
+
+<div class="lmodal" id="lmodal" hidden>
+  <div class="lmodal-card" role="dialog" aria-modal="true" aria-labelledby="lmodalTitle">
+    <h3 id="lmodalTitle">Przejdź do sklepu</h3>
+    <p>To środowisko zablokowało automatyczne otwarcie nowej karty. Skopiuj link i wklej go w przeglądarce:</p>
+    <div class="lmodal-url" id="lmodalUrl"></div>
+    <div class="lmodal-actions">
+      <button class="cta" id="lmodalCopy" type="button">Kopiuj link</button>
+      <button class="mini" id="lmodalClose" type="button">Zamknij</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast" role="status"></div>
 

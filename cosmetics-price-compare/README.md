@@ -35,6 +35,14 @@ renderer/data.js     — dane demonstracyjne: sklepy, kategorie, produkty
 renderer/app.js      — logika: wyszukiwarka, filtry, strona produktu, ulubione, alerty
 ```
 
+## Zdjęcia produktów
+
+Przy pierwszym uruchomieniu aplikacja pobiera prawdziwe zdjęcia produktów
+z Open Beauty Facts (otwarta baza zdjęć rzeczywistych produktów) i cache'uje
+adresy lokalnie. Bez dostępu do sieci karty pokazują wektorowe ilustracje.
+W wersji produkcyjnej zdjęcia pochodziłyby z oficjalnych feedów sklepów
+(sieci afiliacyjne udostępniają je partnerom wraz z cenami).
+
 ## Dane
 
 Ceny i produkty w `renderer/data.js` są demonstracyjne. W wersji produkcyjnej
