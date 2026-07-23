@@ -119,15 +119,16 @@
       parts.join("")+'</svg>';
   }
 
+  var HAS_FEED = typeof FEED_P!=="undefined" && FEED_P.length>0;
   var DATA = P.map(function(p,i){
-    var offers = Object.keys(p.o).map(function(s){ return { store:s, price:p.o[s].p, was:p.o[s].w||null, inStock:true }; });
-    if(i%9===4 && offers.length>3){ offers.slice().sort(function(a,b){return a.price-b.price;})[0].inStock=false; }
+    var offers = Object.keys(p.o).map(function(s){ return { store:s, price:p.o[s].p, was:p.o[s].w||null, url:p.o[s].u||null, inStock:true }; });
+    if(!HAS_FEED && i%9===4 && offers.length>3){ offers.slice().sort(function(a,b){return a.price-b.price;})[0].inStock=false; }
     var avail = offers.filter(function(o){return o.inStock;}).sort(function(a,b){return a.price-b.price;});
     var low=avail[0].price, high=avail[avail.length-1].price;
     offers.sort(function(a,b){ if(a.inStock!==b.inStock)return a.inStock?-1:1; return a.price-b.price; });
     return {
       id:i, brand:p.brand, name:p.name, cat:p.cat, vol:p.vol, ml:volMl(p.vol),
-      pop:p.pop, rate:p.rate, votes:p.votes, img:p.img,
+      pop:p.pop, rate:p.rate, votes:p.votes, img:p.img, photo:p.photo||null,
       offers:offers, low:low, high:high, lowStore:avail[0].store,
       save:+(high-low).toFixed(2), savePct:Math.round((high-low)/high*100),
       hay:slug(p.brand+" "+p.name+" "+p.kw+" "+p.cat), hayc:compact(p.brand+" "+p.name+" "+p.kw)
@@ -167,7 +168,7 @@
   // podgladu), na kartach zostaja wektorowe ilustracje.
   var PHOTOS=loadStore("blask.photos");
   function visualInner(d){
-    var url=PHOTOS[d.id];
+    var url=d.photo||PHOTOS[d.id]; // zdjecie z feedu sklepu ma pierwszenstwo
     return productSVG(d)+(url?'<img class="pphoto" alt="" loading="lazy" src="'+esc(url)+'">':'');
   }
   function injectPhoto(id){
@@ -189,7 +190,7 @@
     }
   },true);
   function loadPhotos(){
-    var queue=DATA.filter(function(d){ return !(d.id in PHOTOS); });
+    var queue=DATA.filter(function(d){ return !d.photo && !(d.id in PHOTOS); });
     (function next(){
       if(!queue.length){ saveStore("blask.photos",PHOTOS); return; }
       var d=queue.shift();
@@ -569,7 +570,8 @@
     var shopQ=d.brand+" "+d.name.split(" ").slice(0,3).join(" ");
     document.getElementById("bbAmt").innerHTML=money(d.low)+'<span class="cur">zł</span>';
     document.getElementById("bbAt").innerHTML='w <b>'+d.lowStore+'</b>'+(d.ml?' · '+money(d.low/d.ml*100)+' zł / 100 ml':'');
-    document.getElementById("bbCta").href=searchUrl(d.lowStore, shopQ);
+    var bestOffer=d.offers.filter(function(o){return o.inStock&&o.store===d.lowStore;})[0];
+    document.getElementById("bbCta").href=(bestOffer&&bestOffer.url)||searchUrl(d.lowStore, shopQ);
     document.getElementById("bbSave").innerHTML=d.save>0
       ? '<span class="save-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Oszczędzasz do '+money(d.save)+' zł ('+d.savePct+'%) względem najdroższej oferty</span>' : '';
 
@@ -580,7 +582,7 @@
       var st=STORES[o.store]||{c:"#999",url:"#",dl:""};
       var best=o.inStock&&o.price===d.low&&o.store===d.lowStore;
       var action=o.inStock
-        ? '<a class="buy" href="'+esc(searchUrl(o.store, shopQ))+'" target="_blank" rel="noopener noreferrer">'+(best?"Kup najtaniej":"Do sklepu")+
+        ? '<a class="buy" href="'+esc(o.url||searchUrl(o.store, shopQ))+'" target="_blank" rel="noopener noreferrer">'+(best?"Kup najtaniej":"Do sklepu")+
           ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'
         : '<span class="oos-pill">Chwilowo niedostępny</span>';
       return '<div class="offer'+(best?" best":"")+(o.inStock?"":" oos")+'">'+

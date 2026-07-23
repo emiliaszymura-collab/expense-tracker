@@ -43,6 +43,22 @@ adresy lokalnie. Bez dostępu do sieci karty pokazują wektorowe ilustracje.
 W wersji produkcyjnej zdjęcia pochodziłyby z oficjalnych feedów sklepów
 (sieci afiliacyjne udostępniają je partnerom wraz z cenami).
 
+## Import prawdziwej bazy sklepów (feedy produktowe)
+
+Pełne katalogi sklepów (nazwa, marka, cena, link partnerski, zdjęcie, EAN)
+pobiera się legalnie jako feedy produktowe z sieci afiliacyjnych po dołączeniu
+do programu partnerskiego danego sklepu (Awin, webePartners, TradeDoubler,
+Conversand). Import:
+
+1. Pobierz feed każdego sklepu i zapisz jako `feeds/<Sklep>.csv`
+   (np. `feeds/Notino.csv`, `feeds/Hebe.csv`),
+2. `node scripts/import-feed.mjs`,
+3. `npm start`.
+
+Skrypt scala oferty tego samego produktu z różnych sklepów po kodzie EAN,
+generuje `renderer/feed.js` i od tego momentu aplikacja pokazuje prawdziwy
+katalog: ceny, zdjęcia sklepowe i linki partnerskie zamiast bazy demo.
+
 ## Wyszukiwarka i katalog
 
 Wyszukiwarka łączy dwa źródła: produkty śledzone w porównywarce (pełne
