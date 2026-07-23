@@ -43,6 +43,15 @@ adresy lokalnie. Bez dostępu do sieci karty pokazują wektorowe ilustracje.
 W wersji produkcyjnej zdjęcia pochodziłyby z oficjalnych feedów sklepów
 (sieci afiliacyjne udostępniają je partnerom wraz z cenami).
 
+## Wyszukiwarka i katalog
+
+Wyszukiwarka łączy dwa źródła: produkty śledzone w porównywarce (pełne
+tabele cen) oraz otwarty katalog Open Beauty Facts przeszukiwany na żywo —
+wpisać można dowolny kosmetyk. Produkt spoza porównywarki dostaje kartę
+z przyciskami "Szukaj w Rossmann/Hebe/Notino..." (deep-linki do wyszukiwarek
+sklepów) i opcją dodania do listy życzeń. Przyciski "Kup" przy cenach również
+prowadzą do wyszukiwania danego produktu w wybranym sklepie.
+
 ## Dane
 
 Ceny i produkty w `renderer/data.js` są demonstracyjne. W wersji produkcyjnej

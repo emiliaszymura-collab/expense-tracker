@@ -3,14 +3,14 @@
 // img: konfiguracja ilustracji produktu (form + kolory + etykieta).
 
 var STORES = {
-  "Rossmann":   { c:"#E4032E", url:"https://www.rossmann.pl",      dl:"od 9,99 zł · darmowa od 99 zł" },
-  "Hebe":       { c:"#00A9A7", url:"https://www.hebe.pl",          dl:"od 8,99 zł · darmowa od 99 zł" },
-  "Notino":     { c:"#E5006D", url:"https://www.notino.pl",        dl:"od 9,90 zł · darmowa od 150 zł" },
-  "Douglas":    { c:"#4A3A55", url:"https://www.douglas.pl",       dl:"od 12,90 zł · darmowa od 150 zł" },
-  "Sephora":    { c:"#7A4CC9", url:"https://www.sephora.pl",       dl:"od 13,99 zł · darmowa od 200 zł" },
-  "Superpharm": { c:"#0072CE", url:"https://www.superpharm.pl",    dl:"od 10,99 zł · darmowa od 129 zł" },
-  "Ezebra":     { c:"#E09112", url:"https://www.ezebra.com.pl",    dl:"od 8,90 zł · darmowa od 99 zł" },
-  "e.Leclerc":  { c:"#0068B4", url:"https://www.zakupy.leclerc",   dl:"odbiór w sklepie" }
+  "Rossmann":   { c:"#E4032E", url:"https://www.rossmann.pl",      search:"https://www.rossmann.pl/szukaj?Search={q}",                dl:"od 9,99 zł · darmowa od 99 zł" },
+  "Hebe":       { c:"#00A9A7", url:"https://www.hebe.pl",          search:"https://www.hebe.pl/search?q={q}",                         dl:"od 8,99 zł · darmowa od 99 zł" },
+  "Notino":     { c:"#E5006D", url:"https://www.notino.pl",        search:"https://www.notino.pl/search.asp?exps={q}",                dl:"od 9,90 zł · darmowa od 150 zł" },
+  "Douglas":    { c:"#4A3A55", url:"https://www.douglas.pl",       search:"https://www.douglas.pl/pl/search?query={q}",               dl:"od 12,90 zł · darmowa od 150 zł" },
+  "Sephora":    { c:"#7A4CC9", url:"https://www.sephora.pl",       search:"https://www.sephora.pl/szukaj?q={q}",                      dl:"od 13,99 zł · darmowa od 200 zł" },
+  "Superpharm": { c:"#0072CE", url:"https://www.superpharm.pl",    search:"https://www.superpharm.pl/catalogsearch/result/?q={q}",    dl:"od 10,99 zł · darmowa od 129 zł" },
+  "Ezebra":     { c:"#E09112", url:"https://www.ezebra.com.pl",    search:"https://www.ezebra.com.pl/search.php?text={q}",            dl:"od 8,90 zł · darmowa od 99 zł" },
+  "e.Leclerc":  { c:"#0068B4", url:"https://www.zakupy.leclerc",   search:null,                                                       dl:"odbiór w sklepie" }
 };
 
 var CATS = ["Wszystkie","Pielęgnacja twarzy","Makijaż","Pielęgnacja ciała","Włosy","Zapachy"];

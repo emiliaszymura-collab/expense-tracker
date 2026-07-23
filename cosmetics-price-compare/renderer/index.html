@@ -79,7 +79,7 @@
           <h1 class="pdp-name" id="pdpName"></h1>
           <div class="pdp-sub" id="pdpSub"></div>
           <div class="pdp-rating" id="pdpRating"></div>
-          <div class="buybox">
+          <div class="buybox tracked-only">
             <div class="lbl">Najniższa cena dziś</div>
             <div class="buybox-row">
               <div>
@@ -93,7 +93,13 @@
             </div>
             <div id="bbSave"></div>
           </div>
-          <div class="mini-actions">
+          <div class="catpanel" id="catPanel" hidden>
+            <div class="catpanel-head">Tego produktu nie ma jeszcze w porównywarce cen Blask</div>
+            <p>Znaleźliśmy go w otwartym katalogu kosmetyków. Sprawdź jego cenę bezpośrednio w sklepach — jednym kliknięciem:</p>
+            <div class="catpanel-shops" id="catShops"></div>
+            <button class="mini" id="wishBtn" type="button"></button>
+          </div>
+          <div class="mini-actions tracked-only">
             <button class="mini" id="pdpFav" type="button"></button>
             <button class="mini" id="pdpAlert" type="button"></button>
             <button class="mini" id="pdpShare" type="button">
@@ -104,17 +110,17 @@
         </div>
       </div>
 
-      <div class="offers-head">
+      <div class="offers-head tracked-only">
         <h2>Porównanie cen<span class="res" id="offCnt"></span></h2>
         <span class="hint">od najtańszej</span>
       </div>
-      <div class="offers" id="offers"></div>
-      <div class="pdp-note">
+      <div class="offers tracked-only" id="offers"></div>
+      <div class="pdp-note tracked-only">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
         <span>Wersja demonstracyjna — ceny przykładowe, ilustracje poglądowe. W wersji produkcyjnej ceny aktualizują się z ofert sklepów, a przyciski prowadzą do konkretnego produktu.</span>
       </div>
 
-      <h2 class="related-head">Podobne produkty</h2>
+      <h2 class="related-head" id="relatedHead">Podobne produkty</h2>
       <div class="pgrid" id="related"></div>
     </div>
   </div>

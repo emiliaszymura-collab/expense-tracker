@@ -212,9 +212,9 @@
   var stores={}; DATA.forEach(function(d){d.offers.forEach(function(o){stores[o.store]=1;});});
   var avgPct=Math.round(DATA.reduce(function(s,d){return s+d.savePct;},0)/DATA.length);
   document.getElementById("bandStats").innerHTML =
-    '<span>'+DATA.length+' produktów</span><span class="dot"></span>'+
     '<span>'+Object.keys(stores).length+' sklepów</span><span class="dot"></span>'+
-    '<span>średnia różnica cen '+avgPct+'%</span>';
+    '<span>średnia różnica cen '+avgPct+'%</span><span class="dot"></span>'+
+    '<span>katalog setek tysięcy kosmetyków w wyszukiwarce</span>';
 
   // ---------- category nav ----------
   var catnav=document.getElementById("catnav");
@@ -364,25 +364,12 @@
     if(!w) showLinkModal(url);
   });
 
-  // ---------- autocomplete ----------
-  function renderSuggest(){
-    var q=qEl.value.trim();
-    if(q.length<2){ closeSug(); return; }
-    curSug=search(q).slice(0,6); activeIdx=-1;
-    if(!curSug.length){
-      sugEl.innerHTML='<div class="sug-empty">Brak wyników dla „'+esc(q)+'". Spróbuj samej marki, np. „CeraVe".</div>';
-      openSug(); return;
-    }
-    var qn=slug(q);
-    sugEl.innerHTML=curSug.map(function(d,i){
-      return '<div class="sug-item" role="option" data-id="'+d.id+'" data-i="'+i+'">'+
-        '<div class="sug-thumb pv" data-pid="'+d.id+'">'+visualInner(d)+'</div>'+
-        '<div class="sug-body"><div class="sug-name">'+hl(d.brand+" "+d.name,qn)+'</div>'+
-        '<div class="sug-meta">'+d.cat+' · '+d.vol+'</div></div>'+
-        '<div class="sug-price">od<b>'+money(d.low)+' zł</b></div></div>';
-    }).join("");
-    openSug();
-  }
+  // ---------- wyszukiwarka: porownywarka + katalog live ----------
+  // Wpisac mozna cokolwiek: najpierw trafienia z porownywarki cen,
+  // ponizej produkty z otwartego katalogu (Open Beauty Facts, ~pol miliona
+  // kosmetykow), na koncu wyszukiwanie frazy bezposrednio w sklepach.
+  var sugRows=[], catCache={}, sugTimer=null, sugSeq=0;
+
   function hl(text,qn){
     var out=esc(text);
     qn.split(" ").filter(function(t){return t.length>1;}).forEach(function(t){
@@ -393,14 +380,93 @@
   function openSug(){ sugEl.classList.add("show"); qEl.setAttribute("aria-expanded","true"); }
   function closeSug(){ sugEl.classList.remove("show"); qEl.setAttribute("aria-expanded","false"); activeIdx=-1; }
 
+  function remoteSearch(q, cb){
+    var key=norm(q);
+    if(catCache[key]){ cb(catCache[key]); return; }
+    fetch("https://world.openbeautyfacts.org/cgi/search.pl?search_terms="+encodeURIComponent(q)+
+          "&search_simple=1&action=process&json=1&page_size=6&sort_by=unique_scans_n"+
+          "&fields=code,product_name,brands,quantity,image_front_small_url,image_front_url")
+      .then(function(r){ return r.json(); })
+      .then(function(js){
+        var items=(js.products||[]).filter(function(p){ return p.product_name; }).map(function(p){
+          return { code:p.code, name:p.product_name, brand:(p.brands||"").split(",")[0].trim(),
+                   qty:p.quantity||"", img:p.image_front_small_url||p.image_front_url||"" };
+        });
+        catCache[key]=items; cb(items);
+      })
+      .catch(function(){ cb(null); });
+  }
+
+  var genericImg={ img:{ form:"bottle", body:"#E9E9EE", cap:"#C9C9CE" } };
+  function rowsHTML(q){
+    var qn=slug(q), html="", firstCat=true;
+    sugRows.forEach(function(r,i){
+      if(r.t==="local"){
+        var d=r.d;
+        html+='<div class="sug-item" role="option" data-i="'+i+'">'+
+          '<div class="sug-thumb pv" data-pid="'+d.id+'">'+visualInner(d)+'</div>'+
+          '<div class="sug-body"><div class="sug-name">'+hl(d.brand+" "+d.name,qn)+'</div>'+
+          '<div class="sug-meta">'+d.cat+' · '+d.vol+'</div></div>'+
+          '<div class="sug-price">od<b>'+money(d.low)+' zł</b></div></div>';
+      } else if(r.t==="cat"){
+        if(firstCat){ html+='<div class="sug-sec">Katalog kosmetyków</div>'; firstCat=false; }
+        var it=r.item;
+        html+='<div class="sug-item" role="option" data-i="'+i+'">'+
+          '<div class="sug-thumb pv">'+productSVG(genericImg)+
+            (it.img?'<img class="pphoto" alt="" loading="lazy" src="'+esc(it.img)+'">':'')+'</div>'+
+          '<div class="sug-body"><div class="sug-name">'+hl((it.brand?it.brand+" ":"")+it.name,qn)+'</div>'+
+          '<div class="sug-meta">'+(it.qty?it.qty+' · ':'')+'sprawdź ceny w sklepach</div></div></div>';
+      } else {
+        html+='<div class="sug-item sug-all" role="option" data-i="'+i+'">Szukaj „'+esc(q)+'" we wszystkich sklepach →</div>';
+      }
+    });
+    return html;
+  }
+
+  function renderSuggest(){
+    var q=qEl.value.trim();
+    if(q.length<2){ closeSug(); return; }
+    var local=search(q).slice(0,5);
+    sugRows=local.map(function(d){ return {t:"local", d:d}; });
+    sugRows.push({t:"all", q:q});
+    activeIdx=-1;
+    sugEl.innerHTML=rowsHTML(q);
+    openSug();
+
+    // katalog: doładuj z opóźnieniem, tylko jeśli fraza się nie zmieniła
+    clearTimeout(sugTimer);
+    var seq=++sugSeq;
+    sugTimer=setTimeout(function(){
+      remoteSearch(q, function(items){
+        if(seq!==sugSeq || !items || !items.length) return;
+        var localKeys={};
+        sugRows.forEach(function(r){ if(r.t==="local") localKeys[compact(r.d.brand+r.d.name)]=1; });
+        var extra=items.filter(function(it){ return !localKeys[compact((it.brand||"")+it.name)]; }).slice(0,4)
+          .map(function(it){ return {t:"cat", item:it}; });
+        if(!extra.length) return;
+        sugRows.splice(sugRows.length-1, 0, extra[0]); // keep "all" last
+        for(var k=1;k<extra.length;k++) sugRows.splice(sugRows.length-1,0,extra[k]);
+        activeIdx=-1;
+        if(qEl.value.trim()===q && sugEl.classList.contains("show")) sugEl.innerHTML=rowsHTML(q);
+      });
+    }, 300);
+  }
+
+  function activateRow(i){
+    var r=sugRows[i]; if(!r) return;
+    if(r.t==="local") openPDP(r.d.id);
+    else if(r.t==="cat") openCatalog(r.item);
+    else openCatalog({ query:true, name:r.q||qEl.value.trim() });
+  }
+
   qEl.addEventListener("input", renderSuggest);
   qEl.addEventListener("focus", function(){ if(qEl.value.trim().length>=2) renderSuggest(); });
   qEl.addEventListener("blur", function(){ setTimeout(closeSug,150); });
   qEl.addEventListener("keydown", function(e){
-    if(!sugEl.classList.contains("show")||!curSug.length){ if(e.key==="Enter") doSearch(); return; }
-    if(e.key==="ArrowDown"){ e.preventDefault(); activeIdx=Math.min(activeIdx+1,curSug.length-1); paintAct(); }
+    if(!sugEl.classList.contains("show")||!sugRows.length){ if(e.key==="Enter") doSearch(); return; }
+    if(e.key==="ArrowDown"){ e.preventDefault(); activeIdx=Math.min(activeIdx+1,sugRows.length-1); paintAct(); }
     else if(e.key==="ArrowUp"){ e.preventDefault(); activeIdx=Math.max(activeIdx-1,0); paintAct(); }
-    else if(e.key==="Enter"){ e.preventDefault(); if(activeIdx>=0) openPDP(curSug[activeIdx].id); else doSearch(); }
+    else if(e.key==="Enter"){ e.preventDefault(); if(activeIdx>=0) activateRow(activeIdx); else doSearch(); }
     else if(e.key==="Escape"){ closeSug(); }
   });
   function paintAct(){
@@ -409,17 +475,78 @@
     });
   }
   sugEl.addEventListener("mousedown", function(e){
-    var it=e.target.closest(".sug-item"); if(it){ e.preventDefault(); openPDP(+it.getAttribute("data-id")); }
+    var it=e.target.closest(".sug-item"); if(it){ e.preventDefault(); activateRow(+it.getAttribute("data-i")); }
   });
   function doSearch(){
-    var res=search(qEl.value);
+    var q=qEl.value.trim(); if(!q) return;
+    var res=search(q);
     if(res.length) openPDP(res[0].id);
-    else renderSuggest();
+    else openCatalog({ query:true, name:q });
   }
   document.getElementById("goBtn").addEventListener("click", doSearch);
 
   // ---------- product page ----------
   var curPdp=null;
+  var wishes=loadStore("blask.wishes");
+
+  function searchUrl(store,q){
+    var st=STORES[store]||{};
+    return st.search ? st.search.replace("{q}", encodeURIComponent(q)) : st.url;
+  }
+  function setTracked(on){
+    Array.prototype.forEach.call(document.querySelectorAll(".tracked-only"),function(el){
+      el.style.display = on ? "" : "none";
+    });
+    document.getElementById("catPanel").hidden = on;
+  }
+
+  // Produkt spoza porownywarki (katalog / surowa fraza): pokazujemy karte
+  // z wyszukiwaniem w sklepach zamiast tabeli cen.
+  function openCatalog(item){
+    curPdp=null; closeSug(); qEl.blur();
+    var isQuery=!!item.query;
+    document.getElementById("crumbs").innerHTML=
+      '<button type="button" data-home>Strona główna</button><span class="sep">›</span>'+
+      '<span>'+(isQuery?"Wyszukiwanie":"Katalog kosmetyków")+'</span>';
+    var vis=document.getElementById("pdpVis");
+    vis.classList.add("pv"); vis.removeAttribute("data-pid");
+    vis.innerHTML=productSVG(genericImg)+
+      (item.img?'<img class="pphoto" alt="" src="'+esc(item.img)+'">':'');
+    document.getElementById("pdpBrand").textContent=item.brand||"";
+    document.getElementById("pdpName").textContent=item.name;
+    document.getElementById("pdpSub").textContent=
+      (item.qty?item.qty+" · ":"")+(isQuery?"Twoje wyszukiwanie":"z otwartego katalogu kosmetyków");
+    document.getElementById("pdpRating").innerHTML="";
+    setTracked(false);
+
+    var q=((item.brand?item.brand+" ":"")+item.name).trim();
+    document.getElementById("catShops").innerHTML=Object.keys(STORES).map(function(s){
+      if(!STORES[s].search) return "";
+      return '<a class="buy" href="'+esc(searchUrl(s,q))+'" target="_blank" rel="noopener noreferrer">'+
+        '<span class="store-dot" style="background:'+STORES[s].c+'"></span>Szukaj w '+s+'</a>';
+    }).join("");
+
+    var wkey=item.code?("c:"+item.code):("q:"+norm(item.name));
+    var wb=document.getElementById("wishBtn");
+    function paintWish(){
+      wb.className="mini"+(wishes[wkey]?" on":"");
+      wb.textContent=wishes[wkey]?"Na liście życzeń ✓":"Chcę porównywać ceny tego produktu";
+    }
+    paintWish();
+    wb.onclick=function(){
+      wishes[wkey]=!wishes[wkey]; if(!wishes[wkey]) delete wishes[wkey];
+      saveStore("blask.wishes",wishes);
+      toast(wishes[wkey]?"Zapisano — dodamy ten produkt do porównywarki":"Usunięto z listy życzeń");
+      paintWish();
+    };
+
+    document.getElementById("relatedHead").textContent="Popularne w Blask";
+    document.getElementById("related").innerHTML=
+      DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,4).map(cardHTML).join("");
+
+    homeEl.style.display="none"; pdpEl.style.display="block";
+    window.scrollTo({top:0,behavior:"auto"});
+  }
   function openPDP(id){
     curPdp=id;
     var d=DATA[id];
@@ -437,9 +564,11 @@
     document.getElementById("pdpSub").textContent=d.cat+" · "+d.vol;
     document.getElementById("pdpRating").innerHTML=starsHTML(d.rate)+' <b>'+d.rate.toFixed(1)+'</b> · '+d.votes.toLocaleString("pl-PL")+' ocen';
 
+    setTracked(true);
+    var shopQ=d.brand+" "+d.name.split(" ").slice(0,3).join(" ");
     document.getElementById("bbAmt").innerHTML=money(d.low)+'<span class="cur">zł</span>';
     document.getElementById("bbAt").innerHTML='w <b>'+d.lowStore+'</b>'+(d.ml?' · '+money(d.low/d.ml*100)+' zł / 100 ml':'');
-    document.getElementById("bbCta").href=(STORES[d.lowStore]||{}).url||"#";
+    document.getElementById("bbCta").href=searchUrl(d.lowStore, shopQ);
     document.getElementById("bbSave").innerHTML=d.save>0
       ? '<span class="save-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Oszczędzasz do '+money(d.save)+' zł ('+d.savePct+'%) względem najdroższej oferty</span>' : '';
 
@@ -450,7 +579,7 @@
       var st=STORES[o.store]||{c:"#999",url:"#",dl:""};
       var best=o.inStock&&o.price===d.low&&o.store===d.lowStore;
       var action=o.inStock
-        ? '<a class="buy" href="'+st.url+'" target="_blank" rel="noopener noreferrer">'+(best?"Kup najtaniej":"Do sklepu")+
+        ? '<a class="buy" href="'+esc(searchUrl(o.store, shopQ))+'" target="_blank" rel="noopener noreferrer">'+(best?"Kup najtaniej":"Do sklepu")+
           ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'
         : '<span class="oos-pill">Chwilowo niedostępny</span>';
       return '<div class="offer'+(best?" best":"")+(o.inStock?"":" oos")+'">'+
@@ -463,6 +592,7 @@
         action+'</div>';
     }).join("");
 
+    document.getElementById("relatedHead").textContent="Podobne produkty";
     var rel=DATA.filter(function(x){return x.cat===d.cat&&x.id!==d.id;}).sort(function(a,b){return b.pop-a.pop;}).slice(0,4);
     document.getElementById("related").innerHTML=rel.map(cardHTML).join("");
 
