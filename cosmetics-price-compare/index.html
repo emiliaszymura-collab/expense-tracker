@@ -1,447 +1,546 @@
 <title>BLASK — porównywarka cen kosmetyków</title>
 <style>
   :root {
-    --porcelain: #FBF7F5;
-    --card: #FFFFFF;
-    --card-soft: #FAF4F2;
-    --ink: #2A2024;
-    --ink-soft: #6B5B62;
-    --ink-faint: #9A8A90;
-    --line: #ECE2DD;
-    --line-strong: #DDCEC8;
-    --berry: #B5476A;
-    --berry-deep: #8E2F4F;
-    --berry-tint: #F7E6EC;
-    --gold: #B98E5E;
-    --good: #2F7D5B;
-    --good-tint: #E4F0EA;
+    --violet-900: #3B1E6E;
+    --violet-700: #5B2DA8;
+    --violet-600: #6D3BC4;
+    --violet-500: #7C4DD4;
+    --violet-100: #EFE9FA;
+    --violet-50:  #F7F4FC;
+
+    --bg: #FFFFFF;
+    --bg-soft: #F7F6F9;
+    --surface: #FFFFFF;
+    --text: #1C1526;
+    --muted: #625A70;
+    --faint: #948CA3;
+    --border: #E8E5EE;
+    --border-2: #D8D3E2;
+    --accent: var(--violet-600);
+    --accent-strong: var(--violet-700);
+    --accent-tint: var(--violet-100);
+    --accent-soft: var(--violet-50);
+    --good: #12805C;
+    --good-tint: #E3F3EC;
+    --sale: #D6336C;
+    --sale-tint: #FCE9F1;
     --warn: #B4741F;
+    --star: #F5A623;
 
-    --bg: var(--porcelain);
-    --surface: var(--card);
-    --surface-2: var(--card-soft);
-    --text: var(--ink);
-    --muted: var(--ink-soft);
-    --faint: var(--ink-faint);
-    --border: var(--line);
-    --border-2: var(--line-strong);
-    --accent: var(--berry);
-    --accent-deep: var(--berry-deep);
-    --accent-tint: var(--berry-tint);
-    --best: var(--good);
-    --best-tint: var(--good-tint);
+    --shadow-sm: 0 1px 2px rgba(28,21,38,.05);
+    --shadow: 0 1px 3px rgba(28,21,38,.05), 0 10px 28px rgba(28,21,38,.08);
+    --shadow-lift: 0 4px 12px rgba(28,21,38,.08), 0 22px 48px rgba(28,21,38,.14);
 
-    --shadow: 0 1px 2px rgba(42,32,36,.04), 0 10px 30px rgba(42,32,36,.07);
-    --shadow-lift: 0 2px 8px rgba(42,32,36,.07), 0 24px 60px rgba(42,32,36,.14);
-    --shadow-pop: 0 12px 40px rgba(42,32,36,.16);
-
-    --serif: Georgia, 'Times New Roman', 'Iowan Old Style', serif;
     --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    --radius: 16px;
+    --r: 12px;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #161015; --surface: #221A20; --surface-2: #1D161C;
-      --text: #F3EAE6; --muted: #B7A6AD; --faint: #8B7A82;
-      --border: #33272F; --border-2: #40323B;
-      --accent: #E77E9E; --accent-deep: #F2AAC0; --accent-tint: #38222C;
-      --best: #63C99B; --best-tint: #1D2E27; --gold: #D3AC7C; --warn: #D69A4A;
-      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
-      --shadow-lift: 0 2px 8px rgba(0,0,0,.45), 0 24px 60px rgba(0,0,0,.55);
-      --shadow-pop: 0 12px 40px rgba(0,0,0,.6);
+      --bg: #141018; --bg-soft: #1B1622; --surface: #1F1928;
+      --text: #F0EBF7; --muted: #ABA2BC; --faint: #7E7590;
+      --border: #2C2438; --border-2: #3A3049;
+      --accent: #A78BEA; --accent-strong: #C0A9F2;
+      --accent-tint: #2E2344; --accent-soft: #241C33;
+      --good: #4CC495; --good-tint: #1B2E26;
+      --sale: #F06D9C; --sale-tint: #38202B; --star: #F5B84D;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.35);
+      --shadow: 0 1px 3px rgba(0,0,0,.35), 0 10px 28px rgba(0,0,0,.45);
+      --shadow-lift: 0 4px 12px rgba(0,0,0,.5), 0 22px 48px rgba(0,0,0,.6);
     }
   }
   :root[data-theme="light"] {
-    --bg: var(--porcelain); --surface: var(--card); --surface-2: var(--card-soft);
-    --text: var(--ink); --muted: var(--ink-soft); --faint: var(--ink-faint);
-    --border: var(--line); --border-2: var(--line-strong);
-    --accent: var(--berry); --accent-deep: var(--berry-deep); --accent-tint: var(--berry-tint);
-    --best: var(--good); --best-tint: var(--good-tint); --gold: #B98E5E; --warn: #B4741F;
-    --shadow: 0 1px 2px rgba(42,32,36,.04), 0 10px 30px rgba(42,32,36,.07);
-    --shadow-lift: 0 2px 8px rgba(42,32,36,.07), 0 24px 60px rgba(42,32,36,.14);
-    --shadow-pop: 0 12px 40px rgba(42,32,36,.16);
+    --bg: #FFFFFF; --bg-soft: #F7F6F9; --surface: #FFFFFF;
+    --text: #1C1526; --muted: #625A70; --faint: #948CA3;
+    --border: #E8E5EE; --border-2: #D8D3E2;
+    --accent: var(--violet-600); --accent-strong: var(--violet-700);
+    --accent-tint: var(--violet-100); --accent-soft: var(--violet-50);
+    --good: #12805C; --good-tint: #E3F3EC;
+    --sale: #D6336C; --sale-tint: #FCE9F1; --star: #F5A623;
+    --shadow-sm: 0 1px 2px rgba(28,21,38,.05);
+    --shadow: 0 1px 3px rgba(28,21,38,.05), 0 10px 28px rgba(28,21,38,.08);
+    --shadow-lift: 0 4px 12px rgba(28,21,38,.08), 0 22px 48px rgba(28,21,38,.14);
   }
   :root[data-theme="dark"] {
-    --bg: #161015; --surface: #221A20; --surface-2: #1D161C;
-    --text: #F3EAE6; --muted: #B7A6AD; --faint: #8B7A82;
-    --border: #33272F; --border-2: #40323B;
-    --accent: #E77E9E; --accent-deep: #F2AAC0; --accent-tint: #38222C;
-    --best: #63C99B; --best-tint: #1D2E27; --gold: #D3AC7C; --warn: #D69A4A;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
-    --shadow-lift: 0 2px 8px rgba(0,0,0,.45), 0 24px 60px rgba(0,0,0,.55);
-    --shadow-pop: 0 12px 40px rgba(0,0,0,.6);
+    --bg: #141018; --bg-soft: #1B1622; --surface: #1F1928;
+    --text: #F0EBF7; --muted: #ABA2BC; --faint: #7E7590;
+    --border: #2C2438; --border-2: #3A3049;
+    --accent: #A78BEA; --accent-strong: #C0A9F2;
+    --accent-tint: #2E2344; --accent-soft: #241C33;
+    --good: #4CC495; --good-tint: #1B2E26;
+    --sale: #F06D9C; --sale-tint: #38202B; --star: #F5B84D;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.35);
+    --shadow: 0 1px 3px rgba(0,0,0,.35), 0 10px 28px rgba(0,0,0,.45);
+    --shadow-lift: 0 4px 12px rgba(0,0,0,.5), 0 22px 48px rgba(0,0,0,.6);
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
   body {
     margin: 0; background: var(--bg); color: var(--text);
-    font-family: var(--sans); -webkit-font-smoothing: antialiased; line-height: 1.5;
+    font-family: var(--sans); line-height: 1.45; -webkit-font-smoothing: antialiased;
+    font-size: 14px;
   }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-  a { color: inherit; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+  button { font-family: var(--sans); }
 
-  /* ---------- Header ---------- */
-  header.top {
-    position: sticky; top: 0; z-index: 60;
-    background: color-mix(in srgb, var(--bg) 86%, transparent);
-    backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
-  }
-  .top-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 0; }
-  .brand { display: flex; align-items: baseline; gap: 12px; cursor: pointer; }
-  .wordmark {
-    font-family: var(--serif); font-weight: 700; font-size: 23px; letter-spacing: .2em;
-    text-transform: uppercase; line-height: 1;
-  }
-  .wordmark .dot { color: var(--accent); }
-  .top-nav { display: flex; align-items: center; gap: 8px; }
-  .nav-link {
-    font-size: 13px; color: var(--muted); text-decoration: none; padding: 8px 12px; border-radius: 8px;
-    transition: color .15s, background .15s;
-  }
-  .nav-link:hover { color: var(--accent); }
-  .theme-toggle {
-    appearance: none; border: 1px solid var(--border-2); background: var(--surface);
-    color: var(--muted); font-family: var(--sans); font-size: 12px; letter-spacing: .06em;
-    text-transform: uppercase; padding: 8px 14px; border-radius: 999px; cursor: pointer;
-    transition: color .15s, border-color .15s;
-  }
-  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
-  .theme-toggle:focus-visible, .nav-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* ============ Utility strip ============ */
+  .ustrip { background: var(--accent-strong); color: #fff; font-size: 12px; }
+  :root[data-theme="dark"] .ustrip { background: var(--violet-900); color: #E6DCF8; }
+  .ustrip-inner { display: flex; justify-content: center; gap: 34px; padding: 7px 0; flex-wrap: wrap; }
+  .ustrip span { display: inline-flex; align-items: center; gap: 6px; opacity: .95; }
 
-  /* ---------- Hero + search ---------- */
-  .hero {
-    text-align: center; padding: 58px 0 30px;
-    background:
-      radial-gradient(120% 80% at 50% -10%, var(--accent-tint), transparent 60%);
+  /* ============ Main header ============ */
+  header.main {
+    position: sticky; top: 0; z-index: 80; background: var(--bg);
+    border-bottom: 1px solid var(--border);
   }
-  .eyebrow {
-    font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold);
-    font-weight: 600; margin-bottom: 16px;
+  .head-row { display: flex; align-items: center; gap: 22px; padding: 14px 0; }
+  .logo { display: flex; align-items: center; gap: 9px; cursor: pointer; flex: none; border: none; background: none; padding: 0; }
+  .logo-mark {
+    width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--violet-500), var(--violet-900));
+    display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 17px;
   }
-  .hero h1 {
-    font-family: var(--serif); font-weight: 700; letter-spacing: -.015em;
-    font-size: clamp(30px, 5.2vw, 52px); line-height: 1.06; margin: 0 auto 16px; max-width: 15ch;
-    text-wrap: balance;
-  }
-  .hero h1 em { font-style: italic; color: var(--accent); }
-  .hero .sub { font-size: 17px; color: var(--muted); max-width: 52ch; margin: 0 auto 30px; }
+  .logo-name { font-size: 21px; font-weight: 800; letter-spacing: -.02em; color: var(--text); }
+  .logo-name i { font-style: normal; color: var(--accent); }
+  .logo:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 
-  .search-shell { max-width: 620px; margin: 0 auto; position: relative; z-index: 40; }
-  .search-box {
-    display: flex; align-items: center; gap: 12px; background: var(--surface);
-    border: 1.5px solid var(--border-2); border-radius: 16px; padding: 6px 6px 6px 18px;
-    box-shadow: var(--shadow); transition: border-color .18s, box-shadow .18s;
+  .hsearch { flex: 1; position: relative; max-width: 640px; margin: 0 auto; }
+  .hsearch-box {
+    display: flex; align-items: center; background: var(--bg-soft);
+    border: 1.5px solid var(--border-2); border-radius: 10px; overflow: hidden;
+    transition: border-color .15s, box-shadow .15s, background .15s;
   }
-  .search-box.focused { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-tint), var(--shadow-lift); }
-  .search-box svg.mag { color: var(--faint); flex: none; }
-  #q {
-    flex: 1; border: none; background: transparent; font-family: var(--sans); font-size: 16.5px;
-    color: var(--text); padding: 14px 0;
+  .hsearch-box:focus-within { border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 3px var(--accent-tint); }
+  #q { flex: 1; border: none; background: transparent; padding: 11px 14px; font-size: 14px; color: var(--text); font-family: var(--sans); min-width: 0; }
+  #q:focus { outline: none; } #q::placeholder { color: var(--faint); }
+  .hsearch-btn {
+    border: none; background: var(--accent); color: #fff; padding: 0 18px; align-self: stretch;
+    cursor: pointer; display: grid; place-items: center; transition: background .15s;
   }
-  #q:focus { outline: none; }
-  #q::placeholder { color: var(--faint); }
-  .go-btn {
-    appearance: none; border: none; cursor: pointer; background: var(--accent); color: #fff;
-    font-family: var(--sans); font-weight: 600; font-size: 14.5px; padding: 12px 22px; border-radius: 11px;
-    transition: background .15s, transform .1s;
-  }
-  .go-btn:hover { background: var(--accent-deep); }
-  .go-btn:active { transform: scale(.98); }
-  .go-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .hsearch-btn:hover { background: var(--accent-strong); }
+  .hsearch-btn:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: -3px; }
 
-  /* ---------- Autocomplete ---------- */
+  .head-actions { display: flex; gap: 4px; flex: none; }
+  .hact {
+    display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 62px;
+    border: none; background: none; cursor: pointer; color: var(--muted); font-size: 11px;
+    padding: 5px 8px; border-radius: 9px; position: relative; transition: color .15s, background .15s;
+  }
+  .hact:hover { color: var(--accent); background: var(--accent-soft); }
+  .hact:focus-visible { outline: 2px solid var(--accent); }
+  .hact .cnt {
+    position: absolute; top: 0; right: 10px; min-width: 16px; height: 16px; border-radius: 999px;
+    background: var(--sale); color: #fff; font-size: 10px; font-weight: 700;
+    display: grid; place-items: center; padding: 0 4px;
+  }
+
+  /* Category nav */
+  .catnav { border-top: 1px solid var(--border); background: var(--bg); }
+  .catnav-inner { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+  .catnav-inner::-webkit-scrollbar { display: none; }
+  .catlink {
+    border: none; background: none; cursor: pointer; white-space: nowrap;
+    font-size: 13.5px; font-weight: 600; color: var(--muted); padding: 12px 15px;
+    border-bottom: 2.5px solid transparent; transition: color .15s, border-color .15s;
+  }
+  .catlink:hover { color: var(--accent); }
+  .catlink.on { color: var(--accent); border-bottom-color: var(--accent); }
+  .catlink:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  /* ============ Autocomplete ============ */
   .suggest {
-    position: absolute; left: 0; right: 0; top: calc(100% + 8px);
-    background: var(--surface); border: 1px solid var(--border-2); border-radius: 14px;
-    box-shadow: var(--shadow-pop); overflow: hidden; display: none; text-align: left;
+    position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 90;
+    background: var(--surface); border: 1px solid var(--border-2); border-radius: 12px;
+    box-shadow: var(--shadow-lift); overflow: hidden; display: none;
   }
   .suggest.show { display: block; }
-  .sug-item {
-    display: flex; align-items: center; gap: 13px; padding: 11px 16px; cursor: pointer;
-    border-top: 1px solid var(--border);
-  }
+  .sug-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; border-top: 1px solid var(--border); }
   .sug-item:first-child { border-top: none; }
-  .sug-item:hover, .sug-item.active { background: var(--surface-2); }
+  .sug-item:hover, .sug-item.active { background: var(--accent-soft); }
   .sug-thumb {
-    width: 40px; height: 40px; border-radius: 9px; flex: none; display: grid; place-items: center;
-    font-family: var(--serif); font-weight: 700; font-size: 14px; color: #fff;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+    width: 38px; height: 38px; border-radius: 8px; flex: none; display: grid; place-items: center;
+    font-weight: 800; font-size: 13px; color: #fff;
   }
-  .sug-body { min-width: 0; flex: 1; }
-  .sug-name { font-size: 14.5px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sug-name b { color: var(--accent); font-weight: 700; }
-  .sug-meta { font-size: 12px; color: var(--faint); }
-  .sug-price { font-size: 13px; color: var(--muted); text-align: right; white-space: nowrap; }
-  .sug-price b { color: var(--best); font-variant-numeric: tabular-nums; }
-  .sug-empty { padding: 18px 16px; color: var(--muted); font-size: 14px; text-align: center; }
+  .sug-body { flex: 1; min-width: 0; }
+  .sug-name { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sug-name b { color: var(--accent); }
+  .sug-meta { font-size: 11.5px; color: var(--faint); }
+  .sug-price { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .sug-price b { display: block; color: var(--good); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+  .sug-empty { padding: 16px; color: var(--muted); text-align: center; font-size: 13px; }
 
-  .pop-line { margin: 22px auto 0; max-width: 620px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; align-items: center; }
-  .pop-line .lbl { font-size: 12px; color: var(--faint); letter-spacing: .04em; }
-  .pop-chip {
-    appearance: none; border: 1px solid var(--border-2); background: var(--surface); cursor: pointer;
-    font-family: var(--sans); font-size: 12.5px; color: var(--muted); padding: 6px 13px; border-radius: 999px;
+  /* ============ Hero band ============ */
+  .band {
+    background: linear-gradient(115deg, var(--accent-soft), var(--accent-tint));
+    border-bottom: 1px solid var(--border);
+  }
+  .band-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 26px 0; flex-wrap: wrap; }
+  .band h1 { font-size: clamp(20px, 3vw, 27px); font-weight: 800; letter-spacing: -.02em; margin: 0 0 4px; }
+  .band h1 i { font-style: normal; color: var(--accent); }
+  .band p { margin: 0; color: var(--muted); font-size: 14px; }
+  .band-stats { display: flex; gap: 12px; flex-wrap: wrap; }
+  .bstat {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--r);
+    padding: 11px 18px; text-align: center; box-shadow: var(--shadow-sm); min-width: 96px;
+  }
+  .bstat .v { font-size: 19px; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .bstat .k { font-size: 11px; color: var(--faint); margin-top: 1px; }
+
+  /* ============ Toolbar ============ */
+  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 0 14px; flex-wrap: wrap; }
+  .toolbar h2 { font-size: 18px; font-weight: 800; letter-spacing: -.015em; margin: 0; }
+  .toolbar .res { color: var(--faint); font-weight: 500; font-size: 13px; margin-left: 8px; }
+  .sort-wrap { display: flex; align-items: center; gap: 8px; }
+  .sort-wrap label { font-size: 12px; color: var(--faint); }
+  select.sort {
+    appearance: none; font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--text);
+    background: var(--surface); border: 1.5px solid var(--border-2); border-radius: 9px;
+    padding: 8px 30px 8px 12px; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23948CA3' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+  }
+  select.sort:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+
+  /* ============ Product grid ============ */
+  .pgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding-bottom: 50px; }
+  .pcard {
+    position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r);
+    padding: 14px; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 0;
+    transition: box-shadow .18s, transform .18s, border-color .18s;
+  }
+  .pcard:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); border-color: var(--border-2); }
+  .pcard:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .pimg {
+    height: 128px; border-radius: 9px; display: grid; place-items: center;
+    font-weight: 800; font-size: 30px; color: #fff; margin-bottom: 12px;
+    background: var(--bg-soft); position: relative; overflow: hidden;
+  }
+  .pimg::after { content:""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(255,255,255,.16), transparent 55%); }
+  .badge {
+    position: absolute; top: 10px; left: 10px; z-index: 2;
+    font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 7px;
+    background: var(--sale); color: #fff;
+  }
+  .fav {
+    position: absolute; top: 10px; right: 10px; z-index: 3; width: 32px; height: 32px;
+    border-radius: 50%; border: 1px solid var(--border); background: var(--surface);
+    display: grid; place-items: center; cursor: pointer; color: var(--faint);
+    transition: color .15s, border-color .15s, transform .1s;
+  }
+  .fav:hover { color: var(--sale); border-color: var(--sale); }
+  .fav.on { color: var(--sale); border-color: var(--sale); background: var(--sale-tint); }
+  .fav:active { transform: scale(.92); }
+  .fav:focus-visible { outline: 2px solid var(--accent); }
+  .pbrand { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--faint); }
+  .pname { font-size: 13.5px; font-weight: 600; line-height: 1.3; margin: 3px 0 6px; min-height: 35px; }
+  .prating { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--faint); margin-bottom: 10px; }
+  .stars { display: inline-flex; color: var(--star); letter-spacing: 1px; font-size: 12px; }
+  .pfoot { margin-top: auto; }
+  .pfrom { font-size: 11px; color: var(--faint); }
+  .pprice { display: flex; align-items: baseline; gap: 7px; }
+  .pprice .now { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .pprice .high { font-size: 12px; color: var(--faint); text-decoration: line-through; font-variant-numeric: tabular-nums; }
+  .pstores { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .pstores b { color: var(--good); }
+  .empty { grid-column: 1/-1; text-align: center; padding: 60px 0; color: var(--muted); }
+  .empty .t { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+
+  /* ============ Product page ============ */
+  #pdp { display: none; }
+  .crumbs { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--faint); padding: 16px 0 4px; flex-wrap: wrap; }
+  .crumbs button { border: none; background: none; cursor: pointer; color: var(--muted); font-size: 12.5px; padding: 2px 4px; border-radius: 5px; }
+  .crumbs button:hover { color: var(--accent); }
+  .crumbs .sep { color: var(--border-2); }
+
+  .pdp-grid { display: grid; grid-template-columns: 380px 1fr; gap: 28px; padding: 14px 0 8px; align-items: start; }
+  .pdp-visual {
+    border: 1px solid var(--border); border-radius: 16px; height: 340px;
+    display: grid; place-items: center; font-weight: 800; font-size: 64px; color: #fff;
+    position: relative; overflow: hidden;
+  }
+  .pdp-visual::after { content:""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(255,255,255,.18), transparent 55%); }
+  .pdp-brand { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); }
+  .pdp-name { font-size: clamp(20px, 2.6vw, 27px); font-weight: 800; letter-spacing: -.02em; line-height: 1.15; margin: 4px 0 6px; text-wrap: balance; }
+  .pdp-sub { font-size: 13px; color: var(--muted); }
+  .pdp-rating { display: flex; align-items: center; gap: 8px; margin: 10px 0 16px; font-size: 12.5px; color: var(--muted); }
+
+  .buybox {
+    border: 1.5px solid var(--border-2); border-radius: 14px; padding: 18px; background: var(--surface);
+    box-shadow: var(--shadow-sm); margin-bottom: 16px;
+  }
+  .buybox .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--faint); font-weight: 700; }
+  .buybox-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
+  .buybox .amt { font-size: 34px; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1; }
+  .buybox .amt .cur { font-size: 16px; font-weight: 700; color: var(--muted); margin-left: 3px; }
+  .buybox .at { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .buybox .at b { color: var(--text); }
+  .cta {
+    display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff;
+    border: none; border-radius: 10px; padding: 13px 22px; font-size: 14.5px; font-weight: 700;
+    cursor: pointer; text-decoration: none; transition: background .15s, transform .1s;
+  }
+  .cta:hover { background: var(--accent-strong); }
+  .cta:active { transform: scale(.98); }
+  .cta:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 2px; }
+  .save-note { display: inline-flex; align-items: center; gap: 6px; background: var(--good-tint); color: var(--good); font-size: 12.5px; font-weight: 700; border-radius: 8px; padding: 6px 11px; margin-top: 12px; }
+
+  .mini-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mini {
+    display: inline-flex; align-items: center; gap: 7px; border: 1.5px solid var(--border-2); background: var(--surface);
+    color: var(--muted); font-size: 12.5px; font-weight: 600; border-radius: 9px; padding: 8px 13px; cursor: pointer;
     transition: all .15s;
   }
-  .pop-chip:hover { color: var(--accent); border-color: var(--accent); }
+  .mini:hover { border-color: var(--accent); color: var(--accent); }
+  .mini.on { background: var(--accent-tint); border-color: transparent; color: var(--accent-strong); }
+  .mini:focus-visible { outline: 2px solid var(--accent); }
 
-  /* ---------- Value props ---------- */
-  .props { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 44px 0 8px; }
-  .prop { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
-  .prop .ic { width: 40px; height: 40px; border-radius: 11px; background: var(--accent-tint); color: var(--accent); display: grid; place-items: center; margin-bottom: 14px; }
-  .prop h3 { font-family: var(--serif); font-size: 17px; margin: 0 0 6px; }
-  .prop p { font-size: 13.5px; color: var(--muted); margin: 0; }
-
-  /* ---------- Section heading ---------- */
-  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 50px 0 18px; }
-  .sec-head h2 { font-family: var(--serif); font-size: 24px; margin: 0; letter-spacing: -.01em; }
-  .sec-head .hint { font-size: 13px; color: var(--faint); }
-
-  /* ---------- Trending grid ---------- */
-  .tgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .tcard {
-    text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 16px; cursor: pointer; box-shadow: var(--shadow); display: flex; gap: 14px; align-items: center;
-    transition: transform .18s, box-shadow .18s, border-color .18s; font-family: var(--sans);
-  }
-  .tcard:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); border-color: var(--border-2); }
-  .tcard:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .tcard .sug-thumb { width: 52px; height: 52px; font-size: 17px; }
-  .tcard .tc-name { font-family: var(--serif); font-size: 15.5px; line-height: 1.15; }
-  .tcard .tc-brand { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .tcard .tc-from { font-size: 12px; color: var(--faint); margin-top: 7px; }
-  .tcard .tc-from b { color: var(--best); font-variant-numeric: tabular-nums; font-size: 14px; }
-
-  /* ---------- How it works ---------- */
-  .how { background: var(--surface-2); border: 1px solid var(--border); border-radius: 20px; padding: 34px; margin-top: 30px; }
-  .how h2 { font-family: var(--serif); font-size: 23px; margin: 0 0 24px; text-align: center; }
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .step { text-align: center; }
-  .step .num {
-    width: 44px; height: 44px; margin: 0 auto 14px; border-radius: 50%; display: grid; place-items: center;
-    font-family: var(--serif); font-size: 19px; font-weight: 700; color: #fff; background: var(--accent);
-  }
-  .step h4 { font-size: 15px; margin: 0 0 5px; }
-  .step p { font-size: 13px; color: var(--muted); margin: 0; }
-  .step-line { display: none; }
-
-  /* ---------- Comparison view ---------- */
-  #compare { display: none; padding-top: 14px; }
-  .back-btn {
-    appearance: none; border: 1px solid var(--border-2); background: var(--surface); cursor: pointer;
-    font-family: var(--sans); font-size: 13px; color: var(--muted); padding: 8px 15px 8px 11px; border-radius: 999px;
-    display: inline-flex; align-items: center; gap: 6px; transition: all .15s; margin-bottom: 22px;
-  }
-  .back-btn:hover { color: var(--accent); border-color: var(--accent); }
-
-  .cmp-hero {
-    display: grid; grid-template-columns: 96px 1fr auto; gap: 22px; align-items: center;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px;
-    box-shadow: var(--shadow);
-  }
-  .cmp-thumb {
-    width: 96px; height: 96px; border-radius: 16px; display: grid; place-items: center;
-    font-family: var(--serif); font-weight: 700; font-size: 30px; color: #fff;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
-  }
-  .cmp-cat { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
-  .cmp-name { font-family: var(--serif); font-size: 26px; line-height: 1.12; margin: 5px 0 4px; text-wrap: balance; }
-  .cmp-brand { font-size: 14px; color: var(--muted); }
-  .cmp-brand .vol { color: var(--faint); }
-  .cmp-bestbox { text-align: right; }
-  .cmp-bestbox .lbl { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--faint); }
-  .cmp-bestbox .amt { font-family: var(--serif); font-size: 38px; line-height: 1; color: var(--best); font-variant-numeric: tabular-nums; margin: 5px 0 4px; }
-  .cmp-bestbox .amt .cur { font-size: 17px; color: var(--muted); font-family: var(--sans); margin-left: 4px; }
-  .cmp-bestbox .store { font-size: 13px; color: var(--muted); }
-  .cmp-bestbox .store b { color: var(--text); }
-
-  .cmp-summary { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0 4px; }
-  .pill { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border-2); background: var(--surface); color: var(--muted); }
-  .pill b { color: var(--text); }
-  .pill.save { background: var(--best-tint); border-color: transparent; color: var(--best); }
-  .pill.save b { color: var(--best); }
-  .pill.alert { cursor: pointer; transition: all .15s; }
-  .pill.alert:hover { border-color: var(--accent); color: var(--accent); }
-  .pill.alert.on { background: var(--accent-tint); border-color: transparent; color: var(--accent); }
-
-  .offers { margin-top: 22px; border: 1px solid var(--border); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
+  /* Offers table */
+  .offers-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 26px 0 12px; }
+  .offers-head h2 { font-size: 17px; font-weight: 800; margin: 0; }
+  .offers-head .hint { font-size: 12px; color: var(--faint); }
+  .offers { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 8px; }
   .offer {
-    display: grid; grid-template-columns: 30px 1fr auto auto; gap: 16px; align-items: center;
-    padding: 16px 20px; border-top: 1px solid var(--border); background: var(--surface);
+    display: grid; grid-template-columns: 26px 1.4fr 1fr auto; gap: 14px; align-items: center;
+    padding: 14px 18px; border-top: 1px solid var(--border); background: var(--surface); font-size: 13.5px;
   }
   .offer:first-child { border-top: none; }
-  .offer.best { background: linear-gradient(90deg, var(--best-tint), var(--surface) 70%); }
-  .offer .rank { font-family: var(--serif); font-size: 16px; color: var(--faint); font-variant-numeric: tabular-nums; text-align: center; }
-  .offer.best .rank { color: var(--best); }
-  .offer-store { display: flex; align-items: center; gap: 11px; min-width: 0; }
-  .store-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
-  .offer-store .nm { font-weight: 600; font-size: 15px; }
-  .offer-store .dl { font-size: 12px; color: var(--faint); margin-top: 1px; }
-  .best-flag { font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: var(--best); background: var(--best-tint); padding: 2px 8px; border-radius: 999px; margin-left: 8px; vertical-align: middle; }
-  .offer-price { text-align: right; }
-  .offer-price .now { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .offer.best .offer-price .now { color: var(--best); }
-  .offer-price .was { font-size: 12.5px; color: var(--faint); text-decoration: line-through; font-variant-numeric: tabular-nums; }
-  .offer-price .ppu { font-size: 11px; color: var(--faint); }
+  .offer.best { background: linear-gradient(90deg, var(--good-tint), var(--surface) 65%); }
+  .offer .rank { color: var(--faint); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+  .offer.best .rank { color: var(--good); }
+  .offer-store { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .store-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .offer-store .nm { font-weight: 700; }
+  .offer-store .dl { font-size: 11.5px; color: var(--faint); }
+  .bflag { font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--good); background: var(--good-tint); border-radius: 6px; padding: 2px 7px; margin-left: 7px; }
+  .offer-price .now { font-size: 16.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .offer.best .offer-price .now { color: var(--good); }
+  .offer-price .was { font-size: 12px; color: var(--faint); text-decoration: line-through; margin-left: 7px; font-variant-numeric: tabular-nums; }
+  .offer-price .ppu { font-size: 11px; color: var(--faint); margin-top: 1px; }
   .buy {
-    appearance: none; border: 1px solid var(--border-2); background: var(--surface); color: var(--text);
-    font-family: var(--sans); font-weight: 600; font-size: 13.5px; padding: 10px 16px; border-radius: 10px;
-    cursor: pointer; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;
-    transition: all .15s;
+    display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--border-2); background: var(--surface);
+    color: var(--text); font-size: 13px; font-weight: 700; border-radius: 9px; padding: 9px 15px;
+    cursor: pointer; text-decoration: none; white-space: nowrap; transition: all .15s;
   }
   .buy:hover { border-color: var(--accent); color: var(--accent); }
   .offer.best .buy { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .offer.best .buy:hover { background: var(--accent-deep); }
-  .offer.oos { opacity: .6; }
-  .offer.oos .offer-price .now { color: var(--faint); text-decoration: line-through; }
-  .oos-pill { font-size: 11px; color: var(--warn); border: 1px solid var(--warn); padding: 8px 14px; border-radius: 10px; white-space: nowrap; }
+  .offer.best .buy:hover { background: var(--accent-strong); }
+  .offer.oos { opacity: .55; }
+  .offer.oos .offer-price .now { text-decoration: line-through; color: var(--faint); }
+  .oos-pill { font-size: 11.5px; color: var(--warn); border: 1.5px solid currentColor; padding: 8px 13px; border-radius: 9px; white-space: nowrap; font-weight: 600; }
+  .pdp-note { display: flex; gap: 8px; font-size: 11.5px; color: var(--faint); padding: 8px 2px 0; }
+  .pdp-note svg { flex: none; margin-top: 1px; }
 
-  .cmp-note { font-size: 12px; color: var(--faint); margin: 16px 2px 0; display: flex; gap: 8px; align-items: flex-start; }
+  .related-head { font-size: 17px; font-weight: 800; margin: 34px 0 14px; }
 
-  .related { margin-top: 44px; }
+  /* ============ Trust bar & footer ============ */
+  .trust { border-top: 1px solid var(--border); background: var(--bg-soft); }
+  .trust-inner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding: 26px 0; }
+  .titem { display: flex; gap: 12px; align-items: flex-start; }
+  .titem .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-tint); color: var(--accent-strong); display: grid; place-items: center; flex: none; }
+  .titem h4 { font-size: 13.5px; font-weight: 700; margin: 0 0 2px; }
+  .titem p { font-size: 12px; color: var(--muted); margin: 0; }
 
-  /* ---------- Footer ---------- */
-  footer { border-top: 1px solid var(--border); margin-top: 60px; padding: 34px 0 44px; }
-  .foot-inner { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-  .foot-brand .wordmark { font-size: 18px; }
-  .foot-brand p { font-size: 12.5px; color: var(--faint); margin: 10px 0 0; max-width: 34ch; }
-  .foot-cols { display: flex; gap: 48px; flex-wrap: wrap; }
-  .foot-col h5 { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin: 0 0 12px; }
+  footer { border-top: 1px solid var(--border); padding: 30px 0 40px; }
+  .foot-inner { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; }
+  .foot-brand p { font-size: 12.5px; color: var(--faint); margin: 10px 0 0; max-width: 36ch; }
+  .foot-cols { display: flex; gap: 54px; flex-wrap: wrap; }
+  .foot-col h5 { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 0 0 11px; }
   .foot-col a { display: block; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 8px; }
   .foot-col a:hover { color: var(--accent); }
-  .foot-legal { border-top: 1px solid var(--border); margin-top: 28px; padding-top: 18px; font-size: 11.5px; color: var(--faint); }
+  .foot-legal { border-top: 1px solid var(--border); margin-top: 26px; padding-top: 16px; font-size: 11.5px; color: var(--faint); display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .theme-toggle {
+    appearance: none; border: 1px solid var(--border-2); background: var(--surface); color: var(--muted);
+    font-size: 11px; letter-spacing: .05em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; cursor: pointer;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
 
-  @media (max-width: 860px) {
-    .props, .tgrid, .steps { grid-template-columns: 1fr; }
-    .cmp-hero { grid-template-columns: 72px 1fr; }
-    .cmp-thumb { width: 72px; height: 72px; font-size: 24px; }
-    .cmp-bestbox { grid-column: 1 / -1; text-align: left; border-top: 1px solid var(--border); padding-top: 16px; }
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--text); color: var(--bg); font-size: 13px; font-weight: 600;
+    padding: 11px 20px; border-radius: 10px; box-shadow: var(--shadow-lift); opacity: 0;
+    transition: transform .25s, opacity .25s; z-index: 200; pointer-events: none;
   }
-  @media (max-width: 560px) {
-    .offer { grid-template-columns: 1fr auto; row-gap: 4px; }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  @media (max-width: 1000px) { .pgrid { grid-template-columns: repeat(3, 1fr); } .trust-inner { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px) {
+    .pgrid { grid-template-columns: repeat(2, 1fr); }
+    .pdp-grid { grid-template-columns: 1fr; }
+    .pdp-visual { height: 200px; font-size: 44px; }
+    .head-row { flex-wrap: wrap; }
+    .hsearch { order: 3; flex-basis: 100%; max-width: none; }
+    .ustrip-inner { gap: 16px; font-size: 11px; }
+  }
+  @media (max-width: 460px) {
+    .pgrid { grid-template-columns: 1fr; }
+    .offer { grid-template-columns: 1fr auto; }
     .offer .rank { display: none; }
-    .offer .buy, .offer .oos-pill { grid-column: 1 / -1; justify-content: center; }
-    .go-btn { padding: 12px 16px; }
+    .offer .buy, .offer .oos-pill { grid-column: 1/-1; justify-content: center; text-align: center; }
+    .trust-inner { grid-template-columns: 1fr; }
   }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
-<header class="top">
-  <div class="wrap top-inner">
-    <div class="brand" id="homeBtn" role="button" tabindex="0" aria-label="Strona główna Blask">
-      <span class="wordmark">Blask<span class="dot">.</span></span>
-    </div>
-    <nav class="top-nav">
-      <a class="nav-link" href="#jak">Jak to działa</a>
-      <a class="nav-link" href="#partnerzy">Dla sklepów</a>
-      <button class="theme-toggle" id="themeBtn" type="button">Motyw</button>
-    </nav>
+<div class="ustrip">
+  <div class="wrap ustrip-inner">
+    <span>✓ Porównujemy 8 drogerii</span>
+    <span>✓ Ceny aktualizowane codziennie</span>
+    <span>✓ Darmowe alerty cenowe</span>
   </div>
+</div>
+
+<header class="main">
+  <div class="wrap head-row">
+    <button class="logo" id="logoBtn" aria-label="Blask — strona główna">
+      <span class="logo-mark">B</span>
+      <span class="logo-name">blask<i>.</i></span>
+    </button>
+    <div class="hsearch">
+      <div class="hsearch-box">
+        <input id="q" type="search" placeholder="Szukaj: produkt, marka… np. Cicaplast B5" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest" aria-label="Szukaj kosmetyku">
+        <button class="hsearch-btn" id="goBtn" type="button" aria-label="Szukaj">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+        </button>
+      </div>
+      <div class="suggest" id="suggest" role="listbox" aria-label="Podpowiedzi"></div>
+    </div>
+    <div class="head-actions">
+      <button class="hact" id="favBtnTop" type="button">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg>
+        Ulubione<span class="cnt" id="favCnt" hidden>0</span>
+      </button>
+      <button class="hact" id="alertBtnTop" type="button">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        Alerty<span class="cnt" id="alertCnt" hidden>0</span>
+      </button>
+    </div>
+  </div>
+  <nav class="catnav" aria-label="Kategorie">
+    <div class="wrap catnav-inner" id="catnav"></div>
+  </nav>
 </header>
 
 <main>
-  <!-- ============ DEFAULT / HOME ============ -->
+  <!-- ======== HOME ======== -->
   <div id="home">
-    <section class="hero">
-      <div class="wrap">
-        <div class="eyebrow">Porównywarka cen kosmetyków</div>
-        <h1>Twój ulubiony kosmetyk. <em>Zawsze najtaniej.</em></h1>
-        <p class="sub">Wpisz nazwę produktu, a my w sekundę sprawdzimy cenę w Rossmannie, Hebe, Notino, Douglasie i innych sklepach. Koniec z szukaniem po pół godzinie.</p>
-
-        <div class="search-shell">
-          <div class="search-box" id="searchBox">
-            <svg class="mag" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
-            <input id="q" type="search" placeholder="np. La Roche-Posay Cicaplast B5…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest" aria-label="Szukaj kosmetyku">
-            <button class="go-btn" id="goBtn" type="button">Porównaj</button>
-          </div>
-          <div class="suggest" id="suggest" role="listbox" aria-label="Podpowiedzi"></div>
+    <section class="band">
+      <div class="wrap band-inner">
+        <div>
+          <h1>Ten sam kosmetyk. <i>Nawet o 25% taniej.</i></h1>
+          <p>Porównujemy ceny w Rossmannie, Hebe, Notino, Douglasie, Sephorze i innych — Ty tylko wybierasz najtańszą.</p>
         </div>
-
-        <div class="pop-line">
-          <span class="lbl">Popularne:</span>
-          <button class="pop-chip" type="button">CeraVe krem</button>
-          <button class="pop-chip" type="button">Cicaplast B5</button>
-          <button class="pop-chip" type="button">The Ordinary niacynamid</button>
-          <button class="pop-chip" type="button">Lash Sensational</button>
-          <button class="pop-chip" type="button">La Vie Est Belle</button>
-        </div>
+        <div class="band-stats" id="bandStats"></div>
       </div>
     </section>
 
     <div class="wrap">
-      <section class="props">
-        <div class="prop">
-          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-          <h3>Realna oszczędność</h3>
-          <p>Na jednym produkcie różnica między sklepami sięga nawet 25%. My znajdujemy tę najniższą za Ciebie.</p>
+      <div class="toolbar">
+        <h2 id="gridTitle">Bestsellery<span class="res" id="gridRes"></span></h2>
+        <div class="sort-wrap">
+          <label for="sort">Sortuj:</label>
+          <select class="sort" id="sort">
+            <option value="pop">Popularność</option>
+            <option value="save">Największa oszczędność</option>
+            <option value="low">Cena: od najniższej</option>
+            <option value="high">Cena: od najwyższej</option>
+            <option value="rate">Najlepiej oceniane</option>
+          </select>
         </div>
-        <div class="prop">
-          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
-          <h3>Jedno wyszukiwanie</h3>
-          <p>Zamiast otwierać pięć kart w przeglądarce, wpisujesz nazwę raz i widzisz wszystkie ceny obok siebie.</p>
-        </div>
-        <div class="prop">
-          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-          <h3>Prosto do sklepu</h3>
-          <p>Klikasz „Kup" i trafiasz od razu do właściwego produktu w wybranej drogerii. Bez szukania na nowo.</p>
-        </div>
-      </section>
-
-      <section class="trending">
-        <div class="sec-head">
-          <h2>Najczęściej porównywane</h2>
-          <span class="hint">Kliknij, aby zobaczyć ceny</span>
-        </div>
-        <div class="tgrid" id="tgrid"></div>
-      </section>
-
-      <section class="how" id="jak">
-        <h2>Jak to działa</h2>
-        <div class="steps">
-          <div class="step">
-            <div class="num">1</div>
-            <h4>Wpisz produkt</h4>
-            <p>Wystarczy nazwa albo sama marka. Podpowiemy resztę, nawet jeśli zrobisz literówkę.</p>
-          </div>
-          <div class="step">
-            <div class="num">2</div>
-            <h4>Porównaj ceny</h4>
-            <p>Widzisz wszystkie sklepy uszeregowane od najtańszego, z dostawą i dostępnością.</p>
-          </div>
-          <div class="step">
-            <div class="num">3</div>
-            <h4>Kup taniej</h4>
-            <p>Jeden klik prowadzi Cię prosto do produktu w wybranej drogerii.</p>
-          </div>
-        </div>
-      </section>
+      </div>
+      <div class="pgrid" id="pgrid"></div>
     </div>
   </div>
 
-  <!-- ============ COMPARISON ============ -->
-  <div class="wrap" id="compare">
-    <button class="back-btn" id="backBtn" type="button">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      Nowe wyszukiwanie
-    </button>
-    <div id="cmpBody"></div>
+  <!-- ======== PRODUCT ======== -->
+  <div id="pdp">
+    <div class="wrap">
+      <nav class="crumbs" id="crumbs" aria-label="Okruszki"></nav>
+      <div class="pdp-grid">
+        <div class="pdp-visual" id="pdpVis"></div>
+        <div>
+          <div class="pdp-brand" id="pdpBrand"></div>
+          <h1 class="pdp-name" id="pdpName"></h1>
+          <div class="pdp-sub" id="pdpSub"></div>
+          <div class="pdp-rating" id="pdpRating"></div>
+          <div class="buybox">
+            <div class="lbl">Najniższa cena dziś</div>
+            <div class="buybox-row">
+              <div>
+                <div class="amt" id="bbAmt"></div>
+                <div class="at" id="bbAt"></div>
+              </div>
+              <a class="cta" id="bbCta" href="#" target="_blank" rel="noopener noreferrer">
+                Kup najtaniej
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+              </a>
+            </div>
+            <div id="bbSave"></div>
+          </div>
+          <div class="mini-actions">
+            <button class="mini" id="pdpFav" type="button"></button>
+            <button class="mini" id="pdpAlert" type="button"></button>
+            <button class="mini" id="pdpShare" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+              Udostępnij
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="offers-head">
+        <h2>Porównanie cen <span class="res" id="offCnt"></span></h2>
+        <span class="hint">od najtańszej</span>
+      </div>
+      <div class="offers" id="offers"></div>
+      <div class="pdp-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span>Wersja demonstracyjna — ceny przykładowe. W wersji produkcyjnej ceny aktualizują się z ofert sklepów, a przyciski prowadzą do konkretnego produktu.</span>
+      </div>
+
+      <h2 class="related-head">Podobne produkty</h2>
+      <div class="pgrid" id="related"></div>
+    </div>
   </div>
 </main>
 
-<footer id="partnerzy">
+<section class="trust">
+  <div class="wrap trust-inner">
+    <div class="titem">
+      <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+      <div><h4>Jedno wyszukiwanie</h4><p>Wszystkie drogerie w jednym miejscu, zamiast pięciu kart w przeglądarce.</p></div>
+    </div>
+    <div class="titem">
+      <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div><h4>Realne oszczędności</h4><p>Różnice cen między sklepami sięgają 25% na tym samym produkcie.</p></div>
+    </div>
+    <div class="titem">
+      <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+      <div><h4>Alerty cenowe</h4><p>Powiadomimy Cię, gdy Twój ulubiony kosmetyk stanieje.</p></div>
+    </div>
+    <div class="titem">
+      <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div><h4>Zawsze bezpłatnie</h4><p>Porównywarka jest darmowa — zarabiamy na prowizji od sklepów, nie od Ciebie.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
   <div class="wrap">
     <div class="foot-inner">
       <div class="foot-brand">
-        <span class="wordmark">Blask<span class="dot">.</span></span>
-        <p>Niezależna porównywarka cen kosmetyków. Pomagamy kupować mądrzej, a sklepom — docierać do kupujących gotowych na zakup.</p>
+        <button class="logo" id="logoBtn2" aria-label="Blask — strona główna">
+          <span class="logo-mark">B</span>
+          <span class="logo-name">blask<i>.</i></span>
+        </button>
+        <p>Niezależna porównywarka cen kosmetyków. Pomagamy kupować mądrzej, a sklepom docierać do klientów gotowych na zakup.</p>
       </div>
       <div class="foot-cols">
         <div class="foot-col">
-          <h5>Kupujący</h5>
-          <a href="#jak">Jak to działa</a>
-          <a href="#">Alerty cenowe</a>
+          <h5>Zakupy</h5>
           <a href="#">Kategorie</a>
+          <a href="#">Bestsellery</a>
+          <a href="#">Alerty cenowe</a>
         </div>
         <div class="foot-col">
           <h5>Dla sklepów</h5>
@@ -449,111 +548,120 @@
           <a href="#">Program afiliacyjny</a>
           <a href="#">Kontakt</a>
         </div>
+        <div class="foot-col">
+          <h5>Blask</h5>
+          <a href="#">O nas</a>
+          <a href="#">Regulamin</a>
+          <a href="#">Prywatność</a>
+        </div>
       </div>
     </div>
     <div class="foot-legal">
-      Blask to prototyp produktu. Prezentowane ceny i linki mają charakter demonstracyjny — w wersji produkcyjnej pochodziłyby z aktualnych ofert sklepów i partnerskich linków afiliacyjnych. Ceny w sklepach mogą się różnić i zmieniać.
+      <span>© 2026 Blask — prototyp produktu. Ceny i linki demonstracyjne.</span>
+      <button class="theme-toggle" id="themeBtn" type="button">Motyw</button>
     </div>
   </div>
 </footer>
+
+<div class="toast" id="toast" role="status"></div>
 
 <script>
 (function () {
   "use strict";
 
   var STORES = {
-    "Rossmann":   { c: "#E4032E", url: "https://www.rossmann.pl", dl: "od 9,99 zł / za darmo od 99 zł" },
-    "Hebe":       { c: "#00A9A7", url: "https://www.hebe.pl",     dl: "od 8,99 zł / za darmo od 99 zł" },
-    "Notino":     { c: "#E5006D", url: "https://www.notino.pl",   dl: "od 9,90 zł / za darmo od 150 zł" },
-    "Douglas":    { c: "#6E4A5B", url: "https://www.douglas.pl",  dl: "od 12,90 zł / za darmo od 150 zł" },
-    "Sephora":    { c: "#7A4CC9", url: "https://www.sephora.pl",  dl: "od 13,99 zł / za darmo od 200 zł" },
-    "Superpharm": { c: "#0072CE", url: "https://www.superpharm.pl", dl: "od 10,99 zł / za darmo od 129 zł" },
-    "Ezebra":     { c: "#E09112", url: "https://www.ezebra.com.pl", dl: "od 8,90 zł / za darmo od 99 zł" },
-    "e.Leclerc":  { c: "#0068B4", url: "https://www.zakupy.leclerc", dl: "odbiór w sklepie" }
+    "Rossmann":   { c:"#E4032E", url:"https://www.rossmann.pl",     dl:"od 9,99 zł · darmowa od 99 zł" },
+    "Hebe":       { c:"#00A9A7", url:"https://www.hebe.pl",         dl:"od 8,99 zł · darmowa od 99 zł" },
+    "Notino":     { c:"#E5006D", url:"https://www.notino.pl",       dl:"od 9,90 zł · darmowa od 150 zł" },
+    "Douglas":    { c:"#4A3A55", url:"https://www.douglas.pl",      dl:"od 12,90 zł · darmowa od 150 zł" },
+    "Sephora":    { c:"#7A4CC9", url:"https://www.sephora.pl",      dl:"od 13,99 zł · darmowa od 200 zł" },
+    "Superpharm": { c:"#0072CE", url:"https://www.superpharm.pl",   dl:"od 10,99 zł · darmowa od 129 zł" },
+    "Ezebra":     { c:"#E09112", url:"https://www.ezebra.com.pl",   dl:"od 8,90 zł · darmowa od 99 zł" },
+    "e.Leclerc":  { c:"#0068B4", url:"https://www.zakupy.leclerc",  dl:"odbiór w sklepie" }
   };
 
-  var CAT_GRAD = {
-    "Pielęgnacja twarzy": ["#C86B8E", "#8E2F4F"],
-    "Makijaż":            ["#B5476A", "#5E2138"],
-    "Pielęgnacja ciała":  ["#C89B6E", "#8A6236"],
-    "Włosy":              ["#7A7CC9", "#3B3D7A"],
-    "Zapachy":            ["#5A9E86", "#2F5E4C"]
+  var CATS = ["Wszystkie","Pielęgnacja twarzy","Makijaż","Pielęgnacja ciała","Włosy","Zapachy"];
+  var GRAD = {
+    "Pielęgnacja twarzy": ["#8B6BD9","#4A2E8F"],
+    "Makijaż":            ["#C25AA8","#7A2E6B"],
+    "Pielęgnacja ciała":  ["#5A8FD9","#2E4E8F"],
+    "Włosy":              ["#6BB0C9","#2E6B8F"],
+    "Zapachy":            ["#9A7ABF","#533A78"]
   };
 
-  // price = current price; was = pre-promo (optional); every product one currency (PLN)
   var P = [
-    { brand:"La Roche-Posay", name:"Cicaplast Baume B5 balsam regenerujący", cat:"Pielęgnacja twarzy", vol:"40 ml",
-      kw:"b5 cicaplast baume balsam regenerujacy kojacy multinaprawczy",
+    { brand:"La Roche-Posay", name:"Cicaplast Baume B5 balsam regenerujący", cat:"Pielęgnacja twarzy", vol:"40 ml", pop:98, rate:4.8, votes:2431,
+      kw:"b5 cicaplast baume balsam regenerujacy kojacy",
       o:{ "Rossmann":{p:44.99}, "Hebe":{p:42.99,w:49.99}, "Notino":{p:39.90}, "Superpharm":{p:47.99}, "Douglas":{p:46.00} } },
-    { brand:"La Roche-Posay", name:"Effaclar Duo(+) M krem", cat:"Pielęgnacja twarzy", vol:"40 ml",
+    { brand:"La Roche-Posay", name:"Effaclar Duo(+) M krem przeciw niedoskonałościom", cat:"Pielęgnacja twarzy", vol:"40 ml", pop:91, rate:4.6, votes:1874,
       kw:"effaclar duo tradzik niedoskonalosci",
       o:{ "Rossmann":{p:74.99}, "Hebe":{p:72.99}, "Notino":{p:69.90}, "Superpharm":{p:79.99}, "Douglas":{p:78.00} } },
-    { brand:"CeraVe", name:"Krem nawilżający do twarzy i ciała", cat:"Pielęgnacja twarzy", vol:"340 ml",
-      kw:"cerave moisturising cream ceramidy sucha skora",
+    { brand:"CeraVe", name:"Krem nawilżający do twarzy i ciała", cat:"Pielęgnacja twarzy", vol:"340 ml", pop:96, rate:4.7, votes:3102,
+      kw:"cerave moisturising cream ceramidy sucha skora krem",
       o:{ "Rossmann":{p:54.99}, "Hebe":{p:59.99}, "Notino":{p:51.90}, "Superpharm":{p:62.50}, "Ezebra":{p:49.99} } },
-    { brand:"CeraVe", name:"Pianka oczyszczająca do skóry normalnej i tłustej", cat:"Pielęgnacja twarzy", vol:"236 ml",
+    { brand:"CeraVe", name:"Pianka oczyszczająca do skóry normalnej i tłustej", cat:"Pielęgnacja twarzy", vol:"236 ml", pop:88, rate:4.5, votes:1560,
       kw:"cerave foaming cleanser pianka myjaca zel",
       o:{ "Rossmann":{p:47.99}, "Hebe":{p:44.99,w:52.99}, "Notino":{p:43.90}, "Superpharm":{p:49.99} } },
-    { brand:"The Ordinary", name:"Niacinamide 10% + Zinc 1% serum", cat:"Pielęgnacja twarzy", vol:"30 ml",
+    { brand:"The Ordinary", name:"Niacinamide 10% + Zinc 1% serum", cat:"Pielęgnacja twarzy", vol:"30 ml", pop:94, rate:4.4, votes:4210,
       kw:"the ordinary niacynamid niacinamide cynk serum pory",
       o:{ "Notino":{p:34.90}, "Sephora":{p:39.00}, "Ezebra":{p:32.99}, "Douglas":{p:38.50} } },
-    { brand:"The Ordinary", name:"Hyaluronic Acid 2% + B5 serum", cat:"Pielęgnacja twarzy", vol:"30 ml",
-      kw:"the ordinary kwas hialuronowy hyaluronic nawilzenie serum",
+    { brand:"The Ordinary", name:"Hyaluronic Acid 2% + B5 serum nawilżające", cat:"Pielęgnacja twarzy", vol:"30 ml", pop:87, rate:4.5, votes:2960,
+      kw:"the ordinary kwas hialuronowy hyaluronic b5 serum",
       o:{ "Notino":{p:37.90}, "Sephora":{p:42.00}, "Ezebra":{p:35.99}, "Douglas":{p:41.00} } },
-    { brand:"Paula's Choice", name:"Skin Perfecting 2% BHA płyn złuszczający", cat:"Pielęgnacja twarzy", vol:"118 ml",
-      kw:"paulas choice bha kwas salicylowy zluszczanie peeling",
+    { brand:"Paula's Choice", name:"Skin Perfecting 2% BHA płyn złuszczający", cat:"Pielęgnacja twarzy", vol:"118 ml", pop:85, rate:4.7, votes:1985,
+      kw:"paulas choice bha kwas salicylowy peeling",
       o:{ "Notino":{p:149.00}, "Sephora":{p:159.00}, "Douglas":{p:155.00}, "Ezebra":{p:142.90} } },
-    { brand:"Bioderma", name:"Sensibio H2O płyn micelarny", cat:"Pielęgnacja twarzy", vol:"500 ml",
-      kw:"bioderma sensibio plyn micelarny demakijaz cera wrazliwa",
+    { brand:"Bioderma", name:"Sensibio H2O płyn micelarny", cat:"Pielęgnacja twarzy", vol:"500 ml", pop:90, rate:4.8, votes:5320,
+      kw:"bioderma sensibio plyn micelarny demakijaz",
       o:{ "Rossmann":{p:64.99}, "Hebe":{p:62.99}, "Notino":{p:58.90}, "Superpharm":{p:69.99}, "Ezebra":{p:57.99} } },
-    { brand:"Vichy", name:"Minéral 89 booster nawilżający", cat:"Pielęgnacja twarzy", vol:"50 ml",
-      kw:"vichy mineral 89 booster kwas hialuronowy nawilzenie",
+    { brand:"Vichy", name:"Minéral 89 booster nawilżający", cat:"Pielęgnacja twarzy", vol:"50 ml", pop:83, rate:4.6, votes:2140,
+      kw:"vichy mineral 89 booster kwas hialuronowy",
       o:{ "Rossmann":{p:89.99}, "Hebe":{p:84.99,w:99.99}, "Notino":{p:79.90}, "Superpharm":{p:94.99}, "Douglas":{p:92.00} } },
-    { brand:"Pixi", name:"Glow Tonic tonik złuszczający", cat:"Pielęgnacja twarzy", vol:"250 ml",
-      kw:"pixi glow tonic tonik kwas glikolowy rozswietlenie",
+    { brand:"Pixi", name:"Glow Tonic tonik złuszczający", cat:"Pielęgnacja twarzy", vol:"250 ml", pop:76, rate:4.3, votes:1230,
+      kw:"pixi glow tonic tonik kwas glikolowy",
       o:{ "Sephora":{p:79.00}, "Notino":{p:72.90}, "Douglas":{p:76.00} } },
-    { brand:"Nivea", name:"Q10 balsam ujędrniający do ciała", cat:"Pielęgnacja ciała", vol:"400 ml",
-      kw:"nivea q10 balsam ujedrniajacy body cialo",
-      o:{ "Rossmann":{p:32.99}, "Hebe":{p:34.99}, "Superpharm":{p:36.50}, "e.Leclerc":{p:29.90}, "Ezebra":{p:31.50} } },
-    { brand:"Sol de Janeiro", name:"Brazilian Bum Bum krem do ciała", cat:"Pielęgnacja ciała", vol:"240 ml",
-      kw:"sol de janeiro bum bum krem cialo zapachowy",
-      o:{ "Sephora":{p:189.00}, "Notino":{p:179.00}, "Douglas":{p:185.00} } },
-    { brand:"CeraVe", name:"SA balsam wygładzający do ciała", cat:"Pielęgnacja ciała", vol:"473 ml",
-      kw:"cerave sa smoothing balsam cialo kwas salicylowy szorstka skora",
-      o:{ "Rossmann":{p:69.99}, "Hebe":{p:67.99}, "Notino":{p:64.90}, "Superpharm":{p:74.99} } },
-    { brand:"Maybelline", name:"Lash Sensational tusz do rzęs", cat:"Makijaż", vol:"9,5 ml",
-      kw:"maybelline lash sensational tusz mascara rzesy pogrubiajacy",
+    { brand:"Bielenda", name:"Neuro Retinol krem-koncentrat na noc", cat:"Pielęgnacja twarzy", vol:"50 ml", pop:74, rate:4.2, votes:890,
+      kw:"bielenda neuro retinol krem noc zmarszczki",
+      o:{ "Rossmann":{p:27.99}, "Hebe":{p:29.99}, "Superpharm":{p:32.99}, "Ezebra":{p:25.90} } },
+    { brand:"Maybelline", name:"Lash Sensational tusz do rzęs", cat:"Makijaż", vol:"9,5 ml", pop:93, rate:4.5, votes:6120,
+      kw:"maybelline lash sensational tusz mascara rzesy",
       o:{ "Rossmann":{p:44.99}, "Hebe":{p:42.99}, "Notino":{p:39.90}, "Superpharm":{p:47.99}, "Ezebra":{p:41.50} } },
-    { brand:"L'Oréal Paris", name:"Infaillible 24H Fresh Wear podkład", cat:"Makijaż", vol:"30 ml",
-      kw:"loreal infaillible fresh wear podklad kryjacy dlugotrwaly",
+    { brand:"L'Oréal Paris", name:"Infaillible 24H Fresh Wear podkład", cat:"Makijaż", vol:"30 ml", pop:89, rate:4.4, votes:3480,
+      kw:"loreal infaillible fresh wear podklad kryjacy",
       o:{ "Rossmann":{p:59.99}, "Hebe":{p:57.99,w:64.99}, "Notino":{p:54.90}, "Superpharm":{p:64.99}, "Douglas":{p:62.00} } },
-    { brand:"Rare Beauty", name:"Soft Pinch Liquid Blush róż w płynie", cat:"Makijaż", vol:"7,5 ml",
-      kw:"rare beauty soft pinch roz blush plyn selena",
+    { brand:"Rare Beauty", name:"Soft Pinch Liquid Blush róż w płynie", cat:"Makijaż", vol:"7,5 ml", pop:92, rate:4.8, votes:2890,
+      kw:"rare beauty soft pinch roz blush plyn",
       o:{ "Sephora":{p:115.00}, "Notino":{p:119.00}, "Douglas":{p:112.90} } },
-    { brand:"NYX", name:"Butter Gloss błyszczyk do ust", cat:"Makijaż", vol:"8 ml",
+    { brand:"NYX", name:"Butter Gloss błyszczyk do ust", cat:"Makijaż", vol:"8 ml", pop:81, rate:4.3, votes:2210,
       kw:"nyx butter gloss blyszczyk usta",
       o:{ "Rossmann":{p:27.99}, "Hebe":{p:25.99,w:31.99}, "Notino":{p:23.90}, "Ezebra":{p:24.50}, "Douglas":{p:29.00} } },
-    { brand:"Charlotte Tilbury", name:"Airbrush Flawless Setting Spray", cat:"Makijaż", vol:"100 ml",
-      kw:"charlotte tilbury airbrush flawless setting spray utrwalajacy",
+    { brand:"Charlotte Tilbury", name:"Airbrush Flawless Setting Spray utrwalający", cat:"Makijaż", vol:"100 ml", pop:84, rate:4.6, votes:1670,
+      kw:"charlotte tilbury airbrush setting spray utrwalacz",
       o:{ "Sephora":{p:189.00}, "Notino":{p:175.00}, "Douglas":{p:182.00} } },
-    { brand:"Olaplex", name:"No.3 Hair Perfector kuracja do włosów", cat:"Włosy", vol:"100 ml",
-      kw:"olaplex no 3 hair perfector kuracja wlosy regeneracja",
+    { brand:"Nivea", name:"Q10 balsam ujędrniający do ciała", cat:"Pielęgnacja ciała", vol:"400 ml", pop:78, rate:4.4, votes:1980,
+      kw:"nivea q10 balsam ujedrniajacy cialo",
+      o:{ "Rossmann":{p:32.99}, "Hebe":{p:34.99}, "Superpharm":{p:36.50}, "e.Leclerc":{p:29.90}, "Ezebra":{p:31.50} } },
+    { brand:"Sol de Janeiro", name:"Brazilian Bum Bum krem do ciała", cat:"Pielęgnacja ciała", vol:"240 ml", pop:86, rate:4.7, votes:2310,
+      kw:"sol de janeiro bum bum krem cialo",
+      o:{ "Sephora":{p:189.00}, "Notino":{p:179.00}, "Douglas":{p:185.00} } },
+    { brand:"CeraVe", name:"SA balsam wygładzający do ciała", cat:"Pielęgnacja ciała", vol:"473 ml", pop:79, rate:4.5, votes:1440,
+      kw:"cerave sa smoothing balsam kwas salicylowy szorstka",
+      o:{ "Rossmann":{p:69.99}, "Hebe":{p:67.99}, "Notino":{p:64.90}, "Superpharm":{p:74.99} } },
+    { brand:"Olaplex", name:"No.3 Hair Perfector kuracja do włosów", cat:"Włosy", vol:"100 ml", pop:88, rate:4.6, votes:3670,
+      kw:"olaplex no 3 hair perfector kuracja wlosy",
       o:{ "Notino":{p:99.90}, "Sephora":{p:115.00}, "Douglas":{p:109.00}, "Ezebra":{p:94.99} } },
-    { brand:"Garnier", name:"Botanic Therapy odżywka Miód i Wosk", cat:"Włosy", vol:"200 ml",
-      kw:"garnier botanic therapy odzywka miod wosk wlosy zniszczone",
+    { brand:"Garnier", name:"Botanic Therapy odżywka Miód i Wosk", cat:"Włosy", vol:"200 ml", pop:72, rate:4.3, votes:1120,
+      kw:"garnier botanic therapy odzywka miod wlosy",
       o:{ "Rossmann":{p:21.99}, "Hebe":{p:23.49}, "Superpharm":{p:24.99}, "e.Leclerc":{p:19.90}, "Ezebra":{p:20.50} } },
-    { brand:"Lancôme", name:"La Vie Est Belle woda perfumowana", cat:"Zapachy", vol:"50 ml",
-      kw:"lancome la vie est belle woda perfumowana perfumy edp",
+    { brand:"Lancôme", name:"La Vie Est Belle woda perfumowana", cat:"Zapachy", vol:"50 ml", pop:90, rate:4.7, votes:4550,
+      kw:"lancome la vie est belle woda perfumowana edp perfumy",
       o:{ "Notino":{p:349.00}, "Douglas":{p:389.00}, "Sephora":{p:385.00}, "Ezebra":{p:329.00} } },
-    { brand:"Yves Saint Laurent", name:"Libre woda perfumowana", cat:"Zapachy", vol:"50 ml",
-      kw:"ysl yves saint laurent libre woda perfumowana perfumy edp",
+    { brand:"Yves Saint Laurent", name:"Libre woda perfumowana", cat:"Zapachy", vol:"50 ml", pop:87, rate:4.7, votes:3210,
+      kw:"ysl yves saint laurent libre edp perfumy",
       o:{ "Notino":{p:379.00}, "Douglas":{p:419.00}, "Sephora":{p:415.00} } },
-    { brand:"Dior", name:"Sauvage woda toaletowa", cat:"Zapachy", vol:"60 ml",
-      kw:"dior sauvage woda toaletowa perfumy meskie edt",
-      o:{ "Notino":{p:359.00}, "Douglas":{p:399.00}, "Sephora":{p:395.00} } },
-    { brand:"Bielenda", name:"Neuro Retinol krem-koncentrat na noc", cat:"Pielęgnacja twarzy", vol:"50 ml",
-      kw:"bielenda neuro retinol krem noc zmarszczki koncentrat",
-      o:{ "Rossmann":{p:27.99}, "Hebe":{p:29.99}, "Superpharm":{p:32.99}, "Ezebra":{p:25.90} } }
+    { brand:"Dior", name:"Sauvage woda toaletowa", cat:"Zapachy", vol:"60 ml", pop:89, rate:4.8, votes:5890,
+      kw:"dior sauvage edt perfumy meskie",
+      o:{ "Notino":{p:359.00}, "Douglas":{p:399.00}, "Sephora":{p:395.00} } }
   ];
 
   // ---------- helpers ----------
@@ -562,254 +670,307 @@
   function slug(s){ return norm(s).replace(/[^a-z0-9]+/g," ").trim(); }
   function compact(s){ return norm(s).replace(/[^a-z0-9]+/g,""); }
   function money(n){ return n.toLocaleString("pl-PL",{minimumFractionDigits:2,maximumFractionDigits:2}); }
-  function initials(brand){
-    var parts = slug(brand).split(" ").filter(Boolean);
-    if(parts.length===1) return parts[0].slice(0,2).toUpperCase();
-    return (parts[0][0]+parts[1][0]).toUpperCase();
+  function esc(s){ return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function initials(b){ var p=slug(b).split(" ").filter(Boolean); return p.length===1?p[0].slice(0,2).toUpperCase():(p[0][0]+p[1][0]).toUpperCase(); }
+  function volMl(v){ var m=v.replace(",",".").match(/([\d.]+)\s*ml/); return m?parseFloat(m[1]):null; }
+  function starsHTML(r){
+    var full=Math.round(r), out="";
+    for(var i=1;i<=5;i++) out+= i<=full?"★":"☆";
+    return '<span class="stars" aria-hidden="true">'+out+'</span>';
   }
-  function volMl(vol){ var m = vol.replace(",",".").match(/([\d.]+)\s*ml/); return m?parseFloat(m[1]):null; }
+  function plural(n,one,few,many){ if(n===1)return one; var t=n%10,h=n%100; if(t>=2&&t<=4&&!(h>=12&&h<=14))return few; return many; }
 
-  // enrich
   var DATA = P.map(function(p,i){
-    var offers = Object.keys(p.o).map(function(s){
-      return { store:s, price:p.o[s].p, was:p.o[s].w||null, inStock:true };
-    });
-    // demo: mark one cheap store out of stock occasionally to show the feature
+    var offers = Object.keys(p.o).map(function(s){ return { store:s, price:p.o[s].p, was:p.o[s].w||null, inStock:true }; });
     if(i%9===4 && offers.length>3){ offers.slice().sort(function(a,b){return a.price-b.price;})[0].inStock=false; }
     var avail = offers.filter(function(o){return o.inStock;}).sort(function(a,b){return a.price-b.price;});
-    var low = avail[0].price, high = avail[avail.length-1].price;
-    offers.sort(function(a,b){
-      if(a.inStock!==b.inStock) return a.inStock?-1:1;
-      return a.price-b.price;
-    });
-    var hay = slug(p.brand+" "+p.name+" "+p.kw+" "+p.cat);
+    var low=avail[0].price, high=avail[avail.length-1].price;
+    offers.sort(function(a,b){ if(a.inStock!==b.inStock)return a.inStock?-1:1; return a.price-b.price; });
     return {
       id:i, brand:p.brand, name:p.name, cat:p.cat, vol:p.vol, ml:volMl(p.vol),
+      pop:p.pop, rate:p.rate, votes:p.votes,
       offers:offers, low:low, high:high, lowStore:avail[0].store,
       save:+(high-low).toFixed(2), savePct:Math.round((high-low)/high*100),
-      hay:hay, hayc:compact(p.brand+" "+p.name+" "+p.kw)
+      hay:slug(p.brand+" "+p.name+" "+p.kw+" "+p.cat), hayc:compact(p.brand+" "+p.name+" "+p.kw)
     };
   });
 
   function search(qRaw){
-    var q = slug(qRaw); if(!q) return [];
-    var toks = q.split(" ").filter(Boolean);
-    var qc = compact(qRaw);
+    var q=slug(qRaw); if(!q) return [];
+    var toks=q.split(" ").filter(Boolean), qc=compact(qRaw);
     return DATA.map(function(d){
-      var score=0, allTok=true;
+      var score=0, all=true;
       toks.forEach(function(t){
-        if(d.hay.indexOf(t)>=0){ score += 3 + (d.hay.indexOf(t)<20?2:0); }
-        else if(d.hayc.indexOf(t)>=0){ score += 2; }
-        else allTok=false;
+        if(d.hay.indexOf(t)>=0) score+=3+(d.hay.indexOf(t)<20?2:0);
+        else if(d.hayc.indexOf(t)>=0) score+=2;
+        else all=false;
       });
-      // whole-query compact match (handles "larochposay")
-      if(d.hayc.indexOf(qc)>=0 && qc.length>4) score += 4;
-      return { d:d, score: allTok?score:0 };
-    }).filter(function(x){return x.score>0;})
-      .sort(function(a,b){ return b.score-a.score || a.d.brand.localeCompare(b.d.brand,"pl"); })
+      if(qc.length>4 && d.hayc.indexOf(qc)>=0) score+=4;
+      return {d:d, s: all?score:0};
+    }).filter(function(x){return x.s>0;})
+      .sort(function(a,b){return b.s-a.s || b.d.pop-a.d.pop;})
       .map(function(x){return x.d;});
   }
 
-  // ---------- DOM refs ----------
-  var qEl = document.getElementById("q");
-  var boxEl = document.getElementById("searchBox");
-  var sugEl = document.getElementById("suggest");
-  var homeEl = document.getElementById("home");
-  var cmpEl = document.getElementById("compare");
-  var cmpBody = document.getElementById("cmpBody");
-  var root = document.documentElement;
-  var activeIdx = -1, curSug = [];
-  var watching = {};
+  // ---------- state ----------
+  var favs={}, alerts={}, activeCat="Wszystkie", activeIdx=-1, curSug=[];
+  var homeEl=document.getElementById("home"), pdpEl=document.getElementById("pdp");
+  var qEl=document.getElementById("q"), sugEl=document.getElementById("suggest");
+  var root=document.documentElement;
 
-  // ---------- Trending ----------
-  var trendIds = [0,2,4,13,20,7]; // Cicaplast, CeraVe, Ordinary, Lash, Lancome, Paula's
-  document.getElementById("tgrid").innerHTML = trendIds.map(function(id){
-    var d = DATA[id]; var g = CAT_GRAD[d.cat];
-    return '<button class="tcard" type="button" data-id="'+id+'">'+
-      '<div class="sug-thumb" style="background:linear-gradient(140deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
-      '<div><div class="tc-name">'+d.name.split(" ").slice(0,4).join(" ")+'</div>'+
-      '<div class="tc-brand">'+d.brand+' · '+d.vol+'</div>'+
-      '<div class="tc-from">od <b>'+money(d.low)+' zł</b> w '+d.offers.length+' sklepach</div></div></button>';
-  }).join("");
+  // ---------- band stats ----------
+  var stores={}; DATA.forEach(function(d){d.offers.forEach(function(o){stores[o.store]=1;});});
+  var avgPct=Math.round(DATA.reduce(function(s,d){return s+d.savePct;},0)/DATA.length);
+  document.getElementById("bandStats").innerHTML =
+    '<div class="bstat"><div class="v">'+DATA.length+'</div><div class="k">produktów</div></div>'+
+    '<div class="bstat"><div class="v">'+Object.keys(stores).length+'</div><div class="k">sklepów</div></div>'+
+    '<div class="bstat"><div class="v">'+avgPct+'%</div><div class="k">śr. różnica cen</div></div>';
 
-  // ---------- Autocomplete render ----------
-  function renderSuggest(){
-    var q = qEl.value.trim();
-    if(q.length < 2){ closeSuggest(); return; }
-    curSug = search(q).slice(0,6);
-    activeIdx = -1;
-    if(!curSug.length){
-      sugEl.innerHTML = '<div class="sug-empty">Brak wyników dla „'+esc(q)+'". Spróbuj samej marki, np. „CeraVe".</div>';
-      openSuggest(); return;
-    }
-    var qn = slug(q);
-    sugEl.innerHTML = curSug.map(function(d,i){
-      var g = CAT_GRAD[d.cat];
-      return '<div class="sug-item" role="option" data-id="'+d.id+'" data-i="'+i+'">'+
-        '<div class="sug-thumb" style="background:linear-gradient(140deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
-        '<div class="sug-body"><div class="sug-name">'+hl(d.brand+" "+d.name, qn)+'</div>'+
-        '<div class="sug-meta">'+d.cat+' · '+d.vol+'</div></div>'+
-        '<div class="sug-price">od <b>'+money(d.low)+' zł</b><br>'+d.offers.length+' sklepów</div></div>';
-    }).join("");
-    openSuggest();
+  // ---------- category nav ----------
+  var catnav=document.getElementById("catnav");
+  CATS.forEach(function(c){
+    var b=document.createElement("button");
+    b.className="catlink"+(c===activeCat?" on":""); b.type="button"; b.textContent=c;
+    b.addEventListener("click", function(){
+      activeCat=c;
+      Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x.textContent===c);});
+      goHome(); renderGrid();
+    });
+    catnav.appendChild(b);
+  });
+
+  // ---------- grid ----------
+  var gridEl=document.getElementById("pgrid"), sortEl=document.getElementById("sort");
+  sortEl.addEventListener("change", renderGrid);
+
+  function gridList(){
+    var list=DATA.filter(function(d){return activeCat==="Wszystkie"||d.cat===activeCat;});
+    var s=sortEl.value;
+    list.sort(function(a,b){
+      if(s==="pop")return b.pop-a.pop;
+      if(s==="save")return b.save-a.save;
+      if(s==="low")return a.low-b.low;
+      if(s==="high")return b.low-a.low;
+      return b.rate-a.rate;
+    });
+    return list;
   }
-  function esc(s){ return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
-  function hl(text, qn){
-    var toks = qn.split(" ").filter(function(t){return t.length>1;});
-    var out = esc(text);
-    toks.forEach(function(t){
-      try{ out = out.replace(new RegExp("("+t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig"),"<b>$1</b>"); }catch(e){}
+
+  function cardHTML(d){
+    var g=GRAD[d.cat];
+    return '<div class="pcard" role="button" tabindex="0" data-id="'+d.id+'">'+
+      (d.savePct>=15?'<span class="badge">−'+d.savePct+'%</span>':'')+
+      '<button class="fav'+(favs[d.id]?" on":"")+'" data-fav="'+d.id+'" type="button" aria-label="Dodaj do ulubionych">'+
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="'+(favs[d.id]?"currentColor":"none")+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg></button>'+
+      '<div class="pimg" style="background:linear-gradient(150deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
+      '<div class="pbrand">'+esc(d.brand)+'</div>'+
+      '<div class="pname">'+esc(d.name)+'</div>'+
+      '<div class="prating">'+starsHTML(d.rate)+' '+d.rate.toFixed(1)+' ('+d.votes.toLocaleString("pl-PL")+')</div>'+
+      '<div class="pfoot"><div class="pfrom">od</div>'+
+      '<div class="pprice"><span class="now">'+money(d.low)+' zł</span>'+
+      (d.save>0?'<span class="high">'+money(d.high)+' zł</span>':'')+'</div>'+
+      '<div class="pstores">w <b>'+d.offers.length+'</b> '+plural(d.offers.length,"sklepie","sklepach","sklepach")+
+      (d.save>0?' · taniej o <b>'+money(d.save)+' zł</b>':'')+'</div></div></div>';
+  }
+
+  function renderGrid(){
+    var list=gridList();
+    document.getElementById("gridTitle").childNodes[0].nodeValue = activeCat==="Wszystkie"?"Bestsellery":activeCat;
+    document.getElementById("gridRes").textContent=" · "+list.length+" "+plural(list.length,"produkt","produkty","produktów");
+    gridEl.innerHTML = list.length ? list.map(cardHTML).join("")
+      : '<div class="empty"><div class="t">Brak produktów</div>Zmień kategorię lub wyszukaj coś innego.</div>';
+  }
+
+  function bindCardEvents(container){
+    container.addEventListener("click", function(e){
+      var f=e.target.closest("[data-fav]");
+      if(f){ e.stopPropagation(); toggleFav(+f.getAttribute("data-fav")); return; }
+      var c=e.target.closest(".pcard"); if(c) openPDP(+c.getAttribute("data-id"));
+    });
+    container.addEventListener("keydown", function(e){
+      if(e.key!=="Enter"&&e.key!==" ") return;
+      var c=e.target.closest(".pcard"); if(c){ e.preventDefault(); openPDP(+c.getAttribute("data-id")); }
+    });
+  }
+  bindCardEvents(gridEl);
+  bindCardEvents(document.getElementById("related"));
+
+  // ---------- favourites / alerts ----------
+  function count(obj){ return Object.keys(obj).filter(function(k){return obj[k];}).length; }
+  function syncCounts(){
+    var fc=count(favs), ac=count(alerts);
+    var fEl=document.getElementById("favCnt"), aEl=document.getElementById("alertCnt");
+    fEl.hidden=!fc; fEl.textContent=fc; aEl.hidden=!ac; aEl.textContent=ac;
+  }
+  function toggleFav(id){
+    favs[id]=!favs[id]; syncCounts();
+    toast(favs[id]?"Dodano do ulubionych ♥":"Usunięto z ulubionych");
+    renderGrid(); if(pdpEl.style.display==="block"&&curPdp===id) paintPdpMini(id);
+  }
+  function toggleAlert(id){
+    alerts[id]=!alerts[id]; syncCounts();
+    toast(alerts[id]?"Alert cenowy ustawiony 🔔":"Alert wyłączony");
+    if(pdpEl.style.display==="block"&&curPdp===id) paintPdpMini(id);
+  }
+  document.getElementById("favBtnTop").addEventListener("click", function(){
+    var n=count(favs); toast(n?("Ulubione: "+n+" "+plural(n,"produkt","produkty","produktów")):"Nie masz jeszcze ulubionych — kliknij ♥ na produkcie");
+  });
+  document.getElementById("alertBtnTop").addEventListener("click", function(){
+    var n=count(alerts); toast(n?("Aktywne alerty: "+n):"Nie masz alertów — ustaw je na stronie produktu");
+  });
+
+  var toastEl=document.getElementById("toast"), toastT;
+  function toast(msg){
+    toastEl.textContent=msg; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT=setTimeout(function(){toastEl.classList.remove("show");},2200);
+  }
+
+  // ---------- autocomplete ----------
+  function renderSuggest(){
+    var q=qEl.value.trim();
+    if(q.length<2){ closeSug(); return; }
+    curSug=search(q).slice(0,6); activeIdx=-1;
+    if(!curSug.length){
+      sugEl.innerHTML='<div class="sug-empty">Brak wyników dla „'+esc(q)+'". Spróbuj samej marki, np. „CeraVe".</div>';
+      openSug(); return;
+    }
+    var qn=slug(q);
+    sugEl.innerHTML=curSug.map(function(d,i){
+      var g=GRAD[d.cat];
+      return '<div class="sug-item" role="option" data-id="'+d.id+'" data-i="'+i+'">'+
+        '<div class="sug-thumb" style="background:linear-gradient(150deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
+        '<div class="sug-body"><div class="sug-name">'+hl(d.brand+" "+d.name,qn)+'</div>'+
+        '<div class="sug-meta">'+d.cat+' · '+d.vol+'</div></div>'+
+        '<div class="sug-price">od<b>'+money(d.low)+' zł</b></div></div>';
+    }).join("");
+    openSug();
+  }
+  function hl(text,qn){
+    var out=esc(text);
+    qn.split(" ").filter(function(t){return t.length>1;}).forEach(function(t){
+      try{ out=out.replace(new RegExp("("+t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig"),"<b>$1</b>"); }catch(e){}
     });
     return out;
   }
-  function openSuggest(){ sugEl.classList.add("show"); qEl.setAttribute("aria-expanded","true"); }
-  function closeSuggest(){ sugEl.classList.remove("show"); qEl.setAttribute("aria-expanded","false"); activeIdx=-1; }
+  function openSug(){ sugEl.classList.add("show"); qEl.setAttribute("aria-expanded","true"); }
+  function closeSug(){ sugEl.classList.remove("show"); qEl.setAttribute("aria-expanded","false"); activeIdx=-1; }
 
   qEl.addEventListener("input", renderSuggest);
-  qEl.addEventListener("focus", function(){ boxEl.classList.add("focused"); if(qEl.value.trim().length>=2) renderSuggest(); });
-  qEl.addEventListener("blur", function(){ boxEl.classList.remove("focused"); setTimeout(closeSuggest,150); });
-
+  qEl.addEventListener("focus", function(){ if(qEl.value.trim().length>=2) renderSuggest(); });
+  qEl.addEventListener("blur", function(){ setTimeout(closeSug,150); });
   qEl.addEventListener("keydown", function(e){
-    if(!sugEl.classList.contains("show") || !curSug.length){
-      if(e.key==="Enter") doSearch();
-      return;
-    }
-    if(e.key==="ArrowDown"){ e.preventDefault(); activeIdx=Math.min(activeIdx+1,curSug.length-1); paintActive(); }
-    else if(e.key==="ArrowUp"){ e.preventDefault(); activeIdx=Math.max(activeIdx-1,0); paintActive(); }
-    else if(e.key==="Enter"){ e.preventDefault(); if(activeIdx>=0) openProduct(curSug[activeIdx].id); else doSearch(); }
-    else if(e.key==="Escape"){ closeSuggest(); }
+    if(!sugEl.classList.contains("show")||!curSug.length){ if(e.key==="Enter") doSearch(); return; }
+    if(e.key==="ArrowDown"){ e.preventDefault(); activeIdx=Math.min(activeIdx+1,curSug.length-1); paintAct(); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); activeIdx=Math.max(activeIdx-1,0); paintAct(); }
+    else if(e.key==="Enter"){ e.preventDefault(); if(activeIdx>=0) openPDP(curSug[activeIdx].id); else doSearch(); }
+    else if(e.key==="Escape"){ closeSug(); }
   });
-  function paintActive(){
-    Array.prototype.forEach.call(sugEl.querySelectorAll(".sug-item"), function(el){
-      el.classList.toggle("active", +el.getAttribute("data-i")===activeIdx);
+  function paintAct(){
+    Array.prototype.forEach.call(sugEl.querySelectorAll(".sug-item"),function(el){
+      el.classList.toggle("active",+el.getAttribute("data-i")===activeIdx);
     });
   }
   sugEl.addEventListener("mousedown", function(e){
-    var it = e.target.closest(".sug-item");
-    if(it){ e.preventDefault(); openProduct(+it.getAttribute("data-id")); }
+    var it=e.target.closest(".sug-item"); if(it){ e.preventDefault(); openPDP(+it.getAttribute("data-id")); }
   });
-
   function doSearch(){
-    var res = search(qEl.value);
-    if(res.length){ openProduct(res[0].id); }
-    else { renderSuggest(); }
+    var res=search(qEl.value);
+    if(res.length) openPDP(res[0].id);
+    else renderSuggest();
   }
   document.getElementById("goBtn").addEventListener("click", doSearch);
 
-  // popular chips
-  Array.prototype.forEach.call(document.querySelectorAll(".pop-chip"), function(c){
-    c.addEventListener("click", function(){ qEl.value=c.textContent; doSearch(); });
-  });
-  // trending cards
-  document.getElementById("tgrid").addEventListener("click", function(e){
-    var t = e.target.closest(".tcard"); if(t) openProduct(+t.getAttribute("data-id"));
-  });
+  // ---------- product page ----------
+  var curPdp=null;
+  function openPDP(id){
+    curPdp=id;
+    var d=DATA[id], g=GRAD[d.cat];
+    closeSug(); qEl.blur();
 
-  // ---------- Comparison view ----------
-  function openProduct(id){
-    var d = DATA[id];
-    closeSuggest();
-    qEl.blur();
-    var g = CAT_GRAD[d.cat];
-    var isWatch = !!watching[id];
+    document.getElementById("crumbs").innerHTML=
+      '<button type="button" data-home>Strona główna</button><span class="sep">/</span>'+
+      '<button type="button" data-cat="'+esc(d.cat)+'">'+esc(d.cat)+'</button><span class="sep">/</span>'+
+      '<span>'+esc(d.brand)+'</span>';
+    document.getElementById("pdpVis").style.background='linear-gradient(150deg,'+g[0]+','+g[1]+')';
+    document.getElementById("pdpVis").textContent=initials(d.brand);
+    document.getElementById("pdpBrand").textContent=d.brand;
+    document.getElementById("pdpName").textContent=d.name;
+    document.getElementById("pdpSub").textContent=d.cat+" · "+d.vol;
+    document.getElementById("pdpRating").innerHTML=starsHTML(d.rate)+' <b>'+d.rate.toFixed(1)+'</b> · '+d.votes.toLocaleString("pl-PL")+' ocen';
 
-    var rows = d.offers.map(function(o,idx){
-      var st = STORES[o.store]||{c:"#999",url:"#",dl:""};
-      var best = o.inStock && o.price===d.low && o.store===d.lowStore;
-      var ppu = d.ml ? '<div class="ppu">'+money(o.price/d.ml*100)+' zł / 100 ml</div>' : '';
-      var priceCell = '<div class="offer-price"><div class="now">'+money(o.price)+' zł</div>'+
-        (o.was?'<div class="was">'+money(o.was)+' zł</div>':'')+ppu+'</div>';
-      var action = o.inStock
-        ? '<a class="buy" href="'+st.url+'" target="_blank" rel="noopener noreferrer">'+(best?'Kup najtaniej':'Kup w '+o.store)+
-          ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'
-        : '<span class="oos-pill">Chwilowo niedostępny</span>';
-      return '<div class="offer'+(best?' best':'')+(o.inStock?'':' oos')+'">'+
+    document.getElementById("bbAmt").innerHTML=money(d.low)+'<span class="cur">zł</span>';
+    document.getElementById("bbAt").innerHTML='w <b>'+d.lowStore+'</b>'+(d.ml?' · '+money(d.low/d.ml*100)+' zł / 100 ml':'');
+    document.getElementById("bbCta").href=(STORES[d.lowStore]||{}).url||"#";
+    document.getElementById("bbSave").innerHTML=d.save>0
+      ? '<span class="save-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Oszczędzasz do '+money(d.save)+' zł ('+d.savePct+'%) względem najdroższej oferty</span>' : '';
+
+    paintPdpMini(id);
+
+    document.getElementById("offCnt").textContent=" · "+d.offers.length+" "+plural(d.offers.length,"sklep","sklepy","sklepów");
+    document.getElementById("offers").innerHTML=d.offers.map(function(o,idx){
+      var st=STORES[o.store]||{c:"#999",url:"#",dl:""};
+      var best=o.inStock&&o.price===d.low&&o.store===d.lowStore;
+      var action=o.inStock
+        ? '<a class="buy" href="'+st.url+'" target="_blank" rel="noopener noreferrer">'+(best?"Kup najtaniej":"Do sklepu")+
+          ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'
+        : '<span class="oos-pill">Niedostępny</span>';
+      return '<div class="offer'+(best?" best":"")+(o.inStock?"":" oos")+'">'+
         '<div class="rank">'+(idx+1)+'</div>'+
         '<div class="offer-store"><span class="store-dot" style="background:'+st.c+'"></span>'+
-          '<div><div class="nm">'+o.store+(best?'<span class="best-flag">najtaniej</span>':'')+'</div>'+
-          '<div class="dl">Dostawa: '+st.dl+'</div></div></div>'+
-        priceCell + action + '</div>';
+        '<div><div class="nm">'+o.store+(best?'<span class="bflag">najtaniej</span>':'')+'</div>'+
+        '<div class="dl">'+st.dl+'</div></div></div>'+
+        '<div class="offer-price"><span class="now">'+money(o.price)+' zł</span>'+
+        (o.was?'<span class="was">'+money(o.was)+' zł</span>':'')+
+        (d.ml?'<div class="ppu">'+money(o.price/d.ml*100)+' zł / 100 ml</div>':'')+'</div>'+
+        action+'</div>';
     }).join("");
 
-    cmpBody.innerHTML =
-      '<div class="cmp-hero">'+
-        '<div class="cmp-thumb" style="background:linear-gradient(140deg,'+g[0]+','+g[1]+')">'+initials(d.brand)+'</div>'+
-        '<div><div class="cmp-cat">'+d.cat+'</div>'+
-          '<h1 class="cmp-name">'+d.name+'</h1>'+
-          '<div class="cmp-brand">'+d.brand+' · <span class="vol">'+d.vol+'</span></div></div>'+
-        '<div class="cmp-bestbox"><div class="lbl">Najniższa cena</div>'+
-          '<div class="amt">'+money(d.low)+'<span class="cur">zł</span></div>'+
-          '<div class="store">w <b>'+d.lowStore+'</b></div></div>'+
-      '</div>'+
-      '<div class="cmp-summary">'+
-        (d.save>0?'<span class="pill save"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1 0-4h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg> Oszczędzasz do <b>'+money(d.save)+' zł</b> ('+d.savePct+'%)</span>':'')+
-        '<span class="pill">Porównano <b>'+d.offers.length+'</b> '+plural(d.offers.length,"sklep","sklepy","sklepów")+'</span>'+
-        (d.ml?'<span class="pill">Cena za 100 ml: od <b>'+money(d.low/d.ml*100)+' zł</b></span>':'')+
-        '<button class="pill alert'+(isWatch?' on':'')+'" type="button" id="alertBtn">'+
-          '<svg width="15" height="15" viewBox="0 0 24 24" fill="'+(isWatch?'currentColor':'none')+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg> '+
-          (isWatch?'Śledzisz cenę':'Ustaw alert cenowy')+'</button>'+
-      '</div>'+
-      '<div class="offers">'+rows+'</div>'+
-      '<div class="cmp-note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>'+
-        '<span>Ceny mają charakter demonstracyjny. W wersji produkcyjnej aktualizowałyby się automatycznie z ofert sklepów, a przyciski „Kup" prowadziłyby do konkretnego produktu przez linki partnerskie.</span></div>'+
-      relatedHTML(d);
+    var rel=DATA.filter(function(x){return x.cat===d.cat&&x.id!==d.id;}).sort(function(a,b){return b.pop-a.pop;}).slice(0,4);
+    document.getElementById("related").innerHTML=rel.map(cardHTML).join("");
 
-    document.getElementById("alertBtn").addEventListener("click", function(){
-      watching[id] = !watching[id];
-      openProduct(id);
-    });
-    cmpBody.querySelectorAll("[data-open]").forEach(function(el){
-      el.addEventListener("click", function(){ openProduct(+el.getAttribute("data-open")); });
-    });
-
-    homeEl.style.display = "none";
-    cmpEl.style.display = "block";
-    window.scrollTo({ top:0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth" });
+    homeEl.style.display="none"; pdpEl.style.display="block";
+    window.scrollTo({top:0,behavior:"auto"});
   }
 
-  function relatedHTML(d){
-    var rel = DATA.filter(function(x){return x.cat===d.cat && x.id!==d.id;}).slice(0,3);
-    if(!rel.length) return "";
-    return '<div class="related"><div class="sec-head"><h2>Podobne w kategorii</h2>'+
-      '<span class="hint">'+d.cat+'</span></div><div class="tgrid">'+
-      rel.map(function(r){ var g=CAT_GRAD[r.cat];
-        return '<button class="tcard" type="button" data-open="'+r.id+'">'+
-          '<div class="sug-thumb" style="background:linear-gradient(140deg,'+g[0]+','+g[1]+')">'+initials(r.brand)+'</div>'+
-          '<div><div class="tc-name">'+r.name.split(" ").slice(0,4).join(" ")+'</div>'+
-          '<div class="tc-brand">'+r.brand+'</div>'+
-          '<div class="tc-from">od <b>'+money(r.low)+' zł</b></div></div></button>';
-      }).join("")+'</div></div>';
+  function paintPdpMini(id){
+    var d=DATA[id];
+    var f=document.getElementById("pdpFav"), a=document.getElementById("pdpAlert");
+    f.className="mini"+(favs[id]?" on":"");
+    f.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="'+(favs[id]?"currentColor":"none")+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg> '+
+      (favs[id]?"W ulubionych":"Do ulubionych");
+    a.className="mini"+(alerts[id]?" on":"");
+    a.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="'+(alerts[id]?"currentColor":"none")+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg> '+
+      (alerts[id]?"Śledzisz cenę":"Alert cenowy");
+    f.onclick=function(){toggleFav(id);};
+    a.onclick=function(){toggleAlert(id);};
+    document.getElementById("pdpShare").onclick=function(){ toast("Link skopiowany do schowka"); };
   }
 
-  function plural(n,one,few,many){
-    if(n===1) return one; var t=n%10,h=n%100;
-    if(t>=2&&t<=4&&!(h>=12&&h<=14)) return few; return many;
-  }
+  document.getElementById("crumbs").addEventListener("click", function(e){
+    var b=e.target.closest("button"); if(!b) return;
+    if(b.hasAttribute("data-home")){ goHome(); }
+    else if(b.hasAttribute("data-cat")){
+      activeCat=b.getAttribute("data-cat");
+      Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x.textContent===activeCat);});
+      goHome(); renderGrid();
+    }
+  });
 
   function goHome(){
-    cmpEl.style.display="none"; homeEl.style.display="block";
-    qEl.value=""; closeSuggest();
-    window.scrollTo({top:0, behavior:"auto"});
+    pdpEl.style.display="none"; homeEl.style.display="block"; curPdp=null;
+    qEl.value=""; closeSug(); window.scrollTo({top:0,behavior:"auto"});
   }
-  document.getElementById("backBtn").addEventListener("click", goHome);
-  function homeNav(){ goHome(); }
-  document.getElementById("homeBtn").addEventListener("click", homeNav);
-  document.getElementById("homeBtn").addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" ") homeNav(); });
+  document.getElementById("logoBtn").addEventListener("click", goHome);
+  document.getElementById("logoBtn2").addEventListener("click", goHome);
 
-  // ---------- Theme ----------
+  // ---------- theme ----------
   document.getElementById("themeBtn").addEventListener("click", function(){
-    var cur = root.getAttribute("data-theme");
-    if(!cur) cur = matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light";
-    root.setAttribute("data-theme", cur==="dark"?"light":"dark");
+    var cur=root.getAttribute("data-theme");
+    if(!cur) cur=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+    root.setAttribute("data-theme",cur==="dark"?"light":"dark");
   });
 
-  // smooth-scroll for in-page anchors without leaving compare view awkwardly
-  document.querySelectorAll('a.nav-link[href^="#"]').forEach(function(a){
-    a.addEventListener("click", function(e){
-      var id=a.getAttribute("href").slice(1); var el=document.getElementById(id);
-      if(el && homeEl.style.display!=="none"){ e.preventDefault(); el.scrollIntoView({behavior:"smooth"}); }
-      else if(el){ goHome(); setTimeout(function(){el.scrollIntoView({behavior:"smooth"});},50); e.preventDefault(); }
-    });
-  });
+  renderGrid();
+  syncCounts();
 })();
 </script>
