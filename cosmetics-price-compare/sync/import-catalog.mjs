@@ -82,7 +82,8 @@ function cleanName(name, brand) {
 
 async function fetchBrand(brand) {
   const items = [];
-  const fields = "code,product_name,product_name_pl,brands,quantity,image_front_small_url,categories";
+  const fields = "code,product_name,product_name_pl,brands,quantity,categories," +
+    "image_front_small_url,image_front_url,image_small_url,image_url,image_thumb_url";
   for (let page = 1; items.length < MAX; page++) {
     const url = "https://world.openbeautyfacts.org/cgi/search.pl?action=process&json=1" +
       "&tagtype_0=brands&tag_contains_0=contains&tag_0=" + encodeURIComponent(brand) +
@@ -99,7 +100,7 @@ async function fetchBrand(brand) {
         brand,
         name,
         ean: p.code || "",
-        img: p.image_front_small_url || "",
+        img: p.image_front_small_url || p.image_small_url || p.image_front_url || p.image_url || p.image_thumb_url || "",
         cat: mapCat((p.categories || "") + " " + name),
         vol: (p.quantity || "").trim()
       });
