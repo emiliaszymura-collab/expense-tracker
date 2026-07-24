@@ -166,7 +166,7 @@
   function loadStore(key){ try { return JSON.parse(localStorage.getItem(key)||"{}"); } catch(e){ return {}; } }
   function saveStore(key,obj){ try { localStorage.setItem(key, JSON.stringify(obj)); } catch(e){} }
   var favs=loadStore("blask.favs"), alerts=loadStore("blask.alerts");
-  var favMode=false, activeCat="Wszystkie", activeIdx=-1, curSug=[];
+  var favMode=false, catalogMode=false, catPage=1, CAT_PAGE=48, activeCat="Wszystkie", activeIdx=-1, curSug=[];
   var homeEl=document.getElementById("home"), pdpEl=document.getElementById("pdp");
   var qEl=document.getElementById("q"), sugEl=document.getElementById("suggest");
   var IS_ELECTRON=/Electron/i.test(navigator.userAgent);
@@ -256,12 +256,21 @@
     var b=document.createElement("button");
     b.className="catlink"+(c===activeCat?" on":""); b.type="button"; b.textContent=c;
     b.addEventListener("click", function(){
-      activeCat=c; favMode=false;
+      activeCat=c; favMode=false; catalogMode=false;
       Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x.textContent===c);});
       goHome(); renderGrid();
     });
     catnav.appendChild(b);
   });
+  // Zakładka "Katalog" — przeglądanie całego katalogu produktów
+  var catalogTab=document.createElement("button");
+  catalogTab.className="catlink"; catalogTab.type="button"; catalogTab.textContent="Katalog";
+  catalogTab.addEventListener("click", function(){
+    catalogMode=true; favMode=false; catPage=1; activeCat="Wszystkie";
+    Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x===catalogTab);});
+    goHome(); renderGrid();
+  });
+  catnav.appendChild(catalogTab);
 
   // ---------- grid ----------
   var gridEl=document.getElementById("pgrid"), sortEl=document.getElementById("sort");
@@ -299,11 +308,37 @@
       (d.save>0?' · taniej o <b>'+money(d.save)+' zł</b>':'')+'</div></div></div>';
   }
 
+  function catalogList(){
+    if(typeof FEED_CATALOG==="undefined") return [];
+    var list=FEED_CATALOG.filter(function(x){ return activeCat==="Wszystkie"||x.cat===activeCat; });
+    list.sort(function(a,b){ return (b.img?1:0)-(a.img?1:0); }); // ze zdjęciem najpierw
+    return list;
+  }
+
   function renderGrid(){
+    var titleEl=document.getElementById("gridTitle"), resEl=document.getElementById("gridRes");
+    if(catalogMode){
+      var full=catalogList();
+      _catItems=full;
+      var shown=full.slice(0, catPage*CAT_PAGE);
+      titleEl.childNodes[0].nodeValue = "Katalog";
+      resEl.textContent=" · "+full.length.toLocaleString("pl-PL")+" "+plural(full.length,"produkt","produkty","produktów")+
+        (activeCat!=="Wszystkie"?" · "+activeCat:"");
+      gridEl.innerHTML = shown.length
+        ? shown.map(function(it,i){ return catalogCardHTML(it,i); }).join("")+
+          (full.length>shown.length
+            ? '<div class="more-wrap"><button class="more-btn" id="moreBtn" type="button">Pokaż więcej ('+
+              (full.length-shown.length).toLocaleString("pl-PL")+')</button></div>'
+            : '')
+        : '<div class="empty"><div class="t">Katalog jest pusty</div>Uruchom import (sync/import-catalog.mjs) lub GitHub Action.</div>';
+      var mb=document.getElementById("moreBtn");
+      if(mb) mb.addEventListener("click", function(){ catPage++; renderGrid(); });
+      return;
+    }
     var list=gridList();
-    document.getElementById("gridTitle").childNodes[0].nodeValue =
+    titleEl.childNodes[0].nodeValue =
       favMode ? "Ulubione" : (activeCat==="Wszystkie"?"Bestsellery":activeCat);
-    document.getElementById("gridRes").textContent=" · "+list.length+" "+plural(list.length,"produkt","produkty","produktów");
+    resEl.textContent=" · "+list.length+" "+plural(list.length,"produkt","produkty","produktów");
     gridEl.innerHTML = list.length ? list.map(cardHTML).join("")
       : (favMode
         ? '<div class="empty"><div class="t">Nie masz jeszcze ulubionych</div>Kliknij ♥ na dowolnym produkcie, a znajdziesz go tutaj — zapamiętamy go na stałe.</div>'
@@ -314,12 +349,26 @@
     container.addEventListener("click", function(e){
       var f=e.target.closest("[data-fav]");
       if(f){ e.stopPropagation(); toggleFav(+f.getAttribute("data-fav")); return; }
-      var c=e.target.closest(".pcard"); if(c) openPDP(+c.getAttribute("data-id"));
+      var c=e.target.closest(".pcard"); if(!c) return;
+      if(c.hasAttribute("data-cat")) openCatalog(_catItems[+c.getAttribute("data-cat")]);
+      else openPDP(+c.getAttribute("data-id"));
     });
     container.addEventListener("keydown", function(e){
       if(e.key!=="Enter"&&e.key!==" ") return;
-      var c=e.target.closest(".pcard"); if(c){ e.preventDefault(); openPDP(+c.getAttribute("data-id")); }
+      var c=e.target.closest(".pcard"); if(!c) return; e.preventDefault();
+      if(c.hasAttribute("data-cat")) openCatalog(_catItems[+c.getAttribute("data-cat")]);
+      else openPDP(+c.getAttribute("data-id"));
     });
+  }
+  var _catItems=[];
+  function catalogCardHTML(it, idx){
+    return '<div class="pcard" role="button" tabindex="0" data-cat="'+idx+'">'+
+      '<div class="pimg pv">'+productSVG(genericImg)+
+        (it.img?'<img class="pphoto" alt="" loading="lazy" src="'+esc(it.img)+'">':'')+'</div>'+
+      '<div class="pbrand">'+esc(it.brand||"")+'</div>'+
+      '<div class="pname">'+esc(it.name)+'</div>'+
+      '<div class="prating">'+(it.qty?esc(it.qty):'')+'</div>'+
+      '<div class="pfoot"><div class="pstores">Sprawdź ceny w sklepach →</div></div></div>';
   }
   bindCardEvents(gridEl);
   bindCardEvents(document.getElementById("related"));
@@ -344,7 +393,7 @@
     if(pdpEl.style.display==="block"&&curPdp===id) paintPdpMini(id);
   }
   document.getElementById("favBtnTop").addEventListener("click", function(){
-    favMode=true; activeCat="Wszystkie";
+    favMode=true; catalogMode=false; activeCat="Wszystkie";
     Array.prototype.forEach.call(catnav.children,function(x){x.classList.remove("on");});
     goHome(); renderGrid();
   });
@@ -624,14 +673,25 @@
     if(isBrand){
       var mine=DATA.filter(function(d){ return d.brand===item.name; })
                    .sort(function(a,b){ return b.pop-a.pop; });
-      if(mine.length){
-        relHead.textContent="Produkty marki "+item.name+" ("+mine.length+")";
-        relEl.innerHTML=mine.map(cardHTML).join("");
+      // produkty tej marki z katalogu OBF (ze zdjeciami), pomijajac duplikaty cenowe
+      var priced={}; mine.forEach(function(d){ priced[compact(d.brand+d.name)]=1; });
+      _catItems = (typeof FEED_CATALOG!=="undefined")
+        ? FEED_CATALOG.filter(function(x){ return slug(x.brand)===slug(item.name) && !priced[compact((x.brand||"")+x.name)]; })
+        : [];
+      _catItems.sort(function(a,b){ return (b.img?1:0)-(a.img?1:0); }); // ze zdjeciem najpierw
+      var total=mine.length+_catItems.length;
+      var withPhoto=mine.filter(function(d){return d.photo||catalogPhoto(d);}).length + _catItems.filter(function(x){return x.img;}).length;
+      if(total){
+        relHead.textContent="Produkty marki "+item.name+" ("+total+
+          (withPhoto?" · "+withPhoto+" ze zdjęciem":"")+")";
+        relEl.innerHTML=mine.map(cardHTML).join("")+
+          _catItems.slice(0,48).map(function(it,i){ return catalogCardHTML(it,i); }).join("");
       } else {
         relHead.textContent="Popularne w Blask";
         relEl.innerHTML=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,4).map(cardHTML).join("");
       }
     } else {
+      _catItems=[];
       relHead.textContent="Popularne w Blask";
       relEl.innerHTML=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,4).map(cardHTML).join("");
     }
@@ -731,7 +791,11 @@
     pdpEl.style.display="none"; homeEl.style.display="block"; curPdp=null;
     qEl.value=""; closeSug(); window.scrollTo({top:0,behavior:"auto"});
   }
-  function showHome(){ favMode=false; goHome(); renderGrid(); }
+  function showHome(){
+    favMode=false; catalogMode=false; activeCat="Wszystkie";
+    Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x.textContent==="Wszystkie");});
+    goHome(); renderGrid();
+  }
   document.getElementById("logoBtn").addEventListener("click", showHome);
   document.getElementById("logoBtn2").addEventListener("click", showHome);
 
