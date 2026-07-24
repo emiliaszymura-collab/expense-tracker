@@ -65,6 +65,21 @@ async function fetchJSON(url) {
   throw last;
 }
 
+// Porządkowanie nazw z OBF: usuwa powtórzoną pojemność, końcowe nawiasy
+// z obcymi dopiskami, zdublowany prefiks marki i nadmiar spacji.
+function cleanName(name, brand) {
+  let s = (name || "").replace(/\s+/g, " ").trim();
+  s = s.replace(/\s*\([^()]*\)\s*$/g, " ").trim();            // końcowy nawias
+  s = s.replace(/[\s,–-]*\b\d+(?:[.,]\d+)?\s?(ml|g|l|szt)\b\.?$/i, "").trim(); // końcowa pojemność
+  if (brand) {                                                 // zdublowany prefiks marki
+    const b = brand.trim();
+    const re = new RegExp("^(" + b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")\\s+\\1\\b", "i");
+    s = s.replace(re, "$1");
+  }
+  s = s.replace(/[\s,;:–-]+$/, "").trim();
+  return s || name;
+}
+
 async function fetchBrand(brand) {
   const items = [];
   const fields = "code,product_name,product_name_pl,brands,quantity,image_front_small_url,categories";
@@ -77,8 +92,9 @@ async function fetchBrand(brand) {
     const prods = js.products || [];
     if (!prods.length) break;
     for (const p of prods) {
-      const name = (p.product_name_pl || p.product_name || "").trim();
-      if (!name) continue;
+      const rawName = (p.product_name_pl || p.product_name || "").trim();
+      if (!rawName) continue;
+      const name = cleanName(rawName, brand);
       items.push({
         brand,
         name,
