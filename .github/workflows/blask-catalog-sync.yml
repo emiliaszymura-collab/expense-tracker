@@ -7,7 +7,7 @@ name: Blask — synchronizacja katalogu
 on:
   workflow_dispatch:        # przycisk "Run workflow" w zakładce Actions
   schedule:
-    - cron: "0 4 * * 1"     # co poniedziałek 04:00 UTC
+    - cron: "0 4 * * *"     # codziennie 04:00 UTC = 06:00 rano czasu polskiego
 
 permissions:
   contents: write
