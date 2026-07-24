@@ -27,7 +27,7 @@ jobs:
 
       - name: Import katalogu produktów (Open Beauty Facts)
         env:
-          BLASK_MAX_PER_BRAND: "60"
+          BLASK_MAX_PER_BRAND: "200"
         run: node sync/import-catalog.mjs
 
       - name: Synchronizacja cen i promocji z feedów (opcjonalnie)
