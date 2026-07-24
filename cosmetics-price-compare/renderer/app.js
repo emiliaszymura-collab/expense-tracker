@@ -314,12 +314,26 @@
     container.addEventListener("click", function(e){
       var f=e.target.closest("[data-fav]");
       if(f){ e.stopPropagation(); toggleFav(+f.getAttribute("data-fav")); return; }
-      var c=e.target.closest(".pcard"); if(c) openPDP(+c.getAttribute("data-id"));
+      var c=e.target.closest(".pcard"); if(!c) return;
+      if(c.hasAttribute("data-cat")) openCatalog(_brandCat[+c.getAttribute("data-cat")]);
+      else openPDP(+c.getAttribute("data-id"));
     });
     container.addEventListener("keydown", function(e){
       if(e.key!=="Enter"&&e.key!==" ") return;
-      var c=e.target.closest(".pcard"); if(c){ e.preventDefault(); openPDP(+c.getAttribute("data-id")); }
+      var c=e.target.closest(".pcard"); if(!c) return; e.preventDefault();
+      if(c.hasAttribute("data-cat")) openCatalog(_brandCat[+c.getAttribute("data-cat")]);
+      else openPDP(+c.getAttribute("data-id"));
     });
+  }
+  var _brandCat=[];
+  function catalogCardHTML(it, idx){
+    return '<div class="pcard" role="button" tabindex="0" data-cat="'+idx+'">'+
+      '<div class="pimg pv">'+productSVG(genericImg)+
+        (it.img?'<img class="pphoto" alt="" loading="lazy" src="'+esc(it.img)+'">':'')+'</div>'+
+      '<div class="pbrand">'+esc(it.brand||"")+'</div>'+
+      '<div class="pname">'+esc(it.name)+'</div>'+
+      '<div class="prating">'+(it.qty?esc(it.qty):'')+'</div>'+
+      '<div class="pfoot"><div class="pstores">Sprawdź ceny w sklepach →</div></div></div>';
   }
   bindCardEvents(gridEl);
   bindCardEvents(document.getElementById("related"));
@@ -624,14 +638,23 @@
     if(isBrand){
       var mine=DATA.filter(function(d){ return d.brand===item.name; })
                    .sort(function(a,b){ return b.pop-a.pop; });
-      if(mine.length){
-        relHead.textContent="Produkty marki "+item.name+" ("+mine.length+")";
-        relEl.innerHTML=mine.map(cardHTML).join("");
+      // produkty tej marki z katalogu OBF (ze zdjeciami), pomijajac duplikaty cenowe
+      var priced={}; mine.forEach(function(d){ priced[compact(d.brand+d.name)]=1; });
+      _brandCat = (typeof FEED_CATALOG!=="undefined")
+        ? FEED_CATALOG.filter(function(x){ return slug(x.brand)===slug(item.name) && !priced[compact((x.brand||"")+x.name)]; })
+        : [];
+      _brandCat.sort(function(a,b){ return (b.img?1:0)-(a.img?1:0); }); // ze zdjeciem najpierw
+      var total=mine.length+_brandCat.length;
+      if(total){
+        relHead.textContent="Produkty marki "+item.name+" ("+total+")";
+        relEl.innerHTML=mine.map(cardHTML).join("")+
+          _brandCat.slice(0,48).map(function(it,i){ return catalogCardHTML(it,i); }).join("");
       } else {
         relHead.textContent="Popularne w Blask";
         relEl.innerHTML=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,4).map(cardHTML).join("");
       }
     } else {
+      _brandCat=[];
       relHead.textContent="Popularne w Blask";
       relEl.innerHTML=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,4).map(cardHTML).join("");
     }
