@@ -177,8 +177,31 @@
   // podgladu), na kartach zostaja wektorowe ilustracje.
   var PHOTOS=loadStore("blask.photos");
   function visualInner(d){
-    var url=d.photo||PHOTOS[d.id]; // zdjecie z feedu sklepu ma pierwszenstwo
+    var url=d.photo||PHOTOS[d.id]||catalogPhoto(d); // feed sklepu > pobrane > z katalogu OBF
     return productSVG(d)+(url?'<img class="pphoto" alt="" loading="lazy" src="'+esc(url)+'">':'');
+  }
+  // Dopasowanie zdjecia z katalogu OBF do produktu z bazy cen (po marce i nazwie).
+  var _catByBrand=null, _photoMemo={};
+  function catalogPhoto(d){
+    if(d.id in _photoMemo) return _photoMemo[d.id];
+    if(typeof FEED_CATALOG==="undefined"){ return (_photoMemo[d.id]=""); }
+    if(!_catByBrand){
+      _catByBrand={};
+      FEED_CATALOG.forEach(function(it){
+        if(!it.img) return;
+        var b=slug(it.brand||"");
+        (_catByBrand[b]=_catByBrand[b]||[]).push(it);
+      });
+    }
+    var pool=_catByBrand[slug(d.brand)]||[];
+    var toks=slug(d.name).split(" ").filter(function(t){return t.length>2;});
+    var best=null,bestScore=0;
+    pool.forEach(function(it){
+      var h=slug(it.name),sc=0;
+      toks.forEach(function(t){ if(h.indexOf(t)>=0) sc++; });
+      if(sc>bestScore){ bestScore=sc; best=it; }
+    });
+    return (_photoMemo[d.id]= best?best.img:"");
   }
   function injectPhoto(id){
     var url=PHOTOS[id]; if(!url) return;
