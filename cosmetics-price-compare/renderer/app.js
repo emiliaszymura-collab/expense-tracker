@@ -166,7 +166,8 @@
   function loadStore(key){ try { return JSON.parse(localStorage.getItem(key)||"{}"); } catch(e){ return {}; } }
   function saveStore(key,obj){ try { localStorage.setItem(key, JSON.stringify(obj)); } catch(e){} }
   var favs=loadStore("blask.favs"), alerts=loadStore("blask.alerts");
-  var favMode=false, catalogMode=false, catPage=1, CAT_PAGE=48, activeCat="Wszystkie", activeIdx=-1, curSug=[];
+  var favMode=false, catalogMode=false, catPage=1, CAT_PAGE=48, catImgOnly=false, catCat="Wszystkie";
+  var activeCat="Wszystkie", activeIdx=-1, curSug=[];
   var homeEl=document.getElementById("home"), pdpEl=document.getElementById("pdp");
   var qEl=document.getElementById("q"), sugEl=document.getElementById("suggest");
   var IS_ELECTRON=/Electron/i.test(navigator.userAgent);
@@ -267,7 +268,11 @@
   catalogTab.className="catlink"; catalogTab.type="button"; catalogTab.textContent="Katalog";
   catalogTab.addEventListener("click", function(){
     catalogMode=true; favMode=false; catPage=1; activeCat="Wszystkie";
+    catCat="Wszystkie"; catImgOnly=false;
     Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x===catalogTab);});
+    var chips=document.getElementById("catFilterChips");
+    if(chips) Array.prototype.forEach.call(chips.children,function(x){x.classList.toggle("on",x.textContent==="Wszystkie");});
+    var io=document.getElementById("imgOnly"); if(io) io.checked=false;
     goHome(); renderGrid();
   });
   catnav.appendChild(catalogTab);
@@ -310,20 +315,40 @@
 
   function catalogList(){
     if(typeof FEED_CATALOG==="undefined") return [];
-    var list=FEED_CATALOG.filter(function(x){ return activeCat==="Wszystkie"||x.cat===activeCat; });
+    var list=FEED_CATALOG.filter(function(x){
+      if(catImgOnly && !x.img) return false;
+      return catCat==="Wszystkie"||x.cat===catCat;
+    });
     list.sort(function(a,b){ return (b.img?1:0)-(a.img?1:0); }); // ze zdjęciem najpierw
     return list;
   }
 
+  // pasek filtrów katalogu (kategorie + tylko ze zdjęciem)
+  var catFilterEl=document.getElementById("catFilter"), catFilterChips=document.getElementById("catFilterChips");
+  CATS.forEach(function(c){
+    var ch=document.createElement("button");
+    ch.className="chip"+(c==="Wszystkie"?" on":""); ch.type="button"; ch.textContent=c;
+    ch.addEventListener("click", function(){
+      catCat=c; catPage=1;
+      Array.prototype.forEach.call(catFilterChips.children,function(x){x.classList.toggle("on",x.textContent===c);});
+      renderGrid();
+    });
+    catFilterChips.appendChild(ch);
+  });
+  document.getElementById("imgOnly").addEventListener("change", function(){
+    catImgOnly=this.checked; catPage=1; renderGrid();
+  });
+
   function renderGrid(){
     var titleEl=document.getElementById("gridTitle"), resEl=document.getElementById("gridRes");
+    catFilterEl.hidden = !catalogMode;
     if(catalogMode){
       var full=catalogList();
       _catItems=full;
       var shown=full.slice(0, catPage*CAT_PAGE);
       titleEl.childNodes[0].nodeValue = "Katalog";
       resEl.textContent=" · "+full.length.toLocaleString("pl-PL")+" "+plural(full.length,"produkt","produkty","produktów")+
-        (activeCat!=="Wszystkie"?" · "+activeCat:"");
+        (catCat!=="Wszystkie"?" · "+catCat:"")+(catImgOnly?" · ze zdjęciem":"");
       gridEl.innerHTML = shown.length
         ? shown.map(function(it,i){ return catalogCardHTML(it,i); }).join("")+
           (full.length>shown.length
