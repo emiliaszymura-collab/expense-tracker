@@ -27,6 +27,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Cache-busting (dopisz wersję do plików, by przeglądarka pobrała nowe)
+        run: |
+          cd cosmetics-price-compare/renderer
+          V="${GITHUB_SHA:0:8}"
+          sed -i -E 's#(href="styles\.css)"#\1?v='"$V"'"#; s#(src="(data|feed|brands|catalog|app)\.js)"#\1?v='"$V"'"#g' index.html
+          echo "Ostemplowano wersją $V"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
