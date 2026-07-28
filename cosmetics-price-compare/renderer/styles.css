@@ -24,6 +24,7 @@
 }
 
 * { box-sizing: border-box; }
+html, body { overflow-x: hidden; }
 body {
   margin: 0; background: var(--bg); color: var(--text);
   font-family: var(--sans); font-size: 15px; line-height: 1.47;
@@ -131,8 +132,8 @@ header.main {
 /* ============ Hero ============ */
 .hero { text-align: center; padding: 54px 0 44px; background: var(--bg); }
 .hero h1 {
-  font-size: clamp(32px, 5vw, 48px); font-weight: 700; letter-spacing: -.03em;
-  line-height: 1.07; margin: 0 0 10px; text-wrap: balance;
+  font-size: clamp(26px, 6vw, 48px); font-weight: 700; letter-spacing: -.03em;
+  line-height: 1.08; margin: 0 0 10px; text-wrap: balance; overflow-wrap: break-word;
 }
 .hero h1 i { font-style: normal; color: var(--blue); }
 .hero .sub {
@@ -457,6 +458,8 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
   .head-row { flex-wrap: wrap; }
   .hsearch { order: 3; flex-basis: 100%; max-width: none; }
   .catnav-inner { justify-content: flex-start; }
+  .hero { padding: 32px 0 26px; }
+  .hero .sub { font-size: 15px; }
 }
 @media (max-width: 460px) {
   .pgrid { grid-template-columns: 1fr; }
