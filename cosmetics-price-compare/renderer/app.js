@@ -121,6 +121,11 @@
 
   var HAS_FEED = typeof FEED_P!=="undefined" && FEED_P.length>0;
 
+  // Zdjecia: pokazujemy TYLKO studyjne zdjecia z feedow sklepow (jednolite tlo,
+  // jak Hebe). Amatorskie zdjecia z Open Beauty Facts sa wylaczone, zeby produkty
+  // nie wygladaly "jak uzywane" — zamiast nich spojne ilustracje.
+  var SHOW_CROWD_PHOTOS = false;
+
   // Pelny rejestr marek: lista z data.js + marki produktow z bazy cen.
   var BRAND_ALL = (function(){
     var set={};
@@ -178,7 +183,8 @@
   // podgladu), na kartach zostaja wektorowe ilustracje.
   var PHOTOS=loadStore("blask.photos");
   function visualInner(d){
-    var url=d.photo||PHOTOS[d.id]||catalogPhoto(d); // feed sklepu > pobrane > z katalogu OBF
+    var url=d.photo; // wylacznie studyjne zdjecie z feedu sklepu
+    if(SHOW_CROWD_PHOTOS && !url) url=PHOTOS[d.id]||catalogPhoto(d);
     return productSVG(d)+(url?'<img class="pphoto" alt="" loading="lazy" src="'+esc(url)+'">':'');
   }
   // Dopasowanie zdjecia z katalogu OBF do produktu z bazy cen (po marce i nazwie).
@@ -223,6 +229,7 @@
     }
   },true);
   function loadPhotos(){
+    if(!SHOW_CROWD_PHOTOS) return; // zdjecia OBF wylaczone
     var queue=DATA.filter(function(d){ return !d.photo && !(d.id in PHOTOS); });
     (function next(){
       if(!queue.length){ saveStore("blask.photos",PHOTOS); return; }
@@ -335,6 +342,8 @@
     });
     catFilterChips.appendChild(ch);
   });
+  var imgOnlyLabel=document.querySelector(".catfilter-toggle");
+  if(!SHOW_CROWD_PHOTOS && imgOnlyLabel){ imgOnlyLabel.style.display="none"; }
   document.getElementById("imgOnly").addEventListener("change", function(){
     catImgOnly=this.checked; catPage=1; renderGrid();
   });
@@ -389,7 +398,7 @@
   function catalogCardHTML(it, idx){
     return '<div class="pcard" role="button" tabindex="0" data-cat="'+idx+'">'+
       '<div class="pimg pv">'+productSVG(genericImg)+
-        (it.img?'<img class="pphoto" alt="" loading="lazy" src="'+esc(it.img)+'">':'')+'</div>'+
+        ((SHOW_CROWD_PHOTOS&&it.img)?'<img class="pphoto" alt="" loading="lazy" src="'+esc(it.img)+'">':'')+'</div>'+
       '<div class="pbrand">'+esc(it.brand||"")+'</div>'+
       '<div class="pname">'+esc(it.name)+'</div>'+
       '<div class="prating">'+(it.qty?esc(it.qty):'')+'</div>'+
@@ -544,7 +553,7 @@
         var it=r.item;
         html+='<div class="sug-item" role="option" data-i="'+i+'">'+
           '<div class="sug-thumb pv">'+productSVG(genericImg)+
-            (it.img?'<img class="pphoto" alt="" loading="lazy" src="'+esc(it.img)+'">':'')+'</div>'+
+            ((SHOW_CROWD_PHOTOS&&it.img)?'<img class="pphoto" alt="" loading="lazy" src="'+esc(it.img)+'">':'')+'</div>'+
           '<div class="sug-body"><div class="sug-name">'+hl((it.brand?it.brand+" ":"")+it.name,qn)+'</div>'+
           '<div class="sug-meta">'+(it.qty?it.qty+' · ':'')+'sprawdź ceny w sklepach</div></div></div>';
       } else {
@@ -656,7 +665,7 @@
     var bStyle=isBrand?BRAND_STYLE[item.name]:null;
     vis.innerHTML=productSVG(bStyle?{img:{form:"bottle",body:bStyle[0],cap:bStyle[1],accent:bStyle[1],
         l1:item.name.toUpperCase().slice(0,14)}}:genericImg)+
-      (item.img?'<img class="pphoto" alt="" src="'+esc(item.img)+'">':'');
+      ((SHOW_CROWD_PHOTOS&&item.img)?'<img class="pphoto" alt="" src="'+esc(item.img)+'">':'');
     document.getElementById("pdpBrand").textContent=isBrand?"Marka":(item.brand||"");
     document.getElementById("pdpName").textContent=item.name;
     document.getElementById("pdpSub").textContent=
@@ -705,7 +714,7 @@
         : [];
       _catItems.sort(function(a,b){ return (b.img?1:0)-(a.img?1:0); }); // ze zdjeciem najpierw
       var total=mine.length+_catItems.length;
-      var withPhoto=mine.filter(function(d){return d.photo||catalogPhoto(d);}).length + _catItems.filter(function(x){return x.img;}).length;
+      var withPhoto=SHOW_CROWD_PHOTOS ? (mine.filter(function(d){return d.photo||catalogPhoto(d);}).length + _catItems.filter(function(x){return x.img;}).length) : 0;
       if(total){
         relHead.textContent="Produkty marki "+item.name+" ("+total+
           (withPhoto?" · "+withPhoto+" ze zdjęciem":"")+")";
