@@ -822,9 +822,89 @@
   });
 
   function goHome(){
-    pdpEl.style.display="none"; homeEl.style.display="block"; curPdp=null;
+    pdpEl.style.display="none"; homeEl.style.display="block"; infoEl.style.display="none"; curPdp=null;
     qEl.value=""; closeSug(); window.scrollTo({top:0,behavior:"auto"});
   }
+
+  // ---------- strony informacyjne (pod wnioski afiliacyjne) ----------
+  var infoEl=document.getElementById("info");
+  var INFO={
+    about:
+      '<h1>O nas</h1>'+
+      '<p class="lede">Blask to niezależna porównywarka cen kosmetyków. Powstała z prostej frustracji: żeby kupić ulubiony krem najtaniej, trzeba było otwierać po kilka sklepów i porównywać ręcznie.</p>'+
+      '<p>Zbieramy w jednym miejscu ceny popularnych kosmetyków z polskich drogerii i perfumerii — Rossmann, Hebe, Notino, Douglas, Sephora, Superpharm, eZebra i innych — i pokazujemy, gdzie dany produkt kupisz najkorzystniej.</p>'+
+      '<h2>Jak zarabiamy</h2>'+
+      '<p>Dla Ciebie Blask jest i pozostanie bezpłatny. Utrzymujemy się z prowizji afiliacyjnych wypłacanych przez sklepy, gdy przejdziesz do nich przez nasz link i dokonasz zakupu. Nie wpływa to na cenę, którą płacisz, ani na kolejność ofert — zawsze pokazujemy najniższą cenę na górze.</p>',
+    contact:
+      '<h1>Kontakt</h1>'+
+      '<p class="lede">Masz pytanie, sugestię albo jesteś sklepem zainteresowanym współpracą? Napisz do nas.</p>'+
+      '<div class="card"><p><b>E-mail:</b> kontakt@blask.pl</p>'+
+      '<p><b>Współpraca dla sklepów:</b> partnerzy@blask.pl</p></div>'+
+      '<p class="muted">Odpowiadamy zwykle w ciągu 1–2 dni roboczych.</p>',
+    partners:
+      '<h1>Dla sklepów i marek</h1>'+
+      '<p class="lede">Docieraj do klientów w momencie decyzji zakupowej — gdy porównują ceny i są gotowi kupić.</p>'+
+      '<h2>Dlaczego Blask</h2>'+
+      '<ul>'+
+      '<li><b>Ruch o wysokiej intencji zakupowej</b> — użytkownik porównywarki to klient z „koszykiem w ręku".</li>'+
+      '<li><b>Pełna karta produktu</b> — Twoja oferta obok konkurencji, z Twoim logo, ceną i linkiem.</li>'+
+      '<li><b>Codzienna aktualizacja</b> — ceny, promocje i zdjęcia pobieramy z Twojego feedu produktowego automatycznie.</li>'+
+      '<li><b>Model rozliczenia za efekt</b> — płacisz prowizję tylko za realną sprzedaż (CPS), przez sieć afiliacyjną.</li>'+
+      '</ul>'+
+      '<h2>Jak zacząć</h2>'+
+      '<p>Współpracujemy przez sieci afiliacyjne (Awin, webePartners, TradeDoubler) oraz bezpośrednio. Napisz na <b>partnerzy@blask.pl</b> — podeślemy szczegóły i podłączymy Twój feed.</p>'+
+      '<a class="cta" href="#" data-info="contact">Napisz do nas</a>',
+    affiliate:
+      '<h1>Współpraca afiliacyjna</h1>'+
+      '<p class="lede">Jawnie i uczciwie o tym, jak działają nasze linki.</p>'+
+      '<p>Część linków w Blask to linki afiliacyjne. Oznacza to, że gdy przejdziesz przez nie do sklepu i dokonasz zakupu, sklep może wypłacić nam prowizję za polecenie.</p>'+
+      '<ul>'+
+      '<li>Prowizja <b>nie zmienia ceny</b>, którą płacisz — jest kosztem sklepu, nie Twoim.</li>'+
+      '<li>Prowizja <b>nie wpływa na kolejność</b> ofert — najniższą cenę zawsze pokazujemy na górze.</li>'+
+      '<li>Współpracujemy z sieciami afiliacyjnymi (m.in. Awin, webePartners) oraz bezpośrednio ze sklepami.</li>'+
+      '</ul>'+
+      '<p>Dzięki temu modelowi możemy utrzymywać Blask bezpłatnym dla Ciebie. Dziękujemy, że kupując przez nasze linki, wspierasz rozwój serwisu. 💜</p>',
+    terms:
+      '<h1>Regulamin</h1>'+
+      '<p class="muted">Wzór do uzupełnienia przez właściciela serwisu i weryfikacji prawnej przed publikacją produkcyjną.</p>'+
+      '<h2>1. Charakter serwisu</h2>'+
+      '<p>Blask („Serwis") to bezpłatna porównywarka cen kosmetyków o charakterze informacyjnym. Serwis nie prowadzi sprzedaży produktów — umożliwia jedynie porównanie ofert i przejście do sklepów zewnętrznych.</p>'+
+      '<h2>2. Ceny i dostępność</h2>'+
+      '<p>Prezentowane ceny mają charakter orientacyjny i pochodzą z danych dostarczanych przez sklepy. O ostatecznej cenie, dostępności i warunkach zakupu decyduje wyłącznie sklep, do którego prowadzi link. Blask dokłada starań, aby dane były aktualne, lecz nie gwarantuje ich pełnej zgodności w każdym momencie.</p>'+
+      '<h2>3. Linki afiliacyjne</h2>'+
+      '<p>Serwis korzysta z linków afiliacyjnych. Zasady opisano w sekcji „Współpraca afiliacyjna".</p>'+
+      '<h2>4. Odpowiedzialność</h2>'+
+      '<p>Blask nie jest stroną transakcji zawieranych w sklepach zewnętrznych i nie ponosi odpowiedzialności za ich realizację, w tym za dostawę, płatność, reklamacje i zwroty.</p>'+
+      '<h2>5. Kontakt</h2>'+
+      '<p>W sprawach dotyczących Serwisu: kontakt@blask.pl.</p>',
+    privacy:
+      '<h1>Polityka prywatności</h1>'+
+      '<p class="muted">Wzór do uzupełnienia (dane administratora, ewentualna analityka) i weryfikacji prawnej przed publikacją produkcyjną.</p>'+
+      '<h2>1. Administrator danych</h2>'+
+      '<p>Administratorem danych jest właściciel serwisu Blask. Kontakt: kontakt@blask.pl.</p>'+
+      '<h2>2. Jakie dane przetwarzamy</h2>'+
+      '<ul>'+
+      '<li><b>Ulubione i alerty cenowe</b> zapisujemy wyłącznie lokalnie w Twojej przeglądarce (localStorage). Nie trafiają one na nasze serwery i nie wymagają konta.</li>'+
+      '<li>Jeśli w przyszłości uruchomimy analitykę lub newsletter, poinformujemy o tym i poprosimy o zgodę tam, gdzie jest wymagana.</li>'+
+      '</ul>'+
+      '<h2>3. Linki do sklepów</h2>'+
+      '<p>Po kliknięciu w link do sklepu lub link afiliacyjny Twoje dane przetwarza już dany sklep i sieć afiliacyjna zgodnie z ich politykami prywatności.</p>'+
+      '<h2>4. Twoje prawa (RODO)</h2>'+
+      '<p>Masz prawo dostępu do danych, ich sprostowania, usunięcia oraz ograniczenia przetwarzania. Dane w localStorage możesz w każdej chwili usunąć, czyszcząc dane strony w przeglądarce.</p>'+
+      '<h2>5. Kontakt</h2>'+
+      '<p>W sprawach prywatności: kontakt@blask.pl.</p>'
+  };
+  function openInfo(key){
+    var html=INFO[key]; if(!html) return;
+    document.getElementById("infoBody").innerHTML=html;
+    homeEl.style.display="none"; pdpEl.style.display="none"; infoEl.style.display="block";
+    closeSug(); window.scrollTo({top:0,behavior:"auto"});
+  }
+  document.getElementById("infoBack").addEventListener("click", showHome);
+  document.addEventListener("click", function(e){
+    var a=e.target.closest("[data-info]"); if(!a) return;
+    e.preventDefault(); openInfo(a.getAttribute("data-info"));
+  });
   function showHome(){
     favMode=false; catalogMode=false; activeCat="Wszystkie";
     Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x.textContent==="Wszystkie");});
