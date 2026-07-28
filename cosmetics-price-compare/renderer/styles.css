@@ -173,12 +173,25 @@ select.sort:focus { outline: none; box-shadow: 0 0 0 4px var(--blue-tint); }
   display: flex; flex-direction: column;
   transition: box-shadow .2s, transform .2s;
 }
-.pcard:hover { box-shadow: 0 0 0 1px var(--hair-soft), var(--shadow-hover); transform: translateY(-2px); }
+.pcard:hover { box-shadow: 0 0 0 1px var(--hair-soft), var(--shadow-hover); transform: translateY(-3px); }
+@keyframes cardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.pcard { animation: cardIn .32s cubic-bezier(.2,.7,.3,1) both; }
 .pimg {
-  height: 150px; border-radius: 12px; background: var(--panel);
-  display: grid; place-items: center; margin-bottom: 12px; overflow: hidden;
+  height: 158px; border-radius: 14px; margin-bottom: 12px; overflow: hidden;
+  display: grid; place-items: center; position: relative;
+  background:
+    radial-gradient(120% 90% at 50% 8%, #FFFFFF 0%, var(--panel) 70%);
 }
-.pimg svg { width: 108px; height: 136px; }
+:root[data-theme="dark"] .pimg { background: radial-gradient(120% 90% at 50% 8%, #2A2233 0%, var(--panel) 72%); }
+.pimg::before { /* subtelny „podest" pod produktem */
+  content: ""; position: absolute; left: 18%; right: 18%; bottom: 14px; height: 12px;
+  border-radius: 50%; background: radial-gradient(closest-side, rgba(28,21,38,.16), transparent 75%);
+  filter: blur(2px);
+}
+.pimg svg { width: 112px; height: 140px; position: relative; z-index: 1;
+  filter: drop-shadow(0 6px 10px rgba(28,21,38,.10)); }
+.pcard:hover .pimg svg { transform: translateY(-3px); }
+.pimg svg, .pcard { transition: transform .22s cubic-bezier(.2,.7,.3,1), box-shadow .2s; }
 .badge {
   position: absolute; top: 20px; left: 20px; z-index: 2;
   font-size: 11.5px; font-weight: 600; color: var(--red);
@@ -451,4 +464,4 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
   .offer .buy, .offer .oos-pill { grid-column: 1/-1; justify-content: center; text-align: center; }
   .trust-inner { grid-template-columns: 1fr; }
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
