@@ -140,7 +140,11 @@ header.main {
   font-size: clamp(26px, 6vw, 48px); font-weight: 700; letter-spacing: -.03em;
   line-height: 1.08; margin: 0 0 10px; text-wrap: balance; overflow-wrap: break-word;
 }
-.hero h1 i { font-style: normal; color: var(--accent-ink); }
+.hero h1 i {
+  font-style: normal; color: var(--accent);
+  -webkit-text-stroke: 0.8px #C9A24A; text-stroke: 0.8px #C9A24A;
+  paint-order: stroke fill;
+}
 .hero .sub {
   font-size: clamp(16px, 2vw, 19px); color: var(--muted); margin: 0 auto;
   max-width: 54ch; font-weight: 400;
