@@ -9,16 +9,14 @@ var STORES = {
   "Hebe":       { c:"#00A9A7", url:"https://www.hebe.pl",          search:"https://www.hebe.pl/search?q={q}",                         dl:"od 8,99 zł · darmowa od 99 zł" },
   "Notino":     { c:"#E5006D", url:"https://www.notino.pl",        search:"https://www.notino.pl/search.asp?exps={q}",                dl:"od 9,90 zł · darmowa od 150 zł" },
   "Douglas":    { c:"#4A3A55", url:"https://www.douglas.pl",       search:"https://www.douglas.pl/pl/search?query={q}",               dl:"od 12,90 zł · darmowa od 150 zł" },
-  "Sephora":    { c:"#7A4CC9", url:"https://www.sephora.pl",       search:"https://www.sephora.pl/szukaj?q={q}",                      dl:"od 13,99 zł · darmowa od 200 zł" },
+  "Sephora":    { c:"#7A4CC9", url:"https://www.sephora.pl",       search:"https://www.sephora.pl/search?q={q}",                      dl:"od 13,99 zł · darmowa od 200 zł" },
   "Superpharm": { c:"#0072CE", url:"https://www.superpharm.pl",    search:"https://www.superpharm.pl/catalogsearch/result/?q={q}",    dl:"od 10,99 zł · darmowa od 129 zł" },
-  "Ezebra":     { c:"#E09112", url:"https://www.ezebra.com.pl",    search:"https://www.ezebra.com.pl/search.php?text={q}",            dl:"od 8,90 zł · darmowa od 99 zł" },
-  "e.Leclerc":  { c:"#0068B4", url:"https://www.zakupy.leclerc",   search:null,                                                       dl:"odbiór w sklepie" },
+  "Ezebra":     { c:"#E09112", url:"https://ezebra.pl",            search:"https://ezebra.pl/pl/search?search_query={q}",             dl:"od 8,90 zł · darmowa od 99 zł" },
   // Marketplace'y — wyszukiwanie (ceny z feedow/API mozna podpiac pozniej)
   "Allegro":    { c:"#FF5A00", url:"https://allegro.pl",           search:"https://allegro.pl/listing?string={q}",                    dl:"wielu sprzedawców", mkt:true },
   "Amazon.pl":  { c:"#FF9900", url:"https://www.amazon.pl",        search:"https://www.amazon.pl/s?k={q}",                            dl:"marketplace", mkt:true },
   "Empik":      { c:"#2B2B2B", url:"https://www.empik.com",        search:"https://www.empik.com/szukaj/produkt?q={q}",               dl:"Empik Place", mkt:true },
-  "Ceneo":      { c:"#F47820", url:"https://www.ceneo.pl",         search:"https://www.ceneo.pl/;szukaj-{q}",                         dl:"porównywarka", mkt:true },
-  "Erli":       { c:"#8E24AA", url:"https://erli.pl",              search:"https://erli.pl/szukaj?phrase={q}",                        dl:"marketplace", mkt:true }
+  "Ceneo":      { c:"#F47820", url:"https://www.ceneo.pl",         search:"https://www.ceneo.pl/;szukaj-{q}",                         dl:"porównywarka", mkt:true }
 };
 
 var CATS = ["Wszystkie","Pielęgnacja twarzy","Makijaż","Pielęgnacja ciała","Włosy","Zapachy"];
@@ -547,7 +545,7 @@ var P = RAW.map(function(r){
   var style=BRAND_STYLE[brand]||["#EFEFF2","#8A8A8E"];
   var tier = BRAND_TIER.p.indexOf(brand)>=0 ? "p" : (BRAND_TIER.d.indexOf(brand)>=0 ? "d" : "x");
   var pool = tier==="p" ? ["Notino","Douglas","Sephora","Ezebra"]
-           : tier==="d" ? ["Rossmann","Hebe","Superpharm","e.Leclerc","Ezebra","Notino"]
+           : tier==="d" ? ["Rossmann","Hebe","Superpharm","Ezebra","Notino"]
            : ["Rossmann","Hebe","Notino","Superpharm","Douglas","Ezebra"];
   var count = tier==="p" ? 3+(h%2) : 4+(h%3);
   count=Math.min(count,pool.length);
