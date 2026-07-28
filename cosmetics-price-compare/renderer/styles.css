@@ -12,12 +12,12 @@
   --hair-soft: rgba(0, 0, 0, .06);
   /* Akcent marki: żółty. Wypełnienia = żółty z ciemnym tekstem; teksty/linki
      na bieli = ciemniejszy bursztyn (kontrast AA). */
-  --blue: #FFC400;                    /* wypełnienia (przyciski) */
-  --blue-hover: #F2B600;
-  --blue-tint: rgba(255, 196, 0, .16);
-  --accent: #FFC400;                  /* alias wypełnienia */
+  --blue: #F6DE8B;                    /* butter yellow — wypełnienia (przyciski) */
+  --blue-hover: #EFD474;
+  --blue-tint: rgba(246, 222, 139, .34);
+  --accent: #F6DE8B;                  /* alias wypełnienia */
   --accent-ink: #8A6100;              /* akcent na tekstach/ikonach (czytelny na bieli) */
-  --ink-on-accent: #1D1D1F;           /* tekst na żółtym przycisku */
+  --ink-on-accent: #1D1D1F;           /* tekst na maślanym przycisku */
   --green: #248A3D;
   --green-tint: #EBF6EE;
   --red: #E30000;
@@ -135,7 +135,7 @@ header.main {
 .sug-empty { padding: 18px; color: var(--muted); text-align: center; font-size: 13.5px; }
 
 /* ============ Hero ============ */
-.hero { text-align: center; padding: 54px 0 44px; background: radial-gradient(120% 72% at 50% -8%, rgba(255,196,0,.16), transparent 62%); }
+.hero { text-align: center; padding: 54px 0 44px; background: radial-gradient(120% 74% at 50% -8%, rgba(246,222,139,.28), transparent 64%); }
 .hero h1 {
   font-size: clamp(26px, 6vw, 48px); font-weight: 700; letter-spacing: -.03em;
   line-height: 1.08; margin: 0 0 10px; text-wrap: balance; overflow-wrap: break-word;
