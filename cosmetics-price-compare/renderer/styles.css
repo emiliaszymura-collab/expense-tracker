@@ -140,13 +140,7 @@ header.main {
   font-size: clamp(26px, 6vw, 48px); font-weight: 700; letter-spacing: -.03em;
   line-height: 1.08; margin: 0 0 10px; text-wrap: balance; overflow-wrap: break-word;
 }
-.hero h1 i {
-  font-style: normal; display: inline-block;
-  background: var(--accent); color: var(--text);
-  border: 2px solid #DCC65E; border-radius: 14px;
-  padding: .04em .4em; margin-top: .14em; line-height: 1.1;
-  box-shadow: 0 4px 16px rgba(220,198,94,.35);
-}
+.hero h1 i { font-style: normal; color: #D6A200; }  /* żółty złocisty, czytelny na bieli */
 .hero .sub {
   font-size: clamp(16px, 2vw, 19px); color: var(--muted); margin: 0 auto;
   max-width: 54ch; font-weight: 400;
