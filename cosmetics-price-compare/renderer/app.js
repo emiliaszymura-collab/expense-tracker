@@ -733,6 +733,58 @@
     homeEl.style.display="none"; pdpEl.style.display="block";
     window.scrollTo({top:0,behavior:"auto"});
   }
+  // ---------- historia cen (backend: sync/history.mjs → history.js) ----------
+  var HIST_DIAC={"ł":"l","ó":"o","ą":"a","ę":"e","ś":"s","ż":"z","ź":"z","ć":"c","ń":"n"};
+  function histKey(s){ return (s||"").toLowerCase().replace(/[łóąęśżźćń]/g,function(m){return HIST_DIAC[m]||m;}).replace(/[^a-z0-9]+/g,""); }
+  function shortDate(iso){ var p=iso.split("-"); return (+p[2])+"."+(+p[1]); }
+
+  function renderPriceHist(d){
+    var box=document.getElementById("priceHist");
+    var H=(typeof PRICE_HISTORY!=="undefined")?PRICE_HISTORY[histKey(d.brand+d.name)]:null;
+    if(!H||H.length<2){ box.innerHTML=""; box.style.display="none"; return; }
+    box.style.display="";
+    var series=H.slice(-30);
+    var vals=series.map(function(pt){return pt[1];});
+    var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
+    var cur=vals[vals.length-1], loIdx=vals.indexOf(lo);
+    var span=(hi-lo)||1;
+    // geometria wykresu
+    var W=720, Hh=180, padL=8, padR=8, padT=16, padB=26;
+    var iw=W-padL-padR, ih=Hh-padT-padB, n=series.length;
+    function X(i){ return padL + (n===1?iw/2:iw*i/(n-1)); }
+    function Y(v){ return padT + ih*(1-(v-lo)/span); }
+    var pts=series.map(function(pt,i){return X(i)+","+Y(pt[1]);});
+    var line="M"+pts.join(" L");
+    var area=line+" L"+X(n-1)+","+(padT+ih)+" L"+X(0)+","+(padT+ih)+" Z";
+    var curX=X(n-1), curY=Y(cur), loX=X(loIdx), loY=Y(lo);
+    var trend=cur<vals[0], diff=Math.abs(cur-vals[0]);
+    var trendTxt=diff<0.01
+      ? 'bez zmian w ostatnich 30 dniach'
+      : (trend?'spadła':'wzrosła')+' o '+money(diff)+' zł ('+Math.round(diff/vals[0]*100)+'%) w 30 dni';
+
+    box.innerHTML=
+      '<div class="ph-head"><h2>Historia ceny</h2>'+
+        '<span class="ph-trend '+(diff<0.01?'flat':(trend?'down':'up'))+'">'+
+        (diff<0.01?'':(trend
+          ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
+          : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>'))+
+        trendTxt+'</span></div>'+
+      '<div class="ph-chart"><svg viewBox="0 0 '+W+' '+Hh+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Wykres historii ceny">'+
+        '<defs><linearGradient id="phFill" x1="0" y1="0" x2="0" y2="1">'+
+          '<stop offset="0" stop-color="#F2E6A0" stop-opacity=".55"/>'+
+          '<stop offset="1" stop-color="#F2E6A0" stop-opacity="0"/></linearGradient></defs>'+
+        '<line class="ph-grid" x1="'+padL+'" y1="'+Y(hi)+'" x2="'+(W-padR)+'" y2="'+Y(hi)+'"/>'+
+        '<line class="ph-grid" x1="'+padL+'" y1="'+Y(lo)+'" x2="'+(W-padR)+'" y2="'+Y(lo)+'"/>'+
+        '<path d="'+area+'" fill="url(#phFill)"/>'+
+        '<path d="'+line+'" fill="none" stroke="#D6A200" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'+
+        '<circle cx="'+loX+'" cy="'+loY+'" r="4.5" fill="#1F9D55"/>'+
+        '<circle cx="'+curX+'" cy="'+curY+'" r="4.5" fill="#D6A200" stroke="#fff" stroke-width="2"/>'+
+      '</svg></div>'+
+      '<div class="ph-axis"><span>'+shortDate(series[0][0])+'</span>'+
+        '<span class="ph-lo"><b style="color:#1F9D55">'+money(lo)+' zł</b> najniżej</span>'+
+        '<span>'+shortDate(series[n-1][0])+' · dziś</span></div>';
+  }
+
   function openPDP(id){
     curPdp=id;
     var d=DATA[id];
@@ -778,6 +830,8 @@
         (d.ml?'<div class="ppu">'+money(o.price/d.ml*100)+' zł / 100 ml</div>':'')+'</div>'+
         action+'</div>';
     }).join("");
+
+    renderPriceHist(d);
 
     document.getElementById("mktStrip").innerHTML='<span class="lbl">Porównaj też na:</span>'+
       Object.keys(STORES).filter(function(s){return STORES[s].mkt&&STORES[s].search;}).map(function(s){
