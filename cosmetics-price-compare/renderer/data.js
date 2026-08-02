@@ -11,7 +11,7 @@ var STORES = {
   "Douglas":    { c:"#4A3A55", url:"https://www.douglas.pl",       search:"https://www.douglas.pl/pl/search?query={q}",               dl:"od 12,90 zł · darmowa od 150 zł" },
   "Sephora":    { c:"#7A4CC9", url:"https://www.sephora.pl",       search:null,                                                       dl:"od 13,99 zł · darmowa od 200 zł" },
   "Superpharm": { c:"#0072CE", url:"https://www.superpharm.pl",    search:"https://www.superpharm.pl/catalogsearch/result/?q={q}",    dl:"od 10,99 zł · darmowa od 129 zł" },
-  "Ezebra":     { c:"#E09112", url:"https://www.ezebra.pl",        search:"https://www.ezebra.pl/pl/searchquery/{q}",                 dl:"od 8,90 zł · darmowa od 99 zł" },
+  "Ezebra":     { c:"#E09112", url:"https://www.ezebra.pl",        search:"https://www.ezebra.pl/pl/search?search_query={q}",         dl:"od 8,90 zł · darmowa od 99 zł" },
   // Marketplace'y — wyszukiwanie (ceny z feedow/API mozna podpiac pozniej)
   "Allegro":    { c:"#FF5A00", url:"https://allegro.pl",           search:"https://allegro.pl/listing?string={q}",                    dl:"wielu sprzedawców", mkt:true },
   "Amazon.pl":  { c:"#FF9900", url:"https://www.amazon.pl",        search:"https://www.amazon.pl/s?k={q}",                            dl:"marketplace", mkt:true },
