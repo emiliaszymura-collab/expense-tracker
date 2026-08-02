@@ -454,6 +454,41 @@
   // To wyroznik: pojedyncze ceny porownuje wielu, caly koszyk — prawie nikt.
   function saveCart(){ saveStore("blask.cart",cart); syncCounts(); }
   function inCart(id){ return cart[id]>0; }
+
+  // udostepnianie koszyka linkiem: kodujemy pozycje w adresie (#k=id*ilosc,...)
+  function encodeCart(){
+    var parts=[]; for(var k in cart){ if(cart[k]>0) parts.push(k+"*"+cart[k]); }
+    return parts.join(",");
+  }
+  function decodeCart(str){
+    var out={};
+    (str||"").split(",").forEach(function(p){
+      var m=p.split("*"), id=parseInt(m[0],10), q=parseInt(m[1]||"1",10);
+      if(!isNaN(id) && id>=0 && id<DATA.length && q>0) out[id]=Math.min(q,99);
+    });
+    return out;
+  }
+  function shareCartLink(){
+    var enc=encodeCart();
+    if(!enc){ toast("Koszyk jest pusty"); return; }
+    var url=location.origin+location.pathname+"#k="+enc;
+    if(navigator.share){
+      navigator.share({ title:"Mój koszyk w Blask 💛", text:"Zobacz mój koszyk kosmetyków i porównaj ceny:", url:url })
+        .catch(function(){});
+    } else {
+      copyText(url, function(ok){ toast(ok?"Skopiowano link do koszyka 🔗":"Nie udało się skopiować"); });
+    }
+  }
+  function importSharedCart(){
+    var m=(location.hash||"").match(/[#&]k=([^&]+)/);
+    if(!m) return false;
+    var shared=decodeCart(decodeURIComponent(m[1])), ids=Object.keys(shared);
+    try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
+    if(!ids.length) return false;
+    ids.forEach(function(id){ cart[id]=(cart[id]||0)+shared[id]; });
+    saveCart();
+    return true;
+  }
   function addToCart(id, silent){
     cart[id]=(cart[id]||0)+1; saveCart();
     if(!silent) toast("Dodano do koszyka 🛒");
@@ -613,6 +648,8 @@
 
     body.innerHTML=
       '<div class="cart-head"><h1>Twój koszyk</h1><span class="res">'+r.N+' '+plural(r.N,"produkt","produkty","produktów")+'</span>'+
+        '<button class="cart-share" id="cartShare" type="button">'+
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Udostępnij</button>'+
         '<button class="cart-clear" id="cartClear" type="button">Wyczyść</button></div>'+
       '<div class="cart-grid"><div class="cart-list">'+itemsHTML+'</div>'+
       '<aside class="cart-result">'+result+
@@ -622,6 +659,7 @@
     document.getElementById("cartClear").addEventListener("click", function(){
       cart={}; saveCart(); renderCart(); toast("Koszyk wyczyszczony");
     });
+    document.getElementById("cartShare").addEventListener("click", shareCartLink);
   }
 
   // klik w widoku koszyka
@@ -637,10 +675,27 @@
   function showCart(){
     homeEl.style.display="none"; pdpEl.style.display="none"; infoEl.style.display="none"; cartEl.style.display="block";
     curPdp=null; closeSug(); renderCart(); window.scrollTo({top:0,behavior:"auto"});
+    navPush({view:"cart"});
   }
   document.getElementById("cartBtnTop").addEventListener("click", showCart);
-  document.getElementById("cartBack").addEventListener("click", showHome);
+  document.getElementById("cartBack").addEventListener("click", function(){ history.back(); });
   document.getElementById("pdpCart").addEventListener("click", function(){ if(curPdp!=null) addToCart(curPdp); });
+
+  // ---------- nawigacja wstecz (przycisk „cofnij" w telefonie/przegladarce) ----------
+  // Bez tego SPA nie tworzy wpisow w historii i przycisk wstecz jest wyszarzony.
+  // Kazde wejscie w glebszy widok (produkt / koszyk / strona info) dokłada wpis,
+  // a popstate przywraca poprzedni widok.
+  var _navSuppress=false;
+  function navPush(state){ if(_navSuppress) return; try{ history.pushState(state,""); }catch(e){} }
+  window.addEventListener("popstate", function(e){
+    _navSuppress=true;
+    var s=e.state||{view:"home"};
+    if(s.view==="pdp" && DATA[s.id]) openPDP(s.id);
+    else if(s.view==="info") openInfo(s.key);
+    else if(s.view==="cart") showCart();
+    else showHome();
+    _navSuppress=false;
+  });
 
   function paintPdpCart(id){
     var b=document.getElementById("pdpCart"); if(!b) return;
@@ -941,8 +996,9 @@
       relEl.innerHTML=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,4).map(cardHTML).join("");
     }
 
-    homeEl.style.display="none"; pdpEl.style.display="block";
+    homeEl.style.display="none"; infoEl.style.display="none"; cartEl.style.display="none"; pdpEl.style.display="block";
     window.scrollTo({top:0,behavior:"auto"});
+    navPush({view:"catalog"});
   }
   // ---------- historia cen (backend: sync/history.mjs → history.js) ----------
   var HIST_DIAC={"ł":"l","ó":"o","ą":"a","ę":"e","ś":"s","ż":"z","ź":"z","ć":"c","ń":"n"};
@@ -1057,6 +1113,7 @@
 
     homeEl.style.display="none"; infoEl.style.display="none"; cartEl.style.display="none"; pdpEl.style.display="block";
     window.scrollTo({top:0,behavior:"auto"});
+    navPush({view:"pdp", id:id});
   }
 
   function paintPdpMini(id){
@@ -1165,8 +1222,9 @@
     document.getElementById("infoBody").innerHTML=html;
     homeEl.style.display="none"; pdpEl.style.display="none"; cartEl.style.display="none"; infoEl.style.display="block";
     closeSug(); window.scrollTo({top:0,behavior:"auto"});
+    navPush({view:"info", key:key});
   }
-  document.getElementById("infoBack").addEventListener("click", showHome);
+  document.getElementById("infoBack").addEventListener("click", function(){ history.back(); });
   document.addEventListener("click", function(e){
     var a=e.target.closest("[data-info]"); if(!a) return;
     e.preventDefault(); openInfo(a.getAttribute("data-info"));
@@ -1182,4 +1240,6 @@
   renderGrid();
   syncCounts();
   loadPhotos();
+  // jesli wejscie z udostepnionego linku — zaladuj koszyk i pokaz go
+  if(importSharedCart()){ showCart(); toast("Załadowano udostępniony koszyk 🛒"); }
 })();
