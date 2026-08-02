@@ -36,11 +36,14 @@ jobs:
         run: |
           if [ -f sync/feeds.config.json ]; then node sync/sync.mjs || true; fi
 
+      - name: Zapis historii cen (dzienny punkt najniższej ceny)
+        run: node sync/history.mjs
+
       - name: Commit wygenerowanych danych
         run: |
           git config user.name "blask-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add renderer/catalog.js renderer/feed.js renderer/brands.js 2>/dev/null || true
+          git add renderer/catalog.js renderer/feed.js renderer/brands.js renderer/history.js 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "Brak zmian w katalogu — nic do commitowania."
           else

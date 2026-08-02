@@ -35,6 +35,10 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
         Alerty<span class="cnt" id="alertCnt" hidden>0</span>
       </button>
+      <button class="hact hact-cart" id="cartBtnTop" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.3 12.2a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.2L22 7H6"/></svg>
+        Koszyk<span class="cnt" id="cartCnt" hidden>0</span>
+      </button>
     </div>
   </div>
   <nav class="catnav" aria-label="Kategorie">
@@ -106,6 +110,7 @@
             <div class="catpanel-shops" id="catShops"></div>
             <button class="mini" id="wishBtn" type="button"></button>
           </div>
+          <button class="cta cta-cart tracked-only" id="pdpCart" type="button"></button>
           <div class="mini-actions tracked-only">
             <button class="mini" id="pdpFav" type="button"></button>
             <button class="mini" id="pdpAlert" type="button"></button>
@@ -122,6 +127,7 @@
         <span class="hint">od najtańszej</span>
       </div>
       <div class="offers tracked-only" id="offers"></div>
+      <div class="pricehist tracked-only" id="priceHist"></div>
       <div class="mkt-strip tracked-only" id="mktStrip"></div>
       <div class="pdp-note tracked-only">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -141,6 +147,17 @@
         Powrót
       </button>
       <article class="info-body" id="infoBody"></article>
+    </div>
+  </div>
+
+  <!-- ======== KOSZYK / PORÓWNYWARKA KOSZYKA ======== -->
+  <div id="cart">
+    <div class="wrap">
+      <button class="back-btn" id="cartBack" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Wróć do zakupów
+      </button>
+      <div id="cartBody"></div>
     </div>
   </div>
 </main>
@@ -214,6 +231,7 @@
 <script src="feed.js"></script>
 <script src="brands.js"></script>
 <script src="catalog.js"></script>
+<script src="history.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
