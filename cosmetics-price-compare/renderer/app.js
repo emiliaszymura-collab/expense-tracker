@@ -560,6 +560,13 @@
   }
 
   function storeDot(s){ return '<span class="store-dot" style="background:'+((STORES[s]||{}).c||"#999")+'"></span>'; }
+  // link do konkretnego produktu w danym sklepie (prawdziwy URL oferty albo
+  // wyszukiwanie w sklepie). Sklepy nie pozwalaja przekazac calego koszyka linkiem,
+  // wiec otwieramy pozycje pojedynczo — tak jak robia to inne porownywarki.
+  function offerUrlAt(d, store){
+    var o=d.offers.filter(function(x){ return x.store===store && x.inStock; })[0];
+    return (o && o.url) || searchUrl(store, d.brand+" "+d.name.split(" ").slice(0,3).join(" "));
+  }
 
   function renderCart(){
     var body=document.getElementById("cartBody");
@@ -604,8 +611,9 @@
         '<div class="cwin-store">'+storeDot(best.store)+'<b>'+best.store+'</b></div>'+
         '<div class="cwin-total">'+money(best.total)+'<span class="cur">zł</span></div>'+
         '<div class="cwin-break">'+money(best.sub)+' zł za produkty · '+freeInfo+'</div>'+
-        '<a class="cta" id="cwinGo" href="'+esc(STORES[best.store].url)+'" target="_blank" rel="noopener noreferrer">Kup w '+esc(best.store)+
-          ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'+
+        '<button class="cta cwin-go" id="cwinCheckout" type="button">Dokończ zakupy w '+esc(best.store)+
+          ' <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>'+
+        '<div class="cwin-hint">Otwieramy Twoje produkty w '+esc(best.store)+' — dodajesz je do koszyka sklepu jednym kliknięciem.</div>'+
         '</div>';
       // pozostale pelne koszyki
       if(r.full.length>1){
@@ -660,7 +668,96 @@
       cart={}; saveCart(); renderCart(); toast("Koszyk wyczyszczony");
     });
     document.getElementById("cartShare").addEventListener("click", shareCartLink);
+    var cb=document.getElementById("cwinCheckout");
+    if(cb && best) cb.addEventListener("click", function(){ openCheckout(best.store); });
   }
+
+  // ---------- „Dokończ zakupy" — otwieranie koszyka w sklepie ----------
+  // Sklepy (Rossmann/Hebe/Notino/Ezebra...) nie udostepniaja linku, ktory
+  // wypelnia caly koszyk — to mozliwe tylko na platformach typu Shopify
+  // (/cart/id:ilosc,...), ktorych te drogerie nie uzywaja, i tylko z ID
+  // produktow z feedu. Dlatego automatyzujemy realnie: otwieramy po kolei
+  // kazdy produkt w wybranym sklepie i pilnujemy postepu. Gdy podłaczymy
+  // feedy, buildStoreCartUrl() zwroci gotowy koszyk tam, gdzie sie da.
+  var coStore=null, coItems=[], coOpened={};
+  function openStoreLink(url){
+    // window.open bez „noopener" zwraca uchwyt okna (truthy) przy sukcesie —
+    // z „noopener" Chrome zwraca null i falszywie sygnalizuje blokade.
+    try{
+      var w=window.open(url,"_blank");
+      if(w){ try{ w.opener=null; }catch(e){} return true; }
+    }catch(e){}
+    // fallback: klikniecie linku (najpewniejsze w geście użytkownika)
+    try{
+      var a=document.createElement("a"); a.href=url; a.target="_blank"; a.rel="noopener";
+      document.body.appendChild(a); a.click(); a.remove(); return true;
+    }catch(e2){}
+    showLinkModal(url); return false;
+  }
+  // Gotowy koszyk sklepu, jesli platforma i dane na to pozwalaja (Shopify).
+  // Dzis zwraca null (brak ID z feedu) — mechanizm gotowy na przyszlosc.
+  function buildStoreCartUrl(store, items){
+    var st=STORES[store]; if(!st) return null;
+    if(st.cartPre==="shopify" && st.domain){
+      var parts=items.map(function(x){ var vid=x.d.sku && x.d.sku[store]; return vid?vid+":"+x.qty:null; }).filter(Boolean);
+      if(parts.length===items.length) return "https://"+st.domain+"/cart/"+parts.join(",");
+    }
+    return null;
+  }
+  function openCheckout(store){
+    coStore=store; coOpened={};
+    coItems=computeBasket().items.map(function(it){ return { d:it.d, qty:it.qty, url:offerUrlAt(it.d, store) }; });
+    // gdyby sklep wspieral gotowy koszyk (np. Shopify z feedu) — od razu tam
+    var pre=buildStoreCartUrl(store, coItems);
+    if(pre){ openStoreLink(pre); return; }
+    document.getElementById("coTitle").innerHTML='Dokończ zakupy w '+storeDot(store)+esc(store);
+    document.getElementById("coLead").innerHTML=
+      'Otwórz każdy produkt w <b>'+esc(store)+'</b> i dodaj go do koszyka sklepu. '+
+      'Odhaczamy otwarte, żeby nic Ci nie umknęło.';
+    renderCheckout();
+    var m=document.getElementById("checkout"); m.hidden=false; document.body.style.overflow="hidden";
+    document.getElementById("coOpenAll").focus();
+  }
+  function renderCheckout(){
+    var n=coItems.length, opened=Object.keys(coOpened).length, all=opened>=n && n>0;
+    document.getElementById("coProg").textContent=opened+" z "+n+" otwartych";
+    document.getElementById("coBar").style.width=(n?Math.round(opened/n*100):0)+"%";
+    document.getElementById("coOpenAll").innerHTML = all
+      ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Wszystkie otwarte'
+      : 'Otwórz wszystkie ('+(n-opened)+')';
+    document.getElementById("coList").innerHTML=coItems.map(function(x,i){
+      return '<div class="co-row'+(coOpened[i]?" done":"")+'">'+
+        '<span class="co-num">'+(coOpened[i]
+          ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'
+          : (i+1))+'</span>'+
+        '<span class="co-nm"><b>'+esc(x.d.brand)+'</b> '+esc(x.d.name)+(x.qty>1?' <span class="co-q">×'+x.qty+'</span>':'')+'</span>'+
+        '<button class="co-open" data-co="'+i+'" type="button">'+(coOpened[i]?"Otwórz ponownie":"Otwórz")+
+          ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>'+
+        '</div>';
+    }).join("");
+  }
+  function coOpen(i){
+    var x=coItems[i]; if(!x) return;
+    if(openStoreLink(x.url)){ coOpened[i]=1; renderCheckout(); }
+  }
+  document.getElementById("coList").addEventListener("click", function(e){
+    var b=e.target.closest("[data-co]"); if(b) coOpen(+b.getAttribute("data-co"));
+  });
+  document.getElementById("coOpenAll").addEventListener("click", function(){
+    // otwieramy sekwencyjnie z drobnym odstepem (przegladarki lubia blokowac
+    // wiele okien naraz — odstep i gest uzytkownika zwiekszaja skutecznosc)
+    coItems.forEach(function(x,i){
+      setTimeout(function(){
+        var w=null; try{ w=window.open(x.url,"_blank"); }catch(e){}
+        if(w){ try{ w.opener=null; }catch(e){} coOpened[i]=1; renderCheckout(); }
+        else if(i===0){ showLinkModal(x.url); }
+      }, i*350);
+    });
+  });
+  function closeCheckout(){ document.getElementById("checkout").hidden=true; document.body.style.overflow=""; }
+  document.getElementById("coClose").addEventListener("click", closeCheckout);
+  document.getElementById("checkout").addEventListener("click", function(e){ if(e.target===this) closeCheckout(); });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape" && !document.getElementById("checkout").hidden) closeCheckout(); });
 
   // klik w widoku koszyka
   document.getElementById("cartBody").addEventListener("click", function(e){
