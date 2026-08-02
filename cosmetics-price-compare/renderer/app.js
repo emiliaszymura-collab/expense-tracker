@@ -170,10 +170,11 @@
   // Ulubione i alerty sa trwale: localStorage przezywa restart aplikacji.
   function loadStore(key){ try { return JSON.parse(localStorage.getItem(key)||"{}"); } catch(e){ return {}; } }
   function saveStore(key,obj){ try { localStorage.setItem(key, JSON.stringify(obj)); } catch(e){} }
-  var favs=loadStore("blask.favs"), alerts=loadStore("blask.alerts");
+  var favs=loadStore("blask.favs"), alerts=loadStore("blask.alerts"), cart=loadStore("blask.cart");
   var favMode=false, catalogMode=false, catPage=1, CAT_PAGE=48, catImgOnly=false, catCat="Wszystkie";
   var activeCat="Wszystkie", activeIdx=-1, curSug=[];
   var homeEl=document.getElementById("home"), pdpEl=document.getElementById("pdp");
+  var cartEl=document.getElementById("cart");
   var qEl=document.getElementById("q"), sugEl=document.getElementById("suggest");
   var IS_ELECTRON=/Electron/i.test(navigator.userAgent);
 
@@ -309,6 +310,8 @@
       (d.savePct>=15?'<span class="badge">−'+d.savePct+'%</span>':'')+
       '<button class="fav'+(favs[d.id]?" on":"")+'" data-fav="'+d.id+'" type="button" aria-label="Dodaj do ulubionych">'+
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="'+(favs[d.id]?"currentColor":"none")+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.4 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.1 3 5.5l7 7z"/></svg></button>'+
+      '<button class="addcart'+(inCart(d.id)?" on":"")+'" data-add="'+d.id+'" type="button" aria-label="Dodaj do koszyka" title="Dodaj do koszyka">'+
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M2 3h3l2.3 12.2a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.2L22 7H6"/></svg></button>'+
       '<div class="pimg pv" data-pid="'+d.id+'">'+visualInner(d)+'</div>'+
       '<div class="pbrand">'+esc(d.brand)+'</div>'+
       '<div class="pname">'+esc(d.name)+'</div>'+
@@ -383,6 +386,8 @@
     container.addEventListener("click", function(e){
       var f=e.target.closest("[data-fav]");
       if(f){ e.stopPropagation(); toggleFav(+f.getAttribute("data-fav")); return; }
+      var ac=e.target.closest("[data-add]");
+      if(ac){ e.stopPropagation(); addToCart(+ac.getAttribute("data-add")); return; }
       var c=e.target.closest(".pcard"); if(!c) return;
       if(c.hasAttribute("data-cat")) openCatalog(_catItems[+c.getAttribute("data-cat")]);
       else openPDP(+c.getAttribute("data-id"));
@@ -409,10 +414,12 @@
 
   // ---------- favourites / alerts ----------
   function count(obj){ return Object.keys(obj).filter(function(k){return obj[k];}).length; }
+  function cartCount(){ var n=0; for(var k in cart){ if(cart[k]>0) n+=cart[k]; } return n; }
   function syncCounts(){
-    var fc=count(favs), ac=count(alerts);
-    var fEl=document.getElementById("favCnt"), aEl=document.getElementById("alertCnt");
+    var fc=count(favs), ac=count(alerts), cc=cartCount();
+    var fEl=document.getElementById("favCnt"), aEl=document.getElementById("alertCnt"), cEl=document.getElementById("cartCnt");
     fEl.hidden=!fc; fEl.textContent=fc; aEl.hidden=!ac; aEl.textContent=ac;
+    cEl.hidden=!cc; cEl.textContent=cc;
   }
   function toggleFav(id){
     favs[id]=!favs[id]; if(!favs[id]) delete favs[id];
@@ -439,6 +446,210 @@
   function toast(msg){
     toastEl.textContent=msg; toastEl.classList.add("show");
     clearTimeout(toastT); toastT=setTimeout(function(){toastEl.classList.remove("show");},2200);
+  }
+
+  // ---------- KOSZYK + porownywarka koszyka ----------
+  // Klient buduje koszyk, a Blask liczy, gdzie CALY koszyk wyjdzie najtaniej
+  // — z uwzglednieniem kosztu i progu darmowej dostawy kazdego sklepu.
+  // To wyroznik: pojedyncze ceny porownuje wielu, caly koszyk — prawie nikt.
+  function saveCart(){ saveStore("blask.cart",cart); syncCounts(); }
+  function inCart(id){ return cart[id]>0; }
+  function addToCart(id, silent){
+    cart[id]=(cart[id]||0)+1; saveCart();
+    if(!silent) toast("Dodano do koszyka 🛒");
+    reflectCartButtons(id);
+  }
+  function setQty(id, q){
+    if(q<=0){ delete cart[id]; } else { cart[id]=q; }
+    saveCart(); reflectCartButtons(id);
+    if(cartEl.style.display==="block") renderCart();
+  }
+  function reflectCartButtons(id){
+    // odswiez przyciski „+ koszyk" na kartach i na stronie produktu
+    Array.prototype.forEach.call(document.querySelectorAll('[data-add="'+id+'"]'),function(b){
+      b.classList.toggle("on", inCart(id));
+    });
+    if(pdpEl.style.display==="block" && curPdp===id) paintPdpCart(id);
+  }
+
+  // dostawa: parsujemy koszt i prog darmowej dostawy z opisu sklepu (data.js)
+  function parseDelivery(store){
+    var st=STORES[store]; if(!st||st.mkt) return null;
+    var dl=st.dl||"", ship=0, free=null;
+    var m1=dl.match(/od\s+([\d.,]+)\s*zł/);          if(m1) ship=parseFloat(m1[1].replace(/\s/g,"").replace(",","."));
+    var m2=dl.match(/darmowa\s+od\s+([\d.,]+)\s*zł/); if(m2) free=parseFloat(m2[1].replace(/\s/g,"").replace(",","."));
+    return { ship: ship||0, free: free };
+  }
+  function realStores(){ return Object.keys(STORES).filter(function(s){ return !STORES[s].mkt; }); }
+
+  function computeBasket(){
+    var ids=[]; for(var k in cart){ if(cart[k]>0) ids.push(+k); }
+    var items=ids.map(function(id){ return { d:DATA[id], qty:cart[id] }; });
+    var N=items.length;
+    var per={}; realStores().forEach(function(s){ per[s]={sub:0,items:0,missing:[]}; });
+    items.forEach(function(it){
+      var byStore={};
+      it.d.offers.forEach(function(o){ if(o.inStock && STORES[o.store] && !STORES[o.store].mkt) byStore[o.store]=o.price; });
+      realStores().forEach(function(s){
+        if(byStore[s]!=null){ per[s].sub+=byStore[s]*it.qty; per[s].items++; }
+        else per[s].missing.push(it.d);
+      });
+    });
+    var full=[], partial=[];
+    realStores().forEach(function(s){
+      var ps=per[s]; if(ps.items===0) return;
+      var del=parseDelivery(s)||{ship:0,free:null};
+      var ship=(del.free!=null && ps.sub>=del.free)?0:del.ship;
+      var row={ store:s, sub:+ps.sub.toFixed(2), ship:ship, total:+(ps.sub+ship).toFixed(2),
+                items:ps.items, freeFrom:del.free, missing:ps.missing };
+      (ps.items===N?full:partial).push(row);
+    });
+    full.sort(function(a,b){ return a.total-b.total; });
+    partial.sort(function(a,b){ return b.items-a.items || a.total-b.total; });
+    // „mix" — kazdy produkt tam, gdzie najtaniej (moze byc kilka sklepow)
+    var byS={}, covered=0, mixSub=0, pick={};
+    items.forEach(function(it){
+      var best=null;
+      it.d.offers.forEach(function(o){ if(o.inStock && STORES[o.store] && !STORES[o.store].mkt && (!best||o.price<best.price)) best=o; });
+      if(best){ covered++; mixSub+=best.price*it.qty; byS[best.store]=(byS[best.store]||0)+best.price*it.qty; pick[it.d.id]=best.store; }
+    });
+    var mixShip=0;
+    Object.keys(byS).forEach(function(s){
+      var del=parseDelivery(s)||{ship:0,free:null};
+      mixShip += (del.free!=null && byS[s]>=del.free)?0:del.ship;
+    });
+    var mix = covered===N && N>0
+      ? { sub:+mixSub.toFixed(2), ship:+mixShip.toFixed(2), total:+(mixSub+mixShip).toFixed(2), stores:Object.keys(byS), pick:pick }
+      : null;
+    return { items:items, N:N, full:full, partial:partial, mix:mix };
+  }
+
+  function storeDot(s){ return '<span class="store-dot" style="background:'+((STORES[s]||{}).c||"#999")+'"></span>'; }
+
+  function renderCart(){
+    var body=document.getElementById("cartBody");
+    var r=computeBasket();
+    if(!r.N){
+      body.innerHTML='<div class="cart-empty">'+
+        '<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.3 12.2a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.2L22 7H6"/></svg>'+
+        '<div class="t">Twój koszyk jest pusty</div>'+
+        '<p>Dodaj kilka produktów (🛒 na karcie lub stronie produktu), a policzymy, w którym sklepie cały koszyk wyjdzie najtaniej — razem z dostawą.</p>'+
+        '<button class="cta" id="cartShop" type="button">Przeglądaj produkty</button></div>';
+      document.getElementById("cartShop").addEventListener("click", showHome);
+      return;
+    }
+    // lista pozycji
+    var itemsHTML=r.items.map(function(it){
+      var d=it.d;
+      return '<div class="citem">'+
+        '<div class="citem-img pv" data-pid="'+d.id+'" data-open="'+d.id+'">'+visualInner(d)+'</div>'+
+        '<div class="citem-info" data-open="'+d.id+'">'+
+          '<div class="citem-brand">'+esc(d.brand)+'</div>'+
+          '<div class="citem-name">'+esc(d.name)+'</div>'+
+          '<div class="citem-sub">'+d.vol+' · od <b>'+money(d.low)+' zł</b> ('+d.lowStore+')</div>'+
+        '</div>'+
+        '<div class="citem-qty">'+
+          '<button class="qbtn" data-dec="'+d.id+'" type="button" aria-label="Mniej">−</button>'+
+          '<span class="qn">'+it.qty+'</span>'+
+          '<button class="qbtn" data-inc="'+d.id+'" type="button" aria-label="Więcej">+</button>'+
+        '</div>'+
+        '<button class="citem-x" data-rm="'+d.id+'" type="button" aria-label="Usuń">'+
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+
+        '</div>';
+    }).join("");
+
+    // panel wyniku
+    var best=r.full[0], result="";
+    if(best){
+      var freeInfo = best.ship===0
+        ? '<span class="cfree">z darmową dostawą</span>'
+        : '+ '+money(best.ship)+' zł dostawy'+(best.freeFrom!=null?' <span class="cmuted">(darmowa od '+money(best.freeFrom)+' zł)</span>':'');
+      result+='<div class="cwin">'+
+        '<div class="cwin-lbl">Cały koszyk najtaniej w</div>'+
+        '<div class="cwin-store">'+storeDot(best.store)+'<b>'+best.store+'</b></div>'+
+        '<div class="cwin-total">'+money(best.total)+'<span class="cur">zł</span></div>'+
+        '<div class="cwin-break">'+money(best.sub)+' zł za produkty · '+freeInfo+'</div>'+
+        '<a class="cta" id="cwinGo" href="'+esc(STORES[best.store].url)+'" target="_blank" rel="noopener noreferrer">Kup w '+esc(best.store)+
+          ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'+
+        '</div>';
+      // pozostale pelne koszyki
+      if(r.full.length>1){
+        result+='<div class="crows">'+r.full.slice(1,4).map(function(row){
+          var extra=row.total-best.total;
+          return '<div class="crow"><div class="crow-s">'+storeDot(row.store)+row.store+'</div>'+
+            '<div class="crow-p"><b>'+money(row.total)+' zł</b>'+
+            '<span class="crow-d">'+(row.ship===0?'z dostawą':'+ '+money(row.ship)+' zł dostawy')+'</span></div>'+
+            '<div class="crow-x">+'+money(extra)+' zł</div></div>';
+        }).join("")+'</div>';
+      }
+    } else {
+      result+='<div class="cwin cwin-none"><div class="cwin-lbl">Żaden sklep nie ma wszystkich produktów</div>'+
+        '<p>Poniżej pokazujemy, gdzie zdobędziesz ich najwięcej, oraz wariant „każdy najtaniej".</p></div>';
+      if(r.partial.length){
+        result+='<div class="crows">'+r.partial.slice(0,4).map(function(row){
+          return '<div class="crow"><div class="crow-s">'+storeDot(row.store)+row.store+'</div>'+
+            '<div class="crow-p"><b>'+money(row.total)+' zł</b><span class="crow-d">'+(row.ship===0?'z dostawą':'+ '+money(row.ship)+' zł dostawy')+'</span></div>'+
+            '<div class="crow-x">'+row.items+'/'+r.N+' produktów</div></div>';
+        }).join("")+'</div>';
+      }
+    }
+
+    // wariant mix (kazdy produkt najtaniej)
+    if(r.mix){
+      var diff = best ? +(best.total - r.mix.total).toFixed(2) : null;
+      var mixClass = (diff!=null && diff>0.01) ? "cmix cmix-win" : "cmix";
+      result+='<div class="'+mixClass+'">'+
+        '<div class="cmix-head"><div class="cmix-lbl">Każdy produkt najtaniej '+
+          '<span class="cmuted">('+r.mix.stores.length+' '+plural(r.mix.stores.length,"sklep","sklepy","sklepów")+')</span></div>'+
+          '<div class="cmix-total">'+money(r.mix.total)+' zł</div></div>'+
+        '<div class="cmix-stores">'+r.mix.stores.map(function(s){return storeDot(s)+s;}).join('<span class="cmix-sep">·</span>')+'</div>'+
+        (diff!=null
+          ? (diff>0.01
+              ? '<div class="cmix-note good">Dzieląc zakupy oszczędzasz <b>'+money(diff)+' zł</b> względem jednego sklepu.</div>'
+              : '<div class="cmix-note">Jeden sklep ('+best.store+') wychodzi taniej lub tak samo — mniej zachodu, ta sama cena.</div>')
+          : '<div class="cmix-note">To najtańszy sposób, jeśli żaden sklep nie ma całego koszyka.</div>')+
+        '</div>';
+    }
+
+    body.innerHTML=
+      '<div class="cart-head"><h1>Twój koszyk</h1><span class="res">'+r.N+' '+plural(r.N,"produkt","produkty","produktów")+'</span>'+
+        '<button class="cart-clear" id="cartClear" type="button">Wyczyść</button></div>'+
+      '<div class="cart-grid"><div class="cart-list">'+itemsHTML+'</div>'+
+      '<aside class="cart-result">'+result+
+        '<p class="cart-disc">Ceny i dostawa demonstracyjne — w wersji produkcyjnej pobierane z ofert sklepów. Koszt dostawy szacujemy z progu każdego sklepu.</p>'+
+      '</aside></div>';
+
+    document.getElementById("cartClear").addEventListener("click", function(){
+      cart={}; saveCart(); renderCart(); toast("Koszyk wyczyszczony");
+    });
+  }
+
+  // klik w widoku koszyka
+  document.getElementById("cartBody").addEventListener("click", function(e){
+    var t=e.target;
+    var inc=t.closest("[data-inc]"), dec=t.closest("[data-dec]"), rm=t.closest("[data-rm]"), op=t.closest("[data-open]");
+    if(inc){ var i=+inc.getAttribute("data-inc"); setQty(i,(cart[i]||0)+1); return; }
+    if(dec){ var j=+dec.getAttribute("data-dec"); setQty(j,(cart[j]||0)-1); return; }
+    if(rm){ setQty(+rm.getAttribute("data-rm"),0); return; }
+    if(op){ openPDP(+op.getAttribute("data-open")); }
+  });
+
+  function showCart(){
+    homeEl.style.display="none"; pdpEl.style.display="none"; infoEl.style.display="none"; cartEl.style.display="block";
+    curPdp=null; closeSug(); renderCart(); window.scrollTo({top:0,behavior:"auto"});
+  }
+  document.getElementById("cartBtnTop").addEventListener("click", showCart);
+  document.getElementById("cartBack").addEventListener("click", showHome);
+  document.getElementById("pdpCart").addEventListener("click", function(){ if(curPdp!=null) addToCart(curPdp); });
+
+  function paintPdpCart(id){
+    var b=document.getElementById("pdpCart"); if(!b) return;
+    var on=inCart(id);
+    b.classList.toggle("in", on);
+    b.setAttribute("data-add", id);
+    b.innerHTML=(on
+      ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> W koszyku ('+cart[id]+') — dodaj kolejny'
+      : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.3 12.2a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.2L22 7H6"/></svg> Dodaj do koszyka');
   }
 
   // ---------- otwieranie sklepow ----------
@@ -812,6 +1023,7 @@
       ? '<span class="save-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Oszczędzasz do '+money(d.save)+' zł ('+d.savePct+'%) względem najdroższej oferty</span>' : '';
 
     paintPdpMini(id);
+    paintPdpCart(id);
 
     document.getElementById("offCnt").textContent=" · "+d.offers.length+" "+plural(d.offers.length,"sklep","sklepy","sklepów");
     document.getElementById("offers").innerHTML=d.offers.map(function(o){
@@ -843,7 +1055,7 @@
     var rel=DATA.filter(function(x){return x.cat===d.cat&&x.id!==d.id;}).sort(function(a,b){return b.pop-a.pop;}).slice(0,4);
     document.getElementById("related").innerHTML=rel.map(cardHTML).join("");
 
-    homeEl.style.display="none"; pdpEl.style.display="block";
+    homeEl.style.display="none"; infoEl.style.display="none"; cartEl.style.display="none"; pdpEl.style.display="block";
     window.scrollTo({top:0,behavior:"auto"});
   }
 
@@ -876,7 +1088,7 @@
   });
 
   function goHome(){
-    pdpEl.style.display="none"; homeEl.style.display="block"; infoEl.style.display="none"; curPdp=null;
+    pdpEl.style.display="none"; homeEl.style.display="block"; infoEl.style.display="none"; cartEl.style.display="none"; curPdp=null;
     qEl.value=""; closeSug(); window.scrollTo({top:0,behavior:"auto"});
   }
 
@@ -951,7 +1163,7 @@
   function openInfo(key){
     var html=INFO[key]; if(!html) return;
     document.getElementById("infoBody").innerHTML=html;
-    homeEl.style.display="none"; pdpEl.style.display="none"; infoEl.style.display="block";
+    homeEl.style.display="none"; pdpEl.style.display="none"; cartEl.style.display="none"; infoEl.style.display="block";
     closeSug(); window.scrollTo({top:0,behavior:"auto"});
   }
   document.getElementById("infoBack").addEventListener("click", showHome);
