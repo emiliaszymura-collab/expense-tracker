@@ -560,12 +560,24 @@
   }
 
   function storeDot(s){ return '<span class="store-dot" style="background:'+((STORES[s]||{}).c||"#999")+'"></span>'; }
-  // link do konkretnego produktu w danym sklepie (prawdziwy URL oferty albo
-  // wyszukiwanie w sklepie). Sklepy nie pozwalaja przekazac calego koszyka linkiem,
-  // wiec otwieramy pozycje pojedynczo — tak jak robia to inne porownywarki.
+  // Link do KONKRETNEGO produktu w danym sklepie.
+  // 1) prawdziwy URL oferty (z feedu) — najlepszy, prowadzi wprost do produktu;
+  // 2) w braku niego: wyszukiwarka Google zawężona do domeny sklepu — zawsze
+  //    trafia w ten produkt w tym sklepie, niezależnie od kaprysów wewnętrznych
+  //    wyszukiwarek sklepów (część zwraca cały katalog przy złym parametrze).
+  // Gdy podłączymy feedy, punkt 1 zadziała wszędzie i Google zniknie.
+  function storeDomain(store){
+    var st=STORES[store]||{};
+    if(st.domain) return st.domain;
+    return (st.url||"").replace(/^https?:\/\//,"").replace(/\/.*$/,"");
+  }
+  function isRealUrl(u){ return typeof u==="string" && /^https?:\/\//.test(u) && u.indexOf("{q}")<0; }
   function offerUrlAt(d, store){
     var o=d.offers.filter(function(x){ return x.store===store && x.inStock; })[0];
-    return (o && o.url) || searchUrl(store, d.brand+" "+d.name.split(" ").slice(0,3).join(" "));
+    if(o && isRealUrl(o.url)) return o.url;
+    var dom=storeDomain(store);
+    var q=d.brand+" "+d.name+(dom?(" site:"+dom):"");
+    return "https://www.google.com/search?q="+encodeURIComponent(q);
   }
 
   function renderCart(){
@@ -1170,8 +1182,7 @@
     var shopQ=d.brand+" "+d.name.split(" ").slice(0,3).join(" ");
     document.getElementById("bbAmt").innerHTML=money(d.low)+'<span class="cur">zł</span>';
     document.getElementById("bbAt").innerHTML='w <b>'+d.lowStore+'</b>'+(d.ml?' · '+money(d.low/d.ml*100)+' zł / 100 ml':'');
-    var bestOffer=d.offers.filter(function(o){return o.inStock&&o.store===d.lowStore;})[0];
-    document.getElementById("bbCta").href=(bestOffer&&bestOffer.url)||searchUrl(d.lowStore, shopQ);
+    document.getElementById("bbCta").href=offerUrlAt(d, d.lowStore);
     document.getElementById("bbSave").innerHTML=d.save>0
       ? '<span class="save-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Oszczędzasz do '+money(d.save)+' zł ('+d.savePct+'%) względem najdroższej oferty</span>' : '';
 
@@ -1183,7 +1194,7 @@
       var st=STORES[o.store]||{c:"#999",url:"#",dl:""};
       var best=o.inStock&&o.price===d.low&&o.store===d.lowStore;
       var action=o.inStock
-        ? '<a class="buy" href="'+esc(o.url||searchUrl(o.store, shopQ))+'" target="_blank" rel="noopener noreferrer">'+(best?"Kup najtaniej":"Do sklepu")+
+        ? '<a class="buy" href="'+esc(offerUrlAt(d, o.store))+'" target="_blank" rel="noopener noreferrer">'+(best?"Kup najtaniej":"Do sklepu")+
           ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'
         : '<span class="oos-pill">Chwilowo niedostępny</span>';
       return '<div class="offer'+(best?" best":"")+(o.inStock?"":" oos")+'">'+
