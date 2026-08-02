@@ -170,6 +170,48 @@ select.sort {
 }
 select.sort:focus { outline: none; box-shadow: 0 0 0 4px var(--blue-tint); }
 
+/* ============ Strona główna: kafelki, karuzele, marki ============ */
+#homeSections { padding-top: 8px; }
+.hcats { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding: 4px 0 22px; }
+.hcats::-webkit-scrollbar { display: none; }
+.hcat {
+  flex: 1 0 auto; min-width: 104px; border: none; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 4px;
+}
+.hcat-ic {
+  width: 68px; height: 68px; border-radius: 20px; display: grid; place-items: center;
+  font-size: 30px; box-shadow: 0 0 0 1px var(--hair-soft), var(--shadow-card);
+  transition: transform .18s cubic-bezier(.2,.7,.3,1), box-shadow .18s;
+}
+.hcat:hover .hcat-ic { transform: translateY(-3px); box-shadow: 0 0 0 1px var(--hair-soft), var(--shadow-hover); }
+.hcat-nm { font-size: 12.5px; font-weight: 600; color: var(--text); text-align: center; letter-spacing: -.01em; }
+
+.hrow { margin: 0 0 34px; }
+.hrow-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.hrow-head h2 { font-size: 20px; font-weight: 700; letter-spacing: -.02em; margin: 0; }
+.hrow-head p { margin: 3px 0 0; font-size: 12.5px; color: var(--faint); }
+.hrow-all {
+  flex: none; display: inline-flex; align-items: center; gap: 5px; border: none; background: none;
+  color: var(--accent-ink); font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; padding: 4px;
+}
+.hrow-all:hover { opacity: .72; }
+.row-scroll {
+  display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; padding: 4px 2px 6px; margin: 0 -2px;
+}
+.row-scroll::-webkit-scrollbar { display: none; }
+.row-scroll .pcard { flex: 0 0 172px; width: 172px; scroll-snap-align: start; animation: none; }
+
+.hbrands { display: flex; flex-wrap: wrap; gap: 9px; }
+.hbrand {
+  border: none; background: var(--panel); color: var(--text); cursor: pointer;
+  font-size: 13px; font-weight: 600; border-radius: 999px; padding: 9px 16px;
+  transition: background .15s, color .15s;
+}
+.hbrand:hover { background: var(--accent); color: var(--ink-on-accent); }
+
+.toolbar { scroll-margin-top: 116px; }
+
 /* ============ Product grid ============ */
 .pgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding-bottom: 64px; }
 .pcard {
