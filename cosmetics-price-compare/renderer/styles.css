@@ -557,19 +557,42 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
 .cwin-break { font-size: 12.5px; color: var(--muted); margin: 2px 0 14px; }
 .cwin-break .cfree { color: var(--green); font-weight: 600; }
 .cwin-break .cmuted { color: var(--faint); }
-.cwin-open { font-size: 12.5px; color: var(--muted); margin: 0 0 10px; line-height: 1.45; }
-.cwin-items { display: flex; flex-direction: column; gap: 8px; }
-.cwin-item {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  background: var(--bg); border-radius: 12px; padding: 10px 12px; text-decoration: none; color: inherit;
-  box-shadow: 0 0 0 1px var(--hair-soft); transition: box-shadow .15s, transform .1s;
-}
-.cwin-item:hover { box-shadow: 0 0 0 1px var(--blue-hover), var(--shadow-card); transform: translateY(-1px); }
-.cwin-item:active { transform: scale(.99); }
-.cwin-item-nm { font-size: 13px; font-weight: 600; line-height: 1.3; min-width: 0; }
-.cwin-item-nm .cwin-q { color: var(--faint); font-weight: 500; }
-.cwin-item-go { display: inline-flex; align-items: center; gap: 4px; flex: none; font-size: 12.5px; font-weight: 600; color: var(--accent-ink); }
+.cwin-go { width: 100%; justify-content: center; }
+.cwin-hint { font-size: 11.5px; color: var(--faint); text-align: center; margin-top: 8px; line-height: 1.45; }
 .cwin-none p { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+
+/* modal „Dokończ zakupy" */
+.cmodal { position: fixed; inset: 0; z-index: 60; background: rgba(20,15,28,.5); backdrop-filter: blur(3px);
+  display: grid; place-items: center; padding: 18px; }
+.cmodal[hidden] { display: none; }
+.cmodal-card { position: relative; width: 100%; max-width: 460px; max-height: 88vh; overflow-y: auto;
+  background: var(--bg); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-pop); animation: cardIn .24s cubic-bezier(.2,.7,.3,1) both; }
+.cmodal-x { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border: none; border-radius: 50%;
+  background: var(--panel); color: var(--muted); display: grid; place-items: center; cursor: pointer; }
+.cmodal-x:hover { color: var(--text); }
+.cmodal-card h3 { font-size: 19px; font-weight: 700; letter-spacing: -.02em; margin: 0 34px 6px 0; display: flex; align-items: center; gap: 8px; }
+.cmodal-lead { font-size: 13.5px; color: var(--muted); line-height: 1.5; margin: 0 0 16px; }
+.cmodal-prog { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.cmodal-track { flex: 1; height: 7px; background: var(--panel); border-radius: 999px; overflow: hidden; }
+.cmodal-bar { height: 100%; width: 0; background: var(--green); border-radius: 999px; transition: width .3s cubic-bezier(.2,.7,.3,1); }
+.cmodal-prog span { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.cmodal-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.co-row { display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 12px;
+  box-shadow: 0 0 0 1px var(--hair-soft); transition: background .2s, box-shadow .2s; }
+.co-row.done { background: var(--green-tint); box-shadow: 0 0 0 1px transparent; }
+.co-num { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--panel); color: var(--muted);
+  display: grid; place-items: center; font-size: 12.5px; font-weight: 700; }
+.co-row.done .co-num { background: var(--green); color: #fff; }
+.co-nm { flex: 1; min-width: 0; font-size: 13px; line-height: 1.3; }
+.co-nm b { font-weight: 700; }
+.co-nm .co-q { color: var(--faint); }
+.co-open { flex: none; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--accent-ink);
+  background: transparent; color: var(--accent-ink); font-size: 12.5px; font-weight: 600; border-radius: 999px;
+  padding: 7px 13px; cursor: pointer; transition: background .15s, color .15s; }
+.co-open:hover { background: var(--accent); color: var(--ink-on-accent); }
+.co-row.done .co-open { border-color: var(--hair); color: var(--faint); }
+.cmodal-actions .cta { width: 100%; justify-content: center; }
+.cmodal-note { font-size: 11px; color: var(--faint); line-height: 1.55; margin: 14px 0 0; }
 
 .crows { display: flex; flex-direction: column; gap: 1px; background: var(--bg); border-radius: 14px; overflow: hidden;
   box-shadow: 0 0 0 1px var(--hair-soft), var(--shadow-card); }
