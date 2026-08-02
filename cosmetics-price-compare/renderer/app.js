@@ -289,8 +289,10 @@
   var gridEl=document.getElementById("pgrid"), sortEl=document.getElementById("sort");
   sortEl.addEventListener("change", renderGrid);
 
+  var brandFilter=null;
   function gridList(){
     var list=DATA.filter(function(d){
+      if(brandFilter) return d.brand===brandFilter;
       if(favMode) return !!favs[d.id];
       return activeCat==="Wszystkie"||d.cat===activeCat;
     });
@@ -374,13 +376,90 @@
     }
     var list=gridList();
     titleEl.childNodes[0].nodeValue =
-      favMode ? "Ulubione" : (activeCat==="Wszystkie"?"Bestsellery":activeCat);
+      brandFilter ? brandFilter
+      : favMode ? "Ulubione"
+      : (activeCat==="Wszystkie"?"Wszystkie produkty":activeCat);
     resEl.textContent=" · "+list.length+" "+plural(list.length,"produkt","produkty","produktów");
     gridEl.innerHTML = list.length ? list.map(cardHTML).join("")
       : (favMode
         ? '<div class="empty"><div class="t">Nie masz jeszcze ulubionych</div>Kliknij ♥ na dowolnym produkcie, a znajdziesz go tutaj — zapamiętamy go na stałe.</div>'
         : '<div class="empty"><div class="t">Brak produktów</div>Zmień kategorię lub wyszukaj coś innego.</div>');
+    updateHome();
   }
+  var homeSectionsEl=document.getElementById("homeSections");
+  function updateHome(){
+    var pristine = !brandFilter && !favMode && !catalogMode && activeCat==="Wszystkie";
+    homeSectionsEl.style.display = pristine ? "" : "none";
+  }
+
+  // ---------- strona główna: kafelki + karuzele + marki (styl drogerii) ----------
+  var CAT_ICON = {
+    "Pielęgnacja twarzy":"🧴", "Makijaż":"💄", "Pielęgnacja ciała":"🧴",
+    "Włosy":"💇", "Zapachy":"🌸"
+  };
+  var CAT_TINT = {
+    "Pielęgnacja twarzy":"#EAF2FB", "Makijaż":"#FBEAF1", "Pielęgnacja ciała":"#EAF7F1",
+    "Włosy":"#F3EEFB", "Zapachy":"#FBF2E7"
+  };
+  function catTiles(){
+    return '<section class="hcats">'+CATS.filter(function(c){return c!=="Wszystkie";}).map(function(c){
+      return '<button class="hcat" type="button" data-hcat="'+esc(c)+'">'+
+        '<span class="hcat-ic" style="background:'+(CAT_TINT[c]||"#F0F0F2")+'">'+(CAT_ICON[c]||"✨")+'</span>'+
+        '<span class="hcat-nm">'+esc(c)+'</span></button>';
+    }).join("")+'</section>';
+  }
+  function carousel(emoji, title, items, sub, seeAllSort){
+    if(!items.length) return "";
+    return '<section class="hrow">'+
+      '<div class="hrow-head"><div><h2>'+emoji+' '+title+'</h2>'+
+        (sub?'<p>'+sub+'</p>':'')+'</div>'+
+        (seeAllSort?'<button class="hrow-all" type="button" data-all="'+seeAllSort+'">Zobacz wszystkie <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>':'')+
+      '</div>'+
+      '<div class="row-scroll">'+items.map(cardHTML).join("")+'</div></section>';
+  }
+  function brandStrip(){
+    var counts={}; DATA.forEach(function(d){ counts[d.brand]=(counts[d.brand]||0)+d.pop; });
+    var top=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];}).slice(0,16);
+    return '<section class="hrow"><div class="hrow-head"><div><h2>✨ Popularne marki</h2></div></div>'+
+      '<div class="hbrands">'+top.map(function(b){
+        return '<button class="hbrand" type="button" data-hbrand="'+esc(b)+'">'+esc(b)+'</button>';
+      }).join("")+'</div></section>';
+  }
+  function renderHomeSections(){
+    var promo=DATA.filter(function(d){return d.savePct>=10;})
+                  .sort(function(a,b){return b.savePct-a.savePct || b.save-a.save;}).slice(0,12);
+    var pop=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,12);
+    var rate=DATA.slice().sort(function(a,b){return b.rate-a.rate || b.votes-a.votes;}).slice(0,12);
+    homeSectionsEl.innerHTML=
+      catTiles()+
+      carousel("🔥","Najlepsze okazje", promo, "Największe różnice cen między sklepami", "save")+
+      carousel("⭐","Bestsellery", pop, "Najczęściej porównywane produkty", "pop")+
+      carousel("💛","Najwyżej oceniane", rate, null, "rate")+
+      brandStrip();
+  }
+
+  function scrollToGrid(){
+    var t=document.querySelector(".toolbar");
+    if(t) t.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  function selectCategory(c){
+    brandFilter=null; activeCat=c; favMode=false; catalogMode=false;
+    Array.prototype.forEach.call(catnav.children,function(x){x.classList.toggle("on",x.textContent===c);});
+    pdpEl.style.display="none"; infoEl.style.display="none"; cartEl.style.display="none"; homeEl.style.display="block";
+    renderGrid(); scrollToGrid();
+  }
+  function selectBrand(b){
+    brandFilter=b; favMode=false; catalogMode=false; activeCat="Wszystkie";
+    Array.prototype.forEach.call(catnav.children,function(x){x.classList.remove("on");});
+    pdpEl.style.display="none"; infoEl.style.display="none"; cartEl.style.display="none"; homeEl.style.display="block";
+    renderGrid(); scrollToGrid();
+  }
+  bindCardEvents(homeSectionsEl);
+  homeSectionsEl.addEventListener("click", function(e){
+    var hc=e.target.closest("[data-hcat]"); if(hc){ selectCategory(hc.getAttribute("data-hcat")); return; }
+    var hb=e.target.closest("[data-hbrand]"); if(hb){ selectBrand(hb.getAttribute("data-hbrand")); return; }
+    var al=e.target.closest("[data-all]"); if(al){ brandFilter=null; sortEl.value=al.getAttribute("data-all"); renderGrid(); scrollToGrid(); }
+  });
 
   function bindCardEvents(container){
     container.addEventListener("click", function(e){
@@ -1247,7 +1326,7 @@
 
   function goHome(){
     pdpEl.style.display="none"; homeEl.style.display="block"; infoEl.style.display="none"; cartEl.style.display="none"; curPdp=null;
-    qEl.value=""; closeSug(); window.scrollTo({top:0,behavior:"auto"});
+    brandFilter=null; qEl.value=""; closeSug(); window.scrollTo({top:0,behavior:"auto"});
   }
 
   // ---------- strony informacyjne (pod wnioski afiliacyjne) ----------
@@ -1338,6 +1417,7 @@
   document.getElementById("logoBtn").addEventListener("click", showHome);
   document.getElementById("logoBtn2").addEventListener("click", showHome);
 
+  renderHomeSections();
   renderGrid();
   syncCounts();
   loadPhotos();
