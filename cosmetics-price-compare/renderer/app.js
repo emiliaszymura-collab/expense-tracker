@@ -393,26 +393,41 @@
   }
 
   // ---------- strona główna: kafelki + karuzele + marki (styl drogerii) ----------
+  function svg(inner){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>'; }
+  // profesjonalne ikony wektorowe (zamiast emoji)
   var CAT_ICON = {
-    "Pielęgnacja twarzy":"🧴", "Makijaż":"💄", "Pielęgnacja ciała":"🧴",
-    "Włosy":"💇", "Zapachy":"🌸"
+    "Pielęgnacja twarzy": svg('<rect x="5" y="9" width="14" height="11" rx="2.6"/><path d="M8 9V7h8v2"/><path d="M9.5 5.4h5"/>'),
+    "Makijaż":            svg('<rect x="9" y="12" width="6" height="8" rx="1"/><path d="M9 12V9l5-3v6"/>'),
+    "Pielęgnacja ciała":  svg('<rect x="7.5" y="10" width="9" height="10" rx="2.6"/><path d="M11 10V7h3l1-1"/><rect x="10" y="5.4" width="4" height="1.7" rx=".85"/>'),
+    "Włosy":              svg('<rect x="4" y="5.4" width="16" height="3.4" rx="1.2"/><path d="M6.6 8.8v8.4M10 8.8v8.4M13.4 8.8v8.4M16.8 8.8v5.8"/>'),
+    "Zapachy":            svg('<rect x="7.6" y="9.6" width="8.8" height="10.4" rx="2"/><rect x="10" y="4" width="4" height="3.2" rx="1"/><path d="M11 7.2h2v2.4h-2z"/>')
   };
   var CAT_TINT = {
     "Pielęgnacja twarzy":"#EAF2FB", "Makijaż":"#FBEAF1", "Pielęgnacja ciała":"#EAF7F1",
-    "Włosy":"#F3EEFB", "Zapachy":"#FBF2E7"
+    "Włosy":"#F1ECFA", "Zapachy":"#FBF2E7"
+  };
+  var CAT_INK = {
+    "Pielęgnacja twarzy":"#3E6DB0", "Makijaż":"#C05E8A", "Pielęgnacja ciała":"#2E8E6A",
+    "Włosy":"#7A4CA8", "Zapachy":"#C0863E"
+  };
+  // ikony nagłówków sekcji
+  var SEC_ICON = {
+    deals: svg('<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0l-6.2-6.2A2 2 0 0 1 3.8 13V6.2a2 2 0 0 1 2-2h6.8a2 2 0 0 1 1.4.6l6.6 6.6a2 2 0 0 1 0 2z"/><circle cx="8.4" cy="8.4" r="1.3"/>'),
+    best:  svg('<path d="M3 17l6-6 4 4 7-7"/><path d="M17 8h4v4"/>'),
+    rated: svg('<path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.6 9.7l5.8-.8z"/>')
   };
   function catTiles(){
     return '<section class="hcats">'+CATS.filter(function(c){return c!=="Wszystkie";}).map(function(c){
       return '<button class="hcat" type="button" data-hcat="'+esc(c)+'">'+
-        '<span class="hcat-ic" style="background:'+(CAT_TINT[c]||"#F0F0F2")+'">'+(CAT_ICON[c]||"✨")+'</span>'+
+        '<span class="hcat-ic" style="background:'+(CAT_TINT[c]||"#F0F0F2")+';color:'+(CAT_INK[c]||"#1D1D1F")+'">'+(CAT_ICON[c]||"")+'</span>'+
         '<span class="hcat-nm">'+esc(c)+'</span></button>';
     }).join("")+'</section>';
   }
-  function carousel(emoji, title, items, sub, seeAllSort){
+  function carousel(icon, title, items, sub, seeAllSort){
     if(!items.length) return "";
     return '<section class="hrow">'+
-      '<div class="hrow-head"><div><h2>'+emoji+' '+title+'</h2>'+
-        (sub?'<p>'+sub+'</p>':'')+'</div>'+
+      '<div class="hrow-head"><div class="hrow-title"><span class="hrow-ic">'+icon+'</span>'+
+        '<div><h2>'+title+'</h2>'+(sub?'<p>'+sub+'</p>':'')+'</div></div>'+
         (seeAllSort?'<button class="hrow-all" type="button" data-all="'+seeAllSort+'">Zobacz wszystkie <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>':'')+
       '</div>'+
       '<div class="row-scroll">'+items.map(cardHTML).join("")+'</div></section>';
@@ -420,7 +435,9 @@
   function brandStrip(){
     var counts={}; DATA.forEach(function(d){ counts[d.brand]=(counts[d.brand]||0)+d.pop; });
     var top=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];}).slice(0,16);
-    return '<section class="hrow"><div class="hrow-head"><div><h2>✨ Popularne marki</h2></div></div>'+
+    var ic=svg('<circle cx="12" cy="8" r="4.5"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>');
+    return '<section class="hrow"><div class="hrow-head"><div class="hrow-title"><span class="hrow-ic">'+ic+'</span>'+
+      '<div><h2>Popularne marki</h2></div></div></div>'+
       '<div class="hbrands">'+top.map(function(b){
         return '<button class="hbrand" type="button" data-hbrand="'+esc(b)+'">'+esc(b)+'</button>';
       }).join("")+'</div></section>';
@@ -431,10 +448,10 @@
     var pop=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,12);
     var rate=DATA.slice().sort(function(a,b){return b.rate-a.rate || b.votes-a.votes;}).slice(0,12);
     homeSectionsEl.innerHTML=
+      carousel(SEC_ICON.deals,"Najlepsze okazje cenowe", promo, "Największe różnice cen między sklepami", "save")+
       catTiles()+
-      carousel("🔥","Najlepsze okazje", promo, "Największe różnice cen między sklepami", "save")+
-      carousel("⭐","Bestsellery", pop, "Najczęściej porównywane produkty", "pop")+
-      carousel("💛","Najwyżej oceniane", rate, null, "rate")+
+      carousel(SEC_ICON.best,"Bestsellery", pop, "Najczęściej porównywane produkty", "pop")+
+      carousel(SEC_ICON.rated,"Najwyżej oceniane", rate, null, "rate")+
       brandStrip();
   }
 
@@ -641,15 +658,21 @@
   function storeDot(s){ return '<span class="store-dot" style="background:'+((STORES[s]||{}).c||"#999")+'"></span>'; }
   // Link do KONKRETNEGO produktu w danym sklepie.
   // 1) prawdziwy URL oferty (z feedu) — najlepszy, prowadzi wprost do produktu;
-  // 2) w braku niego: wyszukiwarka SAMEGO sklepu z nazwą produktu (na stronie
-  //    sklepu, bez pośredników). Zapytanie skracamy do marki + kilku słów, żeby
-  //    wyszukiwarka sklepu nie odfiltrowała wszystkiego.
-  // Gdy podłączymy feedy, punkt 1 zadziała wszędzie.
+  // 2) w braku niego: wyszukiwarka Google zawężona do domeny sklepu. Wewnętrzne
+  //    wyszukiwarki drogerii mają różne, niepubliczne formaty (Ezebra zwracała
+  //    404 albo cały katalog) — Google zawsze znajduje ten produkt w tym sklepie.
+  // Gdy podłączymy feedy, punkt 1 zadziała wszędzie i Google zniknie.
   function isRealUrl(u){ return typeof u==="string" && /^https?:\/\//.test(u) && u.indexOf("{q}")<0; }
+  function storeDomain(store){
+    var st=STORES[store]||{};
+    if(st.domain) return st.domain;
+    return (st.url||"").replace(/^https?:\/\//,"").replace(/^www\./,"").replace(/\/.*$/,"");
+  }
   function offerUrlAt(d, store){
     var o=d.offers.filter(function(x){ return x.store===store && x.inStock; })[0];
     if(o && isRealUrl(o.url)) return o.url;
-    return searchUrl(store, d.brand+" "+d.name.split(" ").slice(0,3).join(" "));
+    var dom=storeDomain(store);
+    return "https://www.google.com/search?q="+encodeURIComponent(d.brand+" "+d.name+(dom?(" site:"+dom):""));
   }
 
   function renderCart(){
