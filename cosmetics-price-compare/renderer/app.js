@@ -562,22 +562,15 @@
   function storeDot(s){ return '<span class="store-dot" style="background:'+((STORES[s]||{}).c||"#999")+'"></span>'; }
   // Link do KONKRETNEGO produktu w danym sklepie.
   // 1) prawdziwy URL oferty (z feedu) — najlepszy, prowadzi wprost do produktu;
-  // 2) w braku niego: wyszukiwarka Google zawężona do domeny sklepu — zawsze
-  //    trafia w ten produkt w tym sklepie, niezależnie od kaprysów wewnętrznych
-  //    wyszukiwarek sklepów (część zwraca cały katalog przy złym parametrze).
-  // Gdy podłączymy feedy, punkt 1 zadziała wszędzie i Google zniknie.
-  function storeDomain(store){
-    var st=STORES[store]||{};
-    if(st.domain) return st.domain;
-    return (st.url||"").replace(/^https?:\/\//,"").replace(/\/.*$/,"");
-  }
+  // 2) w braku niego: wyszukiwarka SAMEGO sklepu z nazwą produktu (na stronie
+  //    sklepu, bez pośredników). Zapytanie skracamy do marki + kilku słów, żeby
+  //    wyszukiwarka sklepu nie odfiltrowała wszystkiego.
+  // Gdy podłączymy feedy, punkt 1 zadziała wszędzie.
   function isRealUrl(u){ return typeof u==="string" && /^https?:\/\//.test(u) && u.indexOf("{q}")<0; }
   function offerUrlAt(d, store){
     var o=d.offers.filter(function(x){ return x.store===store && x.inStock; })[0];
     if(o && isRealUrl(o.url)) return o.url;
-    var dom=storeDomain(store);
-    var q=d.brand+" "+d.name+(dom?(" site:"+dom):"");
-    return "https://www.google.com/search?q="+encodeURIComponent(q);
+    return searchUrl(store, d.brand+" "+d.name.split(" ").slice(0,3).join(" "));
   }
 
   function renderCart(){
