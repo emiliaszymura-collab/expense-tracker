@@ -560,6 +560,13 @@
   }
 
   function storeDot(s){ return '<span class="store-dot" style="background:'+((STORES[s]||{}).c||"#999")+'"></span>'; }
+  // link do konkretnego produktu w danym sklepie (prawdziwy URL oferty albo
+  // wyszukiwanie w sklepie). Sklepy nie pozwalaja przekazac calego koszyka linkiem,
+  // wiec otwieramy pozycje pojedynczo — tak jak robia to inne porownywarki.
+  function offerUrlAt(d, store){
+    var o=d.offers.filter(function(x){ return x.store===store && x.inStock; })[0];
+    return (o && o.url) || searchUrl(store, d.brand+" "+d.name.split(" ").slice(0,3).join(" "));
+  }
 
   function renderCart(){
     var body=document.getElementById("cartBody");
@@ -599,13 +606,18 @@
       var freeInfo = best.ship===0
         ? '<span class="cfree">z darmową dostawą</span>'
         : '+ '+money(best.ship)+' zł dostawy'+(best.freeFrom!=null?' <span class="cmuted">(darmowa od '+money(best.freeFrom)+' zł)</span>':'');
+      var winItems=r.items.map(function(it){
+        return '<a class="cwin-item" href="'+esc(offerUrlAt(it.d, best.store))+'" target="_blank" rel="noopener noreferrer">'+
+          '<span class="cwin-item-nm">'+esc(it.d.brand)+' '+esc(it.d.name)+(it.qty>1?' <span class="cwin-q">×'+it.qty+'</span>':'')+'</span>'+
+          '<span class="cwin-item-go">Otwórz <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></span></a>';
+      }).join("");
       result+='<div class="cwin">'+
         '<div class="cwin-lbl">Cały koszyk najtaniej w</div>'+
         '<div class="cwin-store">'+storeDot(best.store)+'<b>'+best.store+'</b></div>'+
         '<div class="cwin-total">'+money(best.total)+'<span class="cur">zł</span></div>'+
         '<div class="cwin-break">'+money(best.sub)+' zł za produkty · '+freeInfo+'</div>'+
-        '<a class="cta" id="cwinGo" href="'+esc(STORES[best.store].url)+'" target="_blank" rel="noopener noreferrer">Kup w '+esc(best.store)+
-          ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>'+
+        '<div class="cwin-open">Otwórz produkty w '+esc(best.store)+' i dodaj je do koszyka sklepu:</div>'+
+        '<div class="cwin-items">'+winItems+'</div>'+
         '</div>';
       // pozostale pelne koszyki
       if(r.full.length>1){
