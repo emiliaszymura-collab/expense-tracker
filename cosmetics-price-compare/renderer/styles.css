@@ -179,20 +179,20 @@ select.sort:focus { outline: none; box-shadow: 0 0 0 4px var(--blue-tint); }
   display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 4px;
 }
 .hcat-ic {
-  width: 68px; height: 68px; border-radius: 20px; display: grid; place-items: center;
-  box-shadow: 0 0 0 1px var(--hair-soft), var(--shadow-card);
+  width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--bg); color: var(--text); box-shadow: inset 0 0 0 1px var(--hair);
   transition: transform .18s cubic-bezier(.2,.7,.3,1), box-shadow .18s;
 }
-.hcat-ic svg { width: 33px; height: 33px; }
-.hcat:hover .hcat-ic { transform: translateY(-3px); box-shadow: 0 0 0 1px var(--hair-soft), var(--shadow-hover); }
+.hcat-ic svg { width: 28px; height: 28px; stroke-width: 1.5; }
+.hcat:hover .hcat-ic { transform: translateY(-3px); box-shadow: inset 0 0 0 1px var(--text); }
 .hcat-nm { font-size: 12.5px; font-weight: 600; color: var(--text); text-align: center; letter-spacing: -.01em; }
 
 .hrow { margin: 0 0 34px; }
 .hrow-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .hrow-title { display: flex; align-items: center; gap: 11px; }
-.hrow-ic { flex: none; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center;
-  background: var(--accent); color: var(--accent-ink); box-shadow: 0 0 0 1px var(--hair-soft); }
-.hrow-ic svg { width: 21px; height: 21px; }
+.hrow-ic { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--bg); color: var(--text); box-shadow: inset 0 0 0 1px var(--hair); }
+.hrow-ic svg { width: 19px; height: 19px; stroke-width: 1.6; }
 .hrow-head h2 { font-size: 20px; font-weight: 700; letter-spacing: -.02em; margin: 0; }
 .hrow-head p { margin: 2px 0 0; font-size: 12.5px; color: var(--faint); }
 .hrow-all {

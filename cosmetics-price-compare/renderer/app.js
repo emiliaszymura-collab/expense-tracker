@@ -419,7 +419,7 @@
   function catTiles(){
     return '<section class="hcats">'+CATS.filter(function(c){return c!=="Wszystkie";}).map(function(c){
       return '<button class="hcat" type="button" data-hcat="'+esc(c)+'">'+
-        '<span class="hcat-ic" style="background:'+(CAT_TINT[c]||"#F0F0F2")+';color:'+(CAT_INK[c]||"#1D1D1F")+'">'+(CAT_ICON[c]||"")+'</span>'+
+        '<span class="hcat-ic">'+(CAT_ICON[c]||"")+'</span>'+
         '<span class="hcat-nm">'+esc(c)+'</span></button>';
     }).join("")+'</section>';
   }
@@ -668,10 +668,13 @@
     if(st.domain) return st.domain;
     return (st.url||"").replace(/^https?:\/\//,"").replace(/^www\./,"").replace(/\/.*$/,"");
   }
+  var REAL = (typeof REAL_LINKS!=="undefined") ? REAL_LINKS : {};
   function offerUrlAt(d, store){
     var o=d.offers.filter(function(x){ return x.store===store && x.inStock; })[0];
     if(o && isRealUrl(o.url)) return o.url;
-    var dom=storeDomain(store);
+    var real=REAL[compact(d.brand+d.name)];        // ręcznie wpisany prawdziwy link produktu
+    if(real) return real;
+    var dom=storeDomain(store);                     // fallback: Google zawężony do sklepu
     return "https://www.google.com/search?q="+encodeURIComponent(d.brand+" "+d.name+(dom?(" site:"+dom):""));
   }
 
