@@ -841,9 +841,12 @@
           ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'
           : (i+1))+'</span>'+
         '<span class="co-nm"><b>'+esc(x.d.brand)+'</b> '+esc(x.d.name)+(x.qty>1?' <span class="co-q">×'+x.qty+'</span>':'')+'</span>'+
-        '<button class="co-open" data-co="'+i+'" type="button">'+(coOpened[i]?"Otwórz ponownie":"Otwórz")+
-          ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>'+
-        '</div>';
+        '<span class="co-acts">'+
+          '<button class="co-copy" data-cocopy="'+i+'" type="button" title="Kopiuj nazwę — wklej w wyszukiwarkę sklepu" aria-label="Kopiuj nazwę">'+
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>'+
+          '<button class="co-open" data-co="'+i+'" type="button">'+(coOpened[i]?"Otwórz ponownie":"Otwórz")+
+            ' <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>'+
+        '</span></div>';
     }).join("");
   }
   function coOpen(i){
@@ -851,6 +854,10 @@
     if(openStoreLink(x.url)){ coOpened[i]=1; renderCheckout(); }
   }
   document.getElementById("coList").addEventListener("click", function(e){
+    var cp=e.target.closest("[data-cocopy]");
+    if(cp){ var x=coItems[+cp.getAttribute("data-cocopy")];
+      if(x) copyText(x.d.brand+" "+x.d.name, function(ok){ toast(ok?"Skopiowano nazwę — wklej w wyszukiwarkę sklepu":"Nie udało się skopiować"); });
+      return; }
     var b=e.target.closest("[data-co]"); if(b) coOpen(+b.getAttribute("data-co"));
   });
   document.getElementById("coOpenAll").addEventListener("click", function(){
