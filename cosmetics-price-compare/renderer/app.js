@@ -564,10 +564,11 @@
     });
     return out;
   }
+  function cartShareUrl(){ return location.origin+location.pathname+"#k="+encodeCart(); }
   function shareCartLink(){
     var enc=encodeCart();
     if(!enc){ toast("Koszyk jest pusty"); return; }
-    var url=location.origin+location.pathname+"#k="+enc;
+    var url=cartShareUrl();
     if(navigator.share){
       navigator.share({ title:"Mój koszyk w Blask 💛", text:"Zobacz mój koszyk kosmetyków i porównaj ceny:", url:url })
         .catch(function(){});
@@ -575,6 +576,24 @@
       copyText(url, function(ok){ toast(ok?"Skopiowano link do koszyka 🔗":"Nie udało się skopiować"); });
     }
   }
+  // Kod QR koszyka (OPCJA D wg ChatGPT): skanujesz telefonem i otwierasz koszyk.
+  // QR renderuje sprawdzony generator jako obrazek (CSP dopuszcza img https:);
+  // do serwisu trafia wyłącznie link koszyka (numery produktów), nic osobistego.
+  var qrmodal=document.getElementById("qrmodal");
+  function showCartQR(){
+    if(!encodeCart()){ toast("Koszyk jest pusty"); return; }
+    var url=cartShareUrl();
+    document.getElementById("qrImg").src="https://api.qrserver.com/v1/create-qr-code/?size=520x520&margin=10&qzone=1&data="+encodeURIComponent(url);
+    document.getElementById("qrLink").textContent=url;
+    qrmodal.hidden=false; document.body.style.overflow="hidden";
+  }
+  function closeQR(){ qrmodal.hidden=true; document.body.style.overflow=""; }
+  document.getElementById("qrClose").addEventListener("click", closeQR);
+  qrmodal.addEventListener("click", function(e){ if(e.target===qrmodal) closeQR(); });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape" && !qrmodal.hidden) closeQR(); });
+  document.getElementById("qrCopy").addEventListener("click", function(){
+    copyText(cartShareUrl(), function(ok){ toast(ok?"Skopiowano link 🔗":"Nie udało się skopiować"); });
+  });
   function importSharedCart(){
     var m=(location.hash||"").match(/[#&]k=([^&]+)/);
     if(!m) return false;
@@ -768,6 +787,8 @@
       '<div class="cart-head"><h1>Twój koszyk</h1><span class="res">'+r.N+' '+plural(r.N,"produkt","produkty","produktów")+'</span>'+
         '<button class="cart-share" id="cartShare" type="button">'+
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Udostępnij</button>'+
+        '<button class="cart-share" id="cartQR" type="button">'+
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M20 14v.01M14 20h.01M17 20h.01M20 17v3"/></svg>Kod QR</button>'+
         '<button class="cart-clear" id="cartClear" type="button">Wyczyść</button></div>'+
       '<div class="cart-grid"><div class="cart-list">'+itemsHTML+'</div>'+
       '<aside class="cart-result">'+result+
@@ -778,6 +799,7 @@
       cart={}; saveCart(); renderCart(); toast("Koszyk wyczyszczony");
     });
     document.getElementById("cartShare").addEventListener("click", shareCartLink);
+    document.getElementById("cartQR").addEventListener("click", showCartQR);
     var cb=document.getElementById("cwinCheckout");
     if(cb && best) cb.addEventListener("click", function(){ openCheckout(best.store); });
   }
