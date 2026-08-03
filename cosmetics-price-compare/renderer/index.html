@@ -243,6 +243,19 @@
   </div>
 </div>
 
+<div class="cmodal" id="qrmodal" hidden>
+  <div class="cmodal-card qr-card" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+    <button class="cmodal-x" id="qrClose" type="button" aria-label="Zamknij">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3 id="qrTitle">Twój koszyk — kod QR</h3>
+    <p class="cmodal-lead">Zeskanuj telefonem, żeby otworzyć ten koszyk na telefonie i dokończyć zakupy w sklepie. Możesz też wysłać link komuś bliskiemu.</p>
+    <div class="qr-box"><img id="qrImg" alt="Kod QR koszyka" width="240" height="240"></div>
+    <div class="qr-link" id="qrLink"></div>
+    <div class="cmodal-actions"><button class="cta" id="qrCopy" type="button">Kopiuj link</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status"></div>
 
 <script src="data.js"></script>
