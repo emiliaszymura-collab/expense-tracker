@@ -632,46 +632,38 @@
   }
   function realStores(){ return Object.keys(STORES).filter(function(s){ return !STORES[s].mkt; }); }
 
+  // Sklep, w którym REALNIE kupisz dany produkt = domena jego prawdziwego linku
+  // (a nie syntetyczna „najniższa cena"). Dzięki temu podsumowanie koszyka i to,
+  // dokąd prowadzą przyciski, są ZGODNE.
+  var STORE_BY_DOMAIN = { "notino.pl":"Notino","sephora.pl":"Sephora","hebe.pl":"Hebe",
+    "rossmann.pl":"Rossmann","ezebra.pl":"Ezebra","douglas.pl":"Douglas",
+    "superpharm.pl":"Superpharm","empik.com":"Empik" };
+  function hostOf(u){ return (u||"").replace(/^https?:\/\//,"").replace(/^www\./,"").split("/")[0].toLowerCase(); }
+  function storeFromUrl(u){ return STORE_BY_DOMAIN[hostOf(u)] || null; }
+  function cartEntry(d){
+    var real=REAL[compact(d.brand+d.name)];
+    if(real){ var s=storeFromUrl(real); return { store: s||hostOf(real), url: real, known: !!s }; }
+    return { store: d.lowStore, url: offerUrlAt(d, d.lowStore), known: true };
+  }
+
   function computeBasket(){
     var ids=[]; for(var k in cart){ if(cart[k]>0) ids.push(+k); }
-    var items=ids.map(function(id){ return { d:DATA[id], qty:cart[id] }; });
-    var N=items.length;
-    var per={}; realStores().forEach(function(s){ per[s]={sub:0,items:0,missing:[]}; });
+    var items=ids.map(function(id){ var d=DATA[id]; return { d:d, qty:cart[id], e:cartEntry(d) }; });
+    // grupujemy pozycje po sklepie, w którym faktycznie je kupisz
+    var gmap={};
     items.forEach(function(it){
-      var byStore={};
-      it.d.offers.forEach(function(o){ if(o.inStock && STORES[o.store] && !STORES[o.store].mkt) byStore[o.store]=o.price; });
-      realStores().forEach(function(s){
-        if(byStore[s]!=null){ per[s].sub+=byStore[s]*it.qty; per[s].items++; }
-        else per[s].missing.push(it.d);
-      });
+      var s=it.e.store;
+      if(!gmap[s]) gmap[s]={ store:s, known:it.e.known, items:[], sub:0 };
+      gmap[s].items.push(it); gmap[s].sub += it.d.low*it.qty;
     });
-    var full=[], partial=[];
-    realStores().forEach(function(s){
-      var ps=per[s]; if(ps.items===0) return;
-      var del=parseDelivery(s)||{ship:0,free:null};
-      var ship=(del.free!=null && ps.sub>=del.free)?0:del.ship;
-      var row={ store:s, sub:+ps.sub.toFixed(2), ship:ship, total:+(ps.sub+ship).toFixed(2),
-                items:ps.items, freeFrom:del.free, missing:ps.missing };
-      (ps.items===N?full:partial).push(row);
-    });
-    full.sort(function(a,b){ return a.total-b.total; });
-    partial.sort(function(a,b){ return b.items-a.items || a.total-b.total; });
-    // „mix" — kazdy produkt tam, gdzie najtaniej (moze byc kilka sklepow)
-    var byS={}, covered=0, mixSub=0, pick={};
-    items.forEach(function(it){
-      var best=null;
-      it.d.offers.forEach(function(o){ if(o.inStock && STORES[o.store] && !STORES[o.store].mkt && (!best||o.price<best.price)) best=o; });
-      if(best){ covered++; mixSub+=best.price*it.qty; byS[best.store]=(byS[best.store]||0)+best.price*it.qty; pick[it.d.id]=best.store; }
-    });
-    var mixShip=0;
-    Object.keys(byS).forEach(function(s){
-      var del=parseDelivery(s)||{ship:0,free:null};
-      mixShip += (del.free!=null && byS[s]>=del.free)?0:del.ship;
-    });
-    var mix = covered===N && N>0
-      ? { sub:+mixSub.toFixed(2), ship:+mixShip.toFixed(2), total:+(mixSub+mixShip).toFixed(2), stores:Object.keys(byS), pick:pick }
-      : null;
-    return { items:items, N:N, full:full, partial:partial, mix:mix };
+    var groups=Object.keys(gmap).map(function(s){
+      var g=gmap[s], del=g.known?(parseDelivery(g.store)||{ship:0,free:null}):{ship:0,free:null};
+      var ship=(del.free!=null && g.sub>=del.free)?0:(g.known?del.ship:0);
+      g.sub=+g.sub.toFixed(2); g.ship=ship; g.freeFrom=del.free; g.total=+(g.sub+ship).toFixed(2);
+      return g;
+    }).sort(function(a,b){ return b.items.length-a.items.length || a.total-b.total; });
+    var total=groups.reduce(function(s,g){ return s+g.total; },0);
+    return { items:items, N:items.length, groups:groups, total:+total.toFixed(2), single:groups.length===1 };
   }
 
   function storeDot(s){ return '<span class="store-dot" style="background:'+((STORES[s]||{}).c||"#999")+'"></span>'; }
@@ -717,7 +709,7 @@
         '<div class="citem-info" data-open="'+d.id+'">'+
           '<div class="citem-brand">'+esc(d.brand)+'</div>'+
           '<div class="citem-name">'+esc(d.name)+'</div>'+
-          '<div class="citem-sub">'+d.vol+' · od <b>'+money(d.low)+' zł</b> ('+d.lowStore+')</div>'+
+          '<div class="citem-sub">'+d.vol+' · <b>'+money(d.low)+' zł</b> w '+esc(it.e.store)+'</div>'+
         '</div>'+
         '<div class="citem-qty">'+
           '<button class="qbtn" data-dec="'+d.id+'" type="button" aria-label="Mniej">−</button>'+
@@ -729,57 +721,39 @@
         '</div>';
     }).join("");
 
-    // panel wyniku
-    var best=r.full[0], result="";
-    if(best){
-      var freeInfo = best.ship===0
+    // panel wyniku — grupowany po sklepie, w którym faktycznie kupisz produkty
+    var result="";
+    function delText(g){
+      if(!g.known) return "";
+      return g.ship===0
         ? '<span class="cfree">z darmową dostawą</span>'
-        : '+ '+money(best.ship)+' zł dostawy'+(best.freeFrom!=null?' <span class="cmuted">(darmowa od '+money(best.freeFrom)+' zł)</span>':'');
-      result+='<div class="cwin">'+
-        '<div class="cwin-lbl">Cały koszyk najtaniej w</div>'+
-        '<div class="cwin-store">'+storeDot(best.store)+'<b>'+best.store+'</b></div>'+
-        '<div class="cwin-total">'+money(best.total)+'<span class="cur">zł</span></div>'+
-        '<div class="cwin-break">'+money(best.sub)+' zł za produkty · '+freeInfo+'</div>'+
-        '<button class="cta cwin-go" id="cwinCheckout" type="button">Dokończ zakupy w '+esc(best.store)+
-          ' <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>'+
-        '<div class="cwin-hint">Otwieramy Twoje produkty w '+esc(best.store)+' — dodajesz je do koszyka sklepu jednym kliknięciem.</div>'+
-        '</div>';
-      // pozostale pelne koszyki
-      if(r.full.length>1){
-        result+='<div class="crows">'+r.full.slice(1,4).map(function(row){
-          var extra=row.total-best.total;
-          return '<div class="crow"><div class="crow-s">'+storeDot(row.store)+row.store+'</div>'+
-            '<div class="crow-p"><b>'+money(row.total)+' zł</b>'+
-            '<span class="crow-d">'+(row.ship===0?'z dostawą':'+ '+money(row.ship)+' zł dostawy')+'</span></div>'+
-            '<div class="crow-x">+'+money(extra)+' zł</div></div>';
-        }).join("")+'</div>';
-      }
-    } else {
-      result+='<div class="cwin cwin-none"><div class="cwin-lbl">Żaden sklep nie ma wszystkich produktów</div>'+
-        '<p>Poniżej pokazujemy, gdzie zdobędziesz ich najwięcej, oraz wariant „każdy najtaniej".</p></div>';
-      if(r.partial.length){
-        result+='<div class="crows">'+r.partial.slice(0,4).map(function(row){
-          return '<div class="crow"><div class="crow-s">'+storeDot(row.store)+row.store+'</div>'+
-            '<div class="crow-p"><b>'+money(row.total)+' zł</b><span class="crow-d">'+(row.ship===0?'z dostawą':'+ '+money(row.ship)+' zł dostawy')+'</span></div>'+
-            '<div class="crow-x">'+row.items+'/'+r.N+' produktów</div></div>';
-        }).join("")+'</div>';
-      }
+        : '+ '+money(g.ship)+' zł dostawy'+(g.freeFrom!=null?' <span class="cmuted">(darmowa od '+money(g.freeFrom)+' zł)</span>':'');
     }
-
-    // wariant mix (kazdy produkt najtaniej)
-    if(r.mix){
-      var diff = best ? +(best.total - r.mix.total).toFixed(2) : null;
-      var mixClass = (diff!=null && diff>0.01) ? "cmix cmix-win" : "cmix";
-      result+='<div class="'+mixClass+'">'+
-        '<div class="cmix-head"><div class="cmix-lbl">Każdy produkt najtaniej '+
-          '<span class="cmuted">('+r.mix.stores.length+' '+plural(r.mix.stores.length,"sklep","sklepy","sklepów")+')</span></div>'+
-          '<div class="cmix-total">'+money(r.mix.total)+' zł</div></div>'+
-        '<div class="cmix-stores">'+r.mix.stores.map(function(s){return storeDot(s)+s;}).join('<span class="cmix-sep">·</span>')+'</div>'+
-        (diff!=null
-          ? (diff>0.01
-              ? '<div class="cmix-note good">Dzieląc zakupy oszczędzasz <b>'+money(diff)+' zł</b> względem jednego sklepu.</div>'
-              : '<div class="cmix-note">Jeden sklep ('+best.store+') wychodzi taniej lub tak samo — mniej zachodu, ta sama cena.</div>')
-          : '<div class="cmix-note">To najtańszy sposób, jeśli żaden sklep nie ma całego koszyka.</div>')+
+    if(r.single){
+      var g=r.groups[0];
+      result+='<div class="cwin">'+
+        '<div class="cwin-lbl">Cały koszyk kupisz w</div>'+
+        '<div class="cwin-store">'+storeDot(g.store)+'<b>'+esc(g.store)+'</b></div>'+
+        '<div class="cwin-total">'+money(g.total)+'<span class="cur">zł</span></div>'+
+        '<div class="cwin-break">'+money(g.sub)+' zł za produkty'+(g.known?' · '+delText(g):'')+'</div>'+
+        '<button class="cta cwin-go" id="cwinCheckout" type="button">Dokończ zakupy w '+esc(g.store)+
+          ' <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>'+
+        '<div class="cwin-hint">Otwieramy Twoje produkty w '+esc(g.store)+' — dodajesz je do koszyka sklepu.</div>'+
+        '</div>';
+    } else {
+      result+='<div class="cwin cwin-multi">'+
+        '<div class="cwin-lbl">Twój koszyk — '+r.groups.length+' '+plural(r.groups.length,"sklep","sklepy","sklepów")+'</div>'+
+        '<div class="cwin-total">'+money(r.total)+'<span class="cur">zł</span></div>'+
+        '<div class="cwin-break">te produkty kupisz najkorzystniej w różnych sklepach:</div>'+
+        '<div class="crows">'+r.groups.map(function(g){
+          return '<div class="crow"><div class="crow-s">'+storeDot(g.store)+esc(g.store)+'</div>'+
+            '<div class="crow-p"><b>'+money(g.total)+' zł</b>'+
+            (g.known?'<span class="crow-d">'+(g.ship===0?'z dostawą':'+ '+money(g.ship)+' zł dostawy')+'</span>':'')+'</div>'+
+            '<div class="crow-x">'+g.items.length+' '+plural(g.items.length,"produkt","produkty","produktów")+'</div></div>';
+        }).join("")+'</div>'+
+        '<button class="cta cwin-go" id="cwinCheckout" type="button" style="margin-top:14px">Dokończ zakupy'+
+          ' <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>'+
+        '<div class="cwin-hint">Otwieramy każdy produkt w jego sklepie — dodajesz je do koszyków sklepów.</div>'+
         '</div>';
     }
 
@@ -801,7 +775,7 @@
     document.getElementById("cartShare").addEventListener("click", shareCartLink);
     document.getElementById("cartQR").addEventListener("click", showCartQR);
     var cb=document.getElementById("cwinCheckout");
-    if(cb && best) cb.addEventListener("click", function(){ openCheckout(best.store); });
+    if(cb) cb.addEventListener("click", function(){ openCheckout(); });
   }
 
   // ---------- „Dokończ zakupy" — otwieranie koszyka w sklepie ----------
@@ -836,16 +810,18 @@
     }
     return null;
   }
-  function openCheckout(store){
-    coStore=store; coOpened={};
-    coItems=computeBasket().items.map(function(it){ return { d:it.d, qty:it.qty, url:offerUrlAt(it.d, store) }; });
-    // gdyby sklep wspieral gotowy koszyk (np. Shopify z feedu) — od razu tam
-    var pre=buildStoreCartUrl(store, coItems);
-    if(pre){ openStoreLink(pre); return; }
-    document.getElementById("coTitle").innerHTML='Dokończ zakupy w '+storeDot(store)+esc(store);
-    document.getElementById("coLead").innerHTML=
-      'Otwórz każdy produkt w <b>'+esc(store)+'</b> i dodaj go do koszyka sklepu. '+
-      'Odhaczamy otwarte, żeby nic Ci nie umknęło.';
+  function openCheckout(){
+    coOpened={};
+    coItems=computeBasket().items.map(function(it){ return { d:it.d, qty:it.qty, url:it.e.url, store:it.e.store }; });
+    if(!coItems.length) return;
+    var stores={}; coItems.forEach(function(x){ stores[x.store]=1; });
+    var one=Object.keys(stores).length===1 ? coItems[0].store : null;
+    document.getElementById("coTitle").innerHTML= one
+      ? 'Dokończ zakupy w '+storeDot(one)+esc(one)
+      : 'Dokończ zakupy';
+    document.getElementById("coLead").innerHTML= one
+      ? 'Otwórz każdy produkt w <b>'+esc(one)+'</b> i dodaj go do koszyka sklepu. Odhaczamy otwarte, żeby nic Ci nie umknęło.'
+      : 'Otwórz każdy produkt w jego sklepie i dodaj do koszyka. Odhaczamy otwarte, żeby nic Ci nie umknęło.';
     renderCheckout();
     var m=document.getElementById("checkout"); m.hidden=false; document.body.style.overflow="hidden";
     document.getElementById("coOpenAll").focus();
@@ -856,13 +832,14 @@
     document.getElementById("coBar").style.width=(n?Math.round(opened/n*100):0)+"%";
     document.getElementById("coOpenAll").innerHTML = all
       ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Wszystkie otwarte'
-      : 'Otwórz wszystkie ('+(n-opened)+')';
+      : 'Otwórz następny produkt ('+(n-opened)+' z '+n+')';
     document.getElementById("coList").innerHTML=coItems.map(function(x,i){
       return '<div class="co-row'+(coOpened[i]?" done":"")+'">'+
         '<span class="co-num">'+(coOpened[i]
           ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'
           : (i+1))+'</span>'+
-        '<span class="co-nm"><b>'+esc(x.d.brand)+'</b> '+esc(x.d.name)+(x.qty>1?' <span class="co-q">×'+x.qty+'</span>':'')+'</span>'+
+        '<span class="co-nm"><b>'+esc(x.d.brand)+'</b> '+esc(x.d.name)+(x.qty>1?' <span class="co-q">×'+x.qty+'</span>':'')+
+          '<span class="co-store">'+storeDot(x.store)+esc(x.store)+'</span></span>'+
         '<span class="co-acts">'+
           '<button class="co-copy" data-cocopy="'+i+'" type="button" title="Kopiuj nazwę — wklej w wyszukiwarkę sklepu" aria-label="Kopiuj nazwę">'+
             '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>'+
@@ -882,16 +859,10 @@
       return; }
     var b=e.target.closest("[data-co]"); if(b) coOpen(+b.getAttribute("data-co"));
   });
+  // Otwiera KOLEJNY nieotwarty produkt (jedno okno na klik — pewne również na
+  // telefonie, gdzie przeglądarki blokują otwarcie wielu kart naraz).
   document.getElementById("coOpenAll").addEventListener("click", function(){
-    // otwieramy sekwencyjnie z drobnym odstepem (przegladarki lubia blokowac
-    // wiele okien naraz — odstep i gest uzytkownika zwiekszaja skutecznosc)
-    coItems.forEach(function(x,i){
-      setTimeout(function(){
-        var w=null; try{ w=window.open(x.url,"_blank"); }catch(e){}
-        if(w){ try{ w.opener=null; }catch(e){} coOpened[i]=1; renderCheckout(); }
-        else if(i===0){ showLinkModal(x.url); }
-      }, i*350);
-    });
+    for(var i=0;i<coItems.length;i++){ if(!coOpened[i]){ coOpen(i); break; } }
   });
   function closeCheckout(){ document.getElementById("checkout").hidden=true; document.body.style.overflow=""; }
   document.getElementById("coClose").addEventListener("click", closeCheckout);
