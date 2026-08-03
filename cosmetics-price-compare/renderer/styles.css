@@ -633,6 +633,11 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
 .co-nm { flex: 1; min-width: 0; font-size: 13px; line-height: 1.3; }
 .co-nm b { font-weight: 700; }
 .co-nm .co-q { color: var(--faint); }
+.co-acts { flex: none; display: inline-flex; align-items: center; gap: 6px; }
+.co-copy { flex: none; width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid var(--hair);
+  background: transparent; color: var(--muted); border-radius: 50%; cursor: pointer; transition: color .15s, border-color .15s; }
+.co-copy:hover { color: var(--accent-ink); border-color: var(--accent-ink); }
+.co-copy:active { transform: scale(.9); }
 .co-open { flex: none; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--accent-ink);
   background: transparent; color: var(--accent-ink); font-size: 12.5px; font-weight: 600; border-radius: 999px;
   padding: 7px 13px; cursor: pointer; transition: background .15s, color .15s; }
