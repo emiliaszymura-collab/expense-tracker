@@ -689,6 +689,52 @@
     return "https://www.google.com/search?q="+encodeURIComponent(d.brand+" "+d.name+(dom?(" site:"+dom):""));
   }
 
+  // ---------- porównywarka koszykowa: CAŁY koszyk w każdej drogerii osobno ----------
+  // Wyróżnik Blask: pokazujemy, gdzie cały koszyk wyjdzie najtaniej (np. najtaniej
+  // w Notino, a tyle i tyle kosztuje w Rossmannie, Hebe itd.) — jak w reklamie.
+  function computeStoreCompare(){
+    var ids=[]; for(var k in cart){ if(cart[k]>0) ids.push(+k); }
+    if(!ids.length) return null;
+    var items=ids.map(function(id){ return { d:DATA[id], qty:cart[id] }; });
+    var rows=[];
+    realStores().forEach(function(s){
+      var sum=0, have=0;
+      items.forEach(function(it){
+        var o=it.d.offers.filter(function(x){ return x.store===s && x.inStock; })[0];
+        if(o){ sum+=o.price*it.qty; have++; }
+      });
+      if(have>0) rows.push({ store:s, total:+sum.toFixed(2), have:have, all:have===items.length });
+    });
+    if(!rows.length) return null;
+    // do porównania „całego koszyka" preferujemy drogerie mające WSZYSTKIE pozycje
+    var full=rows.filter(function(r){ return r.all; }).sort(function(a,b){ return a.total-b.total; });
+    var list=full.length>=2 ? full
+      : rows.sort(function(a,b){ return b.have-a.have || a.total-b.total; });
+    return { items:items, N:items.length, rows:list, full:full.length>=2, best:list[0] };
+  }
+
+  function storeCompareHTML(){
+    var cmp=computeStoreCompare();
+    if(!cmp || cmp.rows.length<2) return "";
+    var shown=cmp.rows.slice(0,6);
+    var maxT=Math.max.apply(null, shown.map(function(r){ return r.total; }));
+    var save=+(maxT-cmp.best.total).toFixed(2);
+    return '<div class="ccmp">'+
+      '<div class="ccmp-head"><span>Cały koszyk najtaniej w</span>'+
+        (cmp.full && save>0 ? '<span class="ccmp-save">oszczędzasz '+money(save)+' zł</span>':'')+'</div>'+
+      shown.map(function(r,i){
+        return '<div class="ccmp-row'+(i===0?" best":"")+'">'+
+          storeDot(r.store)+'<span class="ccmp-nm">'+esc(r.store)+'</span>'+
+          (i===0?'<span class="ccmp-tag">najtaniej</span>':'')+
+          (!r.all?'<span class="ccmp-part">'+r.have+'/'+cmp.N+' poz.</span>':'')+
+          '<span class="ccmp-pr">'+money(r.total)+' zł</span></div>';
+      }).join("")+
+      '<div class="ccmp-foot">'+(cmp.full
+        ? 'Cały koszyk porównany w '+cmp.rows.length+' drogeriach — kupuj tam, gdzie taniej.'
+        : 'Nie każda drogeria ma wszystkie pozycje — pokazujemy najpełniejsze koszyki.')+'</div>'+
+    '</div>';
+  }
+
   function renderCart(){
     var body=document.getElementById("cartBody");
     var r=computeBasket();
@@ -765,7 +811,7 @@
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M20 14v.01M14 20h.01M17 20h.01M20 17v3"/></svg>Kod QR</button>'+
         '<button class="cart-clear" id="cartClear" type="button">Wyczyść</button></div>'+
       '<div class="cart-grid"><div class="cart-list">'+itemsHTML+'</div>'+
-      '<aside class="cart-result">'+result+
+      '<aside class="cart-result">'+storeCompareHTML()+result+
         '<p class="cart-disc">Ceny i dostawa demonstracyjne — w wersji produkcyjnej pobierane z ofert sklepów. Koszt dostawy szacujemy z progu każdego sklepu.</p>'+
       '</aside></div>';
 
@@ -1246,16 +1292,20 @@
       '<div class="ph-chart"><svg viewBox="0 0 '+W+' '+Hh+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Wykres historii ceny">'+
         '<defs><linearGradient id="phFill" x1="0" y1="0" x2="0" y2="1">'+
           '<stop offset="0" stop-color="#F2E6A0" stop-opacity=".55"/>'+
-          '<stop offset="1" stop-color="#F2E6A0" stop-opacity="0"/></linearGradient></defs>'+
+          '<stop offset="1" stop-color="#F2E6A0" stop-opacity="0"/></linearGradient>'+
+          '<filter id="phGlow" x="-20%" y="-60%" width="140%" height="220%">'+
+            '<feDropShadow dx="0" dy="0" stdDeviation="3.2" flood-color="#E2C766" flood-opacity=".7"/></filter></defs>'+
         '<line class="ph-grid" x1="'+padL+'" y1="'+Y(hi)+'" x2="'+(W-padR)+'" y2="'+Y(hi)+'"/>'+
         '<line class="ph-grid" x1="'+padL+'" y1="'+Y(lo)+'" x2="'+(W-padR)+'" y2="'+Y(lo)+'"/>'+
         '<path d="'+area+'" fill="url(#phFill)"/>'+
-        '<path d="'+line+'" fill="none" stroke="#D6A200" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'+
-        '<circle cx="'+loX+'" cy="'+loY+'" r="4.5" fill="#1F9D55"/>'+
-        '<circle cx="'+curX+'" cy="'+curY+'" r="4.5" fill="#D6A200" stroke="#fff" stroke-width="2"/>'+
+        // pionowy znacznik „dołka" ceny
+        '<line x1="'+loX+'" y1="'+padT+'" x2="'+loX+'" y2="'+(padT+ih)+'" stroke="#1F9D55" stroke-opacity=".32" stroke-width="1.4" stroke-dasharray="3 4"/>'+
+        '<path d="'+line+'" fill="none" stroke="#E2C766" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" filter="url(#phGlow)"/>'+
+        '<circle cx="'+loX+'" cy="'+loY+'" r="5" fill="#1F9D55" stroke="#fff" stroke-width="2"/>'+
+        '<circle cx="'+curX+'" cy="'+curY+'" r="4.5" fill="#1D1D1F" stroke="#fff" stroke-width="2"/>'+
       '</svg></div>'+
       '<div class="ph-axis"><span>'+shortDate(series[0][0])+'</span>'+
-        '<span class="ph-lo"><b style="color:#1F9D55">'+money(lo)+' zł</b> najniżej</span>'+
+        '<span class="ph-lo"><b style="color:#1F9D55">'+money(lo)+' zł</b> najniżej · kupuj w dołku ceny</span>'+
         '<span>'+shortDate(series[n-1][0])+' · dziś</span></div>';
   }
 
