@@ -49,16 +49,25 @@ bash setup.sh                 # jeśli nie masz jeszcze domeny → działa na ht
 Wejdź na `http://TWOJE_IP/` — powinien pojawić się Blask. 🎉
 
 ## 6. Podepnij domenę + darmowy HTTPS
-1. Kup domenę (np. `blask.pl` — ~kilkadziesiąt zł/rok u dowolnego rejestratora).
-   „Darmowa" alternatywa: subdomena (np. DuckDNS) — działa tak samo z krokiem HTTPS.
-2. W panelu domeny ustaw rekordy **A**:
-   - `@`   → `TWOJE_PUBLICZNE_IP`
-   - `www` → `TWOJE_PUBLICZNE_IP`
-3. Odczekaj kilka–kilkanaście minut (propagacja DNS), a potem na serwerze:
+
+### Wariant DARMOWY — DuckDNS („kaczka")  ← wybrany plan
+1. Na **duckdns.org** zaloguj się i dodaj subdomenę, np. `blask` → masz
+   **`blask.duckdns.org`**. Zapisz **token** ze strony.
+2. Gdy maszyna działa: w polu *current ip* wklej **publiczne IP** maszyny → *update ip*.
+3. Na serwerze dołóż darmowy HTTPS:
 ```bash
-bash setup.sh blask.pl        # wpisz swoją domenę → doda darmowy certyfikat HTTPS
+bash setup.sh blask.duckdns.org
 ```
-Gotowe: `https://blask.pl/` z zieloną kłódką (certyfikat odnawia się sam).
+4. (Opcjonalnie) automatyczne trzymanie IP w DuckDNS:
+```bash
+( crontab -l 2>/dev/null; echo "*/5 * * * * DUCK_DOMAIN=blask DUCK_TOKEN=TWOJ_TOKEN bash $HOME/expense-tracker/deploy/duckdns.sh" ) | crontab -
+```
+Gotowe: `https://blask.duckdns.org/` 🔒
+
+### Wariant „ładny" — własna domena (np. blask.pl)
+1. Kup domenę (~kilkadziesiąt zł/rok u dowolnego rejestratora).
+2. Ustaw rekordy **A**: `@` → `TWOJE_IP`, `www` → `TWOJE_IP`.
+3. Odczekaj propagację DNS, potem: `bash setup.sh blask.pl` → HTTPS.
 
 ## Aktualizacja apki (po zmianach na GitHubie)
 ```bash
