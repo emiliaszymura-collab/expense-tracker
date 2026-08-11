@@ -254,10 +254,10 @@
   var stores={}; DATA.forEach(function(d){d.offers.forEach(function(o){stores[o.store]=1;});});
   var avgPct=Math.round(DATA.reduce(function(s,d){return s+d.savePct;},0)/DATA.length);
   document.getElementById("bandStats").innerHTML =
-    '<span>'+BRAND_ALL.length+' marek</span><span class="dot"></span>'+
-    '<span>'+DATA.length+' produktów z cenami</span><span class="dot"></span>'+
-    '<span>'+Object.keys(stores).length+' sklepów</span><span class="dot"></span>'+
-    '<span>średnia różnica cen '+avgPct+'%</span>';
+    '<span class="hstat"><b>'+BRAND_ALL.length+'</b> marek</span>'+
+    '<span class="hstat"><b>'+DATA.length+'</b> produktów z cenami</span>'+
+    '<span class="hstat"><b>'+Object.keys(stores).length+'</b> sklepów</span>'+
+    '<span class="hstat">do <b>'+avgPct+'%</b> różnicy cen</span>';
 
   // ---------- category nav ----------
   var catnav=document.getElementById("catnav");
@@ -322,7 +322,7 @@
       '<div class="pprice"><span class="now">'+money(d.low)+' zł</span>'+
       (d.save>0?'<span class="high">'+money(d.high)+' zł</span>':'')+'</div>'+
       '<div class="pstores">w <b>'+d.offers.length+'</b> '+plural(d.offers.length,"sklepie","sklepach","sklepach")+
-      (d.save>0?' · taniej o <b>'+money(d.save)+' zł</b>':'')+'</div></div></div>';
+      (d.save>0?' · taniej o <b>'+money(d.save)+'&nbsp;zł</b>':'')+'</div></div></div>';
   }
 
   function catalogList(){
