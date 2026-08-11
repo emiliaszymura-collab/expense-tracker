@@ -703,7 +703,11 @@
         var o=it.d.offers.filter(function(x){ return x.store===s && x.inStock; })[0];
         if(o){ sum+=o.price*it.qty; have++; }
       });
-      if(have>0) rows.push({ store:s, total:+sum.toFixed(2), have:have, all:have===items.length });
+      if(have>0){
+        var del=parseDelivery(s)||{ship:0,free:null};
+        var ship=(del.free!=null && sum>=del.free)?0:del.ship;   // dostawa wg progu sklepu
+        rows.push({ store:s, sub:+sum.toFixed(2), ship:ship, total:+(sum+ship).toFixed(2), have:have, all:have===items.length });
+      }
     });
     if(!rows.length) return null;
     // do porównania „całego koszyka" preferujemy drogerie mające WSZYSTKIE pozycje
@@ -730,7 +734,7 @@
           '<span class="ccmp-pr">'+money(r.total)+' zł</span></div>';
       }).join("")+
       '<div class="ccmp-foot">'+(cmp.full
-        ? 'Cały koszyk porównany w '+cmp.rows.length+' drogeriach — kupuj tam, gdzie taniej.'
+        ? 'Cały koszyk w jednym sklepie, z dostawą — jedna paczka, jedna płatność.'
         : 'Nie każda drogeria ma wszystkie pozycje — pokazujemy najpełniejsze koszyki.')+'</div>'+
     '</div>';
   }
@@ -747,6 +751,7 @@
       document.getElementById("cartShop").addEventListener("click", showHome);
       return;
     }
+    var cmp=computeStoreCompare();   // „cały koszyk w jednym sklepie" (z dostawą) — do porównania
     // lista pozycji
     var itemsHTML=r.items.map(function(it){
       var d=it.d;
@@ -787,16 +792,23 @@
         '<div class="cwin-hint">Otwieramy Twoje produkty w '+esc(g.store)+' — dodajesz je do koszyka sklepu.</div>'+
         '</div>';
     } else {
+      var cmpNote='';
+      if(cmp && cmp.full && cmp.best){
+        if(cmp.best.total < r.total-0.01)
+          cmpNote='<div class="cwin-cmp">Taniej w jednym sklepie: cały koszyk w <b>'+esc(cmp.best.store)+' — '+money(cmp.best.total)+' zł</b> (jedna dostawa).</div>';
+        else if(r.total < cmp.best.total-0.01)
+          cmpNote='<div class="cwin-cmp ok">To o <b>'+money(cmp.best.total-r.total)+' zł</b> taniej niż zakup wszystkiego w jednym sklepie.</div>';
+      }
       result+='<div class="cwin cwin-multi">'+
-        '<div class="cwin-lbl">Twój koszyk — '+r.groups.length+' '+plural(r.groups.length,"sklep","sklepy","sklepów")+'</div>'+
+        '<div class="cwin-lbl">Albo — każdy produkt tam, gdzie najtaniej</div>'+
         '<div class="cwin-total">'+money(r.total)+'<span class="cur">zł</span></div>'+
-        '<div class="cwin-break">te produkty kupisz najkorzystniej w różnych sklepach:</div>'+
+        '<div class="cwin-break">Rozbicie na '+r.groups.length+' '+plural(r.groups.length,"sklep","sklepy","sklepów")+' (osobne dostawy):</div>'+
         '<div class="crows">'+r.groups.map(function(g){
           return '<div class="crow"><div class="crow-s">'+storeDot(g.store)+esc(g.store)+'</div>'+
             '<div class="crow-p"><b>'+money(g.total)+' zł</b>'+
             (g.known?'<span class="crow-d">'+(g.ship===0?'z dostawą':'+ '+money(g.ship)+' zł dostawy')+'</span>':'')+'</div>'+
             '<div class="crow-x">'+g.items.length+' '+plural(g.items.length,"produkt","produkty","produktów")+'</div></div>';
-        }).join("")+'</div>'+
+        }).join("")+'</div>'+cmpNote+
         '<button class="cta cwin-go" id="cwinCheckout" type="button" style="margin-top:14px">Dokończ zakupy'+
           ' <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></button>'+
         '<div class="cwin-hint">Otwieramy każdy produkt w jego sklepie — dodajesz je do koszyków sklepów.</div>'+

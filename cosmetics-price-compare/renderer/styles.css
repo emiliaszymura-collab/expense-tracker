@@ -623,6 +623,11 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
 .cwin-break .cmuted { color: var(--faint); }
 .cwin-go { width: 100%; justify-content: center; }
 .cwin-hint { font-size: 11.5px; color: var(--faint); text-align: center; margin-top: 8px; line-height: 1.45; }
+.cwin-cmp { margin-top: 12px; font-size: 12.5px; line-height: 1.4; color: var(--muted);
+  background: var(--panel); border-radius: 12px; padding: 10px 12px; }
+.cwin-cmp b { color: var(--text); }
+.cwin-cmp.ok { background: var(--green-tint); color: var(--green); }
+.cwin-cmp.ok b { color: var(--green); }
 .cwin-none p { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
 
 /* porównywarka koszykowa — cały koszyk w każdej drogerii (jak w reklamie) */
