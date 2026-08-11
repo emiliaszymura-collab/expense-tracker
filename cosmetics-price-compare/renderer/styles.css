@@ -84,11 +84,12 @@ header.main {
 
 .head-actions { display: flex; gap: 2px; flex: none; }
 .hact {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  min-width: 58px; border: none; background: none; cursor: pointer;
-  color: var(--muted); font-size: 10.5px; padding: 4px 6px; border-radius: 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  min-width: 50px; border: none; background: none; cursor: pointer;
+  color: var(--muted); font-size: 10.5px; padding: 4px 5px; border-radius: 10px;
   position: relative; transition: color .15s;
 }
+.hact svg { width: 19px; height: 19px; }
 .hact:hover { color: var(--accent-ink); }
 .hact .cnt {
   position: absolute; top: -2px; right: 8px; min-width: 16px; height: 16px;
@@ -555,6 +556,9 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
   .hrow-title { flex: 1 1 100%; }
   .hrow-head h2 { font-size: 18px; }
   .hrow-all { margin-left: auto; margin-top: 2px; }
+  /* koszyk: akcje schodzą pod tytuł (żeby „Wyczyść" się nie ucinało) */
+  .cart-acts { flex-basis: 100%; margin-left: 0; justify-content: flex-start; gap: 2px; }
+  .cart-acts .cart-share:first-child { padding-left: 0; }
 }
 /* ============ KOSZYK / porównywarka koszyka ============ */
 .addcart {
@@ -572,11 +576,13 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
 .cta-cart.in { background: var(--blue-hover); }
 
 #cart { display: none; }
-.cart-head { display: flex; align-items: baseline; gap: 12px; margin: 6px 0 20px; }
-.cart-head h1 { font-size: clamp(24px, 3vw, 32px); font-weight: 700; letter-spacing: -.02em; margin: 0; }
+.cart-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 12px; margin: 6px 0 20px; }
+.cart-head h1 { font-size: clamp(23px, 3vw, 30px); font-weight: 700; letter-spacing: -.02em; margin: 0; }
 .cart-head .res { color: var(--faint); font-size: 14px; }
-.cart-share { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: none; border: none;
-  color: var(--accent-ink); font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px; }
+.cart-acts { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; }
+.cart-share { display: inline-flex; align-items: center; gap: 6px; background: none; border: none;
+  color: var(--accent-ink); font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+.cart-share:hover { background: var(--panel); opacity: 1; }
 .cart-share:hover { opacity: .75; }
 .cart-clear { background: none; border: none; color: var(--faint); font-size: 13px; cursor: pointer; padding: 4px; }
 .cart-clear:hover { color: var(--red); }
@@ -610,7 +616,7 @@ footer { background: var(--panel); border-top: 1px solid var(--hair-soft); paddi
 }
 .cwin-lbl { font-size: 12.5px; font-weight: 600; color: var(--accent-ink); letter-spacing: .02em; }
 .cwin-store { display: flex; align-items: center; gap: 8px; font-size: 20px; margin: 6px 0 2px; }
-.cwin-total { font-size: 38px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.cwin-total { font-size: 32px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .cwin-total .cur { font-size: 17px; font-weight: 600; margin-left: 4px; color: var(--faint); }
 .cwin-break { font-size: 12.5px; color: var(--muted); margin: 2px 0 14px; }
 .cwin-break .cfree { color: var(--green); font-weight: 600; }

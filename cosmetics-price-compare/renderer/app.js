@@ -805,11 +805,12 @@
 
     body.innerHTML=
       '<div class="cart-head"><h1>Twój koszyk</h1><span class="res">'+r.N+' '+plural(r.N,"produkt","produkty","produktów")+'</span>'+
+        '<div class="cart-acts">'+
         '<button class="cart-share" id="cartShare" type="button">'+
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Udostępnij</button>'+
         '<button class="cart-share" id="cartQR" type="button">'+
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M20 14v.01M14 20h.01M17 20h.01M20 17v3"/></svg>Kod QR</button>'+
-        '<button class="cart-clear" id="cartClear" type="button">Wyczyść</button></div>'+
+        '<button class="cart-clear" id="cartClear" type="button">Wyczyść</button></div></div>'+
       '<div class="cart-grid"><div class="cart-list">'+itemsHTML+'</div>'+
       '<aside class="cart-result">'+storeCompareHTML()+result+
         '<p class="cart-disc">Ceny i dostawa demonstracyjne — w wersji produkcyjnej pobierane z ofert sklepów. Koszt dostawy szacujemy z progu każdego sklepu.</p>'+
