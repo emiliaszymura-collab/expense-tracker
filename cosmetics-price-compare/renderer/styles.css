@@ -54,7 +54,7 @@ header.main {
   line-height: 1; flex: none; display: inline-flex; align-items: center;
 }
 .logo i { font-style: normal; color: var(--accent-ink); }
-.logo-mk { width: .92em; height: .92em; flex: none; fill: #E0A800; margin-right: 6px;
+.logo-mk { width: .96em; height: .96em; flex: none; margin-right: 6px;
   filter: drop-shadow(0 1px 4px rgba(224,168,0,.45)); transition: transform .3s cubic-bezier(.2,.7,.3,1); }
 .logo:hover .logo-mk { transform: rotate(90deg) scale(1.08); }
 
