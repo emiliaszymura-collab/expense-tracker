@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0f172a;
+  color: #e2e8f0;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+/* Leaflet ciemny motyw — lekko przygaszamy jasne kafle OSM. */
+.leaflet-container {
+  background: #0f172a;
+  font-family: inherit;
+}
+.map-dark .leaflet-tile {
+  filter: brightness(0.7) contrast(1.05) saturate(0.85) invert(0) hue-rotate(0deg);
+}
+
+/* Ukrywamy domyślny brzydki atrybut linkowy na małym ekranie, zostawiamy skrót. */
+.leaflet-control-attribution {
+  font-size: 9px;
+  background: rgba(15, 23, 42, 0.7) !important;
+  color: #94a3b8 !important;
+}
+.leaflet-control-attribution a {
+  color: #cbd5e1 !important;
+}
+
+/* Popupy Leaflet w ciemnym stylu. */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #1e293b;
+  color: #e2e8f0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+@layer utilities {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
