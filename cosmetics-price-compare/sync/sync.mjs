@@ -128,11 +128,15 @@ let storesDone = 0, offersTotal = 0;
 
 for (const feed of cfg.feeds) {
   if (!feed.enabled) { log(`— ${feed.store}: wyłączony (uzupełnij URL i ustaw enabled:true)`); continue; }
-  if (!feed.url || feed.url.startsWith("PASTE_")) { log(`— ${feed.store}: brak URL — pomijam`); continue; }
+  // URL feedu: bezpośrednio w configu albo "env:NAZWA" → z sekretu/zmiennej
+  // środowiskowej (żeby nie trzymać adresu z ID afiliacyjnym w repo).
+  let feedUrl = feed.url || "";
+  if (feedUrl.startsWith("env:")) feedUrl = process.env[feedUrl.slice(4)] || "";
+  if (!feedUrl || feedUrl.startsWith("PASTE_")) { log(`— ${feed.store}: brak URL — pomijam`); continue; }
   log(`↓ ${feed.store}: pobieram feed…`);
   let rows;
   try {
-    const raw = await fetchFeed(feed.url, feed.format);
+    const raw = await fetchFeed(feedUrl, feed.format);
     const fmt = feed.format || (raw.trimStart().startsWith("<") ? "xml" : "csv");
     rows = fmt === "xml" ? parseXML(raw) : parseCSV(raw);
   } catch (e) { log(`✗ ${feed.store}: nie udało się pobrać (${e.message}) — pomijam`); continue; }

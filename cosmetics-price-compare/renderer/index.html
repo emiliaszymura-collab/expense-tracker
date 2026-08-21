@@ -9,13 +9,35 @@
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; script-src 'self'; connect-src 'self' https://world.openbeautyfacts.org">
   <title>Blask — porównywarka cen kosmetyków</title>
+  <meta name="description" content="Porównaj ceny kosmetyków w 7 drogeriach (Rossmann, Hebe, Notino, Sephora, Douglas, Superpharm, Ezebra) i kupuj najtaniej. Historia ceny i porównywarka całego koszyka.">
+  <!-- ikony / PWA -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#F0E09A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Blask">
+  <!-- udostępnianie (Open Graph / Twitter) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Blask">
+  <meta property="og:title" content="Blask — porównywarka cen kosmetyków">
+  <meta property="og:description" content="Porównaj ceny w 7 drogeriach i kupuj najtaniej. Historia ceny + porównywarka całego koszyka.">
+  <meta property="og:image" content="https://emiliaszymura-collab.github.io/expense-tracker/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://emiliaszymura-collab.github.io/expense-tracker/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blask — porównywarka cen kosmetyków">
+  <meta name="twitter:description" content="Porównaj ceny w 7 drogeriach i kupuj najtaniej.">
+  <meta name="twitter:image" content="https://emiliaszymura-collab.github.io/expense-tracker/og.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header class="main">
   <div class="wrap head-row">
-    <button class="logo" id="logoBtn" type="button" aria-label="Blask — strona główna"><svg class="logo-mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0.5C13.1 7.4 16.6 10.9 23.5 12C16.6 13.1 13.1 16.6 12 23.5C10.9 16.6 7.4 13.1 0.5 12C7.4 10.9 10.9 7.4 12 0.5Z"/></svg>blask<i>.</i></button>
+    <button class="logo" id="logoBtn" type="button" aria-label="Blask — strona główna"><svg class="logo-mk" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="blaskMk" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#D9A200"/><stop offset="1" stop-color="#F8DF6E"/></linearGradient></defs><path fill="url(#blaskMk)" d="M12 0.5C13.1 7.4 16.6 10.9 23.5 12C16.6 13.1 13.1 16.6 12 23.5C10.9 16.6 7.4 13.1 0.5 12C7.4 10.9 10.9 7.4 12 0.5Z"/></svg>blask<i>.</i></button>
     <div class="hsearch">
       <div class="hsearch-box">
         <svg class="mag" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
@@ -189,7 +211,7 @@
   <div class="wrap">
     <div class="foot-inner">
       <div class="foot-brand">
-        <button class="logo" id="logoBtn2" type="button" aria-label="Blask — strona główna"><svg class="logo-mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0.5C13.1 7.4 16.6 10.9 23.5 12C16.6 13.1 13.1 16.6 12 23.5C10.9 16.6 7.4 13.1 0.5 12C7.4 10.9 10.9 7.4 12 0.5Z"/></svg>blask<i>.</i></button>
+        <button class="logo" id="logoBtn2" type="button" aria-label="Blask — strona główna"><svg class="logo-mk" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="blaskMk" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#D9A200"/><stop offset="1" stop-color="#F8DF6E"/></linearGradient></defs><path fill="url(#blaskMk)" d="M12 0.5C13.1 7.4 16.6 10.9 23.5 12C16.6 13.1 13.1 16.6 12 23.5C10.9 16.6 7.4 13.1 0.5 12C7.4 10.9 10.9 7.4 12 0.5Z"/></svg>blask<i>.</i></button>
         <p>Niezależna porównywarka cen kosmetyków. Pomagamy kupować mądrzej, a sklepom docierać do klientów gotowych na zakup.</p>
       </div>
       <div class="foot-cols">

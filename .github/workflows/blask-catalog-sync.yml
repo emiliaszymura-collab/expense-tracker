@@ -32,7 +32,17 @@ jobs:
 
       - name: Synchronizacja cen i promocji z feedów (opcjonalnie)
         # Uruchom tylko, jeśli w Secrets repo masz włączone feedy afiliacyjne.
+        # Adresy feedów trzymamy w Secrets (Settings → Secrets → Actions),
+        # a w feeds.config.json wskazujemy je jako "env:NAZWA".
         continue-on-error: true
+        env:
+          ROSSMANN_FEED_URL:   ${{ secrets.ROSSMANN_FEED_URL }}
+          HEBE_FEED_URL:       ${{ secrets.HEBE_FEED_URL }}
+          NOTINO_FEED_URL:     ${{ secrets.NOTINO_FEED_URL }}
+          DOUGLAS_FEED_URL:    ${{ secrets.DOUGLAS_FEED_URL }}
+          SEPHORA_FEED_URL:    ${{ secrets.SEPHORA_FEED_URL }}
+          SUPERPHARM_FEED_URL: ${{ secrets.SUPERPHARM_FEED_URL }}
+          EZEBRA_FEED_URL:     ${{ secrets.EZEBRA_FEED_URL }}
         run: |
           if [ -f sync/feeds.config.json ]; then node sync/sync.mjs || true; fi
 
