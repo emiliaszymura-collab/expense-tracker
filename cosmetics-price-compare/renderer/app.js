@@ -188,15 +188,14 @@
     if(SHOW_CROWD_PHOTOS && !url) url=PHOTOS[d.id]||catalogPhoto(d);
     return productSVG(d)+(url?'<img class="pphoto" alt="" loading="lazy" src="'+esc(url)+'">':'');
   }
-  // Dopasowanie zdjecia z katalogu OBF do produktu z bazy cen (po marce i nazwie).
-  var _catByBrand=null, _photoMemo={};
-  function catalogPhoto(d){
-    if(d.id in _photoMemo) return _photoMemo[d.id];
-    if(typeof FEED_CATALOG==="undefined"){ return (_photoMemo[d.id]=""); }
+  // Dopasowanie pozycji z katalogu OBF do produktu z bazy cen (po marce i nazwie).
+  var _catByBrand=null, _matchMemo={};
+  function catalogMatch(d){
+    if(d.id in _matchMemo) return _matchMemo[d.id];
+    if(typeof FEED_CATALOG==="undefined"){ return (_matchMemo[d.id]=null); }
     if(!_catByBrand){
       _catByBrand={};
       FEED_CATALOG.forEach(function(it){
-        if(!it.img) return;
         var b=slug(it.brand||"");
         (_catByBrand[b]=_catByBrand[b]||[]).push(it);
       });
@@ -209,7 +208,11 @@
       toks.forEach(function(t){ if(h.indexOf(t)>=0) sc++; });
       if(sc>bestScore){ bestScore=sc; best=it; }
     });
-    return (_photoMemo[d.id]= best?best.img:"");
+    return (_matchMemo[d.id]= best);
+  }
+  function catalogPhoto(d){
+    var m=catalogMatch(d);
+    return (m&&m.img)?m.img:"";
   }
   function injectPhoto(id){
     var url=PHOTOS[id]; if(!url) return;
@@ -1322,6 +1325,90 @@
         '<span>'+shortDate(series[n-1][0])+' · dziś</span></div>';
   }
 
+  // ---------- skład / INCI (Open Beauty Facts) ----------
+  // Warte uwagi składniki: dopasowanie po fragmencie nazwy INCI -> etykieta PL.
+  var INCI_FLAGS=[
+    { re:/\b(sodium laureth sulfate|sodium lauryl sulfate|ammonium lauryl sulfate|sles|sls)\b/, k:"det", t:"silny detergent (SLS/SLES)" },
+    { re:/paraben\b/, k:"con", t:"konserwant (paraben)" },
+    { re:/\b(methylisothiazolinone|methylchloroisothiazolinone|phenoxyethanol)\b/, k:"con", t:"konserwant" },
+    { re:/(alcohol denat|^alcohol$|^alcohol\b|denatured alcohol)/, k:"alc", t:"alkohol (może wysuszać)" },
+    { re:/(dimethicone|siloxane|silicone|cyclopenta|cyclohexa)/, k:"sil", t:"silikon" },
+    { re:/\b(parfum|fragrance|aroma)\b/, k:"fra", t:"kompozycja zapachowa" },
+    { re:/\b(limonene|linalool|citronellol|geraniol|coumarin|eugenol|citral|hexyl cinnamal|benzyl salicylate|benzyl alcohol|benzyl benzoate|hydroxycitronellal)\b/, k:"fra", t:"substancja zapachowa / alergen" }
+  ];
+  // Warte uwagi „aktywne" składniki -> pozytywna etykieta.
+  var INCI_GOOD=[
+    { re:/niacinamide/, t:"niacynamid" },
+    { re:/(hyaluron|sodium hyaluronate)/, t:"kwas hialuronowy" },
+    { re:/(retinol|retinal|retinyl)/, t:"retinol" },
+    { re:/(ascorbic|ascorbyl|3-o-ethyl)/, t:"witamina C" },
+    { re:/tocopher(ol|yl)/, t:"witamina E" },
+    { re:/(panthenol|allantoin|bisabolol|centella|aloe|glycerin)/, t:"składnik łagodzący" },
+    { re:/(salicylic|glycolic|lactic|mandelic)/, t:"kwas złuszczający" }
+  ];
+  function inciFlag(name){
+    var s=name.toLowerCase();
+    for(var i=0;i<INCI_FLAGS.length;i++) if(INCI_FLAGS[i].re.test(s)) return {cls:"f-"+INCI_FLAGS[i].k, t:INCI_FLAGS[i].t};
+    for(var j=0;j<INCI_GOOD.length;j++) if(INCI_GOOD[j].re.test(s)) return {cls:"f-good", t:INCI_GOOD[j].t};
+    return null;
+  }
+  function parseInci(txt){
+    if(!txt) return [];
+    return txt.replace(/\([^)]*\)/g,"")          // usuń dopiski w nawiasach
+      .split(/[,;•\n]+/).map(function(x){ return x.replace(/[.•*]+$/,"").trim(); })
+      .filter(function(x){ return x.length>1 && x.length<60; }).slice(0,80);
+  }
+  var INCI_CACHE=loadStore("blask.inci");
+  function inciCardHTML(list){
+    var flagged=[];
+    var chips=list.map(function(nm){
+      var f=inciFlag(nm);
+      if(f && f.cls!=="f-good") flagged.push(f.t);
+      return '<span class="inci-chip'+(f?" "+f.cls:"")+'"'+(f?' title="'+esc(f.t)+'"':'')+'>'+esc(nm)+'</span>';
+    }).join("");
+    var note="";
+    if(flagged.length){
+      var uniq=flagged.filter(function(v,i,a){return a.indexOf(v)===i;});
+      note='<div class="inci-note">Warto wiedzieć: '+esc(uniq.join(" · "))+'.</div>';
+    }
+    return '<div class="inci-list">'+chips+'</div>'+note+
+      '<div class="inci-src">Skład wg <a href="https://pl.openbeautyfacts.org" target="_blank" rel="noopener noreferrer">Open Beauty Facts</a> · zawsze sprawdź opakowanie.</div>';
+  }
+  function renderIngredients(d){
+    var box=document.getElementById("ingredients");
+    var m=catalogMatch(d);
+    var ean=m&&m.ean;
+    if(!ean){ box.innerHTML=""; box.style.display="none"; return; }
+    box.style.display="";
+    function head(inner){
+      return '<div class="ing-head"><h2>Skład (INCI)</h2>'+
+        '<span class="ing-sub">czego użyto w tym kosmetyku</span></div>'+inner;
+    }
+    if(ean in INCI_CACHE){
+      var cached=INCI_CACHE[ean];
+      box.innerHTML=head(cached && cached.length ? inciCardHTML(cached)
+        : '<div class="inci-empty">Brak danych o składzie dla tego produktu. Sprawdź opakowanie lub stronę sklepu.</div>');
+      return;
+    }
+    box.innerHTML=head('<div class="inci-empty">Sprawdzam skład…</div>');
+    fetch("https://world.openbeautyfacts.org/api/v2/product/"+encodeURIComponent(ean)+
+          ".json?fields=ingredients_text_pl,ingredients_text,ingredients_text_en")
+      .then(function(r){ return r.json(); })
+      .then(function(js){
+        var p=(js&&js.product)||{};
+        var txt=p.ingredients_text_pl||p.ingredients_text||p.ingredients_text_en||"";
+        var list=parseInci(txt);
+        INCI_CACHE[ean]=list; saveStore("blask.inci",INCI_CACHE);
+        if(curPdp!==d.id) return; // użytkownik już przeszedł dalej
+        box.innerHTML=head(list.length ? inciCardHTML(list)
+          : '<div class="inci-empty">Brak danych o składzie dla tego produktu. Sprawdź opakowanie lub stronę sklepu.</div>');
+      })
+      .catch(function(){
+        if(curPdp!==d.id) return;
+        box.innerHTML=head('<div class="inci-empty">Nie udało się pobrać składu (brak połączenia). Spróbuj ponownie później.</div>');
+      });
+  }
+
   function openPDP(id){
     curPdp=id;
     var d=DATA[id];
@@ -1369,6 +1456,7 @@
     }).join("");
 
     renderPriceHist(d);
+    renderIngredients(d);
 
     document.getElementById("mktStrip").innerHTML='<span class="lbl">Porównaj też na:</span>'+
       Object.keys(STORES).filter(function(s){return STORES[s].mkt&&STORES[s].search;}).map(function(s){
