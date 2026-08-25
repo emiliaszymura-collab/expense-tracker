@@ -425,6 +425,22 @@ select.sort:focus { outline: none; box-shadow: 0 0 0 4px var(--blue-tint); }
 .ph-axis { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; font-size: 12px; color: var(--faint); }
 .ph-axis .ph-lo { text-align: center; }
 
+/* ============ Skład / INCI ============ */
+.ingredients { margin-top: 12px; padding: 18px 20px 16px; background: var(--bg); border-radius: 18px; box-shadow: 0 0 0 1px var(--hair-soft), var(--shadow-card); }
+.ing-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.ing-head h2 { font-size: 18px; font-weight: 700; letter-spacing: -.02em; margin: 0; }
+.ing-sub { font-size: 12.5px; color: var(--faint); }
+.inci-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.inci-chip { font-size: 12.5px; line-height: 1; padding: 6px 9px; border-radius: 8px; background: var(--panel); color: var(--muted); white-space: nowrap; }
+.inci-chip.f-good { background: var(--green-tint); color: #1F7A44; font-weight: 600; }
+.inci-chip.f-det, .inci-chip.f-con, .inci-chip.f-alc { background: rgba(180,50,31,.09); color: #B4321F; font-weight: 600; }
+.inci-chip.f-fra { background: #FBEFC8; color: var(--accent-ink); font-weight: 600; }
+.inci-chip.f-sil { background: #EEF1F6; color: #4A5A78; font-weight: 600; }
+.inci-note { margin-top: 12px; font-size: 13px; color: var(--muted); }
+.inci-src { margin-top: 8px; font-size: 11.5px; color: var(--faint); }
+.inci-src a { color: var(--accent-ink); }
+.inci-empty { font-size: 13.5px; color: var(--faint); }
+
 .related-head { font-size: 22px; font-weight: 700; letter-spacing: -.02em; margin: 40px 0 16px; }
 
 /* ============ Info pages ============ */
