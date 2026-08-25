@@ -83,6 +83,7 @@ function cleanName(name, brand) {
 async function fetchBrand(brand) {
   const items = [];
   const fields = "code,product_name,product_name_pl,brands,quantity,categories," +
+    "ingredients_text_pl,ingredients_text," +
     "image_front_small_url,image_front_url,image_small_url,image_url,image_thumb_url";
   for (let page = 1; items.length < MAX; page++) {
     const url = "https://world.openbeautyfacts.org/cgi/search.pl?action=process&json=1" +
@@ -96,14 +97,17 @@ async function fetchBrand(brand) {
       const rawName = (p.product_name_pl || p.product_name || "").trim();
       if (!rawName) continue;
       const name = cleanName(rawName, brand);
-      items.push({
+      const ing = ((p.ingredients_text_pl || p.ingredients_text || "").trim()).slice(0, 1500);
+      const item = {
         brand,
         name,
         ean: p.code || "",
         img: p.image_front_small_url || p.image_small_url || p.image_front_url || p.image_url || p.image_thumb_url || "",
         cat: mapCat((p.categories || "") + " " + name),
         vol: (p.quantity || "").trim()
-      });
+      };
+      if (ing) item.ing = ing;   // skład (INCI) — pokazywany w apce inline, gdy dostępny
+      items.push(item);
       if (items.length >= MAX) break;
     }
     if (prods.length < PAGE) break;
