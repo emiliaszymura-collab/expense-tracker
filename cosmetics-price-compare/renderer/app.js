@@ -1477,37 +1477,59 @@
     return '<div class="ing-head"><h2>Skład (INCI)</h2>'+
       '<span class="ing-sub">czego użyto w tym kosmetyku</span></div>'+inner;
   }
-  function paintInci(box, d, list){
-    if(curPdp!==d.id) return;
-    if(list && list.length){ box.style.display=""; box.innerHTML=ingHead(inciCardHTML(list)); }
-    else { box.style.display="none"; box.innerHTML=""; }   // brak składu → chowamy sekcję
+  function inciWebLink(d){
+    return "https://www.google.com/search?q="+encodeURIComponent(d.brand+" "+d.name+" skład INCI");
+  }
+  function inciEmpty(d){
+    return '<div class="inci-empty">Nie mamy jeszcze pełnego składu tego produktu w naszej bazie.'+
+      ' <a href="'+esc(inciWebLink(d))+'" target="_blank" rel="noopener noreferrer">Sprawdź pełny skład →</a></div>';
+  }
+  function pickInci(p){ p=p||{}; return p.ingredients_text_pl||p.ingredients_text||p.ingredients_text_en||""; }
+  function ofFetch(u){ return fetch(u).then(function(r){ return r.json(); }); }
+  function obfProduct(ean){
+    return "https://world.openbeautyfacts.org/api/v2/product/"+encodeURIComponent(ean)+
+      ".json?fields=ingredients_text_pl,ingredients_text,ingredients_text_en";
+  }
+  function obfSearch(d){
+    return "https://world.openbeautyfacts.org/cgi/search.pl?search_terms="+
+      encodeURIComponent(d.brand+" "+d.name.split(" ").slice(0,4).join(" "))+
+      "&search_simple=1&action=process&json=1&page_size=5&sort_by=unique_scans_n"+
+      "&fields=code,ingredients_text_pl,ingredients_text,ingredients_text_en";
   }
   function renderIngredients(d){
     var box=document.getElementById("ingredients");
+    box.style.display="";
     var m=catalogMatch(d);
     var key=(m&&m.ean) ? m.ean : "q:"+slug(d.brand+" "+d.name);
-    if(key in INCI_CACHE){ paintInci(box, d, INCI_CACHE[key]); return; }
-    box.style.display=""; box.innerHTML=ingHead('<div class="inci-empty">Sprawdzam skład…</div>');
-    function done(list){ INCI_CACHE[key]=list; saveStore("blask.inci",INCI_CACHE); paintInci(box, d, list); }
-    var url = (m&&m.ean)
-      ? "https://world.openbeautyfacts.org/api/v2/product/"+encodeURIComponent(m.ean)+
-        ".json?fields=ingredients_text_pl,ingredients_text,ingredients_text_en"
-      : "https://world.openbeautyfacts.org/cgi/search.pl?search_terms="+
-        encodeURIComponent(d.brand+" "+d.name.split(" ").slice(0,4).join(" "))+
-        "&search_simple=1&action=process&json=1&page_size=3&sort_by=unique_scans_n"+
-        "&fields=ingredients_text_pl,ingredients_text,ingredients_text_en";
-    fetch(url).then(function(r){ return r.json(); }).then(function(js){
-      var src = js && js.product ? [js.product] : ((js && js.products) || []);
-      var txt="";
-      for(var i=0;i<src.length && !txt;i++){
-        var p=src[i]||{};
-        txt=p.ingredients_text_pl||p.ingredients_text||p.ingredients_text_en||"";
-      }
-      done(parseInci(txt));
-    }).catch(function(){
+    function paint(list){
       if(curPdp!==d.id) return;
-      box.style.display=""; box.innerHTML=ingHead('<div class="inci-empty">Nie udało się pobrać składu (brak połączenia). Spróbuj ponownie później.</div>');
-    });
+      box.innerHTML=ingHead((list&&list.length) ? inciCardHTML(list) : inciEmpty(d));
+    }
+    if(key in INCI_CACHE){ paint(INCI_CACHE[key]); return; }
+    box.innerHTML=ingHead('<div class="inci-empty">Sprawdzam skład…</div>');
+    function done(list){ INCI_CACHE[key]=list||[]; saveStore("blask.inci",INCI_CACHE); paint(list); }
+    function fail(){ if(curPdp===d.id) box.innerHTML=ingHead(
+      '<div class="inci-empty">Nie udało się pobrać składu (brak połączenia). '+
+      '<a href="'+esc(inciWebLink(d))+'" target="_blank" rel="noopener noreferrer">Sprawdź w sieci →</a></div>'); }
+    // 1) próba po kodzie EAN z katalogu; 2) wyszukiwanie po nazwie; 3) kod z wyników wyszukiwania
+    function trySearch(){
+      ofFetch(obfSearch(d)).then(function(js){
+        var arr=(js&&js.products)||[];
+        for(var i=0;i<arr.length;i++){ var t=pickInci(arr[i]); if(t) return done(parseInci(t)); }
+        var code=arr[0]&&arr[0].code;
+        if(code) return ofFetch(obfProduct(code)).then(function(j2){ done(parseInci(pickInci(j2&&j2.product))); }).catch(function(){ done([]); });
+        done([]);
+      }).catch(fail);
+    }
+    if(m&&m.ean){
+      ofFetch(obfProduct(m.ean)).then(function(js){
+        var t=parseInci(pickInci(js&&js.product));
+        if(t.length) return done(t);
+        trySearch();
+      }).catch(trySearch);
+    } else {
+      trySearch();
+    }
   }
 
   function openPDP(id){
