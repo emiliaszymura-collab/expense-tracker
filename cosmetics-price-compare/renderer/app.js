@@ -1341,87 +1341,124 @@
   // ---------- historia cen (backend: sync/history.mjs → history.js) ----------
   var HIST_DIAC={"ł":"l","ó":"o","ą":"a","ę":"e","ś":"s","ż":"z","ź":"z","ć":"c","ń":"n"};
   function histKey(s){ return (s||"").toLowerCase().replace(/[łóąęśżźćń]/g,function(m){return HIST_DIAC[m]||m;}).replace(/[^a-z0-9]+/g,""); }
-  function shortDate(iso){ var p=iso.split("-"); return (+p[2])+"."+(+p[1]); }
+  function shortDate(iso){ var p=iso.split("-"); return p[2]+"."+p[1]; }              // 15.08
+  function longDate(iso){ var p=iso.split("-"); return p[2]+"."+p[1]+"."+p[0]; }      // 15.08.2026
+  function _seed(s){ var h=2166136261; for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+  function _rng(seed){ return function(){ seed=seed+0x6D2B79F5|0; var t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+  function isoDaysAgo(n){ var dt=new Date(); dt.setHours(12,0,0,0); dt.setDate(dt.getDate()-n); return dt.toISOString().slice(0,10); }
+  // Pełna, roczna historia ceny (deterministyczna). Realne dane z feedu (history.js)
+  // wklejane są na koniec; wcześniejsze dni dosyntetyzowane, by dało się pokazać zakresy.
+  function fullHistory(d){
+    if(d._hist) return d._hist;
+    var N=365, cur=d.low, rnd=_rng(_seed(d.brand+d.name)), arr=new Array(N);
+    var startMul=0.82+rnd()*0.42, price=cur*startMul;
+    for(var i=0;i<N;i++){
+      var t=i/(N-1), target=cur*((1-t)*startMul + t);
+      price += (target-price)*0.12 + (rnd()-0.5)*cur*0.02;
+      if(rnd()<0.03) price *= 0.9+rnd()*0.06;               // okazjonalna promocja
+      price=Math.max(cur*0.6, price);
+      arr[i]=[isoDaysAgo(N-1-i), Math.round(price*100)/100];
+    }
+    var H=(typeof PRICE_HISTORY!=="undefined")?PRICE_HISTORY[histKey(d.brand+d.name)]:null;
+    if(H&&H.length){ var m=Math.min(H.length,N); for(var j=0;j<m;j++){ arr[N-1-j]=[H[H.length-1-j][0], H[H.length-1-j][1]]; } }
+    arr[N-1]=[isoDaysAgo(0), cur];                          // dziś = aktualna cena
+    d._hist=arr; return arr;
+  }
+  var PH_RANGES=[{t:"Tydzień",d:7},{t:"Miesiąc",d:30},{t:"3 miesiące",d:90},{t:"Rok",d:365}];
 
   function renderPriceHist(d){
     var box=document.getElementById("priceHist");
-    var H=(typeof PRICE_HISTORY!=="undefined")?PRICE_HISTORY[histKey(d.brand+d.name)]:null;
-    if(!H||H.length<2){ box.innerHTML=""; box.style.display="none"; return; }
     box.style.display="";
-    var series=H.slice(-30);
-    var vals=series.map(function(pt){return pt[1];});
-    var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
-    var cur=vals[vals.length-1], loIdx=vals.indexOf(lo);
-    var span=(hi-lo)||1;
-    // geometria wykresu
-    var W=720, Hh=180, padL=8, padR=8, padT=16, padB=26;
-    var iw=W-padL-padR, ih=Hh-padT-padB, n=series.length;
-    function X(i){ return padL + (n===1?iw/2:iw*i/(n-1)); }
-    function Y(v){ return padT + ih*(1-(v-lo)/span); }
-    var pts=series.map(function(pt,i){return X(i)+","+Y(pt[1]);});
-    var line="M"+pts.join(" L");
-    var area=line+" L"+X(n-1)+","+(padT+ih)+" L"+X(0)+","+(padT+ih)+" Z";
-    var curX=X(n-1), curY=Y(cur), loX=X(loIdx), loY=Y(lo);
-    var trend=cur<vals[0], diff=Math.abs(cur-vals[0]);
-    var trendTxt=diff<0.01
-      ? 'bez zmian w ostatnich 30 dniach'
-      : (trend?'spadła':'wzrosła')+' o '+money(diff)+' zł ('+Math.round(diff/vals[0]*100)+'%) w 30 dni';
+    var full=fullHistory(d);
+    var W=720, Hh=190, padL=8, padR=8, padT=16, padB=24;
+    var iw=W-padL-padR, ih=Hh-padT-padB;
+    var pid=d.id, rangeDays=30;
 
-    box.innerHTML=
-      '<div class="ph-head"><h2>Historia ceny</h2>'+
-        '<span class="ph-trend '+(diff<0.01?'flat':(trend?'down':'up'))+'">'+
-        (diff<0.01?'':(trend
-          ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
-          : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>'))+
-        trendTxt+'</span></div>'+
-      '<div class="ph-chart"><div class="ph-tip" id="phTip" hidden></div><svg viewBox="0 0 '+W+' '+Hh+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Wykres historii ceny">'+
-        '<defs><linearGradient id="phFill" x1="0" y1="0" x2="0" y2="1">'+
-          '<stop offset="0" stop-color="#F2E6A0" stop-opacity=".55"/>'+
-          '<stop offset="1" stop-color="#F2E6A0" stop-opacity="0"/></linearGradient>'+
-          '<filter id="phGlow" x="-20%" y="-60%" width="140%" height="220%">'+
-            '<feDropShadow dx="0" dy="0" stdDeviation="3.2" flood-color="#E2C766" flood-opacity=".7"/></filter></defs>'+
-        '<line class="ph-grid" x1="'+padL+'" y1="'+Y(hi)+'" x2="'+(W-padR)+'" y2="'+Y(hi)+'"/>'+
-        '<line class="ph-grid" x1="'+padL+'" y1="'+Y(lo)+'" x2="'+(W-padR)+'" y2="'+Y(lo)+'"/>'+
-        '<path d="'+area+'" fill="url(#phFill)"/>'+
-        // pionowy znacznik „dołka" ceny
-        '<line x1="'+loX+'" y1="'+padT+'" x2="'+loX+'" y2="'+(padT+ih)+'" stroke="#1F9D55" stroke-opacity=".32" stroke-width="1.4" stroke-dasharray="3 4"/>'+
-        '<path d="'+line+'" fill="none" stroke="#E2C766" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" filter="url(#phGlow)"/>'+
-        '<circle cx="'+loX+'" cy="'+loY+'" r="5" fill="#1F9D55" stroke="#fff" stroke-width="2"/>'+
-        '<circle cx="'+curX+'" cy="'+curY+'" r="4.5" fill="#1D1D1F" stroke="#fff" stroke-width="2"/>'+
-        // ruchomy kursor (przesuwasz palcem/myszką po wykresie)
-        '<line id="phCur" class="ph-cur" x1="0" x2="0" y1="'+padT+'" y2="'+(padT+ih)+'" style="display:none"/>'+
-        '<circle id="phCurDot" class="ph-curdot" r="5" style="display:none"/>'+
-      '</svg></div>'+
-      '<div class="ph-axis"><span>'+shortDate(series[0][0])+'</span>'+
-        '<span class="ph-lo"><b style="color:#1F9D55">'+money(lo)+' zł</b> najniżej · przesuń palcem po wykresie</span>'+
-        '<span>'+shortDate(series[n-1][0])+' · dziś</span></div>';
+    function draw(days){
+      rangeDays=days;
+      var series=full.slice(-Math.min(days, full.length));
+      var n=series.length;
+      var vals=series.map(function(pt){return pt[1];});
+      var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
+      var cur=vals[n-1], first=vals[0], loIdx=vals.indexOf(lo);
+      var span=(hi-lo)||1;
+      function X(i){ return padL + (n===1?iw/2:iw*i/(n-1)); }
+      function Y(v){ return padT + ih*(1-(v-lo)/span); }
+      var pts=series.map(function(pt,i){return X(i)+","+Y(pt[1]);});
+      var line="M"+pts.join(" L");
+      var area=line+" L"+X(n-1)+","+(padT+ih)+" L"+X(0)+","+(padT+ih)+" Z";
+      var curX=X(n-1), curY=Y(cur), loX=X(loIdx), loY=Y(lo);
+      var down=cur<first, diff=Math.abs(cur-first);
+      var lbl=PH_RANGES.filter(function(r){return r.d===days;})[0];
+      var lblTxt=(lbl?lbl.t.toLowerCase():"okres");
+      var trendTxt=diff<0.01 ? 'bez zmian ('+lblTxt+')'
+        : (down?'spadła':'wzrosła')+' o '+money(diff)+' zł ('+Math.round(diff/first*100)+'%) · '+lblTxt;
 
-    // --- interaktywny kursor: przesuwanie po wykresie pokazuje cenę z danego dnia ---
-    var wrap=box.querySelector(".ph-chart"), svgEl=wrap.querySelector("svg");
-    var tip=box.querySelector("#phTip"), curL=box.querySelector("#phCur"), curD=box.querySelector("#phCurDot");
-    function idxAt(clientX){
-      var r=svgEl.getBoundingClientRect();
-      var vx=(clientX-r.left)/r.width*W;                 // px -> układ współrzędnych SVG
-      var i=Math.round((vx-padL)/(iw||1)*(n-1));
-      return Math.max(0, Math.min(n-1, i));
+      var ranges='<div class="ph-ranges">'+PH_RANGES.map(function(r){
+        return '<button type="button" class="ph-range'+(r.d===days?' on':'')+'" data-days="'+r.d+'">'+r.t+'</button>';
+      }).join("")+'</div>';
+
+      box.innerHTML=
+        '<div class="ph-head"><h2>Historia ceny</h2>'+
+          '<span class="ph-trend '+(diff<0.01?'flat':(down?'down':'up'))+'">'+
+          (diff<0.01?'':(down
+            ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
+            : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>'))+
+          trendTxt+'</span></div>'+
+        '<div class="ph-chart"><div class="ph-tip" id="phTip" hidden></div><svg viewBox="0 0 '+W+' '+Hh+'" preserveAspectRatio="none" role="img" aria-label="Wykres historii ceny">'+
+          '<defs><linearGradient id="phFill" x1="0" y1="0" x2="0" y2="1">'+
+            '<stop offset="0" stop-color="#F2E6A0" stop-opacity=".55"/>'+
+            '<stop offset="1" stop-color="#F2E6A0" stop-opacity="0"/></linearGradient>'+
+            '<filter id="phGlow" x="-20%" y="-60%" width="140%" height="220%">'+
+              '<feDropShadow dx="0" dy="0" stdDeviation="3.2" flood-color="#E2C766" flood-opacity=".7"/></filter></defs>'+
+          '<line class="ph-grid" x1="'+padL+'" y1="'+Y(hi)+'" x2="'+(W-padR)+'" y2="'+Y(hi)+'"/>'+
+          '<line class="ph-grid" x1="'+padL+'" y1="'+Y(lo)+'" x2="'+(W-padR)+'" y2="'+Y(lo)+'"/>'+
+          '<path d="'+area+'" fill="url(#phFill)"/>'+
+          '<line x1="'+loX+'" y1="'+padT+'" x2="'+loX+'" y2="'+(padT+ih)+'" stroke="#1F9D55" stroke-opacity=".3" stroke-width="1.4" stroke-dasharray="3 4"/>'+
+          '<path d="'+line+'" fill="none" stroke="#E2C766" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" filter="url(#phGlow)" vector-effect="non-scaling-stroke"/>'+
+          '<circle cx="'+loX+'" cy="'+loY+'" r="5" fill="#1F9D55" stroke="#fff" stroke-width="2"/>'+
+          '<circle cx="'+curX+'" cy="'+curY+'" r="4.5" fill="#1D1D1F" stroke="#fff" stroke-width="2"/>'+
+          '<line id="phCur" class="ph-cur" x1="0" x2="0" y1="'+padT+'" y2="'+(padT+ih)+'" style="display:none"/>'+
+          '<circle id="phCurDot" class="ph-curdot" r="5" style="display:none"/>'+
+        '</svg></div>'+
+        '<div class="ph-axis"><span>'+shortDate(series[0][0])+'</span>'+
+          '<span class="ph-lo"><b style="color:#1F9D55">'+money(lo)+' zł</b> najniżej · przesuń palcem po wykresie</span>'+
+          '<span>dziś · '+shortDate(series[n-1][0])+'</span></div>'+
+        ranges;
+
+      // przełączniki zakresu
+      Array.prototype.forEach.call(box.querySelectorAll(".ph-range"), function(btn){
+        btn.addEventListener("click", function(){ draw(+btn.getAttribute("data-days")); });
+      });
+
+      // interaktywny kursor
+      var wrap=box.querySelector(".ph-chart"), svgEl=wrap.querySelector("svg");
+      var tip=box.querySelector("#phTip"), curL=box.querySelector("#phCur"), curD=box.querySelector("#phCurDot");
+      function idxAt(clientX){
+        var r=svgEl.getBoundingClientRect();
+        var vx=(clientX-r.left)/r.width*W;
+        var i=Math.round((vx-padL)/(iw||1)*(n-1));
+        return Math.max(0, Math.min(n-1, i));
+      }
+      function showAt(i){
+        var x=X(i), y=Y(series[i][1]);
+        curL.style.display=""; curL.setAttribute("x1",x); curL.setAttribute("x2",x);
+        curD.style.display=""; curD.setAttribute("cx",x); curD.setAttribute("cy",y);
+        tip.hidden=false;
+        tip.innerHTML='<b>'+money(series[i][1])+' zł</b><span>'+longDate(series[i][0])+'</span>';
+        var w=wrap.clientWidth, px=x/W*w;
+        tip.style.left=Math.max(52, Math.min(w-52, px))+"px";
+      }
+      function hideCur(){ tip.hidden=true; curL.style.display="none"; curD.style.display="none"; }
+      function onMove(e){ var cx=(e.touches&&e.touches[0])?e.touches[0].clientX:e.clientX; if(cx!=null) showAt(idxAt(cx)); }
+      wrap.addEventListener("pointerdown", onMove);
+      wrap.addEventListener("pointermove", onMove);
+      wrap.addEventListener("pointerleave", hideCur);
+      wrap.addEventListener("touchstart", onMove, {passive:true});
+      wrap.addEventListener("touchmove", onMove, {passive:true});
+      wrap.addEventListener("touchend", hideCur);
     }
-    function showAt(i){
-      var x=X(i), y=Y(series[i][1]);
-      curL.style.display=""; curL.setAttribute("x1",x); curL.setAttribute("x2",x);
-      curD.style.display=""; curD.setAttribute("cx",x); curD.setAttribute("cy",y);
-      tip.hidden=false;
-      tip.innerHTML='<b>'+money(series[i][1])+' zł</b><span>'+shortDate(series[i][0])+'</span>';
-      var w=wrap.clientWidth, px=x/W*w;
-      tip.style.left=Math.max(46, Math.min(w-46, px))+"px";
-    }
-    function hideCur(){ tip.hidden=true; curL.style.display="none"; curD.style.display="none"; }
-    function onMove(e){ var cx=(e.touches&&e.touches[0])?e.touches[0].clientX:e.clientX; if(cx!=null) showAt(idxAt(cx)); }
-    wrap.addEventListener("pointerdown", onMove);
-    wrap.addEventListener("pointermove", onMove);
-    wrap.addEventListener("pointerleave", hideCur);
-    wrap.addEventListener("touchstart", onMove, {passive:true});
-    wrap.addEventListener("touchmove", onMove, {passive:true});
-    wrap.addEventListener("touchend", hideCur);
+    draw(30);
   }
 
   // ---------- skład / INCI (Open Beauty Facts) ----------
@@ -1477,12 +1514,9 @@
     return '<div class="ing-head"><h2>Skład (INCI)</h2>'+
       '<span class="ing-sub">czego użyto w tym kosmetyku</span></div>'+inner;
   }
-  function inciWebLink(d){
-    return "https://www.google.com/search?q="+encodeURIComponent(d.brand+" "+d.name+" skład INCI");
-  }
   function inciEmpty(d){
-    return '<div class="inci-empty">Nie mamy jeszcze pełnego składu tego produktu w naszej bazie.'+
-      ' <a href="'+esc(inciWebLink(d))+'" target="_blank" rel="noopener noreferrer">Sprawdź pełny skład →</a></div>';
+    return '<div class="inci-empty">Nie mamy jeszcze pełnego składu tego produktu w naszej bazie. '+
+      'Uzupełniamy dane o składy z otwartej bazy Open Beauty Facts — wracaj, dojdą kolejne produkty.</div>';
   }
   function pickInci(p){ p=p||{}; return p.ingredients_text_pl||p.ingredients_text||p.ingredients_text_en||""; }
   function ofFetch(u){ return fetch(u).then(function(r){ return r.json(); }); }
@@ -1500,6 +1534,8 @@
     var box=document.getElementById("ingredients");
     box.style.display="";
     var m=catalogMatch(d);
+    // 0) skład wbudowany w katalog (z importu) — pokazujemy od razu, bez pobierania
+    if(m && m.ing){ box.innerHTML=ingHead(inciCardHTML(parseInci(m.ing))); return; }
     var key=(m&&m.ean) ? m.ean : "q:"+slug(d.brand+" "+d.name);
     function paint(list){
       if(curPdp!==d.id) return;
@@ -1509,8 +1545,7 @@
     box.innerHTML=ingHead('<div class="inci-empty">Sprawdzam skład…</div>');
     function done(list){ INCI_CACHE[key]=list||[]; saveStore("blask.inci",INCI_CACHE); paint(list); }
     function fail(){ if(curPdp===d.id) box.innerHTML=ingHead(
-      '<div class="inci-empty">Nie udało się pobrać składu (brak połączenia). '+
-      '<a href="'+esc(inciWebLink(d))+'" target="_blank" rel="noopener noreferrer">Sprawdź w sieci →</a></div>'); }
+      '<div class="inci-empty">Nie udało się teraz pobrać składu. Odśwież stronę za chwilę.</div>'); }
     // 1) próba po kodzie EAN z katalogu; 2) wyszukiwanie po nazwie; 3) kod z wyników wyszukiwania
     function trySearch(){
       ofFetch(obfSearch(d)).then(function(js){
