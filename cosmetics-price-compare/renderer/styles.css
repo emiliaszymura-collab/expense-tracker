@@ -25,7 +25,8 @@
   --shadow-card: 0 2px 8px rgba(0, 0, 0, .04);
   --shadow-hover: 0 8px 28px rgba(0, 0, 0, .10);
   --shadow-pop: 0 18px 50px rgba(0, 0, 0, .16);
-  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --serif: 'Fraunces', 'Georgia', 'Times New Roman', serif;
 }
 
 * { box-sizing: border-box; }
@@ -36,6 +37,7 @@ body {
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 .wrap { max-width: 1040px; margin: 0 auto; padding: 0 22px; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -.01em; }
 button { font-family: var(--sans); }
 :focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
 
@@ -50,7 +52,7 @@ header.main {
 .head-row { display: flex; align-items: center; gap: 18px; padding: 11px 0; }
 .logo {
   border: none; background: none; cursor: pointer; padding: 4px 2px;
-  font-size: 21px; font-weight: 700; letter-spacing: -.03em; color: var(--text);
+  font-family: var(--serif); font-size: 23px; font-weight: 600; letter-spacing: -.02em; color: var(--text);
   line-height: 1; flex: none; display: inline-flex; align-items: center;
 }
 .logo i { font-style: normal; color: var(--accent-ink); }
