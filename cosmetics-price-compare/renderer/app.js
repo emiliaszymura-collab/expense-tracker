@@ -1671,6 +1671,14 @@
       '<h1>O nas</h1>'+
       '<p class="lede">Blask to niezależna porównywarka cen kosmetyków. Powstała z prostej frustracji: żeby kupić ulubiony krem najtaniej, trzeba było otwierać po kilka sklepów i porównywać ręcznie.</p>'+
       '<p>Zbieramy w jednym miejscu ceny popularnych kosmetyków z polskich drogerii i perfumerii — Rossmann, Hebe, Notino, Douglas, Sephora, Superpharm, eZebra i innych — i pokazujemy, gdzie dany produkt kupisz najkorzystniej.</p>'+
+      '<h2>Co potrafi Blask</h2>'+
+      '<ul>'+
+      '<li><b>Najtańszy koszyk</b> — dodaj kilka produktów, a my zsumujemy cały koszyk i pokażemy, w którym sklepie kupisz wszystko najtaniej (z dostawą), zamiast liczyć ręcznie.</li>'+
+      '<li><b>Wiele filtrów</b> — zawęź listę po cenie, ocenie i promocjach, jak w prawdziwej drogerii online.</li>'+
+      '<li><b>Skład kosmetyku (INCI)</b> — sprawdzisz, z czego zrobiony jest produkt; oznaczamy m.in. parabeny, silikony, alergeny zapachowe oraz dobre składniki (niacynamid, kwas hialuronowy, retinol).</li>'+
+      '<li><b>Historia ceny</b> — interaktywny wykres pokazuje, jak zmieniała się cena w ciągu tygodnia, miesiąca czy roku, żebyś kupowała w dołku ceny.</li>'+
+      '<li><b>Alerty i ulubione</b> — zapisz produkt i daj znać, że chcesz kupić taniej.</li>'+
+      '</ul>'+
       '<h2>Jak zarabiamy</h2>'+
       '<p>Dla Ciebie Blask jest i pozostanie bezpłatny. Utrzymujemy się z prowizji afiliacyjnych wypłacanych przez sklepy, gdy przejdziesz do nich przez nasz link i dokonasz zakupu. Nie wpływa to na cenę, którą płacisz, ani na kolejność ofert — zawsze pokazujemy najniższą cenę na górze.</p>',
     contact:
