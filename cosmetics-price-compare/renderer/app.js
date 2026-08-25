@@ -293,8 +293,24 @@
   sortEl.addEventListener("change", renderGrid);
 
   var brandFilter=null;
+  // filtry (jak w Notino): przedział ceny, min. ocena, tylko promocje
+  var fPrice=null, fRate=0, fPromo=false;
+  var PRICE_BUCKETS=[
+    {id:"a", t:"do 30 zł",   lo:0,   hi:30},
+    {id:"b", t:"30–60 zł",   lo:30,  hi:60},
+    {id:"c", t:"60–120 zł",  lo:60,  hi:120},
+    {id:"d", t:"120 zł +",   lo:120, hi:1e9}
+  ];
+  function filtersActive(){ return fPrice||fRate>0||fPromo; }
+  function passFilters(d){
+    if(fPrice){ var b=PRICE_BUCKETS.filter(function(x){return x.id===fPrice;})[0]; if(b && (d.low<b.lo||d.low>=b.hi)) return false; }
+    if(fRate>0 && d.rate<fRate) return false;
+    if(fPromo && !(d.save>0)) return false;
+    return true;
+  }
   function gridList(){
     var list=DATA.filter(function(d){
+      if(!passFilters(d)) return false;
       if(brandFilter) return d.brand===brandFilter;
       if(favMode) return !!favs[d.id];
       return activeCat==="Wszystkie"||d.cat===activeCat;
@@ -356,9 +372,39 @@
     catImgOnly=this.checked; catPage=1; renderGrid();
   });
 
+  // ----- pasek filtrów (cena / ocena / promocje) -----
+  var filterBarEl=document.getElementById("filterBar");
+  var RATE_STEPS=[{v:4.0,t:"4,0+"},{v:4.5,t:"4,5+"},{v:4.7,t:"4,7+"}];
+  function chip(on,label,attr){ return '<button type="button" class="fchip'+(on?" on":"")+'" '+attr+'>'+label+'</button>'; }
+  function renderFilterBar(){
+    if(catalogMode){ filterBarEl.hidden=true; return; }
+    filterBarEl.hidden=false;
+    var html='';
+    html+='<div class="fgroup"><span class="flabel">Cena</span>'+
+      chip(!fPrice,"Wszystkie",'data-price=""')+
+      PRICE_BUCKETS.map(function(b){ return chip(fPrice===b.id,b.t,'data-price="'+b.id+'"'); }).join("")+'</div>';
+    html+='<div class="fgroup"><span class="flabel">Ocena</span>'+
+      chip(fRate===0,"Wszystkie",'data-rate="0"')+
+      RATE_STEPS.map(function(r){ return chip(fRate===r.v,'★ '+r.t,'data-rate="'+r.v+'"'); }).join("")+'</div>';
+    html+='<div class="fgroup"><span class="flabel">Promocje</span>'+
+      chip(fPromo,"Tylko przecenione",'data-promo="1"')+'</div>';
+    if(filtersActive()) html+='<button type="button" class="fclear" data-clear="1">Wyczyść ✕</button>';
+    filterBarEl.innerHTML=html;
+  }
+  filterBarEl.addEventListener("click", function(e){
+    var b=e.target.closest("button"); if(!b) return;
+    if(b.hasAttribute("data-price")){ fPrice=b.getAttribute("data-price")||null; }
+    else if(b.hasAttribute("data-rate")){ fRate=parseFloat(b.getAttribute("data-rate"))||0; }
+    else if(b.hasAttribute("data-promo")){ fPromo=!fPromo; }
+    else if(b.hasAttribute("data-clear")){ fPrice=null; fRate=0; fPromo=false; }
+    else return;
+    renderGrid();
+  });
+
   function renderGrid(){
     var titleEl=document.getElementById("gridTitle"), resEl=document.getElementById("gridRes");
     catFilterEl.hidden = !catalogMode;
+    renderFilterBar();
     if(catalogMode){
       var full=catalogList();
       _catItems=full;
@@ -445,12 +491,33 @@
         return '<button class="hbrand" type="button" data-hbrand="'+esc(b)+'">'+esc(b)+'</button>';
       }).join("")+'</div></section>';
   }
+  var MONTHS=["stycznia","lutego","marca","kwietnia","maja","czerwca","lipca","sierpnia","września","października","listopada","grudnia"];
+  // Promocja miesiąca — jedna wyróżniona okazja, stała w obrębie miesiąca.
+  function dealHero(){
+    var cand=DATA.filter(function(d){return d.savePct>=15 && d.save>0;})
+                 .sort(function(a,b){return b.save-a.save || b.savePct-a.savePct;}).slice(0,10);
+    if(!cand.length) cand=DATA.slice().sort(function(a,b){return b.save-a.save;}).slice(0,10);
+    if(!cand.length) return "";
+    var d=cand[new Date().getMonth()%cand.length];
+    return '<section class="deal-hero" role="button" tabindex="0" data-id="'+d.id+'">'+
+      '<div class="dh-visual pv" data-pid="'+d.id+'">'+visualInner(d)+'</div>'+
+      '<div class="dh-body">'+
+        '<span class="dh-label">✦ Promocja miesiąca · '+MONTHS[new Date().getMonth()]+'</span>'+
+        '<div class="dh-name"><b>'+esc(d.brand)+'</b> '+esc(d.name)+'</div>'+
+        '<div class="dh-prices"><span class="dh-badge">−'+d.savePct+'%</span>'+
+          '<span class="dh-now">'+money(d.low)+' zł</span>'+
+          '<span class="dh-old">'+money(d.high)+' zł</span></div>'+
+        '<div class="dh-meta">najtaniej w <b>'+esc(d.lowStore)+'</b> · oszczędzasz '+money(d.save)+' zł</div>'+
+        '<span class="dh-cta">Zobacz ofertę <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>'+
+      '</div></section>';
+  }
   function renderHomeSections(){
     var promo=DATA.filter(function(d){return d.savePct>=10;})
                   .sort(function(a,b){return b.savePct-a.savePct || b.save-a.save;}).slice(0,12);
     var pop=DATA.slice().sort(function(a,b){return b.pop-a.pop;}).slice(0,12);
     var rate=DATA.slice().sort(function(a,b){return b.rate-a.rate || b.votes-a.votes;}).slice(0,12);
     homeSectionsEl.innerHTML=
+      dealHero()+
       carousel(SEC_ICON.deals,"Najlepsze okazje cenowe", promo, "Największe różnice cen między sklepami", "save")+
       catTiles()+
       carousel(SEC_ICON.best,"Bestsellery", pop, "Najczęściej porównywane produkty", "pop")+
@@ -487,6 +554,8 @@
       if(f){ e.stopPropagation(); toggleFav(+f.getAttribute("data-fav")); return; }
       var ac=e.target.closest("[data-add]");
       if(ac){ e.stopPropagation(); addToCart(+ac.getAttribute("data-add")); return; }
+      var dh=e.target.closest(".deal-hero");
+      if(dh){ openPDP(+dh.getAttribute("data-id")); return; }
       var c=e.target.closest(".pcard"); if(!c) return;
       if(c.hasAttribute("data-cat")) openCatalog(_catItems[+c.getAttribute("data-cat")]);
       else openPDP(+c.getAttribute("data-id"));
@@ -1305,7 +1374,7 @@
           ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
           : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>'))+
         trendTxt+'</span></div>'+
-      '<div class="ph-chart"><svg viewBox="0 0 '+W+' '+Hh+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Wykres historii ceny">'+
+      '<div class="ph-chart"><div class="ph-tip" id="phTip" hidden></div><svg viewBox="0 0 '+W+' '+Hh+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Wykres historii ceny">'+
         '<defs><linearGradient id="phFill" x1="0" y1="0" x2="0" y2="1">'+
           '<stop offset="0" stop-color="#F2E6A0" stop-opacity=".55"/>'+
           '<stop offset="1" stop-color="#F2E6A0" stop-opacity="0"/></linearGradient>'+
@@ -1319,10 +1388,40 @@
         '<path d="'+line+'" fill="none" stroke="#E2C766" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" filter="url(#phGlow)"/>'+
         '<circle cx="'+loX+'" cy="'+loY+'" r="5" fill="#1F9D55" stroke="#fff" stroke-width="2"/>'+
         '<circle cx="'+curX+'" cy="'+curY+'" r="4.5" fill="#1D1D1F" stroke="#fff" stroke-width="2"/>'+
+        // ruchomy kursor (przesuwasz palcem/myszką po wykresie)
+        '<line id="phCur" class="ph-cur" x1="0" x2="0" y1="'+padT+'" y2="'+(padT+ih)+'" style="display:none"/>'+
+        '<circle id="phCurDot" class="ph-curdot" r="5" style="display:none"/>'+
       '</svg></div>'+
       '<div class="ph-axis"><span>'+shortDate(series[0][0])+'</span>'+
-        '<span class="ph-lo"><b style="color:#1F9D55">'+money(lo)+' zł</b> najniżej · kupuj w dołku ceny</span>'+
+        '<span class="ph-lo"><b style="color:#1F9D55">'+money(lo)+' zł</b> najniżej · przesuń palcem po wykresie</span>'+
         '<span>'+shortDate(series[n-1][0])+' · dziś</span></div>';
+
+    // --- interaktywny kursor: przesuwanie po wykresie pokazuje cenę z danego dnia ---
+    var wrap=box.querySelector(".ph-chart"), svgEl=wrap.querySelector("svg");
+    var tip=box.querySelector("#phTip"), curL=box.querySelector("#phCur"), curD=box.querySelector("#phCurDot");
+    function idxAt(clientX){
+      var r=svgEl.getBoundingClientRect();
+      var vx=(clientX-r.left)/r.width*W;                 // px -> układ współrzędnych SVG
+      var i=Math.round((vx-padL)/(iw||1)*(n-1));
+      return Math.max(0, Math.min(n-1, i));
+    }
+    function showAt(i){
+      var x=X(i), y=Y(series[i][1]);
+      curL.style.display=""; curL.setAttribute("x1",x); curL.setAttribute("x2",x);
+      curD.style.display=""; curD.setAttribute("cx",x); curD.setAttribute("cy",y);
+      tip.hidden=false;
+      tip.innerHTML='<b>'+money(series[i][1])+' zł</b><span>'+shortDate(series[i][0])+'</span>';
+      var w=wrap.clientWidth, px=x/W*w;
+      tip.style.left=Math.max(46, Math.min(w-46, px))+"px";
+    }
+    function hideCur(){ tip.hidden=true; curL.style.display="none"; curD.style.display="none"; }
+    function onMove(e){ var cx=(e.touches&&e.touches[0])?e.touches[0].clientX:e.clientX; if(cx!=null) showAt(idxAt(cx)); }
+    wrap.addEventListener("pointerdown", onMove);
+    wrap.addEventListener("pointermove", onMove);
+    wrap.addEventListener("pointerleave", hideCur);
+    wrap.addEventListener("touchstart", onMove, {passive:true});
+    wrap.addEventListener("touchmove", onMove, {passive:true});
+    wrap.addEventListener("touchend", hideCur);
   }
 
   // ---------- skład / INCI (Open Beauty Facts) ----------
@@ -1374,39 +1473,41 @@
     return '<div class="inci-list">'+chips+'</div>'+note+
       '<div class="inci-src">Skład wg <a href="https://pl.openbeautyfacts.org" target="_blank" rel="noopener noreferrer">Open Beauty Facts</a> · zawsze sprawdź opakowanie.</div>';
   }
+  function ingHead(inner){
+    return '<div class="ing-head"><h2>Skład (INCI)</h2>'+
+      '<span class="ing-sub">czego użyto w tym kosmetyku</span></div>'+inner;
+  }
+  function paintInci(box, d, list){
+    if(curPdp!==d.id) return;
+    if(list && list.length){ box.style.display=""; box.innerHTML=ingHead(inciCardHTML(list)); }
+    else { box.style.display="none"; box.innerHTML=""; }   // brak składu → chowamy sekcję
+  }
   function renderIngredients(d){
     var box=document.getElementById("ingredients");
     var m=catalogMatch(d);
-    var ean=m&&m.ean;
-    if(!ean){ box.innerHTML=""; box.style.display="none"; return; }
-    box.style.display="";
-    function head(inner){
-      return '<div class="ing-head"><h2>Skład (INCI)</h2>'+
-        '<span class="ing-sub">czego użyto w tym kosmetyku</span></div>'+inner;
-    }
-    if(ean in INCI_CACHE){
-      var cached=INCI_CACHE[ean];
-      box.innerHTML=head(cached && cached.length ? inciCardHTML(cached)
-        : '<div class="inci-empty">Brak danych o składzie dla tego produktu. Sprawdź opakowanie lub stronę sklepu.</div>');
-      return;
-    }
-    box.innerHTML=head('<div class="inci-empty">Sprawdzam skład…</div>');
-    fetch("https://world.openbeautyfacts.org/api/v2/product/"+encodeURIComponent(ean)+
-          ".json?fields=ingredients_text_pl,ingredients_text,ingredients_text_en")
-      .then(function(r){ return r.json(); })
-      .then(function(js){
-        var p=(js&&js.product)||{};
-        var txt=p.ingredients_text_pl||p.ingredients_text||p.ingredients_text_en||"";
-        var list=parseInci(txt);
-        INCI_CACHE[ean]=list; saveStore("blask.inci",INCI_CACHE);
-        if(curPdp!==d.id) return; // użytkownik już przeszedł dalej
-        box.innerHTML=head(list.length ? inciCardHTML(list)
-          : '<div class="inci-empty">Brak danych o składzie dla tego produktu. Sprawdź opakowanie lub stronę sklepu.</div>');
-      })
-      .catch(function(){
-        if(curPdp!==d.id) return;
-        box.innerHTML=head('<div class="inci-empty">Nie udało się pobrać składu (brak połączenia). Spróbuj ponownie później.</div>');
-      });
+    var key=(m&&m.ean) ? m.ean : "q:"+slug(d.brand+" "+d.name);
+    if(key in INCI_CACHE){ paintInci(box, d, INCI_CACHE[key]); return; }
+    box.style.display=""; box.innerHTML=ingHead('<div class="inci-empty">Sprawdzam skład…</div>');
+    function done(list){ INCI_CACHE[key]=list; saveStore("blask.inci",INCI_CACHE); paintInci(box, d, list); }
+    var url = (m&&m.ean)
+      ? "https://world.openbeautyfacts.org/api/v2/product/"+encodeURIComponent(m.ean)+
+        ".json?fields=ingredients_text_pl,ingredients_text,ingredients_text_en"
+      : "https://world.openbeautyfacts.org/cgi/search.pl?search_terms="+
+        encodeURIComponent(d.brand+" "+d.name.split(" ").slice(0,4).join(" "))+
+        "&search_simple=1&action=process&json=1&page_size=3&sort_by=unique_scans_n"+
+        "&fields=ingredients_text_pl,ingredients_text,ingredients_text_en";
+    fetch(url).then(function(r){ return r.json(); }).then(function(js){
+      var src = js && js.product ? [js.product] : ((js && js.products) || []);
+      var txt="";
+      for(var i=0;i<src.length && !txt;i++){
+        var p=src[i]||{};
+        txt=p.ingredients_text_pl||p.ingredients_text||p.ingredients_text_en||"";
+      }
+      done(parseInci(txt));
+    }).catch(function(){
+      if(curPdp!==d.id) return;
+      box.style.display=""; box.innerHTML=ingHead('<div class="inci-empty">Nie udało się pobrać składu (brak połączenia). Spróbuj ponownie później.</div>');
+    });
   }
 
   function openPDP(id){
