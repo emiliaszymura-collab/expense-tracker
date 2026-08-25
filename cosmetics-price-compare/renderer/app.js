@@ -1660,20 +1660,55 @@
       '<p>W sprawach dotyczących Serwisu: kontakt@blask.pl.</p>',
     privacy:
       '<h1>Polityka prywatności</h1>'+
-      '<p class="muted">Wzór do uzupełnienia (dane administratora, ewentualna analityka) i weryfikacji prawnej przed publikacją produkcyjną.</p>'+
-      '<h2>1. Administrator danych</h2>'+
-      '<p>Administratorem danych jest właściciel serwisu Blask. Kontakt: kontakt@blask.pl.</p>'+
-      '<h2>2. Jakie dane przetwarzamy</h2>'+
+      '<p class="lede">Blask szanuje Twoją prywatność. Nie zakładasz konta, nie zbieramy Twoich danych w celach marketingowych i nie sprzedajemy żadnych informacji. Poniżej wyjaśniamy prosto, jakie dane są przetwarzane i po co.</p>'+
+      '<p class="muted">Ostatnia aktualizacja: 25 sierpnia 2026 r.</p>'+
+
+      '<h2>1. Kto jest administratorem danych</h2>'+
+      '<p>Administratorem danych osobowych jest właściciel serwisu Blask (dalej „Serwis"), dostępnego pod adresem blask.duckdns.org. W sprawach dotyczących prywatności napisz na: <b>kontakt@blask.pl</b>.</p>'+
+      '<p class="muted">Uwaga dla właściciela: przed publikacją produkcyjną uzupełnij tę sekcję o rzeczywiste dane administratora (imię i nazwisko lub nazwę oraz adres kontaktowy).</p>'+
+
+      '<h2>2. Najważniejsze w skrócie</h2>'+
       '<ul>'+
-      '<li><b>Ulubione i alerty cenowe</b> zapisujemy wyłącznie lokalnie w Twojej przeglądarce (localStorage). Nie trafiają one na nasze serwery i nie wymagają konta.</li>'+
-      '<li>Jeśli w przyszłości uruchomimy analitykę lub newsletter, poinformujemy o tym i poprosimy o zgodę tam, gdzie jest wymagana.</li>'+
+      '<li>Nie musisz zakładać konta ani podawać żadnych danych, aby korzystać z Serwisu.</li>'+
+      '<li>Ulubione, koszyk i alerty cenowe zapisujemy <b>tylko w Twojej przeglądarce</b> — nie trafiają na nasz serwer.</li>'+
+      '<li>Nie używamy własnych plików cookie ani reklamowych narzędzi śledzących.</li>'+
+      '<li>Nie sprzedajemy i nie udostępniamy Twoich danych w celach marketingowych.</li>'+
       '</ul>'+
-      '<h2>3. Linki do sklepów</h2>'+
-      '<p>Po kliknięciu w link do sklepu lub link afiliacyjny Twoje dane przetwarza już dany sklep i sieć afiliacyjna zgodnie z ich politykami prywatności.</p>'+
-      '<h2>4. Twoje prawa (RODO)</h2>'+
-      '<p>Masz prawo dostępu do danych, ich sprostowania, usunięcia oraz ograniczenia przetwarzania. Dane w localStorage możesz w każdej chwili usunąć, czyszcząc dane strony w przeglądarce.</p>'+
-      '<h2>5. Kontakt</h2>'+
-      '<p>W sprawach prywatności: kontakt@blask.pl.</p>'
+
+      '<h2>3. Dane zapisywane w Twojej przeglądarce</h2>'+
+      '<p>Serwis korzysta z pamięci lokalnej przeglądarki (localStorage), aby zapamiętać Twoje wybory. Zapisujemy w niej m.in.:</p>'+
+      '<ul>'+
+      '<li><b>Koszyk</b> — produkty dodane do porównania koszykowego;</li>'+
+      '<li><b>Ulubione</b> — produkty oznaczone sercem;</li>'+
+      '<li><b>Alerty cenowe</b> — produkty, których cenę chcesz obserwować;</li>'+
+      '<li><b>Dane pomocnicze</b> — pobrane zdjęcia i składy produktów (pamięć podręczna), aby serwis działał szybciej.</li>'+
+      '</ul>'+
+      '<p>Te dane <b>pozostają na Twoim urządzeniu</b>, nie są wysyłane do nas ani nie pozwalają Cię zidentyfikować. Możesz je w każdej chwili usunąć, czyszcząc dane strony w ustawieniach przeglądarki.</p>'+
+
+      '<h2>4. Logi serwera</h2>'+
+      '<p>Jak każda strona internetowa, serwer hostujący Blask może automatycznie zapisywać standardowe logi techniczne: adres IP, typ przeglądarki, datę i godzinę wizyty oraz odwiedzony adres. Służą one wyłącznie zapewnieniu bezpieczeństwa i prawidłowego działania Serwisu. Podstawą prawną jest nasz uzasadniony interes (art. 6 ust. 1 lit. f RODO). Logi przechowujemy nie dłużej, niż to konieczne (zwykle do kilkunastu miesięcy), po czym są usuwane lub anonimizowane.</p>'+
+
+      '<h2>5. Usługi zewnętrzne i odbiorcy danych</h2>'+
+      '<ul>'+
+      '<li><b>Open Beauty Facts</b> — zdjęcia i składy (INCI) produktów pobieramy z otwartej bazy Open Beauty Facts. Przy pobieraniu Twoja przeglądarka łączy się bezpośrednio z tym serwisem, który może odebrać Twój adres IP i treść zapytania, zgodnie z własną polityką prywatności.</li>'+
+      '<li><b>Sklepy i sieci afiliacyjne</b> — po kliknięciu w link do sklepu (w tym link afiliacyjny) Twoje dane przetwarza już dany sklep oraz sieć afiliacyjna (np. Awin, webePartners), zgodnie z ich politykami. Mogą one zapisać plik cookie, aby przypisać ewentualny zakup do polecenia z Blask. Szczegóły w sekcji „Współpraca afiliacyjna".</li>'+
+      '<li><b>Hosting</b> — Serwis działa na serwerze, na którym powstają opisane wyżej logi techniczne.</li>'+
+      '</ul>'+
+
+      '<h2>6. Cele i podstawy prawne</h2>'+
+      '<p>Dane techniczne (logi) przetwarzamy w celu utrzymania i bezpieczeństwa Serwisu na podstawie uzasadnionego interesu (art. 6 ust. 1 lit. f RODO). Dane zapisane w Twojej przeglądarce służą wyłącznie zapamiętaniu Twoich wyborów i działają na Twoim urządzeniu.</p>'+
+
+      '<h2>7. Twoje prawa (RODO)</h2>'+
+      '<p>Masz prawo do: dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, wniesienia sprzeciwu oraz przenoszenia danych. Dane zapisane w przeglądarce możesz samodzielnie usunąć w każdej chwili. Przysługuje Ci też prawo wniesienia skargi do organu nadzorczego — Prezesa Urzędu Ochrony Danych Osobowych (PUODO), ul. Stawki 2, 00-193 Warszawa.</p>'+
+
+      '<h2>8. Dzieci</h2>'+
+      '<p>Serwis jest przeznaczony dla osób dorosłych i nie jest kierowany do dzieci. Nie zbieramy świadomie danych osób poniżej 16. roku życia.</p>'+
+
+      '<h2>9. Zmiany polityki</h2>'+
+      '<p>Możemy aktualizować niniejszą politykę, np. gdy dodamy nowe funkcje. Aktualna wersja jest zawsze dostępna na tej stronie, wraz z datą ostatniej zmiany na górze.</p>'+
+
+      '<h2>10. Kontakt</h2>'+
+      '<p>W sprawach dotyczących prywatności i Twoich danych napisz na: <b>kontakt@blask.pl</b>.</p>'
   };
   function openInfo(key){
     var html=INFO[key]; if(!html) return;
