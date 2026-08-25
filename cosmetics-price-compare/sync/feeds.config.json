@@ -1,16 +1,16 @@
 {
-  "//": "Konfiguracja źródeł danych dla codziennej synchronizacji Blask.",
-  "//url": "Adres feedu produktowego danego sklepu z Twojego panelu afiliacyjnego (Awin / webePartners / TradeDoubler). Wklej prawdziwy URL po akceptacji do programu.",
-  "//format": "csv | csv-gzip | xml (Google Merchant / RSS). Wykrywane też automatycznie po nagłówku.",
-  "//enabled": "false = pomijamy przy synchronizacji (np. dopóki nie masz jeszcze URL-a).",
+  "//": "Źródła danych dla codziennej synchronizacji cen Blask. Instrukcja: sync/JAK-PODPIAC-CENY.md",
+  "//url": "Bezpośredni adres feedu produktowego ALBO 'env:NAZWA' → adres z sekretu GitHub (bezpieczniej, bo zawiera Twój ID afiliacyjny). Wklej po akceptacji do programu.",
+  "//enabled": "false = pomijamy przy synchronizacji (dopóki nie masz URL-a). Ustaw true, gdy sekret/URL jest gotowy.",
+  "//format": "csv | csv-gzip | xml (Google Merchant / RSS). Wykrywane też automatycznie po treści.",
   "feeds": [
-    { "store": "Rossmann",   "enabled": false, "format": "csv",      "url": "PASTE_ROSSMANN_FEED_URL" },
-    { "store": "Hebe",       "enabled": false, "format": "csv",      "url": "PASTE_HEBE_FEED_URL" },
-    { "store": "Notino",     "enabled": false, "format": "csv-gzip", "url": "PASTE_NOTINO_FEED_URL" },
-    { "store": "Douglas",    "enabled": false, "format": "xml",      "url": "PASTE_DOUGLAS_FEED_URL" },
-    { "store": "Sephora",    "enabled": false, "format": "csv",      "url": "PASTE_SEPHORA_FEED_URL" },
-    { "store": "Superpharm", "enabled": false, "format": "csv",      "url": "PASTE_SUPERPHARM_FEED_URL" },
-    { "store": "Ezebra",     "enabled": false, "format": "csv",      "url": "PASTE_EZEBRA_FEED_URL" }
+    { "store": "Rossmann",   "enabled": false, "format": "csv",      "url": "env:ROSSMANN_FEED_URL" },
+    { "store": "Hebe",       "enabled": false, "format": "csv",      "url": "env:HEBE_FEED_URL" },
+    { "store": "Notino",     "enabled": false, "format": "csv-gzip", "url": "env:NOTINO_FEED_URL" },
+    { "store": "Douglas",    "enabled": false, "format": "xml",      "url": "env:DOUGLAS_FEED_URL" },
+    { "store": "Sephora",    "enabled": false, "format": "csv",      "url": "env:SEPHORA_FEED_URL" },
+    { "store": "Superpharm", "enabled": false, "format": "csv",      "url": "env:SUPERPHARM_FEED_URL" },
+    { "store": "Ezebra",     "enabled": false, "format": "csv",      "url": "env:EZEBRA_FEED_URL" }
   ],
   "options": {
     "outputDir": "../renderer",
