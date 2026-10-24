@@ -1,10 +1,10 @@
-# Spendli — analiza prawna udostępniania aplikacji
+# Quantera — analiza prawna udostępniania aplikacji
 
 > ⚠️ **Zastrzeżenie:** Nie jestem prawnikiem, a ten dokument to **materiał informacyjny**, nie porada prawna. Aplikacja przetwarza dane finansowe i bankowe — to obszar szczególnie wrażliwy. **Przed udostępnieniem aplikacji szerzej (znajomym „na poważnie", publicznie, a zwłaszcza odpłatnie) skonsultuj się z prawdziwym prawnikiem** specjalizującym się w RODO / prawie nowych technologii. Poniżej masz mapę tematów, o które trzeba zadbać i zapytać.
 
 ---
 
-## 1. Czym jest Spendli w oczach prawa
+## 1. Czym jest Quantera w oczach prawa
 Twoja aplikacja:
 - przechowuje **dane osobowe** użytkowników (nazwa konta, PIN – jako hash, ewentualnie e-mail),
 - łączy się z **bankiem** i czyta **transakcje + saldo** (dane finansowe – kategoria najbardziej wrażliwa),
@@ -54,7 +54,7 @@ W polityce prywatności **wymień te podmioty** i kraje przetwarzania (część 
 1. **Regulamin (Terms of Service)** — zasady korzystania, ograniczenie odpowiedzialności, zakaz nadużyć, prawo do zablokowania konta.
 2. **Polityka prywatności (Privacy Policy)** — jak wyżej (RODO).
 3. **Zgoda / checkbox** przy zakładaniu konta: „Akceptuję Regulamin i Politykę prywatności".
-4. **Disclaimer finansowy** — wyraźnie: *„Spendli nie świadczy doradztwa finansowego / inwestycyjnego. Informacje mają charakter poglądowy."* (AI-doradca to NIE licencjonowany doradca).
+4. **Disclaimer finansowy** — wyraźnie: *„Quantera nie świadczy doradztwa finansowego / inwestycyjnego. Informacje mają charakter poglądowy."* (AI-doradca to NIE licencjonowany doradca).
 
 ---
 

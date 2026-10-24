@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Spendli — mój kurs nauki</title>
+<title>Quantera — mój kurs nauki</title>
 <style>
   :root{
     --bg:#0f1117; --bg2:#161923; --card:#1b1f2b; --card2:#212636;
@@ -125,8 +125,8 @@
       <polygon points="78,26 66,26 78,38" fill="url(#g)"/>
     </svg>
   </div>
-  <h1>Spendli — mój kurs nauki</h1>
-  <p class="sub">Wszystko, z czego zbudowana jest Twoja aplikacja — rozpisane krok po kroku, z przykładami i quizami. Przeczytaj, klikaj, sprawdzaj się. Po kilku podejściach zrozumiesz, jak Spendli działa od środka.</p>
+  <h1>Quantera — mój kurs nauki</h1>
+  <p class="sub">Wszystko, z czego zbudowana jest Twoja aplikacja — rozpisane krok po kroku, z przykładami i quizami. Przeczytaj, klikaj, sprawdzaj się. Po kilku podejściach zrozumiesz, jak Quantera działa od środka.</p>
   <div class="badge">Twój pierwszy projekt do portfolio 🚀</div>
 </header>
 
@@ -139,7 +139,7 @@
   <div class="module" id="m1">
     <div class="head"><span class="num">1</span><h2>Jak to wszystko działa razem</h2><span class="done-tag">✓ przeczytane</span><span class="chev">›</span></div>
     <div class="body">
-      <p>Zanim wejdziemy w szczegóły — spójrz na całość. Spendli składa się z czterech warstw, które rozmawiają ze sobą:</p>
+      <p>Zanim wejdziemy w szczegóły — spójrz na całość. Quantera składa się z czterech warstw, które rozmawiają ze sobą:</p>
       <pre><span class="c">  TELEFON / PRZEGLĄDARKA          SERWER (Railway)           USŁUGI ZEWNĘTRZNE</span>
  ┌────────────────────┐  HTTPS  ┌────────────────────┐      ┌────────────────┐
  │ FRONTEND (React)   │ ──────▶ │ BACKEND (Node)     │ ───▶ │ Anthropic (AI) │
@@ -187,7 +187,7 @@ dodaj(2, 3); <span class="c">// = 5</span></pre>
 <span class="k">const</span> paragon = { sklep: <span class="s">"Lidl"</span>, kwota: 45.50 };
 <span class="c">// tablica = lista kart</span>
 <span class="k">const</span> wydatki = [paragon, innyParagon];</pre>
-      <div class="tip"><b>JavaScript vs TypeScript:</b> Spendli używa <b>TypeScript</b> — to JavaScript z „etykietami typów". Etykieta mówi np. „to musi być liczba". Dzięki temu błędy (np. wpisanie tekstu zamiast kwoty) wyłapują się, zanim program się uruchomi.</div>
+      <div class="tip"><b>JavaScript vs TypeScript:</b> Quantera używa <b>TypeScript</b> — to JavaScript z „etykietami typów". Etykieta mówi np. „to musi być liczba". Dzięki temu błędy (np. wpisanie tekstu zamiast kwoty) wyłapują się, zanim program się uruchomi.</div>
 
       <div class="quiz" data-correct="2">
         <div class="q">Do czego służy pętla <code>for</code>?</div>
@@ -203,7 +203,7 @@ dodaj(2, 3); <span class="c">// = 5</span></pre>
   <div class="module" id="m3">
     <div class="head"><span class="num">3</span><h2>Frontend — React (to, co widać)</h2><span class="done-tag">✓ przeczytane</span><span class="chev">›</span></div>
     <div class="body">
-      <p><b>React</b> to biblioteka do budowania interfejsu z <b>komponentów</b> — klocków wielokrotnego użytku. Każdy ekran Spendli to komponent: <code>Dashboard</code>, <code>LoginGate</code>, <code>AccountSync</code>, <code>Navigation</code>.</p>
+      <p><b>React</b> to biblioteka do budowania interfejsu z <b>komponentów</b> — klocków wielokrotnego użytku. Każdy ekran Quantera to komponent: <code>Dashboard</code>, <code>LoginGate</code>, <code>AccountSync</code>, <code>Navigation</code>.</p>
       <h3>Trzy pojęcia, które musisz znać</h3>
       <ul>
         <li><b>Props</b> — dane wchodzące do komponentu (jak składniki podane do przepisu).</li>
@@ -217,7 +217,7 @@ dodaj(2, 3); <span class="c">// = 5</span></pre>
 &lt;input value={pin} onChange={e =&gt; setPin(e.target.value)} /&gt;</pre>
       <div class="analogy"><b>Analogia stanu:</b> stan to jak licznik na tablicy w klasie. Zmieniasz liczbę na tablicy (stan) → wszyscy od razu widzą nową wartość (ekran się odświeża). Nie musisz ręcznie przerysowywać.</div>
       <h3>Gdzie są dane?</h3>
-      <p><b>localStorage</b> — mała pamięć w telefonie/przeglądarce. Spendli trzyma tam Twoje wydatki i cele „lokalnie na urządzeniu". <b>PWA</b> (dzięki plikowi <code>manifest.json</code>) sprawia, że apka webowa może być dodana na ekran główny i działać jak natywna — ma ikonę, splash i nazwę „Spendli".</p>
+      <p><b>localStorage</b> — mała pamięć w telefonie/przeglądarce. Quantera trzyma tam Twoje wydatki i cele „lokalnie na urządzeniu". <b>PWA</b> (dzięki plikowi <code>manifest.json</code>) sprawia, że apka webowa może być dodana na ekran główny i działać jak natywna — ma ikonę, splash i nazwę „Quantera".</p>
 
       <div class="quiz" data-correct="1">
         <div class="q">Co się dzieje, gdy zmieni się <b>stan</b> komponentu React?</div>
@@ -245,7 +245,7 @@ dodaj(2, 3); <span class="c">// = 5</span></pre>
   <span class="k">if</span> (!zalogowany) <span class="k">return</span> res.status(401); <span class="c">// odmowa</span>
   next(); <span class="c">// przepuść dalej</span>
 }</pre>
-      <div class="tip"><b>Najważniejszy powód istnienia backendu w Spendli:</b> ukrycie klucza do AI. Frontend prosi backend → backend (mając klucz w bezpiecznym miejscu) woła AI. To była cała sekcja pracy „ukryj klucz na backendzie".</div>
+      <div class="tip"><b>Najważniejszy powód istnienia backendu w Quantera:</b> ukrycie klucza do AI. Frontend prosi backend → backend (mając klucz w bezpiecznym miejscu) woła AI. To była cała sekcja pracy „ukryj klucz na backendzie".</div>
 
       <div class="quiz" data-correct="0">
         <div class="q">Której metody HTTP użyjesz, żeby <b>utworzyć nowe konto</b>?</div>
@@ -261,7 +261,7 @@ dodaj(2, 3); <span class="c">// = 5</span></pre>
   <div class="module" id="m5">
     <div class="head"><span class="num">5</span><h2>Baza danych i SQL</h2><span class="done-tag">✓ przeczytane</span><span class="chev">›</span></div>
     <div class="body">
-      <p><b>Baza danych</b> przechowuje dane, które muszą przetrwać restart serwera. Spendli używa <b>PostgreSQL</b>. Rozmawiamy z nią językiem <b>SQL</b>.</p>
+      <p><b>Baza danych</b> przechowuje dane, które muszą przetrwać restart serwera. Quantera używa <b>PostgreSQL</b>. Rozmawiamy z nią językiem <b>SQL</b>.</p>
       <h3>Tabela = arkusz z kolumnami i wierszami</h3>
       <pre><span class="k">CREATE TABLE</span> receipts (
   id      <span class="k">TEXT PRIMARY KEY</span>,  <span class="c">-- unikalny identyfikator</span>
@@ -276,7 +276,7 @@ dodaj(2, 3); <span class="c">// = 5</span></pre>
 <span class="k">UPDATE</span> receipts <span class="k">SET</span> total = 45;   <span class="c">-- Update (zmień)</span>
 <span class="k">DELETE FROM</span> receipts <span class="k">WHERE</span> id=...;  <span class="c">-- Delete (usuń)</span></pre>
       <div class="analogy"><b>Analogia:</b> tabela to arkusz Excela. <code>PRIMARY KEY</code> to numer PESEL wiersza (nigdy się nie powtarza). <code>WHERE</code> to filtr („pokaż tylko wiersze, gdzie…").</div>
-      <div class="tip"><b>Izolacja użytkowników:</b> dodaliśmy kolumnę <code>user_id</code> i każde zapytanie ma <code>WHERE user_id = ...</code>. Dzięki temu każdy widzi TYLKO swoje dane. To fundament wielu użytkowników w Spendli.</div>
+      <div class="tip"><b>Izolacja użytkowników:</b> dodaliśmy kolumnę <code>user_id</code> i każde zapytanie ma <code>WHERE user_id = ...</code>. Dzięki temu każdy widzi TYLKO swoje dane. To fundament wielu użytkowników w Quantera.</div>
 
       <div class="quiz" data-correct="2">
         <div class="q">Co robi <code>WHERE user_id = 'user123'</code> w zapytaniu SELECT?</div>
@@ -363,7 +363,7 @@ dodaj(2, 3); <span class="c">// = 5</span></pre>
   </div>
 
   <div class="module" id="m9">
-    <div class="head"><span class="num">9</span><h2>Architektura Spendli + test końcowy</h2><span class="done-tag">✓ przeczytane</span><span class="chev">›</span></div>
+    <div class="head"><span class="num">9</span><h2>Architektura Quantera + test końcowy</h2><span class="done-tag">✓ przeczytane</span><span class="chev">›</span></div>
     <div class="body">
       <h3>Które pliki za co odpowiadają</h3>
       <pre>public/        <span class="c"># pliki statyczne + manifest PWA + splash</span>
@@ -401,7 +401,7 @@ server/        <span class="c"># BACKEND (Node + Express)</span>
         <div class="explain">✅ HTTPS szyfruje dane między przeglądarką a serwerem.</div>
       </div>
       <div class="quiz" data-correct="2">
-        <div class="q">Dlaczego Spendli ma kolumnę <code>user_id</code> w tabelach?</div>
+        <div class="q">Dlaczego Quantera ma kolumnę <code>user_id</code> w tabelach?</div>
         <button class="opt">Dla ozdoby</button>
         <button class="opt">Żeby liczyć wiersze</button>
         <button class="opt">Żeby każdy użytkownik widział TYLKO swoje dane (izolacja)</button>
@@ -421,7 +421,7 @@ server/        <span class="c"># BACKEND (Node + Express)</span>
   <div class="module" id="m10">
     <div class="head"><span class="num">10</span><h2>Automatyzacja firm z n8n</h2><span class="done-tag">✓ przeczytane</span><span class="chev">›</span></div>
     <div class="body">
-      <p>To rozdział pod Twój cel: <b>automatyzacja firm</b>. Spendli nauczyło Cię, jak łączyć programy przez API — a <b>n8n</b> pozwala robić dokładnie to, ale <b>bez pisania całego kodu</b>, „klikając" przepływy. To jedna z najbardziej dochodowych umiejętności dla firm.</p>
+      <p>To rozdział pod Twój cel: <b>automatyzacja firm</b>. Quantera nauczyło Cię, jak łączyć programy przez API — a <b>n8n</b> pozwala robić dokładnie to, ale <b>bez pisania całego kodu</b>, „klikając" przepływy. To jedna z najbardziej dochodowych umiejętności dla firm.</p>
 
       <h3>Co to jest n8n</h3>
       <p><b>n8n</b> to narzędzie <b>low-code</b> do automatyzacji. Budujesz <b>workflow</b> (przepływ) z klocków zwanych <b>nodami</b>, które łączysz strzałkami. Każdy node coś robi: pobiera dane, przetwarza je, wysyła dalej. To jak schemat blokowy, który naprawdę działa.</p>
@@ -435,7 +435,7 @@ server/        <span class="c"># BACKEND (Node + Express)</span>
       </ul>
 
       <h3>Jak to się łączy z tym, co już umiesz</h3>
-      <p>W Spendli backend wołał API Anthropic i Enable Banking. W n8n robisz to samo <b>klockiem HTTP Request</b> albo gotowym nodem — bez pisania serwera od zera. Ta sama idea (API, JSON, tokeny), inne narzędzie. Dlatego rozumiejąc Spendli, rozumiesz też automatyzację.</p>
+      <p>W Quantera backend wołał API Anthropic i Enable Banking. W n8n robisz to samo <b>klockiem HTTP Request</b> albo gotowym nodem — bez pisania serwera od zera. Ta sama idea (API, JSON, tokeny), inne narzędzie. Dlatego rozumiejąc Quantera, rozumiesz też automatyzację.</p>
 
       <h3>Przykład: automatyzacja rekrutacji (jak Twój HR-OS)</h3>
       <pre><span class="c"># Workflow w n8n:</span>
@@ -449,7 +449,7 @@ server/        <span class="c"># BACKEND (Node + Express)</span>
 [Node: zapisz wynik do Arkusza / bazy]
         │
 [Node: jeśli dopasowanie > 80% → wyślij powiadomienie]</pre>
-      <div class="tip"><b>To dokładnie Twój projekt HR-OS:</b> n8n + Claude do wstępnej selekcji kandydatów. Klienci (agencje) płacą za taką automatyzację, bo oszczędza godziny ręcznej pracy. Spendli to Twój „dowód", że rozumiesz API i AI — a n8n to narzędzie, którym te automatyzacje sprzedasz.</div>
+      <div class="tip"><b>To dokładnie Twój projekt HR-OS:</b> n8n + Claude do wstępnej selekcji kandydatów. Klienci (agencje) płacą za taką automatyzację, bo oszczędza godziny ręcznej pracy. Quantera to Twój „dowód", że rozumiesz API i AI — a n8n to narzędzie, którym te automatyzacje sprzedasz.</div>
 
       <h3>Gdzie n8n bije przewagę nad zwykłym kodem</h3>
       <ul>
@@ -457,7 +457,7 @@ server/        <span class="c"># BACKEND (Node + Express)</span>
         <li>Widać cały przepływ na jednym ekranie — łatwo pokazać klientowi.</li>
         <li>Można hostować u siebie (self-host) → dane zostają pod Twoją kontrolą (ważne przy RODO).</li>
       </ul>
-      <div class="tip"><b>Kiedy jednak kod (jak w Spendli)?</b> Gdy potrzebujesz własnego interfejsu dla użytkownika, pełnej kontroli i produktu z logowaniem. Najlepsi łączą oba: <b>aplikacja (kod) + automatyzacje w tle (n8n)</b>.</div>
+      <div class="tip"><b>Kiedy jednak kod (jak w Quantera)?</b> Gdy potrzebujesz własnego interfejsu dla użytkownika, pełnej kontroli i produktu z logowaniem. Najlepsi łączą oba: <b>aplikacja (kod) + automatyzacje w tle (n8n)</b>.</div>
 
       <div class="quiz" data-correct="1">
         <div class="q">Czym jest <b>trigger</b> w n8n?</div>
@@ -467,11 +467,11 @@ server/        <span class="c"># BACKEND (Node + Express)</span>
         <div class="explain">✅ Trigger to start workflow — „coś się stało, więc rusz". Reszta klocków (akcje) wykonuje się po nim.</div>
       </div>
       <div class="quiz" data-correct="2">
-        <div class="q">Co łączy Spendli i n8n?</div>
+        <div class="q">Co łączy Quantera i n8n?</div>
         <button class="opt">Nic, to zupełnie różne światy</button>
         <button class="opt">Oba to bazy danych</button>
         <button class="opt">Oba łączą programy przez API (JSON, tokeny) — tylko n8n robi to „klockami"</button>
-        <div class="explain">✅ Ta sama idea: rozmowa programów przez API. W Spendli pisałaś kod, w n8n układasz gotowe klocki. Rozumiejąc jedno, rozumiesz drugie.</div>
+        <div class="explain">✅ Ta sama idea: rozmowa programów przez API. W Quantera pisałaś kod, w n8n układasz gotowe klocki. Rozumiejąc jedno, rozumiesz drugie.</div>
       </div>
       <div class="mark"><button onclick="toggleDone('m10')">Oznacz jako przeczytane ✓</button></div>
     </div>
@@ -502,7 +502,7 @@ server/        <span class="c"># BACKEND (Node + Express)</span>
 
   <footer>
     Twój wynik quizów: <b id="score">0 poprawnych</b> · Ukończone rozdziały zapisują się automatycznie w tej przeglądarce.<br/>
-    Wracaj tu, gdy chcesz sobie przypomnieć, jak działa Spendli. Powodzenia! 🚀
+    Wracaj tu, gdy chcesz sobie przypomnieć, jak działa Quantera. Powodzenia! 🚀
   </footer>
 </div>
 

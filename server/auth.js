@@ -16,7 +16,7 @@ async function wa() {
   return _wa;
 }
 
-const RP_NAME = 'Spendli';
+const RP_NAME = 'Quantera';
 const TOKEN_TTL = 30 * 864e5; // 30 days
 
 // ── PIN (scrypt) ───────────────────────────────────────────
