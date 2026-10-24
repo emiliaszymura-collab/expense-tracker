@@ -1,8 +1,8 @@
-# Quantera — przewodnik do nauki (jak zbudowano całą aplikację)
+# Spendli — przewodnik do nauki (jak zbudowano całą aplikację)
 
-Ten plik to Twój **schemat do nauki**. Prowadzę Cię od zera przez wszystko, co składa się na Quantera: od podstaw programowania, przez bazę danych (SQL), aż po wdrożenie w internecie i własną domenę. To Twój pierwszy projekt do portfolio — a jednocześnie mapa do kariery w tworzeniu aplikacji i automatyzacji firm.
+Ten plik to Twój **schemat do nauki**. Prowadzę Cię od zera przez wszystko, co składa się na Spendli: od podstaw programowania, przez bazę danych (SQL), aż po wdrożenie w internecie i własną domenę. To Twój pierwszy projekt do portfolio — a jednocześnie mapa do kariery w tworzeniu aplikacji i automatyzacji firm.
 
-> Jak korzystać: czytaj sekcja po sekcji. Przy każdej technologii masz: **co to jest → po co → gdzie w Quantera → jak się tego uczyć dalej.**
+> Jak korzystać: czytaj sekcja po sekcji. Przy każdej technologii masz: **co to jest → po co → gdzie w Spendli → jak się tego uczyć dalej.**
 
 ---
 
@@ -35,7 +35,7 @@ Ten plik to Twój **schemat do nauki**. Prowadzę Cię od zera przez wszystko, c
 **Pętle** — powtarzanie: `for (const wydatek of wydatki) { ... }`.
 **Tablice i obiekty** — listy i „karty danych": `{ nazwa: "Biedronka", kwota: 45.50 }`.
 
-W Quantera używamy **JavaScript** (język przeglądarki i Node) oraz **TypeScript** (JavaScript z „etykietami typów", które łapią błędy zanim program się uruchomi — np. że `kwota` to liczba, a nie tekst).
+W Spendli używamy **JavaScript** (język przeglądarki i Node) oraz **TypeScript** (JavaScript z „etykietami typów", które łapią błędy zanim program się uruchomi — np. że `kwota` to liczba, a nie tekst).
 
 📚 *Nauka dalej:* „JavaScript.info" (po polsku dostępne kursy), potem TypeScript Handbook.
 
@@ -43,7 +43,7 @@ W Quantera używamy **JavaScript** (język przeglądarki i Node) oraz **TypeScri
 
 ## 2. Frontend — React + TypeScript (to, co widać)
 
-**React** to biblioteka do budowania interfejsów z **komponentów** — klocków wielokrotnego użytku. Każdy ekran Quantera to komponent:
+**React** to biblioteka do budowania interfejsów z **komponentów** — klocków wielokrotnego użytku. Każdy ekran Spendli to komponent:
 - `Dashboard.tsx` — pulpit z wykresami i saldem,
 - `LoginGate.tsx` — ekran logowania/rejestracji,
 - `AccountSync.tsx` — karta „Stan konta" + „Synchronizuj teraz",
@@ -57,9 +57,9 @@ Kluczowe pojęcia React:
 
 **localStorage** — mała pamięć w przeglądarce/telefonie, gdzie trzymamy wydatki i cele „lokalnie na urządzeniu".
 
-**CSS** — wygląd (kolory, układ). W Quantera: `App.css`, tryb ciemny przez zmienne CSS (`var(--bg)`), responsywność (inny układ na telefonie i komputerze).
+**CSS** — wygląd (kolory, układ). W Spendli: `App.css`, tryb ciemny przez zmienne CSS (`var(--bg)`), responsywność (inny układ na telefonie i komputerze).
 
-**PWA (Progressive Web App)** — dzięki `manifest.json` aplikacja webowa może być „dodana do ekranu głównego" i działać jak natywna (ikona, splash, nazwa „Quantera").
+**PWA (Progressive Web App)** — dzięki `manifest.json` aplikacja webowa może być „dodana do ekranu głównego" i działać jak natywna (ikona, splash, nazwa „Spendli").
 
 📚 *Nauka dalej:* oficjalny tutorial React (react.dev), potem zbuduj własną małą apkę (np. lista zadań).
 
@@ -88,7 +88,7 @@ Kluczowe pojęcia React:
 
 **Baza danych** przechowuje dane, które muszą przetrwać restart serwera. Używamy **PostgreSQL** (popularna, darmowa baza relacyjna).
 
-**SQL** to język zapytań do bazy. Podstawy na przykładach ze Quantera:
+**SQL** to język zapytań do bazy. Podstawy na przykładach ze Spendli:
 
 **Tabela** = arkusz z kolumnami i wierszami. Nasza tabela paragonów:
 ```sql
@@ -118,7 +118,7 @@ Ważne pojęcia:
 - **JSONB** — kolumna trzymająca dane w formacie JSON (np. lista produktów z paragonu).
 - **Izolacja danych** — dodaliśmy kolumnę `user_id`, żeby każdy użytkownik widział TYLKO swoje dane (`WHERE user_id = ...`). To fundament wielu użytkowników.
 
-W Quantera jest też prostszy wzorzec **KV (klucz–wartość)** — tabela `kv`, gdzie pod kluczem (np. `users`) trzymamy cały obiekt JSON. Wygodne do rzeczy, które nie potrzebują pełnej tabeli.
+W Spendli jest też prostszy wzorzec **KV (klucz–wartość)** — tabela `kv`, gdzie pod kluczem (np. `users`) trzymamy cały obiekt JSON. Wygodne do rzeczy, które nie potrzebują pełnej tabeli.
 
 📚 *Nauka dalej:* „SQLBolt" (interaktywny kurs SQL), potem projekt z własną tabelą.
 
@@ -159,12 +159,12 @@ W Quantera jest też prostszy wzorzec **KV (klucz–wartość)** — tabela `kv`
 
 ---
 
-## 8. Architektura Quantera — pliki i za co odpowiadają
+## 8. Architektura Spendli — pliki i za co odpowiadają
 
 ```
 expense-tracker/
 ├── public/            # pliki statyczne + manifest PWA + splash
-│   ├── manifest.json  # nazwa "Quantera", ikony, tryb standalone
+│   ├── manifest.json  # nazwa "Spendli", ikony, tryb standalone
 │   └── index.html     # szkielet strony + ekran startowy (splash)
 ├── src/               # FRONTEND (React + TypeScript)
 │   ├── App.tsx        # główny komponent, stan aplikacji
@@ -185,12 +185,12 @@ expense-tracker/
 
 ## 9. Historia projektu = lekcja iteracyjnego tworzenia
 
-Quantera powstawało **krok po kroku**, tak jak prawdziwe produkty:
+Spendli powstawało **krok po kroku**, tak jak prawdziwe produkty:
 1. Podstawowa apka do wydatków (localStorage).
 2. Ładny wygląd: animacje, tryb ciemny, profesjonalne ikony.
 3. Integracja z bankiem (PSD2) i AI (paragony, doradca).
 4. **Bezpieczeństwo:** przeniesienie klucza AI na backend.
-5. **Własna marka:** logo, ekran startowy, nazwa Quantera.
+5. **Własna marka:** logo, ekran startowy, nazwa Spendli.
 6. **Własna domena** + HTTPS.
 7. **Wielu użytkowników:** konta, logowanie, izolacja danych.
 8. Poprawki błędów (np. redirect banku, splash) i dokumentacja.
@@ -201,11 +201,11 @@ Quantera powstawało **krok po kroku**, tak jak prawdziwe produkty:
 
 ## 10. O „PowerPoint" i prezentacji projektu w portfolio
 
-W tej aplikacji **nie używaliśmy PowerPointa** — to narzędzie do prezentacji, nie do programowania. Ale skoro budujesz **portfolio**, oto jak zaprezentować Quantera (np. w PowerPoint / Canva / jako stronę):
+W tej aplikacji **nie używaliśmy PowerPointa** — to narzędzie do prezentacji, nie do programowania. Ale skoro budujesz **portfolio**, oto jak zaprezentować Spendli (np. w PowerPoint / Canva / jako stronę):
 
 Slajdy, które robią wrażenie na rekruterze/kliencie:
 1. **Problem** — „Trudno kontrolować wydatki i widzieć realne saldo".
-2. **Rozwiązanie** — Quantera: automatyczny import z banku + AI + cele.
+2. **Rozwiązanie** — Spendli: automatyczny import z banku + AI + cele.
 3. **Zrzuty ekranu** — pulpit, skan paragonu, wykresy.
 4. **Technologie** — React, TypeScript, Node, PostgreSQL, PSD2, AI.
 5. **Wyzwania i jak je rozwiązałaś** — bezpieczeństwo klucza, wielu użytkowników, wdrożenie na własną domenę.
@@ -226,7 +226,7 @@ Kolejność, która ma sens:
 6. **Wdrożenia:** Git/GitHub, Railway/Vercel, domeny, HTTPS.
 7. **Bezpieczeństwo i RODO** — bo pracujesz z danymi ludzi.
 
-Quantera dotknęło **wszystkich** tych obszarów — dlatego jest świetnym pierwszym projektem. Wracaj do tego pliku, gdy chcesz sobie przypomnieć, „jak to było zrobione i dlaczego".
+Spendli dotknęło **wszystkich** tych obszarów — dlatego jest świetnym pierwszym projektem. Wracaj do tego pliku, gdy chcesz sobie przypomnieć, „jak to było zrobione i dlaczego".
 
 ---
 
