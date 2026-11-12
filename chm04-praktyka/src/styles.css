@@ -1,0 +1,478 @@
+:root {
+  --tlo: #f4f6f8;
+  --panel: #ffffff;
+  --tekst: #1d2a33;
+  --tekst-2: #5b6b76;
+  --linia: #dde3e8;
+  --akcent: #0f766e;
+  --akcent-jasny: #ccfbf1;
+  --ok: #15803d;
+  --ok-tlo: #ecfdf3;
+  --ostrz: #b45309;
+  --ostrz-tlo: #fff7ed;
+  --blad: #b91c1c;
+  --blad-tlo: #fef2f2;
+  --info-tlo: #eff6ff;
+  --info: #1d4ed8;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--tekst);
+  background: var(--tlo);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--tlo);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  background: var(--akcent);
+  color: white;
+  font-weight: 600;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button.drugorzedny {
+  background: transparent;
+  color: var(--tekst);
+  border: 1px solid var(--linia);
+  font-weight: 500;
+}
+
+button.drugorzedny:hover:not(:disabled) {
+  background: #eef2f5;
+}
+
+.znaczek {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--akcent);
+  background: var(--akcent-jasny);
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin: 0;
+}
+
+/* ---------- ekran startowy ---------- */
+.start {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 16px;
+}
+
+.start h1 {
+  font-size: 40px;
+  margin: 12px 0 8px;
+}
+
+.start header p:last-child {
+  color: var(--tekst-2);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.lista-poziomow {
+  list-style: none;
+  padding: 0;
+  margin: 32px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+.lista-poziomow button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+  background: var(--panel);
+  color: var(--tekst);
+  border: 1px solid var(--linia);
+  padding: 16px;
+  font-weight: 400;
+}
+
+.lista-poziomow button:hover {
+  border-color: var(--akcent);
+}
+
+.nr {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--akcent-jasny);
+  color: var(--akcent);
+  font-weight: 700;
+}
+
+.opis {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+}
+
+.opis span {
+  color: var(--tekst-2);
+  font-size: 14px;
+}
+
+.status {
+  font-size: 13px;
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+.status-ok {
+  background: var(--ok-tlo);
+  color: var(--ok);
+}
+
+.status-trwa {
+  background: var(--ostrz-tlo);
+  color: var(--ostrz);
+}
+
+.status-nowy {
+  background: #eef2f5;
+  color: var(--tekst-2);
+}
+
+/* ---------- ekran gry ---------- */
+.gra {
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) 1fr;
+  grid-template-rows: auto 1fr;
+}
+
+.gra.bez-protokolu {
+  grid-template-columns: 1fr;
+}
+
+.gorny-pasek {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--linia);
+  flex-wrap: wrap;
+}
+
+.tryb {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--akcent);
+  font-weight: 600;
+}
+
+.przelacznik {
+  font-size: 13px;
+  color: var(--tekst-2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.protokol {
+  overflow-y: auto;
+  background: var(--panel);
+  border-right: 1px solid var(--linia);
+  padding: 20px;
+  line-height: 1.55;
+  font-size: 14.5px;
+}
+
+.protokol-naglowek h1 {
+  font-size: 22px;
+  margin: 10px 0 2px;
+}
+
+.metoda {
+  margin: 0 0 8px;
+  color: var(--tekst-2);
+}
+
+.protokol h2 {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--akcent);
+  margin: 22px 0 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--linia);
+}
+
+.protokol h3 {
+  font-size: 14.5px;
+  margin: 12px 0 4px;
+}
+
+.protokol p {
+  margin: 0 0 8px;
+}
+
+.protokol ul {
+  margin: 0 0 8px;
+  padding-left: 18px;
+}
+
+.wzor {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  background: #f1f5f9;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.laboratorium {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(260px, 1fr) minmax(240px, 42%);
+}
+
+.scena {
+  position: relative;
+  min-height: 0;
+}
+
+.etykieta-3d {
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--tekst);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.konsola {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 0;
+  background: var(--panel);
+  border-top: 1px solid var(--linia);
+}
+
+.pasek-stanu {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--linia);
+  flex-wrap: wrap;
+}
+
+.postep {
+  position: relative;
+  flex: 1;
+  min-width: 160px;
+  height: 22px;
+  border-radius: 999px;
+  background: #eef2f5;
+  overflow: hidden;
+}
+
+.postep-wypelnienie {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--akcent);
+  transition: width 0.4s;
+}
+
+.postep span {
+  position: relative;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22px;
+  padding-left: 10px;
+  color: var(--tekst);
+  mix-blend-mode: normal;
+}
+
+.bhp {
+  display: flex;
+  gap: 6px;
+}
+
+.bhp span {
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+.bhp-ok {
+  background: var(--ok-tlo);
+  color: var(--ok);
+}
+
+.bhp-brak {
+  background: #eef2f5;
+  color: var(--tekst-2);
+  text-decoration: line-through;
+}
+
+.dziennik {
+  overflow-y: auto;
+  padding: 10px 12px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.pusty {
+  color: var(--tekst-2);
+  margin: 4px 0;
+}
+
+.wpis {
+  border-radius: 8px;
+  padding: 8px 10px;
+  border-left: 4px solid var(--linia);
+  background: #f8fafc;
+  font-size: 14px;
+}
+
+.wpis-gracz {
+  color: var(--tekst-2);
+  font-style: italic;
+  margin-bottom: 2px;
+}
+
+.wpis-odp {
+  font-weight: 600;
+}
+
+.wpis-wyjasnienie {
+  margin-top: 4px;
+  color: var(--tekst);
+  line-height: 1.45;
+}
+
+.wpis-ok,
+.wpis-bhp {
+  border-left-color: var(--ok);
+  background: var(--ok-tlo);
+}
+
+.wpis-ok .wpis-odp,
+.wpis-bhp .wpis-odp {
+  color: var(--ok);
+}
+
+.wpis-za-wczesnie,
+.wpis-brak-bhp,
+.wpis-nie-rozpoznano,
+.wpis-juz-zrobione {
+  border-left-color: var(--ostrz);
+  background: var(--ostrz-tlo);
+}
+
+.wpis-za-wczesnie .wpis-odp,
+.wpis-brak-bhp .wpis-odp,
+.wpis-nie-rozpoznano .wpis-odp {
+  color: var(--ostrz);
+}
+
+.wpis-blad {
+  border-left-color: var(--blad);
+  background: var(--blad-tlo);
+}
+
+.wpis-blad .wpis-odp {
+  color: var(--blad);
+}
+
+.wpis-podpowiedz {
+  border-left-color: var(--info);
+  background: var(--info-tlo);
+}
+
+.wpis-podpowiedz .wpis-gracz {
+  display: none;
+}
+
+.wpis-koniec {
+  border-left-color: var(--akcent);
+  background: var(--akcent-jasny);
+  font-weight: 600;
+}
+
+.wpisz {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--linia);
+}
+
+.wpisz input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--linia);
+}
+
+.wpisz input:focus {
+  outline: 2px solid var(--akcent);
+  outline-offset: -1px;
+}
+
+/* ---------- telefon ---------- */
+@media (max-width: 800px) {
+  .gra {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .protokol {
+    max-height: 40vh;
+    border-right: 0;
+    border-bottom: 1px solid var(--linia);
+  }
+
+  .laboratorium {
+    grid-template-rows: 46vh auto;
+  }
+
+  .dziennik {
+    max-height: 40vh;
+  }
+
+  .wpisz {
+    flex-wrap: wrap;
+  }
+
+  .wpisz input {
+    flex-basis: 100%;
+  }
+
+  .tryb {
+    margin-left: 0;
+  }
+}
