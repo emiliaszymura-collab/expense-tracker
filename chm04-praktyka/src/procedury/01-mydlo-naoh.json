@@ -23,7 +23,7 @@
       "id": "montaz",
       "opis": "Zestaw do miareczkowania zmontowany: statyw, łapa, biureta 50 cm³.",
       "wymagane": [
-        ["zmont", "montuj", "montaż", "złóż", "składa", "przygotow", "zamocow", "mocuj", "ustaw"],
+        ["zmont", "montuj", "montaż", "złóż", "składa", "przygotow", "zamocow", "mocuj", "ustaw", "zakład", "wkład", "umieszcz", "przykręc"],
         ["zestaw", "biuret", "statyw", "łap"]
       ],
       "wykluczajace": ["rozmont", "demont", "zero", "zera", "menisk", "pęcherz"],
@@ -52,7 +52,7 @@
       "id": "lejek",
       "opis": "Lejek zdjęty z biurety.",
       "wymagane": [
-        ["zdejm", "wyjm", "usuń", "ściąg", "odstaw", "zabier", "odłóż", "zdjąć", "wyjąć"],
+        ["zdejm", "wyjm", "usuń", "ściąg", "odstaw", "zabier", "odłóż", "odkład", "zdjąć", "wyjąć"],
         ["lejek", "lejk"]
       ],
       "wymaga": ["napelnij"],
@@ -100,7 +100,7 @@
       "id": "waga",
       "opis": "Waga włączona, wypoziomowana i wytarowana.",
       "wymagane": [
-        ["włącz", "wytar", "tar", "wyzer", "wypoziom", "poziomuj", "uruchom", "przygotuj"],
+        ["włącz", "wytar", "tar", "wyzer", "zeruj", "zerow", "wypoziom", "poziomuj", "uruchom", "przygotuj"],
         ["wag"]
       ],
       "wykluczajace": ["wyłącz"],
@@ -117,7 +117,7 @@
         ["odważ", "zważ", "waż", "naważ", "odmierz"],
         ["mydł", "próbk", "2 g", "2g", "dwa gram", "naważk", "odważk"]
       ],
-      "wykluczajace": ["zlewk"],
+      "wykluczajace": ["zlewk", "zlewc", "zlewek"],
       "wymaga": ["waga"],
       "wymagaBhp": true,
       "podpowiedz": "Odważ ok. 2 g mydła do kolby stożkowej z dokładnością do 0,01 g.",
@@ -133,7 +133,7 @@
         ["dodaj", "dodaję", "dolej", "wlej", "wlew", "nalej", "nalew", "odmierz", "wprowadz", "uzupełn"],
         ["wod", "h2o"]
       ],
-      "wykluczajace": ["zlewk", "biuret"],
+      "wykluczajace": ["zlewk", "zlewc", "zlewek", "biuret"],
       "wymaga": ["odwaz"],
       "podpowiedz": "Dodaj do kolby 100 cm³ wody destylowanej odmierzonej cylindrem.",
       "dlaczego": "Mydło trzeba rozpuścić, żeby NaOH przeszedł do roztworu i mógł przereagować z HCl.",
@@ -147,7 +147,7 @@
       "wymagane": [
         ["miesz", "wymiesz", "zamiesz", "rozpuść", "wstrząs", "rozpuszcz"]
       ],
-      "wykluczajace": ["zlewk", "bagiet"],
+      "wykluczajace": ["zlewk", "zlewc", "zlewek", "bagiet"],
       "wymaga": ["woda"],
       "podpowiedz": "Dokładnie wymieszaj zawartość kolby.",
       "dlaczego": "Kryterium przebiegu: wymieszał zawartość kolby stożkowej – próbka musi być jednorodna.",
@@ -216,7 +216,7 @@
       "id": "odczyn_roztwor",
       "opis": "Przygotowano roztwór do badania odczynu: ok. 2 g mydła + 50 cm³ wody w zlewce, wymieszane bagietką.",
       "wymagane": [
-        ["zlewk"],
+        ["zlewk", "zlewc", "zlewek"],
         ["odważ", "zważ", "waż", "mydł", "wod", "rozpuść", "przygotuj", "dodaj", "miesz", "bagiet"]
       ],
       "wymaga": ["waga"],
@@ -272,7 +272,7 @@
       "id": "myj",
       "opis": "Szkło laboratoryjne umyte.",
       "wymagane": [
-        ["umyj", "myj", "myję", "wypłucz", "wypłuk", "opłucz", "płucz", "płucz"],
+        ["umyj", "myj", "myję", "myci", "wypłucz", "wypłuk", "opłucz", "płucz", "płucz"],
         ["szkł", "kolb", "zlewk", "biuret", "naczy", "sprzęt", "cylind", "pipet"]
       ],
       "wymaga": ["odpady"],
@@ -311,7 +311,7 @@
   "bledy": [
     {
       "slowa": ["zlew"],
-      "wykluczajace": ["zlewk", "zlewam", "zlewać", "odpad", "pojemnik", "myj", "myję", "umyj", "płucz", "wypłucz", "mycie"],
+      "wykluczajace": ["zlewk", "zlewc", "zlewek", "zlewam", "zlewać", "odpad", "pojemnik", "myj", "myję", "umyj", "płucz", "wypłucz", "mycie"],
       "dokladnie": true,
       "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
     },

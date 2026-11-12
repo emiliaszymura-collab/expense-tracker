@@ -562,3 +562,8 @@ input:focus-visible {
     transition: none;
   }
 }
+
+.podsumowanie {
+  font-weight: 400;
+  margin-top: 4px;
+}

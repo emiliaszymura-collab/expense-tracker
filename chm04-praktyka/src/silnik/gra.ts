@@ -8,6 +8,8 @@ export interface StanGry {
   bhp: ElementBhp[];
   /** Ile razy gracz próbował zrobić krok za wcześnie / bez BHP (do punktacji w etapie 5). */
   bledy: number;
+  /** Ile razy gracz poprosił o podpowiedź. */
+  podpowiedzi?: number;
   dziennik: WpisDziennika[];
 }
 
@@ -96,8 +98,9 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
   // 2. Środki ochrony indywidualnej.
   const zakladanie = SLOWA_ZAKLADANIA.some((s) => frazaPasuje(s, wpis));
   const wymienioneBhp = WSZYSTKIE_BHP.filter((b) => SLOWA_BHP[b].some((s) => frazaPasuje(s, wpis)));
-  const zdejmowanie = ['zdejm', 'sciag', 'bez'].some((s) => frazaPasuje(s, wpis));
-  if (wymienioneBhp.length > 0 && !zdejmowanie && (zakladanie || wpis.length <= 4)) {
+  const zdejmowanie = ['zdejm', 'sciag', 'bez'].some((s) => frazaPasuje(s, wpis, false));
+  const bylyBhp = wymienioneBhp.length > 0 && !zdejmowanie && (zakladanie || wpis.length <= 4);
+  if (bylyBhp) {
     const nowe = wymienioneBhp.filter((b) => !stan.bhp.includes(b));
     stan.bhp.push(...nowe);
     const brak = brakujaceBhp(stan);
@@ -110,11 +113,21 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
             (brak.length > 0 ? ` Brakuje jeszcze: ${brak.map((b) => NAZWY_BHP[b]).join(', ')}.` : ' Komplet środków ochrony.')
           : 'Te środki ochrony masz już na sobie.',
     });
+  } else if (wymienioneBhp.length > 0 && zdejmowanie) {
+    stan.bledy++;
+    dodaj({
+      rodzaj: 'blad',
+      tekstGracza: tekst,
+      komunikat: 'Środków ochrony nie zdejmuje się w trakcie pracy z odczynnikami – fartuch, rękawice i okulary nosisz do końca porządkowania stanowiska.',
+    });
     return { stan, przyjete };
   }
 
-  // 3. Kroki procedury. Jeden wpis może opisywać kilka czynności ("dodaję wodę i mieszam").
+  // 3. Kroki procedury. Jeden wpis może opisywać kilka czynności ("dodaję wodę i mieszam"),
+  //    także razem ze środkami ochrony ("zakładam fartuch i montuję zestaw").
   const dopasowane = poziom.kroki.filter((k) => krokPasuje(k, wpis));
+
+  if (dopasowane.length === 0 && bylyBhp) return { stan, przyjete };
 
   if (dopasowane.length === 0) {
     stan.bledy += trybCwiczenia ? 0 : 1;
@@ -209,5 +222,5 @@ export function dodajPodpowiedz(poziom: Poziom, stan: StanGry): StanGry {
       : krok
         ? { rodzaj: 'podpowiedz', tekstGracza: 'Podpowiedź', komunikat: krok.podpowiedz, wyjasnienie: krok.dlaczego }
         : { rodzaj: 'podpowiedz', tekstGracza: 'Podpowiedź', komunikat: 'Wszystkie kroki wykonane.' };
-  return { ...stan, dziennik: [...stan.dziennik, wpis] };
+  return { ...stan, podpowiedzi: (stan.podpowiedzi ?? 0) + 1, dziennik: [...stan.dziennik, wpis] };
 }

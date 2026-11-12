@@ -77,7 +77,15 @@ export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz }:
         ))}
         {ukonczony && (
           <div className="wpis wpis-koniec">
-            Procedura wykonana! Następny etap: tabela wyników i obliczenia (etap 5).
+            <div>Procedura wykonana – wszystkie {liczbaKrokow} kroki.</div>
+            <div className="podsumowanie">
+              Błędy i pominięte kroki: <strong>{stan.bledy}</strong> · Podpowiedzi: <strong>{stan.podpowiedzi ?? 0}</strong>
+            </div>
+            <div className="podsumowanie">
+              {stan.bledy === 0 && (stan.podpowiedzi ?? 0) === 0
+                ? 'Bezbłędnie i bez podpowiedzi – tak jak na egzaminie.'
+                : 'Spróbuj jeszcze raz („Od nowa”), aż przejdziesz bez błędów i podpowiedzi.'}
+            </div>
           </div>
         )}
       </div>
