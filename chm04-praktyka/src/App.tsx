@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { POZIOMY } from './procedury';
 import { usunStan, wczytajStan, zapiszStan } from './postep';
 import { Laboratorium } from './scena/Laboratorium';
-import { dodajPodpowiedz, nowyStan, ocenWpis, poziomUkonczony, stanSceny, type StanGry } from './silnik/gra';
+import { dodajPodpowiedz, nowyStan, ocenWpis, poziomUkonczony, type StanGry } from './silnik/gra';
 import type { Poziom } from './silnik/typy';
 import { Konsola } from './ui/Konsola';
 import { PanelProtokolu } from './ui/PanelProtokolu';
@@ -53,7 +53,6 @@ function WyborPoziomu({ onWybierz }: { onWybierz: (id: string) => void }) {
 
 function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
   const [stan, setStan] = useState<StanGry>(() => wczytajStan(poziom.id) ?? nowyStan(poziom.id));
-  const [impuls, setImpuls] = useState(0);
   const [etykiety, setEtykiety] = useState(true);
   // Kartka z protokołem otwarta na start nowego poziomu, zwinięta przy powrocie do rozpoczętego.
   const [protokolOtwarty, setProtokolOtwarty] = useState(() => stan.dziennik.length === 0);
@@ -61,14 +60,15 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
 
   useEffect(() => zapiszStan(stan), [stan]);
 
-  const scena = useMemo(() => stanSceny(poziom, stan), [poziom, stan]);
-  const ostatniKrok = [...stan.wykonane].reverse().map((id) => poziom.kroki.find((k) => k.id === id)).find((k) => k?.sprzet);
+  const wykonaneKroki = useMemo(
+    () => stan.wykonane.map((id) => poziom.kroki.find((k) => k.id === id)!).filter(Boolean),
+    [poziom, stan.wykonane],
+  );
   const ukonczony = poziomUkonczony(poziom, stan);
 
   const wpisz = (tekst: string) => {
     const wynik = ocenWpis(poziom, stan, tekst, true);
     setStan(wynik.stan);
-    if (wynik.przyjete.length > 0 || wynik.stan.bhp.length !== stan.bhp.length) setImpuls((n) => n + 1);
   };
 
   const resetuj = () => {
@@ -108,7 +108,7 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
       </nav>
       <section className="laboratorium">
         <div className="scena">
-          <Laboratorium stan={scena} aktywnySprzet={ostatniKrok?.sprzet} impuls={impuls} pokazEtykiety={etykiety} kartkaOtwarta={protokolOtwarty} />
+          <Laboratorium kroki={wykonaneKroki} bhp={stan.bhp} pokazEtykiety={etykiety} kartkaOtwarta={protokolOtwarty} />
           <PanelProtokolu poziom={poziom} otwarty={protokolOtwarty} onPrzelacz={setProtokolOtwarty} />
         </div>
         <Konsola

@@ -23,75 +23,171 @@
       "id": "montaz",
       "opis": "Zestaw do miareczkowania zmontowany: statyw, łapa, biureta 50 cm³.",
       "wymagane": [
-        ["zmont", "montuj", "montaż", "złóż", "składa", "przygotow", "zamocow", "mocuj", "ustaw", "zakład", "wkład", "umieszcz", "przykręc"],
-        ["zestaw", "biuret", "statyw", "łap"]
+        [
+          "zmont",
+          "montuj",
+          "montaż",
+          "złóż",
+          "składa",
+          "przygotow",
+          "zamocow",
+          "mocuj",
+          "ustaw",
+          "zakład",
+          "wkład",
+          "umieszcz",
+          "przykręc"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw",
+          "łap"
+        ]
       ],
-      "wykluczajace": ["rozmont", "demont", "zero", "zera", "menisk", "pęcherz"],
+      "wykluczajace": [
+        "rozmont",
+        "demont",
+        "zero",
+        "zera",
+        "menisk",
+        "pęcherz"
+      ],
       "wymaga": [],
       "podpowiedz": "Zmontuj zestaw do miareczkowania (statyw, łapa, biureta).",
       "dlaczego": "Zmontowany zestaw jest osobnym rezultatem ocenianym po zgłoszeniu gotowości.",
       "sprzet": "statyw",
       "animacja": "montaz",
-      "stanSceny": { "zestaw": true, "lejek": true }
+      "stanSceny": {
+        "zestaw": true,
+        "lejek": true
+      }
     },
     {
       "id": "napelnij",
       "opis": "Biureta napełniona titrantem – HCl 0,01 mol/dm³ (przez lejek).",
       "wymagane": [
-        ["napełn", "nalew", "nalej", "wlew", "wlej", "uzupełn", "wypełn"],
-        ["biuret"]
+        [
+          "napełn",
+          "nalew",
+          "nalej",
+          "wlew",
+          "wlej",
+          "uzupełn",
+          "wypełn"
+        ],
+        [
+          "biuret"
+        ]
       ],
       "wymagaBhp": true,
       "podpowiedz": "Napełnij biuretę titrantem – roztworem HCl 0,01 mol/dm³, używając lejka.",
       "dlaczego": "Bez titranta nie ma miareczkowania; egzaminator sprawdza, czy biureta jest napełniona.",
       "sprzet": "statyw",
       "animacja": "przelewanie",
-      "stanSceny": { "biuretaPoziom": 0.95 }
+      "stanSceny": {
+        "biuretaPoziom": 0.95
+      }
     },
     {
       "id": "lejek",
       "opis": "Lejek zdjęty z biurety.",
       "wymagane": [
-        ["zdejm", "wyjm", "usuń", "ściąg", "odstaw", "zabier", "odłóż", "odkład", "zdjąć", "wyjąć"],
-        ["lejek", "lejk"]
+        [
+          "zdejm",
+          "wyjm",
+          "usuń",
+          "ściąg",
+          "odstaw",
+          "zabier",
+          "odłóż",
+          "odkład",
+          "zdjąć",
+          "wyjąć"
+        ],
+        [
+          "lejek",
+          "lejk"
+        ]
       ],
-      "wymaga": ["napelnij"],
+      "wymaga": [
+        "napelnij"
+      ],
       "podpowiedz": "Zdejmij lejek z biurety.",
       "dlaczego": "Lejek pozostawiony w biurecie może dolewać krople titranta i zafałszować odczyt – miareczkuje się bez lejka.",
       "sprzet": "statyw",
-      "stanSceny": { "lejek": false }
+      "stanSceny": {
+        "lejek": false
+      },
+      "animacja": "siegnij_gora"
     },
     {
       "id": "pecherz",
       "opis": "Usunięto pęcherzyk powietrza spod kranika biurety.",
       "wymagane": [
-        ["pęcherz", "powietrz", "odpowietrz"]
+        [
+          "pęcherz",
+          "powietrz",
+          "odpowietrz"
+        ]
       ],
-      "wymaga": ["napelnij"],
+      "wymaga": [
+        "napelnij"
+      ],
       "podpowiedz": "Usuń pęcherzyk powietrza spod kranika biurety (spuść trochę titranta).",
       "dlaczego": "Pęcherz w kraniku zwiększa odczytaną objętość – kryterium: brak pęcherza powietrza w kraniku.",
-      "sprzet": "statyw"
+      "sprzet": "statyw",
+      "animacja": "kranik"
     },
     {
       "id": "zero",
       "opis": "Poziom titranta ustawiony na 0 cm³ (menisk dolny).",
       "wymagane": [
-        ["zero", "zera", "0", "kresk", "menisk", "wyzer", "poziom"]
+        [
+          "zero",
+          "zera",
+          "0",
+          "kresk",
+          "menisk",
+          "wyzer",
+          "poziom"
+        ]
       ],
-      "wykluczajace": ["wag", "odczyt", "objętość"],
-      "wymaga": ["napelnij"],
+      "wykluczajace": [
+        "wag",
+        "odczyt",
+        "objętość"
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
       "podpowiedz": "Ustaw poziom titranta na zero – dolny menisk na kresce 0.",
       "dlaczego": "Kryteria: biureta napełniona do poziomu 0 i zachowany menisk dolny (dla roztworów bezbarwnych).",
       "sprzet": "statyw",
-      "stanSceny": { "biuretaPoziom": 1 }
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "animacja": "kranik"
     },
     {
       "id": "zglos",
       "opis": "Zgłoszono gotowość do oceny zestawu – egzaminator sprawdza biuretę.",
       "wymagane": [
-        ["zgłoś", "zgłasz", "podnieś", "podnos", "gotowoś", "zgłoszenie"]
+        [
+          "zgłoś",
+          "zgłasz",
+          "podnieś",
+          "podnos",
+          "gotowoś",
+          "zgłoszenie"
+        ]
       ],
-      "wymaga": ["napelnij", "lejek", "pecherz", "zero"],
+      "wymaga": [
+        "napelnij",
+        "lejek",
+        "pecherz",
+        "zero"
+      ],
       "podpowiedz": "Podnieś rękę i zgłoś gotowość do oceny zestawu do miareczkowania.",
       "dlaczego": "Polecenie z arkusza – bez zgłoszenia egzaminator nie oceni zestawu, a to osobny rezultat.",
       "animacja": "reka"
@@ -100,99 +196,240 @@
       "id": "waga",
       "opis": "Waga włączona, wypoziomowana i wytarowana.",
       "wymagane": [
-        ["włącz", "wytar", "tar", "wyzer", "zeruj", "zerow", "wypoziom", "poziomuj", "uruchom", "przygotuj"],
-        ["wag"]
+        [
+          "włącz",
+          "wytar",
+          "tar",
+          "wyzer",
+          "zeruj",
+          "zerow",
+          "wypoziom",
+          "poziomuj",
+          "uruchom",
+          "przygotuj"
+        ],
+        [
+          "wag"
+        ]
       ],
-      "wykluczajace": ["wyłącz"],
+      "wykluczajace": [
+        "wyłącz"
+      ],
       "wymaga": [],
       "podpowiedz": "Włącz wagę, sprawdź poziomicę i wytaruj ją z naczyniem.",
       "dlaczego": "Ważenie zgodnie z zasadami: wypoziomowanie i tarowanie, inaczej masa próbki jest błędna.",
       "sprzet": "waga",
-      "stanSceny": { "waga": "wlaczona" }
+      "stanSceny": {
+        "waga": "wlaczona"
+      },
+      "animacja": "przycisk"
     },
     {
       "id": "odwaz",
       "opis": "Odważono ok. 2 g mydła do kolby stożkowej (dokładność 0,01 g).",
       "wymagane": [
-        ["odważ", "zważ", "waż", "naważ", "odmierz"],
-        ["mydł", "próbk", "2 g", "2g", "dwa gram", "naważk", "odważk"]
+        [
+          "odważ",
+          "zważ",
+          "waż",
+          "naważ",
+          "odmierz"
+        ],
+        [
+          "mydł",
+          "próbk",
+          "2 g",
+          "2g",
+          "dwa gram",
+          "naważk",
+          "odważk"
+        ]
       ],
-      "wykluczajace": ["zlewk", "zlewc", "zlewek"],
-      "wymaga": ["waga"],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek"
+      ],
+      "wymaga": [
+        "waga"
+      ],
       "wymagaBhp": true,
       "podpowiedz": "Odważ ok. 2 g mydła do kolby stożkowej z dokładnością do 0,01 g.",
       "dlaczego": "Masa próbki (m) jest potrzebna do obliczenia zawartości NaOH; zapisuje się ją z dokładnością do 0,01 g.",
       "sprzet": "waga",
       "animacja": "wazenie",
-      "stanSceny": { "kolba": "mydlo" }
+      "stanSceny": {
+        "kolba": "mydlo"
+      }
     },
     {
       "id": "woda",
       "opis": "Dodano 100 cm³ wody destylowanej (cylinder miarowy 100 cm³).",
       "wymagane": [
-        ["dodaj", "dodaję", "dolej", "wlej", "wlew", "nalej", "nalew", "odmierz", "wprowadz", "uzupełn"],
-        ["wod", "h2o"]
+        [
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "uzupełn"
+        ],
+        [
+          "wod",
+          "h2o"
+        ]
       ],
-      "wykluczajace": ["zlewk", "zlewc", "zlewek", "biuret"],
-      "wymaga": ["odwaz"],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "biuret"
+      ],
+      "wymaga": [
+        "odwaz"
+      ],
       "podpowiedz": "Dodaj do kolby 100 cm³ wody destylowanej odmierzonej cylindrem.",
       "dlaczego": "Mydło trzeba rozpuścić, żeby NaOH przeszedł do roztworu i mógł przereagować z HCl.",
       "sprzet": "kolba",
       "animacja": "przelewanie",
-      "stanSceny": { "kolba": "bezbarwny" }
+      "stanSceny": {
+        "kolba": "bezbarwny"
+      }
     },
     {
       "id": "mieszaj",
       "opis": "Zawartość kolby dokładnie wymieszana.",
       "wymagane": [
-        ["miesz", "wymiesz", "zamiesz", "rozpuść", "wstrząs", "rozpuszcz"]
+        [
+          "miesz",
+          "wymiesz",
+          "zamiesz",
+          "rozpuść",
+          "wstrząs",
+          "rozpuszcz"
+        ]
       ],
-      "wykluczajace": ["zlewk", "zlewc", "zlewek", "bagiet"],
-      "wymaga": ["woda"],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "bagiet"
+      ],
+      "wymaga": [
+        "woda"
+      ],
       "podpowiedz": "Dokładnie wymieszaj zawartość kolby.",
       "dlaczego": "Kryterium przebiegu: wymieszał zawartość kolby stożkowej – próbka musi być jednorodna.",
-      "sprzet": "kolba"
+      "sprzet": "kolba",
+      "animacja": "mieszanie"
     },
     {
       "id": "oranz",
       "opis": "Dodano 3 krople oranżu metylowego – roztwór żółty.",
       "wymagane": [
-        ["dodaj", "dodaję", "wkrapl", "wkropl", "wpuść", "kropl", "wprowadz", "dodanie"],
-        ["oranż", "metyl", "wskaźnik", "indykator"]
+        [
+          "dodaj",
+          "dodaję",
+          "wkrapl",
+          "wkropl",
+          "wpuść",
+          "kropl",
+          "wprowadz",
+          "dodanie"
+        ],
+        [
+          "oranż",
+          "metyl",
+          "wskaźnik",
+          "indykator"
+        ]
       ],
-      "wykluczajace": ["papier"],
-      "wymaga": ["mieszaj"],
+      "wykluczajace": [
+        "papier"
+      ],
+      "wymaga": [
+        "mieszaj"
+      ],
       "wymagaBhp": true,
       "podpowiedz": "Dodaj 3 krople oranżu metylowego.",
       "dlaczego": "Oranż metylowy zmienia barwę w zakresie pH 3,1–4,4 i wskazuje punkt końcowy miareczkowania NaOH kwasem solnym.",
       "sprzet": "kolba",
       "animacja": "pipetowanie",
-      "stanSceny": { "kolba": "zolty" }
+      "stanSceny": {
+        "kolba": "zolty"
+      }
     },
     {
       "id": "miareczkuj",
       "opis": "Miareczkowanie HCl, stale mieszając, do zmiany barwy z żółtej na pomarańczoworóżową.",
       "wymagane": [
-        ["miareczk", "titruj", "titrac"]
+        [
+          "miareczk",
+          "titruj",
+          "titrac"
+        ]
       ],
-      "wykluczajace": ["zestaw", "powtórz", "drug", "trzec", "kolejn", "jeszcze", "ponown"],
-      "wymaga": ["zglos", "oranz"],
+      "wykluczajace": [
+        "zestaw",
+        "powtórz",
+        "drug",
+        "trzec",
+        "kolejn",
+        "jeszcze",
+        "ponown"
+      ],
+      "wymaga": [
+        "zglos",
+        "oranz"
+      ],
       "wymagaBhp": true,
       "podpowiedz": "Miareczkuj roztworem HCl, stale mieszając, do zmiany barwy z żółtej na pomarańczoworóżową.",
       "dlaczego": "Zmiana barwy oznacza punkt końcowy: cały NaOH przereagował (NaOH + HCl → NaCl + H₂O).",
       "sprzet": "statyw",
       "animacja": "miareczkowanie",
-      "stanSceny": { "kolba": "pomaranczowy", "biuretaPoziom": 0.6 }
+      "stanSceny": {
+        "kolba": "pomaranczowy",
+        "biuretaPoziom": 0.6,
+        "kolbaMiejsce": "biureta"
+      }
     },
     {
       "id": "odczyt",
       "opis": "Odczytano i zapisano objętość zużytego titranta (V₁).",
       "wymagane": [
-        ["odczyt", "zapis", "notuj", "spisuj", "sprawdz", "patrz"],
-        ["objętoś", "biuret", "wynik", "cm3", "ml", "menisk", "zużyt", "v1"]
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "spisuj",
+          "sprawdz",
+          "patrz"
+        ],
+        [
+          "objętoś",
+          "biuret",
+          "wynik",
+          "cm3",
+          "ml",
+          "menisk",
+          "zużyt",
+          "v1"
+        ]
       ],
-      "wykluczajace": ["pęcherz", "powietrz", "wag", "papier", "ph"],
-      "wymaga": ["miareczkuj"],
+      "wykluczajace": [
+        "pęcherz",
+        "powietrz",
+        "wag",
+        "papier",
+        "ph"
+      ],
+      "wymaga": [
+        "miareczkuj"
+      ],
       "podpowiedz": "Odczytaj z biurety objętość zużytego titranta (dolny menisk) i zapisz ją.",
       "dlaczego": "Objętość V jest podstawą obliczeń – w tabeli zapisuje się ją w cm³ i przelicza na dm³.",
       "sprzet": "statyw",
@@ -202,80 +439,202 @@
       "id": "powtorz",
       "opis": "Wykonano kolejne oznaczenia – razem co najmniej 3 równoległe miareczkowania.",
       "wymagane": [
-        ["powtórz", "powtarz", "ponown", "jeszcze", "kolejn", "drug", "trzec", "trzykrot", "3 razy", "trzy razy", "równoleg", "następn"]
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
       ],
-      "wymaga": ["odczyt"],
+      "wymaga": [
+        "odczyt"
+      ],
       "wymagaBhp": true,
       "podpowiedz": "Powtórz oznaczenie – procedura wymaga co najmniej trzech równoległych oznaczeń.",
       "dlaczego": "Kryterium: miareczkowanie wykonane co najmniej trzykrotnie; z wyników liczy się średnią.",
       "sprzet": "statyw",
       "animacja": "miareczkowanie",
-      "stanSceny": { "kolby": 3 }
+      "stanSceny": {
+        "kolby": 3
+      }
     },
     {
       "id": "odczyn_roztwor",
       "opis": "Przygotowano roztwór do badania odczynu: ok. 2 g mydła + 50 cm³ wody w zlewce, wymieszane bagietką.",
       "wymagane": [
-        ["zlewk", "zlewc", "zlewek"],
-        ["odważ", "zważ", "waż", "mydł", "wod", "rozpuść", "przygotuj", "dodaj", "miesz", "bagiet"]
+        [
+          "zlewk",
+          "zlewc",
+          "zlewek"
+        ],
+        [
+          "odważ",
+          "zważ",
+          "waż",
+          "mydł",
+          "wod",
+          "rozpuść",
+          "przygotuj",
+          "dodaj",
+          "miesz",
+          "bagiet"
+        ]
       ],
-      "wymaga": ["waga"],
+      "wymaga": [
+        "waga"
+      ],
       "wymagaBhp": true,
       "podpowiedz": "Do zlewki odważ ok. 2 g mydła, dodaj 50 cm³ wody i wymieszaj bagietką.",
       "dlaczego": "Badanie odczynu to osobna procedura i osobny przebieg oceniany przez egzaminatora.",
       "sprzet": "zlewka",
       "animacja": "przelewanie",
-      "stanSceny": { "zlewka": "roztwor" }
+      "stanSceny": {
+        "zlewka": "roztwor"
+      }
     },
     {
       "id": "papierek",
       "opis": "Papierek wskaźnikowy zanurzony – barwa porównana ze skalą pH (odczyn zasadowy).",
       "wymagane": [
-        ["papier", "uniwersaln"],
-        ["zanurz", "zamocz", "włóż", "wkład", "sprawdz", "porówn", "zbada", "bada", "odczyt", "przyłóż", "mocz", "użyj", "uzyw"]
+        [
+          "papier",
+          "uniwersaln"
+        ],
+        [
+          "zanurz",
+          "zamocz",
+          "włóż",
+          "wkład",
+          "sprawdz",
+          "porówn",
+          "zbada",
+          "bada",
+          "odczyt",
+          "przyłóż",
+          "mocz",
+          "użyj",
+          "uzyw"
+        ]
       ],
-      "wymaga": ["odczyn_roztwor"],
+      "wymaga": [
+        "odczyn_roztwor"
+      ],
       "podpowiedz": "Zanurz papierek wskaźnikowy w roztworze, wyjmij i porównaj barwę ze skalą pH.",
       "dlaczego": "Zapisujesz barwę papierka, przybliżone pH i odczyn – trzy osobne kryteria w tabeli 2.",
       "sprzet": "zlewka",
       "animacja": "odczyt",
-      "stanSceny": { "papierek": "niebieskozielony" }
+      "stanSceny": {
+        "papierek": "niebieskozielony"
+      }
     },
     {
       "id": "odpady",
       "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
       "wymagane": [
-        ["przelej", "przelew", "wylej", "wylew", "zlej", "zlewam", "utyliz", "wyrzuć", "opróżn"],
-        ["odpad", "pojemnik", "utyliz", "butelk"]
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
       ],
-      "wymaga": ["powtorz", "papierek"],
+      "wymaga": [
+        "powtorz",
+        "papierek"
+      ],
       "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
       "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
       "sprzet": "odpady",
       "animacja": "przelewanie",
-      "stanSceny": { "kolba": "pusta", "zlewka": "pusta", "kolby": 1, "papierek": "brak" }
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      }
     },
     {
       "id": "rozmontuj",
       "opis": "Zestaw do miareczkowania rozmontowany.",
       "wymagane": [
-        ["rozmont", "zdemont", "demont", "rozkręć", "rozłóż", "rozbier", "rozebr", "rozkład"],
-        ["zestaw", "biuret", "statyw"]
+        [
+          "rozmont",
+          "zdemont",
+          "demont",
+          "rozkręć",
+          "rozłóż",
+          "rozbier",
+          "rozebr",
+          "rozkład"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw"
+        ]
       ],
-      "wymaga": ["powtorz", "papierek"],
+      "wymaga": [
+        "powtorz",
+        "papierek"
+      ],
       "podpowiedz": "Rozmontuj zestaw do miareczkowania (resztę titranta z biurety też do odpadów).",
       "dlaczego": "Kryterium porządkowania: zestaw do miareczkowania rozmontowany.",
       "sprzet": "statyw",
-      "stanSceny": { "zestaw": false, "biuretaPoziom": 0 }
+      "stanSceny": {
+        "zestaw": false,
+        "biuretaPoziom": 0
+      },
+      "animacja": "montaz"
     },
     {
       "id": "myj",
       "opis": "Szkło laboratoryjne umyte.",
       "wymagane": [
-        ["umyj", "myj", "myję", "myci", "wypłucz", "wypłuk", "opłucz", "płucz", "płucz"],
-        ["szkł", "kolb", "zlewk", "biuret", "naczy", "sprzęt", "cylind", "pipet"]
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
       ],
-      "wymaga": ["odpady"],
+      "wymaga": [
+        "odpady"
+      ],
       "podpowiedz": "Umyj szkło laboratoryjne.",
       "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
       "sprzet": "zlew",
@@ -285,23 +644,55 @@
       "id": "wylacz_wage",
       "opis": "Waga wyłączona.",
       "wymagane": [
-        ["=wyłącz", "=odłącz"],
-        ["wag"]
+        [
+          "=wyłącz",
+          "=odłącz"
+        ],
+        [
+          "wag"
+        ]
       ],
-      "wymaga": ["powtorz", "papierek"],
+      "wymaga": [
+        "powtorz",
+        "papierek"
+      ],
       "podpowiedz": "Wyłącz wagę.",
       "dlaczego": "Kryterium porządkowania: waga wyłączona.",
       "sprzet": "waga",
-      "stanSceny": { "waga": "wylaczona" }
+      "stanSceny": {
+        "waga": "wylaczona"
+      },
+      "animacja": "przycisk"
     },
     {
       "id": "stol",
       "opis": "Stół roboczy czysty i suchy.",
       "wymagane": [
-        ["wytrz", "wycier", "ścier", "przecier", "posprząt", "sprząt", "uporządk", "osusz", "wysusz", "przetrz", "przetar"],
-        ["stół", "stol", "stanowisk", "blat"]
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
       ],
-      "wymaga": ["myj", "rozmontuj", "wylacz_wage"],
+      "wymaga": [
+        "myj",
+        "rozmontuj",
+        "wylacz_wage"
+      ],
       "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
       "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
       "sprzet": "stol",
@@ -310,26 +701,51 @@
   ],
   "bledy": [
     {
-      "slowa": ["zlew"],
-      "wykluczajace": ["zlewk", "zlewc", "zlewek", "zlewam", "zlewać", "odpad", "pojemnik", "myj", "myję", "umyj", "płucz", "wypłucz", "mycie"],
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
       "dokladnie": true,
       "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
     },
     {
-      "slowa": ["kanaliz"],
+      "slowa": [
+        "kanaliz"
+      ],
       "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
     },
     {
-      "slowa": ["ustami"],
+      "slowa": [
+        "ustami"
+      ],
       "dokladnie": true,
       "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
     },
     {
-      "slowa": ["fenoloft"],
+      "slowa": [
+        "fenoloft"
+      ],
       "komunikat": "W tej procedurze wskaźnikiem jest oranż metylowy, nie fenoloftaleina – zawsze używaj wskaźnika z procedury."
     },
     {
-      "slowa": ["naoh", "biuret"],
+      "slowa": [
+        "naoh",
+        "biuret"
+      ],
       "komunikat": "Titrantem jest tu kwas solny HCl 0,01 mol/dm³ – NaOH to substancja oznaczana w mydle, nie odczynnik w biurecie."
     }
   ]

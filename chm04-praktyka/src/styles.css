@@ -720,3 +720,14 @@ button.kartka-zwin {
     height: calc(50% - 15px);
   }
 }
+
+.ocena-3d {
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--ok);
+  color: var(--na-akcencie);
+  border-radius: 999px;
+  padding: 4px 12px;
+  white-space: nowrap;
+  pointer-events: none;
+}
