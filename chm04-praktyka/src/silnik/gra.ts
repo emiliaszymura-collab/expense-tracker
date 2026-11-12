@@ -86,7 +86,9 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
 
   // 1. Typowe błędy (np. odpady do zlewu) – zawsze sygnalizowane.
   for (const b of poziom.bledy ?? []) {
-    const rozmyte = !b.dokladnie;
+    // Błędy rozpoznajemy tylko po dokładnych słowach – lepiej przepuścić błąd z literówką,
+    // niż zarzucić graczowi coś, czego nie napisał.
+    const rozmyte = false;
     if (b.wykluczajace?.some((s) => frazaPasuje(s, wpis, false))) continue;
     if (b.slowa.every((s) => frazaPasuje(s, wpis, rozmyte))) {
       stan.bledy++;

@@ -259,3 +259,16 @@ describe('cały poziom – inne poprawne kolejności', () => {
     expect(ostatni.wyjasnienie).toContain('oranż');
   });
 });
+
+describe('fałszywe alarmy', () => {
+  it('„waga analityczna” to nie „kanalizacja”', () => {
+    for (const t of ['odważyć około 2 gramy mydła na wadze analitycznej', 'odważam 2 g mydła do kolby na wadze analitycznej', 'analizuję próbkę']) {
+      const { stan } = ocenWpis(poziom, stanPrzed('odwaz'), t, true);
+      expect(stan.dziennik.at(-1)!.rodzaj, t).not.toBe('blad');
+    }
+  });
+  it('odważyć około 2 gramy mydła – przyjęte', () => {
+    const { przyjete } = ocenWpis(poziom, stanPrzed('odwaz'), 'odważyć około 2 gramy mydła', true);
+    expect(przyjete.map((k) => k.id)).toContain('odwaz');
+  });
+});

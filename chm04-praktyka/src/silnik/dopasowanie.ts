@@ -54,6 +54,9 @@ export function slowoPasuje(rdzen: string, token: string, rozmyte = true): boole
   // Krótkich rdzeni (np. "hcl", "wag") nie rozmywamy – za dużo fałszywych trafień.
   const limit = dozwolonyBlad(rdzen.length);
   if (limit === 0) return false;
+  // Literówki rzadko trafiają w pierwszą literę, a ten warunek odcina fałszywe trafienia
+  // (np. „analitycznej” ≠ „kanaliz…”).
+  if (token[0] !== rdzen[0]) return false;
   // Porównujemy rdzeń z początkiem tokenu o podobnej długości (końcówki fleksyjne są ignorowane).
   for (let dl = rdzen.length - 1; dl <= rdzen.length + 1; dl++) {
     if (dl < 1 || dl > token.length) continue;
