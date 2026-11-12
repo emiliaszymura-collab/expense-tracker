@@ -56,6 +56,7 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
   const [impuls, setImpuls] = useState(0);
   const [etykiety, setEtykiety] = useState(true);
   const [protokolOtwarty, setProtokolOtwarty] = useState(true);
+  const [pytanieReset, setPytanieReset] = useState(false);
 
   useEffect(() => zapiszStan(stan), [stan]);
 
@@ -70,9 +71,9 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
   };
 
   const resetuj = () => {
-    if (!confirm('Zacząć ten poziom od nowa?')) return;
     usunStan(poziom.id);
     setStan(nowyStan(poziom.id));
+    setPytanieReset(false);
   };
 
   return (
@@ -88,9 +89,21 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
         <label className="przelacznik">
           <input type="checkbox" checked={etykiety} onChange={(e) => setEtykiety(e.target.checked)} /> Podpisy sprzętu
         </label>
-        <button className="drugorzedny" onClick={resetuj}>
-          Od nowa
-        </button>
+        {pytanieReset ? (
+          <span className="potwierdz">
+            Zacząć od nowa?
+            <button className="niebezpieczny" onClick={resetuj}>
+              Tak, od nowa
+            </button>
+            <button className="drugorzedny" onClick={() => setPytanieReset(false)}>
+              Anuluj
+            </button>
+          </span>
+        ) : (
+          <button className="drugorzedny" onClick={() => setPytanieReset(true)}>
+            Od nowa
+          </button>
+        )}
       </nav>
       {protokolOtwarty && <PanelProtokolu poziom={poziom} />}
       <section className="laboratorium">

@@ -14,9 +14,67 @@
   --blad-tlo: #fef2f2;
   --info-tlo: #eff6ff;
   --info: #1d4ed8;
+  --pole: var(--pole);
+  --pole-2: var(--pole-2);
+  --na-akcencie: #ffffff;
+  --etykieta-3d: rgba(255, 255, 255, 0.88);
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color: var(--tekst);
   background: var(--tlo);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --tlo: #0f1719;
+    --panel: #151f22;
+    --tekst: #e3ecef;
+    --tekst-2: #9aabb3;
+    --linia: #263338;
+    --akcent: #2dd4bf;
+    --akcent-jasny: #123a37;
+    --ok: #4ade80;
+    --ok-tlo: #10261a;
+    --ostrz: #fbbf24;
+    --ostrz-tlo: #2a2010;
+    --blad: #f87171;
+    --blad-tlo: #2c1416;
+    --info-tlo: #12203a;
+    --info: #93c5fd;
+    --pole: #1d292d;
+    --pole-2: #182326;
+    --na-akcencie: #062b28;
+    --etykieta-3d: rgba(21, 31, 34, 0.88);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --tlo: #0f1719;
+  --panel: #151f22;
+  --tekst: #e3ecef;
+  --tekst-2: #9aabb3;
+  --linia: #263338;
+  --akcent: #2dd4bf;
+  --akcent-jasny: #123a37;
+  --ok: #4ade80;
+  --ok-tlo: #10261a;
+  --ostrz: #fbbf24;
+  --ostrz-tlo: #2a2010;
+  --blad: #f87171;
+  --blad-tlo: #2c1416;
+  --info-tlo: #12203a;
+  --info: #93c5fd;
+  --pole: #1d292d;
+  --pole-2: #182326;
+  --na-akcencie: #062b28;
+  --etykieta-3d: rgba(21, 31, 34, 0.88);
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
 }
 
 * {
@@ -26,6 +84,7 @@
 body {
   margin: 0;
   background: var(--tlo);
+  color: var(--tekst);
 }
 
 button {
@@ -35,7 +94,7 @@ button {
   border-radius: 8px;
   padding: 8px 14px;
   background: var(--akcent);
-  color: white;
+  color: var(--na-akcencie);
   font-weight: 600;
 }
 
@@ -52,7 +111,7 @@ button.drugorzedny {
 }
 
 button.drugorzedny:hover:not(:disabled) {
-  background: #eef2f5;
+  background: var(--pole);
 }
 
 .znaczek {
@@ -71,7 +130,9 @@ button.drugorzedny:hover:not(:disabled) {
 .start {
   max-width: 760px;
   margin: 0 auto;
-  padding: 48px 16px;
+  padding-block: 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 
 .start h1 {
@@ -151,14 +212,13 @@ button.drugorzedny:hover:not(:disabled) {
 }
 
 .status-nowy {
-  background: #eef2f5;
+  background: var(--pole);
   color: var(--tekst-2);
 }
 
 /* ---------- ekran gry ---------- */
 .gra {
-  height: 100vh;
-  height: 100dvh;
+  height: 100%;
   display: grid;
   grid-template-columns: minmax(300px, 380px) 1fr;
   grid-template-rows: auto 1fr;
@@ -173,7 +233,9 @@ button.drugorzedny:hover:not(:disabled) {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding-block: 8px;
+  padding-left: max(12px, env(safe-area-inset-left, 0px));
+  padding-right: max(12px, env(safe-area-inset-right, 0px));
   background: var(--panel);
   border-bottom: 1px solid var(--linia);
   flex-wrap: wrap;
@@ -239,7 +301,7 @@ button.drugorzedny:hover:not(:disabled) {
 
 .wzor {
   font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  background: #f1f5f9;
+  background: var(--pole);
   border-radius: 6px;
   padding: 6px 10px;
 }
@@ -258,7 +320,7 @@ button.drugorzedny:hover:not(:disabled) {
 .etykieta-3d {
   font-size: 12px;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--etykieta-3d);
   color: var(--tekst);
   border-radius: 4px;
   padding: 1px 6px;
@@ -289,7 +351,7 @@ button.drugorzedny:hover:not(:disabled) {
   min-width: 160px;
   height: 22px;
   border-radius: 999px;
-  background: #eef2f5;
+  background: var(--pole);
   overflow: hidden;
 }
 
@@ -328,7 +390,7 @@ button.drugorzedny:hover:not(:disabled) {
 }
 
 .bhp-brak {
-  background: #eef2f5;
+  background: var(--pole);
   color: var(--tekst-2);
   text-decoration: line-through;
 }
@@ -350,7 +412,7 @@ button.drugorzedny:hover:not(:disabled) {
   border-radius: 8px;
   padding: 8px 10px;
   border-left: 4px solid var(--linia);
-  background: #f8fafc;
+  background: var(--pole-2);
   font-size: 14px;
 }
 
@@ -447,7 +509,7 @@ button.drugorzedny:hover:not(:disabled) {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr;
     height: auto;
-    min-height: 100dvh;
+    min-height: 100%;
   }
 
   .protokol {
@@ -474,5 +536,29 @@ button.drugorzedny:hover:not(:disabled) {
 
   .tryb {
     margin-left: 0;
+  }
+}
+
+.potwierdz {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+}
+
+button.niebezpieczny {
+  background: var(--blad);
+  color: var(--na-akcencie);
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--akcent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .postep-wypelnienie {
+    transition: none;
   }
 }
