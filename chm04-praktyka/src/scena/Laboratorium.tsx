@@ -1,7 +1,7 @@
 // Scena 3D: stół laboratoryjny, sprzęt i laborant.
 import { ContactShadows, Html, OrbitControls } from '@react-three/drei';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Laborant } from './Laborant';
 import { Butelka, Kolba, PojemnikOdpady, Statyw, Waga, Zlew, Zlewka } from './Sprzet';
@@ -14,6 +14,20 @@ interface Props {
   aktywnySprzet?: string;
   impuls: number;
   pokazEtykiety: boolean;
+}
+
+/** Na wąskim ekranie (telefon) poszerza pole widzenia, żeby cały stół mieścił się w kadrze. */
+function KameraDopasowanie() {
+  const { camera, size } = useThree();
+  useEffect(() => {
+    const kamera = camera as THREE.PerspectiveCamera;
+    const proporcje = size.width / size.height;
+    const poziomeFov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(45) / 2) * 1.7);
+    const pionoweFov = 2 * Math.atan(Math.tan(poziomeFov / 2) / proporcje);
+    kamera.fov = Math.min(80, Math.max(45, THREE.MathUtils.radToDeg(pionoweFov)));
+    kamera.updateProjectionMatrix();
+  }, [camera, size]);
+  return null;
 }
 
 function Podswietlenie({ id }: { id?: string }) {
@@ -106,6 +120,7 @@ export function Laboratorium({ stan, aktywnySprzet, impuls, pokazEtykiety }: Pro
         shadow-camera-top={4}
         shadow-camera-bottom={-2}
       />
+      <KameraDopasowanie />
       <Pomieszczenie />
 
       <group position={p.zlew}>

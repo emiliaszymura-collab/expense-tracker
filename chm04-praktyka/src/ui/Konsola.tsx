@@ -62,7 +62,7 @@ export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz }:
       <div className="dziennik" ref={dziennikRef}>
         {stan.dziennik.length === 0 && (
           <p className="pusty">
-            Przeczytaj protokół po lewej i wpisz, co robisz – np. „zakładam fartuch, rękawice i okulary” albo „montuję zestaw
+            Kliknij kartkę „Protokół” w rogu laboratorium, przeczytaj procedurę i wpisz, co robisz – np. „zakładam fartuch, rękawice i okulary” albo „montuję zestaw
             do miareczkowania”.
           </p>
         )}
@@ -102,8 +102,9 @@ export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz }:
         <button type="submit" disabled={ukonczony}>
           Wykonaj
         </button>
-        <button type="button" className="drugorzedny" onClick={onPodpowiedz} disabled={ukonczony}>
-          Podpowiedź
+        <button type="button" className="drugorzedny" onClick={onPodpowiedz} disabled={ukonczony} aria-label="Podpowiedź">
+          <span className="tylko-szeroki">Podpowiedź</span>
+          <span className="tylko-waski" aria-hidden="true">?</span>
         </button>
       </form>
     </div>

@@ -55,7 +55,8 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
   const [stan, setStan] = useState<StanGry>(() => wczytajStan(poziom.id) ?? nowyStan(poziom.id));
   const [impuls, setImpuls] = useState(0);
   const [etykiety, setEtykiety] = useState(true);
-  const [protokolOtwarty, setProtokolOtwarty] = useState(true);
+  // Kartka z protokołem otwarta na start nowego poziomu, zwinięta przy powrocie do rozpoczętego.
+  const [protokolOtwarty, setProtokolOtwarty] = useState(() => stan.dziennik.length === 0);
   const [pytanieReset, setPytanieReset] = useState(false);
 
   useEffect(() => zapiszStan(stan), [stan]);
@@ -77,17 +78,17 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
   };
 
   return (
-    <div className={`gra ${protokolOtwarty ? '' : 'bez-protokolu'}`}>
+    <div className="gra">
       <nav className="gorny-pasek">
         <button className="drugorzedny" onClick={onWyjdz}>
           ← Poziomy
         </button>
-        <button className="drugorzedny" onClick={() => setProtokolOtwarty((o) => !o)}>
-          {protokolOtwarty ? 'Ukryj protokół' : 'Pokaż protokół'}
-        </button>
-        <span className="tryb">Tryb: ćwiczenie</span>
+        <span className="tryb">
+          <span className="tylko-szeroki">Tryb:&nbsp;</span>ćwiczenie
+        </span>
         <label className="przelacznik">
-          <input type="checkbox" checked={etykiety} onChange={(e) => setEtykiety(e.target.checked)} /> Podpisy sprzętu
+          <input id="podpisy" type="checkbox" checked={etykiety} onChange={(e) => setEtykiety(e.target.checked)} /> Podpisy
+          <span className="tylko-szeroki">&nbsp;sprzętu</span>
         </label>
         {pytanieReset ? (
           <span className="potwierdz">
@@ -105,10 +106,10 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
           </button>
         )}
       </nav>
-      {protokolOtwarty && <PanelProtokolu poziom={poziom} />}
       <section className="laboratorium">
         <div className="scena">
           <Laboratorium stan={scena} aktywnySprzet={ostatniKrok?.sprzet} impuls={impuls} pokazEtykiety={etykiety} />
+          <PanelProtokolu poziom={poziom} otwarty={protokolOtwarty} onPrzelacz={setProtokolOtwarty} />
         </div>
         <Konsola
           stan={stan}

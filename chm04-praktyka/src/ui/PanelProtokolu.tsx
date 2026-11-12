@@ -1,20 +1,58 @@
+import { useEffect } from 'react';
 import type { Poziom } from '../silnik/typy';
 
-/** Wyświetla treść zadania i procedury jak w arkuszu egzaminacyjnym. */
-export function PanelProtokolu({ poziom }: { poziom: Poziom }) {
+interface Props {
+  poziom: Poziom;
+  otwarty: boolean;
+  onPrzelacz: (otwarty: boolean) => void;
+}
+
+/**
+ * Protokół jako kartka leżąca na scenie: zwinięta to mała kartka w rogu,
+ * po kliknięciu rozwija się na część ekranu, a laboratorium dalej widać obok.
+ */
+export function PanelProtokolu({ poziom, otwarty, onPrzelacz }: Props) {
+  useEffect(() => {
+    if (!otwarty) return;
+    const klawisz = (e: KeyboardEvent) => e.key === 'Escape' && onPrzelacz(false);
+    window.addEventListener('keydown', klawisz);
+    return () => window.removeEventListener('keydown', klawisz);
+  }, [otwarty, onPrzelacz]);
+
+  if (!otwarty) {
+    return (
+      <button className="kartka-zwinieta" onClick={() => onPrzelacz(true)} aria-label="Otwórz protokół z arkusza">
+        <span className="kartka-linie" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+          <i />
+        </span>
+        <span className="kartka-podpis">Protokół</span>
+      </button>
+    );
+  }
+
   return (
-    <aside className="protokol">
-      <div className="protokol-naglowek">
-        <span className="znaczek">{poziom.zrodlo}</span>
-        <h1>{poziom.tytul}</h1>
-        <p className="metoda">{poziom.metoda}</p>
+    <aside className="kartka" aria-label="Protokół z arkusza egzaminacyjnego">
+      <header className="kartka-naglowek">
+        <div>
+          <span className="kartka-zrodlo">{poziom.zrodlo}</span>
+          <h1>{poziom.tytul}</h1>
+          <p className="metoda">{poziom.metoda}</p>
+        </div>
+        <button className="kartka-zwin" onClick={() => onPrzelacz(false)} aria-label="Zwiń protokół">
+          Zwiń
+        </button>
+      </header>
+      <div className="kartka-tresc">
+        {poziom.protokol.map((sekcja) => (
+          <section key={sekcja.tytul}>
+            <h2>{sekcja.tytul}</h2>
+            <Tresc tekst={sekcja.tresc} />
+          </section>
+        ))}
       </div>
-      {poziom.protokol.map((sekcja) => (
-        <section key={sekcja.tytul}>
-          <h2>{sekcja.tytul}</h2>
-          <Tresc tekst={sekcja.tresc} />
-        </section>
-      ))}
     </aside>
   );
 }

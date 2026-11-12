@@ -18,6 +18,14 @@
   --pole-2: var(--pole-2);
   --na-akcencie: #ffffff;
   --etykieta-3d: rgba(255, 255, 255, 0.88);
+  /* kartka z protokołem – zawsze jasna, jak papier */
+  --papier: #fdfcf7;
+  --papier-tekst: #23303a;
+  --papier-tekst-2: #5f6b73;
+  --papier-linia: #e4e1d6;
+  --papier-akcent: #0f766e;
+  --papier-wzor: #f1efe6;
+  --cien: rgba(15, 30, 40, 0.28);
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color: var(--tekst);
   background: var(--tlo);
@@ -79,6 +87,10 @@ body,
 
 * {
   box-sizing: border-box;
+}
+
+.tylko-waski {
+  display: none;
 }
 
 body {
@@ -220,12 +232,9 @@ button.drugorzedny:hover:not(:disabled) {
 .gra {
   height: 100%;
   display: grid;
-  grid-template-columns: minmax(300px, 380px) 1fr;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr;
-}
-
-.gra.bez-protokolu {
-  grid-template-columns: 1fr;
+  overflow: hidden;
 }
 
 .gorny-pasek {
@@ -256,58 +265,17 @@ button.drugorzedny:hover:not(:disabled) {
   gap: 4px;
 }
 
-.protokol {
-  overflow-y: auto;
-  background: var(--panel);
-  border-right: 1px solid var(--linia);
-  padding: 20px;
-  line-height: 1.55;
-  font-size: 14.5px;
-}
-
-.protokol-naglowek h1 {
-  font-size: 22px;
-  margin: 10px 0 2px;
-}
-
-.metoda {
-  margin: 0 0 8px;
-  color: var(--tekst-2);
-}
-
-.protokol h2 {
-  font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--akcent);
-  margin: 22px 0 8px;
-  padding-top: 14px;
-  border-top: 1px solid var(--linia);
-}
-
-.protokol h3 {
-  font-size: 14.5px;
-  margin: 12px 0 4px;
-}
-
-.protokol p {
-  margin: 0 0 8px;
-}
-
-.protokol ul {
-  margin: 0 0 8px;
-  padding-left: 18px;
-}
-
 .wzor {
   font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  background: var(--pole);
+  background: var(--papier-wzor);
   border-radius: 6px;
   padding: 6px 10px;
 }
 
 .laboratorium {
   min-height: 0;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   display: grid;
   grid-template-rows: minmax(260px, 1fr) minmax(240px, 42%);
 }
@@ -315,6 +283,7 @@ button.drugorzedny:hover:not(:disabled) {
 .scena {
   position: relative;
   min-height: 0;
+  overflow: hidden;
 }
 
 .etykieta-3d {
@@ -330,6 +299,7 @@ button.drugorzedny:hover:not(:disabled) {
 
 .konsola {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr auto;
   min-height: 0;
   background: var(--panel);
@@ -505,37 +475,62 @@ button.drugorzedny:hover:not(:disabled) {
 
 /* ---------- telefon ---------- */
 @media (max-width: 800px) {
-  .gra {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr;
-    height: auto;
-    min-height: 100%;
-  }
-
-  .protokol {
-    max-height: 40vh;
-    border-right: 0;
-    border-bottom: 1px solid var(--linia);
-  }
-
   .laboratorium {
-    grid-template-rows: 46vh auto;
+    grid-template-rows: minmax(200px, 1fr) minmax(0, 44%);
   }
 
-  .dziennik {
-    max-height: 40vh;
+  .gorny-pasek {
+    gap: 6px;
+    flex-wrap: nowrap;
   }
 
-  .wpisz {
-    flex-wrap: wrap;
-  }
-
-  .wpisz input {
-    flex-basis: 100%;
+  .gorny-pasek button {
+    padding: 6px 10px;
+    white-space: nowrap;
   }
 
   .tryb {
-    margin-left: 0;
+    display: none;
+  }
+
+  .przelacznik {
+    margin-left: auto;
+  }
+
+  .pasek-stanu {
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 6px 10px;
+  }
+
+  .postep {
+    min-width: 0;
+  }
+
+  .bhp {
+    gap: 3px;
+  }
+
+  .bhp span {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+
+  .wpisz {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .wpisz button {
+    padding: 8px 12px;
+  }
+
+  .tylko-szeroki {
+    display: none;
+  }
+
+  .tylko-waski {
+    display: inline;
   }
 }
 
@@ -566,4 +561,159 @@ input:focus-visible {
 .podsumowanie {
   font-weight: 400;
   margin-top: 4px;
+}
+
+/* ---------- kartka z protokołem ---------- */
+.kartka-zwinieta {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 86px;
+  height: 108px;
+  padding: 12px 10px 8px;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 6px;
+  background: var(--papier);
+  color: var(--papier-tekst);
+  border: 1px solid var(--papier-linia);
+  border-radius: 3px;
+  box-shadow: 0 6px 16px var(--cien);
+  transform: rotate(-4deg);
+  transition: transform 0.2s;
+  font-weight: 600;
+}
+
+.kartka-zwinieta:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+.kartka-linie {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+}
+
+.kartka-linie i {
+  display: block;
+  height: 2px;
+  background: var(--papier-linia);
+}
+
+.kartka-linie i:first-child {
+  width: 70%;
+  background: var(--papier-akcent);
+}
+
+.kartka-podpis {
+  font-size: 12px;
+  text-align: center;
+}
+
+.kartka {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  bottom: 10px;
+  width: min(440px, 46%);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--papier);
+  color: var(--papier-tekst);
+  border: 1px solid var(--papier-linia);
+  border-radius: 4px;
+  box-shadow: 0 12px 32px var(--cien);
+  transform-origin: top left;
+  animation: kartka-rozwin 0.22s ease-out;
+  z-index: 20;
+}
+
+@keyframes kartka-rozwin {
+  from {
+    transform: scale(0.25) rotate(-4deg);
+    opacity: 0.4;
+  }
+}
+
+.kartka-naglowek {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--papier-linia);
+}
+
+.kartka-naglowek h1 {
+  font-size: 18px;
+  margin: 4px 0 0;
+  text-wrap: balance;
+}
+
+.kartka-naglowek .metoda {
+  color: var(--papier-tekst-2);
+  font-size: 13px;
+  margin: 2px 0 0;
+}
+
+.kartka-zrodlo {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--papier-akcent);
+}
+
+button.kartka-zwin {
+  flex: none;
+  background: var(--papier-akcent);
+  color: var(--papier);
+  padding: 6px 12px;
+}
+
+.kartka-tresc {
+  overflow-y: auto;
+  padding: 4px 16px 16px;
+  font-size: 14px;
+  line-height: 1.55;
+  min-height: 0;
+}
+
+.kartka-tresc h2 {
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--papier-akcent);
+  margin: 14px 0 6px;
+}
+
+.kartka-tresc h3 {
+  font-size: 14px;
+  margin: 10px 0 4px;
+}
+
+.kartka-tresc p {
+  margin: 0 0 8px;
+}
+
+.kartka-tresc ul {
+  margin: 0 0 8px;
+  padding-left: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kartka {
+    animation: none;
+  }
+
+  .kartka-zwinieta {
+    transition: none;
+  }
+}
+
+@media (max-width: 800px) {
+  .kartka {
+    width: auto;
+    right: 10px;
+  }
 }
