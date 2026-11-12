@@ -1,8 +1,9 @@
 // Scena 3D: sala, stanowisko, laborant i egzaminator. „Reżyser” odtwarza po kolei animacje przyjętych kroków.
-import { ContactShadows, Environment, Html, Lightformer, OrbitControls } from '@react-three/drei';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { ContactShadows, Environment, Html, OrbitControls } from '@react-three/drei';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import type { ElementBhp, Krok } from '../silnik/typy';
 import { CZAS, nowaAnim } from './animacje';
 import { STAL, SZKLO } from './materialy';
@@ -61,6 +62,16 @@ function KameraDopasowanie({ kartkaOtwarta }: { kartkaOtwarta: boolean }) {
     kamera.updateProjectionMatrix();
   });
   return null;
+}
+
+/**
+ * Światło i odbicia z prawdziwego wnętrza (HDRI z Poly Haven, CC0).
+ * Plik .hdr ma rozszerzenie .wasm, bo hosting strony nie serwuje plików .hdr.
+ */
+function Otoczenie() {
+  const tekstura = useLoader(RGBELoader, 'zasoby/sala.wasm');
+  tekstura.mapping = THREE.EquirectangularReflectionMapping;
+  return <Environment map={tekstura} environmentIntensity={0.75} />;
 }
 
 function Etykieta({ id }: { id: string }) {
@@ -516,18 +527,12 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
       />
       <directionalLight position={[-1.5, 2.6, -3.2]} intensity={0.45} color="#eaf4ff" />
       {/* odbicia na szkle i metalu – otoczenie budowane w locie, bez zewnętrznych plików */}
-      <Environment resolution={256} frames={1} environmentIntensity={0.55}>
-        <mesh scale={30}>
-          <sphereGeometry args={[1, 24, 16]} />
-          <meshBasicMaterial color="#cfd6da" side={THREE.BackSide} />
-        </mesh>
-        <Lightformer form="rect" intensity={3} position={[0, 5, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[7, 4, 1]} />
-        <Lightformer form="rect" intensity={4} color="#e6f2ff" position={[0, 2, -7]} scale={[9, 3, 1]} />
-        <Lightformer form="rect" intensity={1.2} position={[0, 2, 7]} rotation={[0, Math.PI, 0]} scale={[9, 4, 1]} />
-        <Lightformer form="rect" intensity={1.5} position={[-7, 2, 0]} rotation={[0, Math.PI / 2, 0]} scale={[6, 3, 1]} />
-      </Environment>
-      <KameraDopasowanie kartkaOtwarta={kartkaOtwarta} />
-      <Scena {...reszta} />
+      <Suspense fallback={null}>
+        {/* światło i odbicia z prawdziwego wnętrza (HDRI z Poly Haven, CC0) */}
+        <Otoczenie />
+        <KameraDopasowanie kartkaOtwarta={kartkaOtwarta} />
+        <Scena {...reszta} />
+      </Suspense>
       <ContactShadows position={[0, 0.002, -0.4]} opacity={0.3} scale={9} blur={2.4} far={1.2} />
       <OrbitControls
         target={[-0.1, 1.24, -0.25]}

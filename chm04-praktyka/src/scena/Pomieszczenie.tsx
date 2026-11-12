@@ -1,4 +1,5 @@
 // Sala laboratoryjna: jasne ściany, okna ze światłem dziennym, panele LED, szafki, dygestorium, wyspa.
+import { useGLTF, useTexture } from '@react-three/drei';
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import { BLAT_MAT, CHROM, PLASTIK_CIEMNY, SZAFKA, SZKLO, STAL, etykieta } from './materialy';
@@ -187,6 +188,42 @@ function Plakat({ x, y, napis, tlo, kolor }: { x: number; y: number; napis: stri
   );
 }
 
+/** Podłoga z płytek – tekstury PBR z Poly Haven (CC0), przyciemnione do szarości. */
+function Podloga() {
+  const mapy = useTexture({ map: 'zasoby/podloga/diff.jpg', normalMap: 'zasoby/podloga/nor_gl.jpg', roughnessMap: 'zasoby/podloga/rough.jpg' });
+  useMemo(() => {
+    for (const t of Object.values(mapy)) {
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(7, 6);
+      t.anisotropy = 8;
+    }
+    mapy.map.colorSpace = THREE.SRGBColorSpace;
+  }, [mapy]);
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      <planeGeometry args={[14, 12]} />
+      <meshStandardMaterial {...mapy} roughness={0.75} metalness={0.02} />
+    </mesh>
+  );
+}
+
+/** Zestaw szkła laboratoryjnego – model 3D z Poly Haven (CC0). */
+export function ZestawSzkla(props: JSX.IntrinsicElements['group']) {
+  const { scene } = useGLTF('zasoby/chemia/chemistry_set.json');
+  const kopia = useMemo(() => {
+    const k = scene.clone(true);
+    k.traverse((o) => {
+      o.castShadow = true;
+    });
+    return k;
+  }, [scene]);
+  return (
+    <group {...props}>
+      <primitive object={kopia} />
+    </group>
+  );
+}
+
 export function Pomieszczenie() {
   const zegar = useMemo(teksturaZegara, []);
   const szerWyspy = WYSPA.x1 - WYSPA.x0;
@@ -197,10 +234,7 @@ export function Pomieszczenie() {
   return (
     <group>
       {/* podłoga, ściany, sufit */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[14, 12]} />
-        <meshStandardMaterial color="#a9b2b5" roughness={0.5} metalness={0.02} />
-      </mesh>
+      <Podloga />
       <mesh position={[0, SUFIT / 2, Z_SCIANY]} receiveShadow>
         <planeGeometry args={[14, SUFIT]} />
         <meshStandardMaterial color="#e6e8e3" roughness={0.95} />
@@ -268,6 +302,7 @@ export function Pomieszczenie() {
             <boxGeometry args={[0.16, 0.012, 0.2]} />
           </mesh>
         </group>
+        <ZestawSzkla position={[-1.2, 0.915, 0.0]} />
         {/* szkło i odczynniki */}
         {[-2.7, -2.45, -2.2, -0.2, 0.05].map((x, i) => (
           <group key={x} position={[x, 0.915, -0.1 + (i % 2) * 0.12]}>
