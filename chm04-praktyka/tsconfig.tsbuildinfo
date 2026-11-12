@@ -1,1 +1,0 @@
-{"root":["./src/App.tsx","./src/main.tsx","./src/postep.ts","./src/procedury/index.ts","./src/scena/Laborant.tsx","./src/scena/Laboratorium.tsx","./src/scena/Sprzet.tsx","./src/scena/uklad.ts","./src/silnik/dopasowanie.ts","./src/silnik/gra.test.ts","./src/silnik/gra.ts","./src/silnik/typy.ts","./src/ui/Konsola.tsx","./src/ui/PanelProtokolu.tsx"],"version":"5.6.3"}
