@@ -615,7 +615,7 @@ input:focus-visible {
   top: 10px;
   left: 10px;
   bottom: 10px;
-  width: min(440px, 46%);
+  width: calc(50% - 15px);
   display: grid;
   grid-template-rows: auto 1fr;
   background: var(--papier);
@@ -712,8 +712,11 @@ button.kartka-zwin {
 }
 
 @media (max-width: 800px) {
+  /* telefon: kartka na górnej połowie sceny, laborant widoczny w dolnej */
   .kartka {
     width: auto;
     right: 10px;
+    bottom: auto;
+    height: calc(50% - 15px);
   }
 }

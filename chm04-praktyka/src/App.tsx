@@ -108,7 +108,7 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
       </nav>
       <section className="laboratorium">
         <div className="scena">
-          <Laboratorium stan={scena} aktywnySprzet={ostatniKrok?.sprzet} impuls={impuls} pokazEtykiety={etykiety} />
+          <Laboratorium stan={scena} aktywnySprzet={ostatniKrok?.sprzet} impuls={impuls} pokazEtykiety={etykiety} kartkaOtwarta={protokolOtwarty} />
           <PanelProtokolu poziom={poziom} otwarty={protokolOtwarty} onPrzelacz={setProtokolOtwarty} />
         </div>
         <Konsola

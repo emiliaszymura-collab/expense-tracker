@@ -1,7 +1,7 @@
 // Scena 3D: stół laboratoryjny, sprzęt i laborant.
 import { ContactShadows, Html, OrbitControls } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import * as THREE from 'three';
 import { Laborant } from './Laborant';
 import { Butelka, Kolba, PojemnikOdpady, Statyw, Waga, Zlew, Zlewka } from './Sprzet';
@@ -14,19 +14,46 @@ interface Props {
   aktywnySprzet?: string;
   impuls: number;
   pokazEtykiety: boolean;
+  /** Czy kartka z protokołem zasłania połowę sceny. */
+  kartkaOtwarta: boolean;
 }
 
-/** Na wąskim ekranie (telefon) poszerza pole widzenia, żeby cały stół mieścił się w kadrze. */
-function KameraDopasowanie() {
+/**
+ * Dopasowuje kadr do wolnej części sceny.
+ * - Na wąskim ekranie (telefon) poszerza pole widzenia, żeby cały stół mieścił się w kadrze.
+ * - Gdy otwarta jest kartka z protokołem, przesuwa obraz w wolną połowę (na komputerze prawą,
+ *   na telefonie dolną) i oddala go, żeby laborant i stół były widoczne obok kartki.
+ */
+function KameraDopasowanie({ kartkaOtwarta }: { kartkaOtwarta: boolean }) {
   const { camera, size } = useThree();
-  useEffect(() => {
+  const biezace = useRef({ x: 0, y: 0, tanPol: Math.tan(THREE.MathUtils.degToRad(45) / 2) });
+
+  useFrame((_, dt) => {
     const kamera = camera as THREE.PerspectiveCamera;
-    const proporcje = size.width / size.height;
+    const { width: w, height: h } = size;
+    if (!w || !h) return;
+    const telefon = window.innerWidth <= 800;
+    // Wolny obszar kadru, w którym ma się zmieścić stół.
+    const wolneW = kartkaOtwarta && !telefon ? w / 2 : w;
+    const wolneH = kartkaOtwarta && telefon ? h / 2 : h;
     const poziomeFov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(45) / 2) * 1.7);
-    const pionoweFov = 2 * Math.atan(Math.tan(poziomeFov / 2) / proporcje);
-    kamera.fov = Math.min(80, Math.max(45, THREE.MathUtils.radToDeg(pionoweFov)));
+    const potrzebne = 2 * Math.atan(Math.tan(poziomeFov / 2) / (wolneW / wolneH));
+    const ograniczone = THREE.MathUtils.clamp(potrzebne, THREE.MathUtils.degToRad(45), THREE.MathUtils.degToRad(80));
+    const celTan = Math.tan(ograniczone / 2) * (h / wolneH);
+    const celX = kartkaOtwarta && !telefon ? -w / 4 : 0;
+    const celY = kartkaOtwarta && telefon ? -h / 4 : 0;
+
+    const b = biezace.current;
+    const k = Math.min(1, dt * 8); // płynne przejście ~0,3 s
+    b.x += (celX - b.x) * k;
+    b.y += (celY - b.y) * k;
+    b.tanPol += (celTan - b.tanPol) * k;
+
+    kamera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(b.tanPol));
+    if (Math.abs(b.x) < 0.5 && Math.abs(b.y) < 0.5) kamera.clearViewOffset();
+    else kamera.setViewOffset(w, h, b.x, b.y, w, h);
     kamera.updateProjectionMatrix();
-  }, [camera, size]);
+  });
   return null;
 }
 
@@ -100,7 +127,7 @@ function Pomieszczenie() {
   );
 }
 
-export function Laboratorium({ stan, aktywnySprzet, impuls, pokazEtykiety }: Props) {
+export function Laboratorium({ stan, aktywnySprzet, impuls, pokazEtykiety, kartkaOtwarta }: Props) {
   // Laborant staje obok sprzętu (z prawej), żeby nie zasłaniać go kamerze.
   const celX = (POZYCJE[aktywnySprzet ?? '']?.[0] ?? POZYCJE.kolba[0]) + 0.42;
   const p = POZYCJE;
@@ -120,7 +147,7 @@ export function Laboratorium({ stan, aktywnySprzet, impuls, pokazEtykiety }: Pro
         shadow-camera-top={4}
         shadow-camera-bottom={-2}
       />
-      <KameraDopasowanie />
+      <KameraDopasowanie kartkaOtwarta={kartkaOtwarta} />
       <Pomieszczenie />
 
       <group position={p.zlew}>
