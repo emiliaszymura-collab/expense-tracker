@@ -230,9 +230,66 @@ Częste pułapki z zasad oceniania:
 
 ## Część B. Czego jeszcze nie było, a może być
 
-Ta część **nie pochodzi z arkuszy** – opiera się na mojej wiedzy o zakresie kwalifikacji CHM.04 i typowych ćwiczeniach z technikum. Nie mam informatora CKE ani podstawy programowej, więc traktuj listę jako przewidywanie, a nie pewnik. Liczby w poziomach gry będą przykładowe.
+### B0. Co mówią oficjalne dokumenty (podstawa programowa 2019 + CKE)
 
-Jak czytać dotychczasowy wzorzec: przez 8 sesji **trzonem zawsze było miareczkowanie**, a przyrząd (pehametr) był dodatkiem. Najbardziej prawdopodobny „nowy” arkusz to więc nowy rodzaj miareczkowania albo znane miareczkowanie z nowym pomiarem instrumentalnym jako drugą częścią.
+Pliki źródłowe są w folderze `zrodla/`.
+
+**1. Podstawa programowa 2019, technik analityk 311103, CHM.04** (Dz.U. 2019 poz. 991, `zrodla/podstawa-programowa-2019-technik-analityk.pdf`)
+
+Uczeń ma umieć dobrać sprzęt i wykonać analizę (CHM.04.3, efekt 4, kryteria 2–3):
+- metodami klasycznymi: **alkacymetrią, redoksymetrią, precypitometrią, kompleksometrią oraz wagową**,
+- metodami instrumentalnymi: **potencjometryczną, konduktometryczną, polarymetryczną, refraktometryczną, chromatograficzną, nefelometryczną, turbidymetryczną i spektrofotometryczną**.
+
+Do tego:
+- pomiar wielkości fizycznych: **lepkość, gęstość, charakterystyczne temperatury** (CHM.04.3.6),
+- oznaczenia ilościowe **cukrów, białek, tłuszczów**, próby wykrywania białek, cukrów i tłuszczów (CHM.04.4.5, 4.7),
+- analizy fizykochemiczne **wody, ścieków, powietrza, gleby, żywności**, ocena względem norm (CHM.04.4.8–9),
+- wykresy i tabele z wyników aparatury, błędy w analizie ilościowej, zgodność z normą lub etykietą,
+- mikrobiologia (podłoża, preparaty) też jest w podstawie – pomijamy ją, bo na stanowisku egzaminacyjnym nie ma do niej sprzętu (patrz punkt 2).
+
+**2. CKE: wyposażenie stanowiska egzaminacyjnego CHM.04** (`zrodla/CKE-wyposazenie-...pdf`, lata 2024–2026 i 2027–2029)
+
+To najważniejszy dokument: CKE wymienia sprzęt, który **musi** być w każdym ośrodku. Czego nie ma na liście, tego zadanie praktycznie nie może wymagać.
+
+Na **każdym stanowisku**:
+- pehametr/miernik SEM z elektrodą i czujnikiem temperatury,
+- **konduktometr umożliwiający miareczkowanie konduktometryczne**,
+- mieszadło magnetyczne, płyta grzewcza, palnik, łaźnia wodna, trójnóg z siatką,
+- waga 0,001 g, termometr, eksykator, parownica, **rozdzielacz 250 i 500 cm³** (ekstrakcja),
+- **cylindry Nesslera** (porównanie barw – kolorymetria wizualna),
+- **3 kuwety do spektrofotometru** (10 mm),
+- biurety 10/25/50 cm³, pipety, kolby, zlewki, moździerz, lejek szybkosączący, papier do wykresów, gogle, rękawice.
+
+**Wspólne dla kilku stanowisk:**
+- **refraktometr Abbego** (nD 1,300–1,700 i skala cukrowa 0–95% Brix) – 1 na 6 osób,
+- **polarymetr** z rurkami 10 i 20 cm – 1 na 6,
+- **spektrofotometr UV-Vis** – 1 na 6, **od 2027 r. 1 na 3 osoby**,
+- dygestorium, **suszarka**, **wirówka**, lodówka, **waga analityczna 0,0001 g**.
+
+**Od 2027 r.:** komputer z arkuszem kalkulacyjnym na każdym stanowisku. To sugeruje zadania z wykresami (krzywa wzorcowa, krzywa miareczkowania) rysowanymi w Excelu/LibreOffice.
+
+Brak mikroskopu, autoklawu i cieplarki, więc **mikrobiologii na części praktycznej nie będzie**.
+
+**3. Stara kwalifikacja AU.60** (ten sam zakres, wcześniejsza podstawa programowa)
+
+Arkusze z arkusze.pl, 2020–2024, które pokazują, co już było w podobnym egzaminie:
+
+| Sesja | Zadanie | Metoda |
+|---|---|---|
+| 2020 czerwiec | kwas szczawiowy + miedź | manganometria + **krzywa wzorcowa z danych ASA** (wykres na papierze) |
+| 2021 styczeń | H₂O₂ w wodzie utlenionej | **manganometria** |
+| 2021 i 2024 czerwiec | aktywny tlen w proszku do prania + pH | jodometria + pehametr |
+| 2022 styczeń | spirytus salicylowy | wykrywanie FeCl₃ + alkacymetria |
+| 2022 czerwiec | kwasowość twarogu | alkacymetria + pH (kwasowość czynna) |
+| 2023 styczeń | chlorki w soli fizjologicznej | argentometria |
+
+Przykładowe zadanie z informatora CKE (2017, AU.60): **zasadowość nawozu przez odmiareczkowanie nadmiaru HCl** (miareczkowanie odwrotne z próbą ślepą) + **analiza jakościowa Ca²⁺ / Mg²⁺**.
+
+### Wniosek do gry
+
+Pewne: miareczkowania wszystkich 4 typów, pH, odczyn. Bardzo prawdopodobne „nowości”, bo sprzęt **musi** stać w sali: **refraktometria, polarymetria, spektrofotometria UV-Vis (krzywa wzorcowa), konduktometria / miareczkowanie konduktometryczne, manganometria, miareczkowanie odwrotne z próbą ślepą, analiza wagowa / suszenie, wykrywanie jonów (analiza jakościowa)**. Mniej prawdopodobne: ekstrakcja w rozdzielaczu, kolorymetria w cylindrach Nesslera, gęstość, lepkość (brak areometru i wiskozymetru na liście CKE).
+
+Jak czytać dotychczasowy wzorzec: przez 8 sesji CHM.04 i 7 sesji AU.60 **trzonem zawsze było miareczkowanie**, a przyrząd był dodatkiem albo drugą częścią zadania. Najbardziej prawdopodobny „nowy” arkusz to znane miareczkowanie + nowy pomiar instrumentalny (refraktometr, polarymetr, spektrofotometr, konduktometr).
 
 ### B1. Miareczkowania, których nie było
 
