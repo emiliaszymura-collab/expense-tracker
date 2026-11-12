@@ -153,7 +153,10 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
         }
       } else {
         const zaleglosci = kroki.length - nRef.current;
-        a.p += (dt / (CZAS[typ] ?? 2)) * (zaleglosci > 2 ? 2.2 : 1);
+        // haczyki testowe: __tempo przyspiesza animacje, __stop zatrzymuje postęp na danej wartości
+        const dbg = window as unknown as { __tempo?: number; __stop?: number | null };
+        a.p += (dt / (CZAS[typ] ?? 2)) * (zaleglosci > 2 ? 2.2 : 1) * (dbg.__tempo ?? 1);
+        if (dbg.__stop != null) a.p = Math.min(a.p, dbg.__stop);
         if (a.p >= 0.5 && !ak.polowa) {
           ak.polowa = true;
           setPolowa(true);

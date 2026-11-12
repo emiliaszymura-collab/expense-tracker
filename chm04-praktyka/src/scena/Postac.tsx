@@ -113,7 +113,7 @@ export function Postac({ ster, api, rola, fartuch = false, rekawice = false, oku
     const dyst = Math.hypot(dx, dz);
     const idzie = dyst > 0.015;
     if (idzie) {
-      const krok = Math.min(dyst, dt * predkosc);
+      const krok = Math.min(dyst, dt * predkosc * ((window as unknown as { __tempo?: number }).__tempo ?? 1));
       g.position.x += (dx / dyst) * krok;
       g.position.z += (dz / dyst) * krok;
       faza.current += dt * 9;
