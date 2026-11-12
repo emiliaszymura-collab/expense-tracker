@@ -5,7 +5,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import type { ElementBhp, Krok } from '../silnik/typy';
-import { CZAS, nowaAnim } from './animacje';
+import { CZAS, nowaAnim, type Anim } from './animacje';
 import { STAL, SZKLO } from './materialy';
 import { Pomieszczenie } from './Pomieszczenie';
 import { Postac, nowePostacApi, nowySter } from './Postac';
@@ -21,6 +21,13 @@ interface Props {
   pokazEtykiety: boolean;
   /** Czy kartka z protokołem zasłania połowę sceny. */
   kartkaOtwarta: boolean;
+  /** Laborant wypełnia kartę wyników – zbliżenie na pisanie. */
+  pisanie: boolean;
+  widok: 'przod' | 'tyl';
+  /** Masa pierwszej próbki pokazywana na wadze [g]. */
+  masa: number;
+  /** Zgłasza, że trwa odczyt z biurety (pokaż powiększenie). */
+  onZblizenie?: (aktywne: boolean) => void;
 }
 
 const scal = (kroki: Krok[]): StanSceny => Object.assign({}, ...kroki.map((k) => k.stanSceny ?? {}));
@@ -74,6 +81,73 @@ function Otoczenie() {
   return <Environment map={tekstura} environmentIntensity={0.75} />;
 }
 
+/**
+ * Reżyser kamery: zbliżenia na biuretę, wagę i kartę, widok z przodu albo zza pleców laboranta.
+ * Gdy gracz sam obróci kamerę, reżyser odpuszcza do następnej zmiany ujęcia.
+ */
+function KameraRezyser({ anim, widok, pisanie }: { anim: React.MutableRefObject<Anim>; widok: 'przod' | 'tyl'; pisanie: boolean }) {
+  const camera = useThree((s) => s.camera);
+  const controls = useThree((s) => s.controls) as unknown as { target: THREE.Vector3; update: () => void; addEventListener: (t: string, f: () => void) => void; removeEventListener: (t: string, f: () => void) => void } | null;
+  const st = useRef({ klucz: '', auto: true });
+  const v = useMemo(() => ({ p: new THREE.Vector3(), t: new THREE.Vector3() }), []);
+  useEffect(() => {
+    if (!controls) return;
+    const f = () => {
+      st.current.auto = false;
+    };
+    controls.addEventListener('start', f);
+    return () => controls.removeEventListener('start', f);
+  }, [controls]);
+  useFrame((_, dt) => {
+    if (!controls) return;
+    const a = anim.current;
+    const tyl = widok === 'tyl';
+    let klucz = 'baza';
+    if (tyl) {
+      v.p.set(-0.1, 2.15, -3.0);
+      v.t.set(-0.1, 1.0, 0.2);
+    } else {
+      v.p.set(-0.1, 1.72, 3.1);
+      v.t.set(-0.1, 1.24, -0.25);
+    }
+    const zbliz = (x: number, yCel: number, yKam: number, odl: number) => {
+      v.t.set(x, yCel, 0.03);
+      if (tyl) v.p.set(x + 0.42, yKam + 0.35, -1.35);
+      else v.p.set(x - 0.1, yKam, odl);
+    };
+    if (a.aktywna) {
+      if (a.sprzet === 'statyw' && (a.typ === 'miareczkowanie' || a.typ === 'kranik')) {
+        klucz = 'biureta';
+        zbliz(POZYCJE.statyw[0], 1.22, 1.42, 1.35);
+      } else if (a.sprzet === 'statyw' && a.typ === 'odczyt') {
+        klucz = 'odczyt';
+        zbliz(POZYCJE.statyw[0], 1.5, 1.55, 1.0);
+      } else if (a.typ === 'wazenie') {
+        klucz = 'waga';
+        zbliz(POZYCJE.waga[0], 1.05, 1.4, 1.35);
+      } else if (a.typ === 'pipetowanie' || a.typ === 'mieszanie') {
+        klucz = 'kolba';
+        zbliz(POZYCJE.kolba[0], 1.1, 1.42, 1.35);
+      }
+    } else if (pisanie) {
+      klucz = 'pisanie';
+      zbliz(POZYCJE.stol[0], 0.98, 1.5, 1.2);
+    }
+    klucz += widok;
+    if (klucz !== st.current.klucz) {
+      st.current.klucz = klucz;
+      st.current.auto = true;
+    }
+    if (st.current.auto) {
+      const k = 1 - Math.exp(-dt * 3.2);
+      camera.position.lerp(v.p, k);
+      controls.target.lerp(v.t, k);
+      controls.update();
+    }
+  });
+  return null;
+}
+
 function Etykieta({ id }: { id: string }) {
   const [x, , z] = POZYCJE[id];
   return (
@@ -83,7 +157,8 @@ function Etykieta({ id }: { id: string }) {
   );
 }
 
-function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
+function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie }: Omit<Props, 'kartkaOtwarta'>) {
+  const zblizenie = useRef(false);
   const nRef = useRef(kroki.length);
   const [n, setN] = useState(kroki.length);
   const [wToku, setWToku] = useState(false);
@@ -183,6 +258,24 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
           setOcena(false);
         }
       }
+    }
+
+    // --- sprawozdanie: laborant pisze przy stole ---
+    if (!ak && pisanie) {
+      const [px, , pz] = POZYCJE.stol;
+      sL.x = px;
+      if (!apiL.current.idzie) {
+        sL.pochyl = 0.12;
+        sL.glowa = 0.38;
+        a.rekwizyt = 'dlugopis';
+        sL.prawa = P.set(px - 0.06 + Math.sin(t * 9) * 0.012 + Math.sin(t * 0.7) * 0.04, BLAT + 0.07, pz + 0.04);
+        sL.lewa = L.set(px + 0.12, BLAT + 0.04, pz + 0.06);
+      }
+    }
+    const czyOdczyt = a.aktywna && typ === 'odczyt' && sprzet === 'statyw';
+    if (czyOdczyt !== zblizenie.current) {
+      zblizenie.current = czyOdczyt;
+      onZblizenie?.(czyOdczyt);
     }
 
     // --- pozy dla bieżącej animacji ---
@@ -376,7 +469,7 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
         <Zlew anim={anim} />
       </group>
       <group position={POZYCJE.waga}>
-        <Waga wlaczona={stan.waga === 'wlaczona'} anim={anim} />
+        <Waga wlaczona={stan.waga === 'wlaczona'} anim={anim} masa={masa} />
       </group>
       {/* szkiełko z próbką mydła */}
       <group position={MYDLO}>
@@ -478,6 +571,12 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
               <meshStandardMaterial color="#f1d36b" side={THREE.DoubleSide} />
             </mesh>
           </group>
+          <group name="dlugopis" visible={false}>
+            <mesh position={[0, -0.05, 0.01]} rotation={[0.5, 0, 0.3]}>
+              <cylinderGeometry args={[0.004, 0.004, 0.13, 8]} />
+              <meshStandardMaterial color="#1f4fa3" roughness={0.4} />
+            </mesh>
+          </group>
           <group name="sciereczka" visible={false}>
             <mesh position={[0, -0.05, 0]}>
               <boxGeometry args={[0.14, 0.012, 0.1]} />
@@ -494,6 +593,13 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
         <sphereGeometry args={[0.005, 8, 8]} />
         <meshStandardMaterial color="#d8eef9" roughness={0.05} />
       </mesh>
+
+      {/* arkusz egzaminacyjny na stole */}
+      <mesh position={[POZYCJE.stol[0], BLAT + 0.002, POZYCJE.stol[2] + 0.06]} rotation={[-Math.PI / 2, 0, 0.06]} receiveShadow>
+        <planeGeometry args={[0.21, 0.297]} />
+        <meshStandardMaterial color="#fbfbf7" roughness={0.9} />
+      </mesh>
+      <KameraRezyser anim={anim} widok={widok} pisanie={pisanie} />
 
       {ocena && (
         <Html position={[zx, BLAT + 1.05, zz]} center distanceFactor={3.2} zIndexRange={[12, 0]}>
@@ -539,10 +645,9 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
         enablePan={false}
         minDistance={1.4}
         maxDistance={5.5}
-        minPolarAngle={0.6}
+        minPolarAngle={0.45}
         maxPolarAngle={1.5}
-        minAzimuthAngle={-0.8}
-        maxAzimuthAngle={0.8}
+        makeDefault
       />
     </Canvas>
   );

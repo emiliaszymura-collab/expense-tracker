@@ -4,7 +4,10 @@ import { usunStan, wczytajStan, zapiszStan } from './postep';
 import { Laboratorium } from './scena/Laboratorium';
 import { dodajPodpowiedz, nowyStan, ocenWpis, poziomUkonczony, type StanGry } from './silnik/gra';
 import type { Poziom } from './silnik/typy';
+import { losujPomiary } from './silnik/pomiary';
+import { Karta } from './ui/Karta';
 import { Konsola } from './ui/Konsola';
+import { Lupa } from './ui/Lupa';
 import { PanelProtokolu } from './ui/PanelProtokolu';
 
 export default function App() {
@@ -52,7 +55,14 @@ function WyborPoziomu({ onWybierz }: { onWybierz: (id: string) => void }) {
 }
 
 function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
-  const [stan, setStan] = useState<StanGry>(() => wczytajStan(poziom.id) ?? nowyStan(poziom.id));
+  const [stan, setStan] = useState<StanGry>(() => {
+    const zapis = wczytajStan(poziom.id) ?? nowyStan(poziom.id);
+    return zapis.pomiary ? zapis : { ...zapis, pomiary: losujPomiary() };
+  });
+  const pomiary = stan.pomiary!;
+  const [kartaOtwarta, setKartaOtwarta] = useState(false);
+  const [widok, setWidok] = useState<'przod' | 'tyl'>('przod');
+  const [lupa, setLupa] = useState(false);
   const [etykiety, setEtykiety] = useState(true);
   // Kartka z protokołem otwarta na start nowego poziomu, zwinięta przy powrocie do rozpoczętego.
   const [protokolOtwarty, setProtokolOtwarty] = useState(() => stan.dziennik.length === 0);
@@ -65,6 +75,11 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
     [poziom, stan.wykonane],
   );
   const ukonczony = poziomUkonczony(poziom, stan);
+  const poOdczycie = stan.wykonane.includes('odczyt');
+  const otworzKarte = (otwarta: boolean) => {
+    setKartaOtwarta(otwarta);
+    if (otwarta) setProtokolOtwarty(false);
+  };
 
   const wpisz = (tekst: string) => {
     const wynik = ocenWpis(poziom, stan, tekst, true);
@@ -75,6 +90,7 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
     usunStan(poziom.id);
     setStan(nowyStan(poziom.id));
     setPytanieReset(false);
+    setKartaOtwarta(false);
   };
 
   return (
@@ -86,6 +102,12 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
         <span className="tryb">
           <span className="tylko-szeroki">Tryb:&nbsp;</span>ćwiczenie
         </span>
+        <button className="drugorzedny" onClick={() => otworzKarte(!kartaOtwarta)} disabled={!poOdczycie} title={poOdczycie ? '' : 'Dostępna po pierwszym odczycie z biurety'}>
+          Karta<span className="tylko-szeroki">&nbsp;wyników</span>
+        </button>
+        <button className="drugorzedny" onClick={() => setWidok((w) => (w === 'przod' ? 'tyl' : 'przod'))}>
+          {widok === 'przod' ? 'Zza pleców' : 'Z przodu'}
+        </button>
         <label className="przelacznik">
           <input id="podpisy" type="checkbox" checked={etykiety} onChange={(e) => setEtykiety(e.target.checked)} /> Podpisy
           <span className="tylko-szeroki">&nbsp;sprzętu</span>
@@ -108,14 +130,47 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
       </nav>
       <section className="laboratorium">
         <div className="scena">
-          <Laboratorium kroki={wykonaneKroki} bhp={stan.bhp} pokazEtykiety={etykiety} kartkaOtwarta={protokolOtwarty} />
-          <PanelProtokolu poziom={poziom} otwarty={protokolOtwarty} onPrzelacz={setProtokolOtwarty} />
+          <Laboratorium
+            kroki={wykonaneKroki}
+            bhp={stan.bhp}
+            pokazEtykiety={etykiety}
+            kartkaOtwarta={protokolOtwarty || kartaOtwarta}
+            pisanie={kartaOtwarta}
+            widok={widok}
+            masa={pomiary.m[0]}
+            onZblizenie={setLupa}
+          />
+          {!kartaOtwarta && (
+            <PanelProtokolu
+              poziom={poziom}
+              otwarty={protokolOtwarty}
+              onPrzelacz={(o) => {
+                setProtokolOtwarty(o);
+                if (o) setKartaOtwarta(false);
+              }}
+            />
+          )}
+          {lupa && (
+            <div className="lupa-plywajaca">
+              <Lupa v={pomiary.v[0]} podpis="Odczytaj V₁ na dolnym menisku" />
+            </div>
+          )}
         </div>
+        {kartaOtwarta && (
+          <Karta
+            pomiary={pomiary}
+            odpowiedzi={stan.karta ?? {}}
+            onZmiana={(karta) => setStan((s) => ({ ...s, karta }))}
+            onZwin={() => setKartaOtwarta(false)}
+            podpowiedzi
+          />
+        )}
         <Konsola
           stan={stan}
           liczbaKrokow={poziom.kroki.length}
           ukonczony={ukonczony}
           onWpis={wpisz}
+          onKarta={() => otworzKarte(true)}
           onPodpowiedz={() => setStan((s) => dodajPodpowiedz(poziom, s))}
         />
       </section>

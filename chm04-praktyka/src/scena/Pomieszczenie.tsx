@@ -251,6 +251,29 @@ export function Pomieszczenie() {
         <planeGeometry args={[14, 12]} />
         <meshStandardMaterial color="#fafaf8" roughness={1} />
       </mesh>
+      {/* ściana od strony wejścia (widać ją w widoku zza pleców) */}
+      <mesh position={[0, SUFIT / 2, 5.6]} rotation={[0, Math.PI, 0]}>
+        <planeGeometry args={[14, SUFIT]} />
+        <meshStandardMaterial color="#e6e8e3" roughness={0.95} />
+      </mesh>
+      <group position={[2.6, 0, 5.57]} rotation={[0, Math.PI, 0]}>
+        <mesh position={[0, 1.02, 0]}>
+          <boxGeometry args={[0.95, 2.04, 0.05]} />
+          <meshStandardMaterial color="#d9dcd7" roughness={0.6} />
+        </mesh>
+        <mesh position={[0.36, 1.0, 0.04]} material={CHROM}>
+          <boxGeometry args={[0.12, 0.02, 0.04]} />
+        </mesh>
+      </group>
+      <group position={[-1.2, 1.6, 5.57]} rotation={[0, Math.PI, 0]}>
+        <mesh>
+          <boxGeometry args={[2.4, 1.2, 0.03]} />
+          <meshStandardMaterial color="#fdfdfd" roughness={0.25} />
+        </mesh>
+        <mesh position={[0, -0.63, 0.03]} material={STAL}>
+          <boxGeometry args={[2.4, 0.03, 0.08]} />
+        </mesh>
+      </group>
       {/* listwa przypodłogowa */}
       <mesh position={[0, 0.05, Z_SCIANY + 0.01]}>
         <boxGeometry args={[14, 0.1, 0.02]} />

@@ -20,7 +20,7 @@ export const CZAS: Record<string, number> = {
   wazenie: 4.4,
   pipetowanie: 3.2,
   miareczkowanie: 5.5,
-  odczyt: 2.8,
+  odczyt: 5,
   reka: 7.5,
   mycie: 3.2,
   kranik: 2.4,

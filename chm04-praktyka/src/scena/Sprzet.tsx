@@ -174,7 +174,7 @@ export function Statyw(props: { zestaw: boolean; lejek: boolean; poziomOd: numbe
   );
 }
 
-export function Waga({ wlaczona, anim }: { wlaczona: boolean; anim: AnimRef }) {
+export function Waga({ wlaczona, anim, masa = 2.01 }: { wlaczona: boolean; anim: AnimRef; masa?: number }) {
   const { tekstura, ctx } = useMemo(() => {
     const c = document.createElement('canvas');
     c.width = 256;
@@ -189,7 +189,7 @@ export function Waga({ wlaczona, anim }: { wlaczona: boolean; anim: AnimRef }) {
     let tekst = '';
     if (wlaczona) {
       let m = 0;
-      if (a.aktywna && a.typ === 'wazenie') m = a.p < 0.3 ? 0 : a.p < 0.55 ? 1.12 * gladko(0.3, 0.42, a.p) : a.p < 0.92 ? 1.12 + 0.89 * gladko(0.55, 0.7, a.p) : 0;
+      if (a.aktywna && a.typ === 'wazenie') m = a.p < 0.3 ? 0 : a.p < 0.55 ? masa * 0.56 * gladko(0.3, 0.42, a.p) : a.p < 0.92 ? masa * (0.56 + 0.44 * gladko(0.55, 0.7, a.p)) : 0;
       tekst = `${m.toFixed(2).replace('.', ',')} g`;
     }
     if (tekst !== ostatni.current) {

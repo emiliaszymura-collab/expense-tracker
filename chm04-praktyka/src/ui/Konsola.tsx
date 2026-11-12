@@ -22,9 +22,10 @@ interface Props {
   ukonczony: boolean;
   onWpis: (tekst: string) => void;
   onPodpowiedz: () => void;
+  onKarta: () => void;
 }
 
-export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz }: Props) {
+export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz, onKarta }: Props) {
   const [tekst, setTekst] = useState('');
   const dziennikRef = useRef<HTMLDivElement>(null);
 
@@ -80,6 +81,11 @@ export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz }:
             <div>Procedura wykonana – wszystkie {liczbaKrokow} kroki.</div>
             <div className="podsumowanie">
               Błędy i pominięte kroki: <strong>{stan.bledy}</strong> · Podpowiedzi: <strong>{stan.podpowiedzi ?? 0}</strong>
+            </div>
+            <div className="podsumowanie">
+              <button type="button" onClick={onKarta}>
+                Wypełnij kartę wyników
+              </button>
             </div>
             <div className="podsumowanie">
               {stan.bledy === 0 && (stan.podpowiedzi ?? 0) === 0
