@@ -144,7 +144,8 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
     if (ak) {
       typ = ak.krok.animacja ?? 'siegnij';
       sprzet = ak.krok.sprzet ?? 'stol';
-      if (typ !== 'reka') sL.x = (POZYCJE[sprzet] ?? POZYCJE.stol)[0];
+      // przy biurecie laborant staje lekko z boku, żeby rurka nie zasłaniała twarzy
+      if (typ !== 'reka') sL.x = (POZYCJE[sprzet] ?? POZYCJE.stol)[0] - (sprzet === 'statyw' ? 0.2 : 0);
       if (ak.faza === 'idz') {
         if (!apiL.current.idzie && Math.abs(apiL.current.poz.x - sL.x) < 0.03) {
           ak.faza = 'rob';
@@ -181,7 +182,7 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
       const wTrakcie = p > 0.08 && p < 0.92;
       switch (typ) {
         case 'montaz':
-          sL.pochyl = 0.1;
+          sL.pochyl = 0.06;
           sL.prawa = P.set(sx - 0.04, BLAT + 0.62 + Math.sin(t * 7) * 0.03, sz);
           sL.lewa = L.set(sx + 0.14, BLAT + 0.5, sz - 0.05);
           break;
@@ -197,14 +198,14 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
           if (sprzet === 'statyw') sL.lewa = L.set(sx + 0.03, BLAT + 0.62, sz);
           else if (sprzet !== 'odpady') {
             sL.lewa = L.set(cel.x + 0.06, BLAT + 0.12, cel.z);
-            sL.pochyl = 0.14;
+            sL.pochyl = 0.08;
             sL.glowa = 0.25;
           }
           if (przechyl.current > 0.85) strugaDo = sprzet === 'statyw' ? cel.y - 0.04 : cel.y - 0.14;
           break;
         }
         case 'wazenie': {
-          sL.pochyl = 0.2;
+          sL.pochyl = 0.12;
           sL.glowa = 0.3;
           a.rekwizyt = 'lyzeczka';
           const u = THREE.MathUtils.clamp((p - 0.18) / 0.72, 0, 1) * 2;
@@ -216,7 +217,7 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
           break;
         }
         case 'pipetowanie':
-          sL.pochyl = 0.18;
+          sL.pochyl = 0.11;
           sL.glowa = 0.3;
           a.rekwizyt = 'pipeta';
           sL.prawa = P.set(kPos.x - 0.01, kPos.y + 0.4, kPos.z);
@@ -227,12 +228,12 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
           }
           break;
         case 'mieszanie':
-          sL.pochyl = 0.16;
+          sL.pochyl = 0.1;
           sL.glowa = 0.28;
           if (wTrakcie) sL.prawa = P.set(kPos.x - 0.02, kPos.y + 0.18, kPos.z);
           break;
         case 'miareczkowanie':
-          sL.pochyl = 0.18;
+          sL.pochyl = 0.11;
           sL.glowa = 0.26;
           sL.lewa = L.set(sx + 0.05, BLAT + BIURETA.dol + 0.045, sz);
           sL.prawa = P.set(kPos.x - 0.03, kPos.y + 0.18, kPos.z);
@@ -242,7 +243,7 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
           }
           break;
         case 'kranik':
-          sL.pochyl = 0.18;
+          sL.pochyl = 0.11;
           sL.glowa = 0.2;
           sL.lewa = L.set(sx + 0.05, BLAT + BIURETA.dol + 0.045, sz);
           if (p > 0.3 && p < 0.75) {
@@ -253,12 +254,12 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
         case 'odczyt':
           if (sprzet === 'zlewka') {
             a.rekwizyt = 'papierek';
-            sL.pochyl = 0.16;
+            sL.pochyl = 0.1;
             sL.glowa = 0.3;
             const zanurz = Math.sin(Math.PI * gladko(0.1, 0.55, p));
             sL.prawa = P.set(sx - 0.01 + gladko(0.6, 0.85, p) * 0.1, BLAT + 0.26 - zanurz * 0.1, sz);
           } else {
-            sL.pochyl = 0.08;
+            sL.pochyl = 0.05;
             sL.glowa = -0.05;
             sL.prawa = P.set(sx - 0.07, BLAT + BIURETA.dol + 0.07 + BIURETA.dlugosc * 0.7, sz + 0.02);
           }
@@ -282,7 +283,7 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
           break;
         }
         case 'mycie':
-          sL.pochyl = 0.2;
+          sL.pochyl = 0.12;
           sL.glowa = 0.3;
           if (sprzet === 'zlew') {
             a.rekwizyt = 'kolbaPusta';
@@ -294,14 +295,14 @@ function Scena({ kroki, bhp, pokazEtykiety }: Omit<Props, 'kartkaOtwarta'>) {
           }
           break;
         case 'przycisk':
-          sL.pochyl = 0.22;
+          sL.pochyl = 0.13;
           if (wTrakcie) sL.prawa = P.set(sx - 0.1, BLAT + 0.07, sz + 0.1);
           break;
         case 'siegnij_gora':
           if (wTrakcie) sL.prawa = P.set(sx - 0.01, BIURETA_GORA + 0.07, sz);
           break;
         default:
-          sL.pochyl = 0.16;
+          sL.pochyl = 0.1;
           if (wTrakcie) sL.prawa = P.set(sx - 0.03, BLAT + 0.14, sz);
       }
     }
