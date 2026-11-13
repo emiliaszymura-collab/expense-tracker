@@ -82,7 +82,7 @@ function KameraDopasowanie({ kartkaOtwarta }: { kartkaOtwarta: boolean }) {
 function Otoczenie() {
   const tekstura = useLoader(RGBELoader, 'zasoby/sala.wasm');
   tekstura.mapping = THREE.EquirectangularReflectionMapping;
-  return <Environment map={tekstura} environmentIntensity={0.75} />;
+  return <Environment map={tekstura} environmentIntensity={1.15} />;
 }
 
 /**
@@ -625,9 +625,9 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
 
 export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
   return (
-    <Canvas shadows camera={{ position: [-0.1, 1.72, 3.1], fov: 42 }} dpr={[1, 1.75]} gl={{ toneMappingExposure: 1.25, antialias: false }}>
+    <Canvas shadows flat camera={{ position: [-0.1, 1.72, 3.1], fov: 42 }} dpr={[1, 1.75]} gl={{ antialias: false }}>
       <color attach="background" args={['#dfe3e4']} />
-      <hemisphereLight args={['#ffffff', '#9aa5ab', 0.3]} />
+      <hemisphereLight args={['#fffdf8', '#c9c4ba', 0.9]} />
       <directionalLight
         position={[2.6, 5, 3.6]}
         intensity={1.25}

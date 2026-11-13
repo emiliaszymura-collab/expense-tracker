@@ -82,6 +82,18 @@ function Szafki({ szer, wys, gl, fronty, szuflady = false }: { szer: number; wys
       <mesh position={[0, 0.05, -0.03]} material={PLASTIK_CIEMNY}>
         <boxGeometry args={[szer - 0.02, 0.1, gl - 0.06]} />
       </mesh>
+      {/* ciemne szczeliny między frontami – bez nich szafki wyglądają jak jeden klocek */}
+      {Array.from({ length: fronty + 1 }, (_, i) => (
+        <mesh key={`s${i}`} position={[-szer / 2 + w * i, wys / 2 + 0.05, gl / 2 + 0.002]}>
+          <boxGeometry args={[0.006, wys - 0.12, 0.004]} />
+          <meshStandardMaterial color="#8d9497" roughness={0.8} />
+        </mesh>
+      ))}
+      {/* stalowa listwa przypodłogowa cokołu */}
+      <mesh position={[0, 0.05, gl / 2 - 0.028]}>
+        <boxGeometry args={[szer - 0.02, 0.1, 0.004]} />
+        <meshStandardMaterial color="#9aa2a6" metalness={0.8} roughness={0.35} />
+      </mesh>
       {Array.from({ length: fronty }, (_, i) => {
         const x = -szer / 2 + w * (i + 0.5);
         const zSzuflada = szuflady && i % 3 === 1;
@@ -122,6 +134,21 @@ function Okno({ x }: { x: number }) {
       <mesh>
         <planeGeometry args={[1.7, 1.3]} />
         <meshBasicMaterial map={tex} toneMapped={false} />
+      </mesh>
+      {/* żaluzje pionowe, częściowo rozsunięte – typowe w pracowniach */}
+      {Array.from({ length: 18 }, (_, i) => {
+        const x = -0.82 + i * 0.096;
+        const zsuniete = i < 4 || i > 13;
+        return (
+          <mesh key={`z${i}`} position={[x, 0.02, 0.07]} rotation={[0, zsuniete ? 0.15 : 1.25, 0]}>
+            <boxGeometry args={[0.089, 1.38, 0.004]} />
+            <meshStandardMaterial color="#f1f0ea" roughness={0.85} transparent opacity={0.96} />
+          </mesh>
+        );
+      })}
+      <mesh position={[0, 0.72, 0.07]}>
+        <boxGeometry args={[1.8, 0.035, 0.05]} />
+        <meshStandardMaterial color="#e8e8e4" roughness={0.5} />
       </mesh>
       {/* rama */}
       {[[0, 0.67, 1.8, 0.06], [0, -0.67, 1.8, 0.06], [-0.88, 0, 0.06, 1.4], [0.88, 0, 0.06, 1.4], [0, 0, 0.04, 1.3]].map(([px, py, w, h], i) => (
@@ -247,7 +274,7 @@ function usePbr(folder: string, rx: number, ry: number) {
 function Sciany() {
   const dluga = usePbr('sciana', 5, 1.1);
   const krotka = usePbr('sciana', 4.3, 1.1);
-  const material = (m: ReturnType<typeof usePbr>) => <meshStandardMaterial {...m} color="#fbfaf6" roughness={0.92} />;
+  const material = (m: ReturnType<typeof usePbr>) => <meshStandardMaterial {...m} color="#fbfaf6" roughness={0.92} normalScale={new THREE.Vector2(0.25, 0.25)} emissive="#5a5852" emissiveIntensity={0.55} />;
   return (
     <group>
       <mesh position={[0, SUFIT / 2, Z_SCIANY]} receiveShadow>

@@ -24,7 +24,7 @@ export const CHROM = new THREE.MeshStandardMaterial({ color: '#dfe3e6', metalnes
 export const STAL = new THREE.MeshStandardMaterial({ color: '#b9c0c5', metalness: 0.9, roughness: 0.32 });
 export const PLASTIK_BIALY = new THREE.MeshStandardMaterial({ color: '#f1f3f4', roughness: 0.45 });
 export const PLASTIK_CIEMNY = new THREE.MeshStandardMaterial({ color: '#22272b', roughness: 0.5 });
-export const SZAFKA = new THREE.MeshStandardMaterial({ color: '#e9ebe8', roughness: 0.55 });
+export const SZAFKA = new THREE.MeshStandardMaterial({ color: '#eef0ee', roughness: 0.42, metalness: 0.02 });
 export const BLAT_MAT = new THREE.MeshStandardMaterial({ color: '#414c53', roughness: 0.32, metalness: 0.05 });
 
 export function plyn(kolor: string) {
