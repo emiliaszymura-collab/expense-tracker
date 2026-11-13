@@ -744,7 +744,7 @@ export function Pomieszczenie() {
         <meshBasicMaterial map={zegar} />
       </mesh>
       <Plakat x={4.4} y={1.75} napis={['BHP', 'fartuch', 'rękawice', 'okulary']} tlo="#1864ab" kolor="#ffffff" />
-      <Tablica tex={teksturaUkladu} x={-0.1} y={2.42} w={1.02} h={0.6} />
+      <Tablica tex={teksturaUkladu} x={-0.1} y={2.2} w={0.9} h={0.53} />
       <Tablica tex={teksturaGhs} x={-2.85} y={1.8} w={0.42} h={0.56} />
       <Tablica tex={teksturaPh} x={2.85} y={1.85} w={0.42} h={0.56} />
       <Stolek x={-2.4} z={Z_SCIANY + 0.95} />

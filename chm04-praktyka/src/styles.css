@@ -1020,3 +1020,129 @@ button.sprawdz {
   padding: 2px 4px;
   white-space: nowrap;
 }
+
+/* ---------- tryb egzaminu ---------- */
+.drobne-start {
+  font-size: 14px;
+  color: var(--tekst-2);
+}
+
+.lista-poziomow .poziom {
+  display: flex;
+  gap: 8px;
+}
+
+.lista-poziomow .poziom > button:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.lista-poziomow .przycisk-egzamin {
+  flex: none;
+  width: 92px;
+  display: grid;
+  place-content: center;
+  gap: 2px;
+  text-align: center;
+  background: var(--akcent);
+  color: var(--na-akcencie);
+  border: 0;
+  font-weight: 700;
+}
+
+.przycisk-egzamin span {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.zegar {
+  margin-left: auto;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--akcent);
+  background: var(--akcent-jasny);
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+.zegar-malo {
+  color: var(--blad);
+  background: var(--blad-tlo);
+}
+
+.laboratorium {
+  position: relative;
+}
+
+.wynik-egzaminu {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 20, 26, 0.55);
+  padding: 16px;
+}
+
+.wynik-karta {
+  background: var(--panel);
+  color: var(--tekst);
+  border-radius: 12px;
+  padding: 20px 22px;
+  width: min(520px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+}
+
+.wynik-karta h2 {
+  font-size: 26px;
+  margin: 10px 0 4px;
+}
+
+.tabela-wyniku {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.tabela-wyniku th,
+.tabela-wyniku td {
+  border-bottom: 1px solid var(--linia);
+  padding: 8px 4px;
+  text-align: left;
+}
+
+.tabela-wyniku td {
+  text-align: right;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.wynik-karta details {
+  font-size: 13.5px;
+  margin-bottom: 12px;
+}
+
+.wynik-przyciski {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 800px) {
+  .zegar {
+    display: inline-block;
+    margin-left: 0;
+    font-size: 14px;
+  }
+
+  .lista-poziomow .przycisk-egzamin {
+    width: 76px;
+  }
+}

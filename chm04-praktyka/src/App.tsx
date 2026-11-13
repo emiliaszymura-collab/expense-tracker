@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { formatCzasu, ocenEgzamin, PROG, pozostaloMs } from './silnik/egzamin';
 import { POZIOMY } from './procedury';
 import { usunStan, wczytajStan, zapiszStan } from './postep';
 import { Laboratorium } from './scena/Laboratorium';
@@ -11,32 +12,39 @@ import { Lupa } from './ui/Lupa';
 import { PanelProtokolu } from './ui/PanelProtokolu';
 
 export default function App() {
-  const [poziomId, setPoziomId] = useState<string | null>(null);
-  const poziom = POZIOMY.find((p) => p.id === poziomId);
+  const [wybor, setWybor] = useState<{ id: string; tryb: Tryb } | null>(null);
+  const poziom = POZIOMY.find((p) => p.id === wybor?.id);
 
-  if (!poziom) return <WyborPoziomu onWybierz={setPoziomId} />;
-  return <Gra key={poziom.id} poziom={poziom} onWyjdz={() => setPoziomId(null)} />;
+  if (!poziom || !wybor) return <WyborPoziomu onWybierz={(id, tryb) => setWybor({ id, tryb })} />;
+  return <Gra key={`${poziom.id}-${wybor.tryb}`} poziom={poziom} tryb={wybor.tryb} onWyjdz={() => setWybor(null)} />;
 }
 
-function WyborPoziomu({ onWybierz }: { onWybierz: (id: string) => void }) {
+type Tryb = 'cwiczenie' | 'egzamin';
+
+function WyborPoziomu({ onWybierz }: { onWybierz: (id: string, tryb: Tryb) => void }) {
   return (
     <main className="start">
       <header>
         <p className="znaczek">Technik analityk · CHM.04 · podstawa 2019</p>
         <h1>Lab CHM.04</h1>
         <p>Ćwicz procedury z egzaminu praktycznego: czytasz protokół, opisujesz, co robisz, a laborant to wykonuje.</p>
+        <p className="drobne-start">Kliknij poziom, żeby ćwiczyć z podpowiedziami. „Egzamin” to próba jak na prawdziwym egzaminie: limit czasu, bez podpowiedzi, wynik w punktach (zdane od {PROG}%).</p>
       </header>
       <ul className="lista-poziomow">
         {POZIOMY.map((p, i) => {
           const zapis = wczytajStan(p.id);
-          const status = zapis
-            ? poziomUkonczony(p, zapis)
-              ? 'ukończony'
-              : `w trakcie: ${zapis.wykonane.length}/${p.kroki.length}`
-            : 'nowy';
+          const status = !zapis
+            ? 'nowy'
+            : zapis.tryb === 'egzamin' && zapis.zakonczony
+              ? `egzamin: ${ocenEgzamin(p, zapis).procent}%`
+              : zapis.tryb === 'egzamin'
+                ? 'egzamin w toku'
+                : poziomUkonczony(p, zapis)
+                  ? 'ukończony'
+                  : `w trakcie: ${zapis.wykonane.length}/${p.kroki.length}`;
           return (
-            <li key={p.id}>
-              <button onClick={() => onWybierz(p.id)}>
+            <li key={p.id} className="poziom">
+              <button onClick={() => onWybierz(p.id, 'cwiczenie')}>
                 <span className="nr">{i + 1}</span>
                 <span className="opis">
                   <strong>{p.tytul}</strong>
@@ -44,7 +52,11 @@ function WyborPoziomu({ onWybierz }: { onWybierz: (id: string) => void }) {
                     {p.metoda} · {p.zrodlo}
                   </span>
                 </span>
-                <span className={`status status-${status === 'ukończony' ? 'ok' : status === 'nowy' ? 'nowy' : 'trwa'}`}>{status}</span>
+                <span className={`status status-${status === 'ukończony' || status.startsWith('egzamin:') ? 'ok' : status === 'nowy' ? 'nowy' : 'trwa'}`}>{status}</span>
+              </button>
+              <button className="przycisk-egzamin" onClick={() => onWybierz(p.id, 'egzamin')} aria-label={`Egzamin: ${p.tytul}`}>
+                Egzamin
+                <span>{p.czasMinut} min</span>
               </button>
             </li>
           );
@@ -54,9 +66,13 @@ function WyborPoziomu({ onWybierz }: { onWybierz: (id: string) => void }) {
   );
 }
 
-function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
+function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: () => void }) {
+  const egzamin = tryb === 'egzamin';
   const [stan, setStan] = useState<StanGry>(() => {
-    const zapis = wczytajStan(poziom.id) ?? nowyStan(poziom.id);
+    const nowy = (): StanGry => ({ ...nowyStan(poziom.id), tryb, start: egzamin ? Date.now() : undefined });
+    const stary = wczytajStan(poziom.id);
+    // zapis z innego trybu nie przechodzi: egzamin zawsze zaczyna się od zera, ćwiczenie nie dziedziczy egzaminu
+    const zapis = stary && (stary.tryb ?? 'cwiczenie') === tryb && !(egzamin && stary.zakonczony) ? stary : nowy();
     // brak pomiarów albo zapis w starym formacie → losujemy od nowa
     const aktualne = zapis.pomiary && poziom.karta?.losuj.every((l) => typeof zapis.pomiary![l.id] === 'number');
     return aktualne || !poziom.karta ? zapis : { ...zapis, karta: undefined, pomiary: losujPomiary(poziom.karta) };
@@ -83,14 +99,29 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
     if (otwarta) setProtokolOtwarty(false);
   };
 
+  // odliczanie czasu egzaminu
+  const [teraz, setTeraz] = useState(Date.now());
+  useEffect(() => {
+    if (!egzamin || stan.zakonczony) return;
+    const t = window.setInterval(() => setTeraz(Date.now()), 1000);
+    return () => window.clearInterval(t);
+  }, [egzamin, stan.zakonczony]);
+  const pozostalo = egzamin ? pozostaloMs(poziom, stan, teraz) : 0;
+  useEffect(() => {
+    if (egzamin && !stan.zakonczony && pozostalo <= 0) setStan((s) => ({ ...s, zakonczony: true }));
+  }, [egzamin, pozostalo, stan.zakonczony]);
+  const [pytanieOddaj, setPytanieOddaj] = useState(false);
+  const wynikEgz = egzamin && stan.zakonczony ? ocenEgzamin(poziom, stan) : null;
+
   const wpisz = (tekst: string) => {
-    const wynik = ocenWpis(poziom, stan, tekst, true);
+    if (stan.zakonczony) return;
+    const wynik = ocenWpis(poziom, stan, tekst, !egzamin);
     setStan(wynik.stan);
   };
 
   const resetuj = () => {
     usunStan(poziom.id);
-    setStan({ ...nowyStan(poziom.id), pomiary: poziom.karta ? losujPomiary(poziom.karta) : undefined });
+    setStan({ ...nowyStan(poziom.id), tryb, start: egzamin ? Date.now() : undefined, pomiary: poziom.karta ? losujPomiary(poziom.karta) : undefined });
     setPytanieReset(false);
     setKartaOtwarta(false);
   };
@@ -101,10 +132,32 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
         <button className="drugorzedny" onClick={onWyjdz}>
           ← Poziomy
         </button>
-        <span className="tryb">
-          <span className="tylko-szeroki">Tryb:&nbsp;</span>ćwiczenie
-        </span>
-        <button className="drugorzedny" onClick={() => otworzKarte(!kartaOtwarta)} disabled={!poOdczycie} title={poOdczycie ? '' : 'Dostępna po pierwszym odczycie wyniku'}>
+        {egzamin ? (
+          <span className={`zegar ${pozostalo < 15 * 60000 ? 'zegar-malo' : ''}`} role="timer" aria-label="Pozostały czas egzaminu">
+            ⏱ {formatCzasu(pozostalo)}
+          </span>
+        ) : (
+          <span className="tryb">
+            <span className="tylko-szeroki">Tryb:&nbsp;</span>ćwiczenie
+          </span>
+        )}
+        {egzamin && !stan.zakonczony &&
+          (pytanieOddaj ? (
+            <span className="potwierdz">
+              Oddać pracę?
+              <button className="niebezpieczny" onClick={() => setStan((s) => ({ ...s, zakonczony: true }))}>
+                Tak, oddaję
+              </button>
+              <button className="drugorzedny" onClick={() => setPytanieOddaj(false)}>
+                Nie
+              </button>
+            </span>
+          ) : (
+            <button className="drugorzedny" onClick={() => setPytanieOddaj(true)}>
+              Zakończ egzamin
+            </button>
+          ))}
+        <button className="drugorzedny" onClick={() => otworzKarte(!kartaOtwarta)} disabled={!poOdczycie && !egzamin} title={poOdczycie || egzamin ? '' : 'Dostępna po pierwszym odczycie wyniku'}>
           Karta<span className="tylko-szeroki">&nbsp;wyników</span>
         </button>
         <button className="drugorzedny" onClick={() => setWidok((w) => (w === 'przod' ? 'tyl' : 'przod'))}>
@@ -166,7 +219,8 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
             odpowiedzi={stan.karta ?? {}}
             onZmiana={(karta) => setStan((s) => ({ ...s, karta }))}
             onZwin={() => setKartaOtwarta(false)}
-            podpowiedzi
+            podpowiedzi={!egzamin}
+            bezSprawdzania={egzamin}
           />
         )}
         <Konsola
@@ -176,7 +230,50 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
           onWpis={wpisz}
           onKarta={() => otworzKarte(true)}
           onPodpowiedz={() => setStan((s) => dodajPodpowiedz(poziom, s))}
+          egzamin={egzamin}
+          zablokowana={Boolean(stan.zakonczony)}
         />
+        {wynikEgz && (
+          <div className="wynik-egzaminu" role="dialog" aria-label="Wynik egzaminu">
+            <div className="wynik-karta">
+              <p className="znaczek">{pozostalo <= 0 ? 'Koniec czasu' : 'Praca oddana'}</p>
+              <h2>{wynikEgz.zdany ? 'Zdane' : 'Niezdane'} – {wynikEgz.procent}%</h2>
+              <p className="drobne-start">Próg zaliczenia części praktycznej: {PROG}%.</p>
+              <table className="tabela-wyniku">
+                <tbody>
+                  <tr>
+                    <th>Przebieg (kroki procedury, minus błędy: {stan.bledy})</th>
+                    <td>{wynikEgz.przebieg.pkt} / {wynikEgz.przebieg.max}</td>
+                  </tr>
+                  <tr>
+                    <th>Środki ochrony indywidualnej</th>
+                    <td>{wynikEgz.bhp.pkt} / {wynikEgz.bhp.max}</td>
+                  </tr>
+                  <tr>
+                    <th>Karta wyników (kryteria z zasad oceniania)</th>
+                    <td>{wynikEgz.karta.pkt} / {wynikEgz.karta.max}</td>
+                  </tr>
+                </tbody>
+              </table>
+              {wynikEgz.karta.nieSpelnione.length > 0 && (
+                <details>
+                  <summary>Niespełnione kryteria karty ({wynikEgz.karta.nieSpelnione.length})</summary>
+                  <ul>
+                    {wynikEgz.karta.nieSpelnione.map((k) => (
+                      <li key={k}>{k}</li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+              <div className="wynik-przyciski">
+                <button onClick={resetuj}>Nowy egzamin</button>
+                <button className="drugorzedny" onClick={onWyjdz}>
+                  Lista poziomów
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

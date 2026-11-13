@@ -23,9 +23,11 @@ interface Props {
   onWpis: (tekst: string) => void;
   onPodpowiedz: () => void;
   onKarta: () => void;
+  egzamin?: boolean;
+  zablokowana?: boolean;
 }
 
-export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz, onKarta }: Props) {
+export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz, onKarta, egzamin = false, zablokowana = false }: Props) {
   const [tekst, setTekst] = useState('');
   const dziennikRef = useRef<HTMLDivElement>(null);
 
@@ -103,15 +105,17 @@ export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz, o
           placeholder="Co teraz robisz?"
           aria-label="Opisz czynność"
           autoFocus
-          disabled={ukonczony}
+          disabled={ukonczony || zablokowana}
         />
-        <button type="submit" disabled={ukonczony}>
+        <button type="submit" disabled={ukonczony || zablokowana}>
           Wykonaj
         </button>
-        <button type="button" className="drugorzedny" onClick={onPodpowiedz} disabled={ukonczony} aria-label="Podpowiedź">
+        {!egzamin && (
+        <button type="button" className="drugorzedny" onClick={onPodpowiedz} disabled={ukonczony || zablokowana} aria-label="Podpowiedź">
           <span className="tylko-szeroki">Podpowiedź</span>
           <span className="tylko-waski" aria-hidden="true">?</span>
         </button>
+        )}
       </form>
     </div>
   );

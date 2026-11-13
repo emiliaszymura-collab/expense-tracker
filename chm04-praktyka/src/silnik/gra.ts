@@ -15,6 +15,12 @@ export interface StanGry {
   pomiary?: Pomiary;
   /** Wpisy gracza w karcie wyników. */
   karta?: Odpowiedzi;
+  /** Tryb rozgrywki. */
+  tryb?: 'cwiczenie' | 'egzamin';
+  /** Początek egzaminu (ms od 1970) – do odliczania czasu. */
+  start?: number;
+  /** Egzamin zakończony (oddany albo koniec czasu). */
+  zakonczony?: boolean;
   dziennik: WpisDziennika[];
 }
 
