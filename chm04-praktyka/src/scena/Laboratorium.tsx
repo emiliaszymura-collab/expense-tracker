@@ -1,5 +1,5 @@
 // Scena 3D: sala, stanowisko, laborant i egzaminator. „Reżyser” odtwarza po kolei animacje przyjętych kroków.
-import { ContactShadows, Environment, Html, OrbitControls } from '@react-three/drei';
+import { ContactShadows, Environment, Html, OrbitControls, useProgress } from '@react-three/drei';
 import { EffectComposer, N8AO, ToneMapping, Vignette } from '@react-three/postprocessing';
 import { ToneMappingMode } from 'postprocessing';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
@@ -623,16 +623,60 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
   );
 }
 
-export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
+/** Telefony i tablety: bez efektów AO, mniejsze cienie i rozdzielczość – inaczej iOS potrafi wyłączyć grafikę. */
+const SLABY =
+  typeof window !== 'undefined' && window.matchMedia('(max-width: 800px), (pointer: coarse)').matches;
+
+/** Pasek ładowania modeli i tekstur oraz komunikat, gdy przeglądarka wyłączy grafikę 3D. */
+function Nakladka({ utracony }: { utracony: boolean }) {
+  const { active, progress } = useProgress();
+  if (utracony)
+    return (
+      <div className="nakladka-sceny" role="alert">
+        <strong>Przeglądarka wyłączyła grafikę 3D</strong>
+        <span>Zwykle to brak pamięci w telefonie. Zamknij inne karty i odśwież stronę – postęp jest zapisany.</span>
+        <button onClick={() => window.location.reload()}>Odśwież</button>
+      </div>
+    );
+  if (!active) return null;
   return (
-    <Canvas shadows flat camera={{ position: [-0.1, 1.72, 3.1], fov: 42 }} dpr={[1, 1.75]} gl={{ antialias: false }}>
+    <div className="nakladka-sceny" role="status">
+      <strong>Ładowanie laboratorium… {Math.round(progress)}%</strong>
+      <span className="pasek-ladowania">
+        <span style={{ width: `${progress}%` }} />
+      </span>
+    </div>
+  );
+}
+
+export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
+  const [utracony, setUtracony] = useState(false);
+  return (
+    <>
+    <Canvas
+      shadows={!SLABY}
+      flat
+      camera={{ position: [-0.1, 1.72, 3.1], fov: 42 }}
+      dpr={SLABY ? [1, 1.25] : [1, 1.75]}
+      gl={{ antialias: SLABY, powerPreference: 'high-performance' }}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener('webglcontextlost', (e) => {
+          e.preventDefault();
+          setUtracony(true);
+        });
+        if (SLABY) {
+          gl.toneMapping = THREE.AgXToneMapping;
+          gl.toneMappingExposure = 1.05;
+        }
+      }}
+    >
       <color attach="background" args={['#dfe3e4']} />
       <hemisphereLight args={['#fffdf8', '#c9c4ba', 0.9]} />
       <directionalLight
         position={[2.6, 5, 3.6]}
         intensity={1.25}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={SLABY ? [512, 512] : [2048, 2048]}
         shadow-camera-left={-4}
         shadow-camera-right={4}
         shadow-camera-top={4}
@@ -649,11 +693,13 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
         <Scena {...reszta} />
       </Suspense>
       {/* fotorealizm: cieniowanie zakamarków (AO), filmowe mapowanie tonów, lekka winieta */}
+      {!SLABY && (
       <EffectComposer multisampling={4} enableNormalPass={false}>
         <N8AO aoRadius={0.45} intensity={2.2} distanceFalloff={0.6} quality="medium" halfRes />
         <ToneMapping mode={ToneMappingMode.AGX} />
         <Vignette offset={0.3} darkness={0.35} />
       </EffectComposer>
+      )}
       <ContactShadows position={[0, 0.002, -0.4]} opacity={0.3} scale={9} blur={2.4} far={1.2} />
       <OrbitControls
         target={[-0.1, 1.24, -0.25]}
@@ -665,5 +711,7 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
         makeDefault
       />
     </Canvas>
+    <Nakladka utracony={utracony} />
+    </>
   );
 }
