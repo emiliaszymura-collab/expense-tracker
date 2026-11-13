@@ -1,8 +1,11 @@
-// Postać człowieka (laborant / egzaminator) z brył, z ramionami sterowanymi kinematyką odwrotną:
-// podajemy punkt w świecie, do którego ma sięgnąć dłoń, a bark–łokieć–nadgarstek ustawiają się same.
-import { useFrame } from '@react-three/fiber';
-import { useMemo, useRef, type MutableRefObject } from 'react';
+// Postać człowieka (laborant / egzaminator) – gotowy model ze szkieletem (Ready Player Me, z przykładów three.js).
+// Ramiona steruje kinematyka odwrotna: podajemy punkt w świecie, do którego ma sięgnąć dłoń,
+// a kości ramienia i przedramienia ustawiają się same.
+import { useGLTF } from '@react-three/drei';
+import { createPortal, useFrame } from '@react-three/fiber';
+import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 import * as THREE from 'three';
+import { clone as klonujSzkielet } from 'three/examples/jsm/utils/SkeletonUtils.js';
 
 export interface Ster {
   /** Dokąd postać ma iść. */
@@ -44,68 +47,91 @@ interface Props {
   predkosc?: number;
 }
 
-const SKORA = '#e9b99a';
-const BIODRO = 0.93;
-const BARK_Y = 0.43;
-const BARK_X = 0.185;
-const L1 = 0.29;
-const L2 = 0.27;
-const OS_Y = new THREE.Vector3(0, 1, 0);
-
+const PLIK = 'zasoby/postacie/rpm.wasm';
+const SKALA = 0.93;
+const KOSCI = ['Spine', 'Spine1', 'Head', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightArm', 'RightForeArm', 'RightHand', 'LeftUpLeg', 'LeftLeg', 'RightUpLeg', 'RightLeg'] as const;
+type NazwaKosci = (typeof KOSCI)[number];
+const OS_X = new THREE.Vector3(1, 0, 0);
 const tlum = (a: number, b: number, k: number) => a + (b - a) * k;
-
-function profil(punkty: [number, number][]) {
-  return new THREE.LatheGeometry(punkty.map(([r, y]) => new THREE.Vector2(r, y)), 28);
-}
-
-interface Ramie {
-  gora: THREE.Mesh | null;
-  dol: THREE.Mesh | null;
-  lokiec: THREE.Mesh | null;
-  dlon: THREE.Group | null;
-  cel: THREE.Vector3;
-}
 
 export function Postac({ ster, api, rola, fartuch = false, rekawice = false, okulary = false, predkosc = 1.5 }: Props) {
   const grupa = useRef<THREE.Group>(null);
-  const tulow = useRef<THREE.Group>(null);
-  const glowa = useRef<THREE.Group>(null);
-  const nogaL = useRef<THREE.Group>(null);
-  const nogaP = useRef<THREE.Group>(null);
-  const faza = useRef(0);
-  const ramiona = useRef<[Ramie, Ramie]>([
-    { gora: null, dol: null, lokiec: null, dlon: null, cel: new THREE.Vector3(BARK_X + 0.03, -0.1, 0.06) },
-    { gora: null, dol: null, lokiec: null, dlon: null, cel: new THREE.Vector3(-BARK_X - 0.03, -0.1, 0.06) },
-  ]);
-  const tmp = useMemo(
-    () => ({ a: new THREE.Vector3(), b: new THREE.Vector3(), c: new THREE.Vector3(), d: new THREE.Vector3(), q: new THREE.Quaternion() }),
-    [],
-  );
-
+  const { scene } = useGLTF(PLIK);
   const egz = rola === 'egzaminator';
-  const kolorGory = egz ? '#2c3a4f' : fartuch ? '#fbfbf9' : '#3f7f8c';
-  const kolorSpodni = egz ? '#23272e' : '#27324a';
-  const kolorDloni = rekawice ? '#2f6fd6' : SKORA;
 
-  const geo = useMemo(
-    () => ({
-      // fartuch do kolan / marynarka / sweter – profil obracany, potem spłaszczony w osi z
-      fartuch: profil([[0.0, -0.4], [0.2, -0.4], [0.195, -0.2], [0.18, 0.0], [0.158, 0.18], [0.172, 0.33], [0.17, 0.42], [0.11, 0.485], [0.055, 0.5], [0, 0.5]]),
-      gora: profil([[0.0, -0.06], [0.175, -0.06], [0.178, 0.0], [0.155, 0.18], [0.17, 0.33], [0.168, 0.42], [0.11, 0.485], [0.055, 0.5], [0, 0.5]]),
-      ramieGora: new THREE.CylinderGeometry(0.047, 0.041, 1, 14),
-      ramieDol: new THREE.CylinderGeometry(0.04, 0.032, 1, 14),
-    }),
+  // Własna kopia modelu ze szkieletem i materiałami (dwie postacie nie mogą dzielić kości).
+  const { model, kosci, spoczynek, materialy } = useMemo(() => {
+    const model = klonujSzkielet(scene);
+    const materialy: Record<string, { m: THREE.MeshStandardMaterial; mapa: THREE.Texture | null; kolor: THREE.Color; mesh: THREE.Mesh }> = {};
+    model.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (!mesh.isMesh) return;
+      mesh.castShadow = true;
+      mesh.frustumCulled = false;
+      const m = (mesh.material as THREE.MeshStandardMaterial).clone();
+      mesh.material = m;
+      materialy[m.name] = { m, mapa: m.map, kolor: m.color.clone(), mesh };
+    });
+    const kosci = {} as Record<NazwaKosci, THREE.Object3D>;
+    const spoczynek = {} as Record<NazwaKosci, THREE.Quaternion>;
+    for (const n of KOSCI) {
+      kosci[n] = model.getObjectByName(n)!;
+      spoczynek[n] = kosci[n].quaternion.clone();
+    }
+    return { model, kosci, spoczynek, materialy };
+  }, [scene]);
+
+  // Ubiór: fartuch = biała góra, rękawice = niebieskie dłonie; egzaminator w granatowym garniturze.
+  useEffect(() => {
+    const ustaw = (nazwa: string, kolor: string | null) => {
+      const x = materialy[nazwa];
+      if (!x) return;
+      if (kolor) {
+        x.m.map = null;
+        x.m.color.set(kolor);
+      } else {
+        x.m.map = x.mapa;
+        x.m.color.copy(x.kolor);
+      }
+      x.m.needsUpdate = true;
+    };
+    if (materialy.Wolf3D_Headwear) materialy.Wolf3D_Headwear.mesh.visible = false;
+    if (materialy.Wolf3D_Beard) materialy.Wolf3D_Beard.mesh.visible = egz;
+    ustaw('Wolf3D_Outfit_Top', egz ? '#2a3850' : fartuch ? '#f6f6f3' : null);
+    ustaw('Wolf3D_Outfit_Bottom', egz ? '#232c3d' : fartuch ? '#2b3140' : null);
+    ustaw('Wolf3D_Body', rekawice ? '#2f6fd6' : null);
+    if (materialy.Wolf3D_Body) materialy.Wolf3D_Body.m.roughness = rekawice ? 0.35 : 0.7;
+  }, [materialy, egz, fartuch, rekawice]);
+
+  const faza = useRef(0);
+  const cele = useRef([new THREE.Vector3(0.24, 0.9, 0.05), new THREE.Vector3(-0.24, 0.9, 0.05)]);
+  const pochylenie = useRef({ tulow: 0, glowa: 0, nogi: 0 });
+  const t = useMemo(
+    () => ({ a: new THREE.Vector3(), b: new THREE.Vector3(), c: new THREE.Vector3(), d: new THREE.Vector3(), e: new THREE.Vector3(), q: new THREE.Quaternion(), q2: new THREE.Quaternion(), q3: new THREE.Quaternion() }),
     [],
   );
+
+  /** Obraca kość tak, żeby odcinek kość→dziecko wskazywał w kierunku `kier` (w układzie świata). */
+  const skieruj = (kosc: THREE.Object3D, dziecko: THREE.Object3D, kier: THREE.Vector3) => {
+    const { a, b, q, q2, q3 } = t;
+    kosc.getWorldPosition(a);
+    dziecko.getWorldPosition(b);
+    b.sub(a).normalize();
+    q.setFromUnitVectors(b, kier);
+    kosc.getWorldQuaternion(q2);
+    q.multiply(q2); // nowa orientacja w świecie
+    kosc.parent!.getWorldQuaternion(q3).invert();
+    kosc.quaternion.copy(q3.multiply(q));
+    kosc.updateWorldMatrix(false, true);
+  };
 
   useFrame(({ clock }, dtSurowe) => {
     const g = grupa.current;
-    const t = tulow.current;
-    if (!g || !t) return;
+    if (!g) return;
     const dt = Math.min(dtSurowe, 0.05);
     const s = ster.current;
     const k = 1 - Math.exp(-dt * 9);
-    const czas = clock.elapsedTime;
+    const tempo = (window as unknown as { __tempo?: number }).__tempo ?? 1;
 
     // --- chodzenie ---
     const dx = s.x - g.position.x;
@@ -113,266 +139,97 @@ export function Postac({ ster, api, rola, fartuch = false, rekawice = false, oku
     const dyst = Math.hypot(dx, dz);
     const idzie = dyst > 0.015;
     if (idzie) {
-      const krok = Math.min(dyst, dt * predkosc * ((window as unknown as { __tempo?: number }).__tempo ?? 1));
+      const krok = Math.min(dyst, dt * predkosc * tempo);
       g.position.x += (dx / dyst) * krok;
       g.position.z += (dz / dyst) * krok;
-      faza.current += dt * 9;
+      faza.current += dt * 8;
     }
     const celObrot = idzie && dyst > 0.12 ? Math.atan2(dx, dz) : s.obrotY;
     let roznica = celObrot - g.rotation.y;
     roznica = Math.atan2(Math.sin(roznica), Math.cos(roznica));
     g.rotation.y += roznica * (1 - Math.exp(-dt * 10));
     const mach = idzie ? Math.sin(faza.current) : 0;
-    if (nogaL.current && nogaP.current) {
-      nogaL.current.rotation.x = tlum(nogaL.current.rotation.x, mach * 0.55, k * 2);
-      nogaP.current.rotation.x = tlum(nogaP.current.rotation.x, -mach * 0.55, k * 2);
-    }
-    g.position.y = idzie ? Math.abs(Math.cos(faza.current)) * 0.018 : 0;
+    const p = pochylenie.current;
+    p.nogi = tlum(p.nogi, mach, k * 2);
+    p.tulow = tlum(p.tulow, idzie ? 0.03 : s.pochyl + Math.sin(clock.elapsedTime * 1.4) * 0.006, k);
+    p.glowa = tlum(p.glowa, idzie ? 0 : s.glowa, k);
 
-    // --- tułów i głowa ---
-    const oddech = Math.sin(czas * 1.4) * 0.006;
-    t.rotation.x = tlum(t.rotation.x, idzie ? 0.04 : s.pochyl + oddech, k);
-    if (glowa.current) glowa.current.rotation.x = tlum(glowa.current.rotation.x, idzie ? 0 : s.glowa, k);
+    // --- kości: zaczynamy od pozy spoczynkowej, potem nakładamy ruch ---
+    for (const n of KOSCI) kosci[n].quaternion.copy(spoczynek[n]);
+    const obrocX = (n: NazwaKosci, kat: number) => kosci[n].quaternion.multiply(t.q.setFromAxisAngle(OS_X, kat));
+    obrocX('Spine', p.tulow * 0.6);
+    obrocX('Spine1', p.tulow * 0.4);
+    obrocX('Head', p.glowa);
+    obrocX('LeftUpLeg', -p.nogi * 0.5);
+    obrocX('RightUpLeg', p.nogi * 0.5);
+    obrocX('LeftLeg', Math.max(0, p.nogi) * 0.6);
+    obrocX('RightLeg', Math.max(0, -p.nogi) * 0.6);
     g.updateWorldMatrix(true, true);
 
-    // --- ramiona (IK dwóch kości) ---
-    const { a, b, c, d, q } = tmp;
-    ramiona.current.forEach((r, i) => {
-      const strona = i === 0 ? 1 : -1; // 0 = lewa ręka postaci (+x), 1 = prawa (−x)
-      const celSwiat = i === 0 ? s.lewa : s.prawa;
-      const bark = a.set(strona * BARK_X, BARK_Y, 0);
-      if (celSwiat && !idzie) {
-        b.copy(celSwiat);
-        t.worldToLocal(b);
-      } else {
-        b.set(strona * (BARK_X + 0.035), -0.1, 0.05 - strona * mach * 0.16);
-      }
-      r.cel.lerp(b, k);
-      // ograniczenie zasięgu
-      c.copy(r.cel).sub(bark);
-      const dl = THREE.MathUtils.clamp(c.length(), 0.08, L1 + L2 - 0.004);
-      c.normalize();
-      const nadgarstek = d.copy(bark).addScaledVector(c, dl);
-      // łokieć: kąt przy barku z twierdzenia cosinusów, biegun w dół / na zewnątrz / do tyłu
-      const cosA = THREE.MathUtils.clamp((L1 * L1 + dl * dl - L2 * L2) / (2 * L1 * dl), -1, 1);
-      const sinA = Math.sqrt(1 - cosA * cosA);
-      const biegun = b.set(strona * 0.55, -1, -0.5);
-      biegun.addScaledVector(c, -biegun.dot(c)).normalize();
-      const lokiec = b.copy(bark).addScaledVector(c, L1 * cosA).addScaledVector(biegun, L1 * sinA);
+    // --- ramiona (IK dwóch kości w układzie świata) ---
+    const { c, d, e } = t;
+    ([['LeftArm', 'LeftForeArm', 'LeftHand', s.lewa, 1], ['RightArm', 'RightForeArm', 'RightHand', s.prawa, -1]] as const).forEach(
+      ([nRamie, nPrzedramie, nDlon, celSwiat, strona], i) => {
+        const ramie = kosci[nRamie];
+        const przedramie = kosci[nPrzedramie];
+        const dlon = kosci[nDlon];
+        // cel w układzie postaci (płynnie doganiany), potem z powrotem do świata
+        if (celSwiat && !idzie) g.worldToLocal(c.copy(celSwiat));
+        else c.set(strona * 0.25, 0.88, 0.06 - strona * mach * 0.16);
+        cele.current[i].lerp(c, k);
+        const cel = g.localToWorld(c.copy(cele.current[i]));
 
-      if (r.gora && r.dol && r.lokiec && r.dlon) {
-        // ramię: bark → łokieć
-        c.copy(lokiec).sub(bark);
-        r.gora.position.copy(bark).addScaledVector(c, 0.5);
-        r.gora.scale.y = c.length();
-        r.gora.quaternion.setFromUnitVectors(OS_Y, c.normalize().negate());
-        r.lokiec.position.copy(lokiec);
-        // przedramię: łokieć → nadgarstek
-        c.copy(nadgarstek).sub(lokiec);
-        r.dol.position.copy(lokiec).addScaledVector(c, 0.5);
-        r.dol.scale.y = c.length();
-        q.setFromUnitVectors(OS_Y, c.normalize().negate());
-        r.dol.quaternion.copy(q);
-        r.dlon.position.copy(nadgarstek);
-        r.dlon.quaternion.copy(q);
-      }
-      // pozycja dłoni w świecie – dla rekwizytów trzymanych w ręce
-      const wyjscie = i === 0 ? api.current.dlonL : api.current.dlonP;
-      wyjscie.copy(nadgarstek);
-      t.localToWorld(wyjscie);
-    });
+        const bark = ramie.getWorldPosition(d);
+        const l1 = bark.distanceTo(przedramie.getWorldPosition(e));
+        const l2 = e.distanceTo(dlon.getWorldPosition(t.a));
+        const kier = e.copy(cel).sub(bark);
+        const dl = THREE.MathUtils.clamp(kier.length(), 0.08, l1 + l2 - 0.004);
+        kier.normalize();
+        const cosA = THREE.MathUtils.clamp((l1 * l1 + dl * dl - l2 * l2) / (2 * l1 * dl), -1, 1);
+        const sinA = Math.sqrt(1 - cosA * cosA);
+        // biegun łokcia: w dół, na zewnątrz i do tyłu względem postaci
+        const biegun = t.b.set(strona * 0.55, -1, -0.5).applyQuaternion(g.quaternion);
+        biegun.addScaledVector(kier, -biegun.dot(kier)).normalize();
+        const lokiec = c.copy(bark).addScaledVector(kier, l1 * cosA).addScaledVector(biegun, l1 * sinA);
+        const nadgarstek = t.a.copy(bark).addScaledVector(kier, dl);
+
+        const kierRamienia = lokiec.clone().sub(bark).normalize();
+        const kierPrzedramienia = nadgarstek.clone().sub(lokiec).normalize();
+        skieruj(ramie, przedramie, kierRamienia);
+        skieruj(przedramie, dlon, kierPrzedramienia);
+        dlon.getWorldPosition(i === 0 ? api.current.dlonL : api.current.dlonP);
+      },
+    );
 
     api.current.poz.copy(g.position);
     api.current.idzie = idzie;
   });
 
-  const ustaw = (i: 0 | 1, pole: 'gora' | 'dol' | 'lokiec' | 'dlon') => (el: THREE.Object3D | null) => {
-    (ramiona.current[i] as unknown as Record<string, THREE.Object3D | null>)[pole] = el;
-  };
-
   return (
     <group ref={grupa} position={[ster.current.x, 0, ster.current.z]} rotation={[0, ster.current.obrotY, 0]}>
-      {/* nogi */}
-      {([[0.085, nogaL], [-0.085, nogaP]] as const).map(([x, ref]) => (
-        <group key={x} ref={ref} position={[x, BIODRO, 0]}>
-          <mesh position={[0, -0.44, 0]} castShadow>
-            <cylinderGeometry args={[0.078, 0.058, 0.88, 14]} />
-            <meshStandardMaterial color={kolorSpodni} roughness={0.85} />
-          </mesh>
-          <mesh position={[0, -0.9, 0.04]} castShadow>
-            <boxGeometry args={[0.095, 0.06, 0.24]} />
-            <meshStandardMaterial color={egz ? '#1a1a1c' : '#f1f1ee'} roughness={0.6} />
-          </mesh>
-        </group>
-      ))}
-
-      {/* tułów obraca się w biodrach – razem z nim ramiona i głowa */}
-      <group ref={tulow} position={[0, BIODRO, 0]}>
-        <mesh geometry={!egz && fartuch ? geo.fartuch : geo.gora} scale={[1, 1, 0.66]} castShadow>
-          <meshStandardMaterial color={kolorGory} roughness={0.82} />
-        </mesh>
-        {(egz || fartuch) && (
-          <>
-            {/* zapięcie, guziki, kołnierz, kieszeń */}
-            <mesh position={[0, egz ? 0.15 : 0.0, 0.118]}>
-              <boxGeometry args={[0.006, egz ? 0.42 : 0.78, 0.004]} />
-              <meshStandardMaterial color={egz ? '#1b2533' : '#cfd3d2'} />
-            </mesh>
-            {(egz ? [0.1, 0.2] : [-0.2, -0.08, 0.04, 0.16, 0.28]).map((y) => (
-              <mesh key={y} position={[0.018, y, egz ? 0.115 : 0.121 - Math.max(0, y - 0.1) * 0.05]}>
-                <sphereGeometry args={[0.009, 10, 8]} />
-                <meshStandardMaterial color={egz ? '#0f1620' : '#dfe2e1'} roughness={0.4} />
-              </mesh>
-            ))}
-            {[1, -1].map((s) => (
-              <mesh key={s} position={[s * 0.05, 0.4, 0.092]} rotation={[0.25, 0, s * -0.55]}>
-                <boxGeometry args={[0.06, 0.12, 0.008]} />
-                <meshStandardMaterial color={kolorGory} roughness={0.8} />
-              </mesh>
-            ))}
-            {!egz && (
-              <group position={[0.1, 0.27, 0.108]}>
-                <mesh>
-                  <boxGeometry args={[0.075, 0.07, 0.006]} />
-                  <meshStandardMaterial color="#f3f3f0" roughness={0.85} />
-                </mesh>
-                <mesh position={[0.018, 0.035, 0.006]}>
-                  <cylinderGeometry args={[0.004, 0.004, 0.06, 6]} />
-                  <meshStandardMaterial color="#1f4fa3" />
-                </mesh>
-              </group>
-            )}
-          </>
-        )}
-        {egz && (
-          <mesh position={[0, 0.36, 0.1]}>
-            <boxGeometry args={[0.06, 0.2, 0.01]} />
-            <meshStandardMaterial color="#f4f4f4" roughness={0.7} />
-          </mesh>
-        )}
-        {/* barki */}
-        {[1, -1].map((s) => (
-          <mesh key={s} position={[s * BARK_X, BARK_Y, 0]} castShadow>
-            <sphereGeometry args={[0.058, 14, 12]} />
-            <meshStandardMaterial color={kolorGory} roughness={0.82} />
-          </mesh>
-        ))}
-        {/* szyja */}
-        <mesh position={[0, 0.535, 0]}>
-          <cylinderGeometry args={[0.042, 0.048, 0.09, 12]} />
-          <meshStandardMaterial color={SKORA} roughness={0.7} />
-        </mesh>
-
-        {/* głowa */}
-        <group ref={glowa} position={[0, 0.58, 0]}>
-          <mesh position={[0, 0.105, 0]} scale={[0.88, 1.06, 0.95]} castShadow>
-            <sphereGeometry args={[0.108, 28, 22]} />
-            <meshStandardMaterial color={SKORA} roughness={0.65} />
-          </mesh>
-          {/* włosy */}
-          <mesh position={[0, 0.118, -0.012]} scale={[0.93, 1.08, 1.02]} rotation={[-0.32, 0, 0]}>
-            <sphereGeometry args={[0.112, 28, 18, 0, Math.PI * 2, 0, Math.PI * 0.56]} />
-            <meshStandardMaterial color={egz ? '#8d8f93' : '#5b3a26'} roughness={0.9} />
-          </mesh>
-          {!egz && (
-            <mesh position={[0, 0.16, -0.115]}>
-              <sphereGeometry args={[0.05, 16, 12]} />
-              <meshStandardMaterial color="#553522" roughness={0.9} />
-            </mesh>
-          )}
-          {/* twarz */}
-          {[1, -1].map((s) => (
-            <mesh key={s} position={[s * 0.036, 0.115, 0.093]}>
-              <sphereGeometry args={[0.0105, 10, 8]} />
-              <meshStandardMaterial color="#2a2018" roughness={0.3} />
-            </mesh>
-          ))}
-          {[1, -1].map((s) => (
-            <mesh key={s} position={[s * 0.036, 0.142, 0.094]} rotation={[0, 0, s * -0.12]}>
-              <boxGeometry args={[0.03, 0.005, 0.004]} />
-              <meshStandardMaterial color={egz ? '#77797d' : '#4a2f1f'} />
-            </mesh>
-          ))}
-          <mesh position={[0, 0.09, 0.103]}>
-            <sphereGeometry args={[0.013, 10, 8]} />
-            <meshStandardMaterial color="#e2ab8b" roughness={0.7} />
-          </mesh>
-          <mesh position={[0, 0.052, 0.094]}>
-            <boxGeometry args={[0.034, 0.006, 0.004]} />
-            <meshStandardMaterial color="#b9675a" />
-          </mesh>
-          {/* okulary ochronne (gogle) albo zwykłe okulary egzaminatora */}
-          {okulary && (
-            <group position={[0, 0.117, 0]}>
-              <mesh>
-                <cylinderGeometry args={[0.106, 0.106, 0.052, 28, 1, true, -1.15, 2.3]} />
-                <meshPhysicalMaterial color="#d8f0ff" transmission={0.9} thickness={0.01} roughness={0.05} side={THREE.DoubleSide} envMapIntensity={2} />
-              </mesh>
-              <mesh position={[0, 0.028, 0]}>
-                <cylinderGeometry args={[0.108, 0.108, 0.008, 28, 1, true, -1.2, 2.4]} />
-                <meshStandardMaterial color="#3d7fd9" side={THREE.DoubleSide} />
-              </mesh>
-              <mesh>
-                <cylinderGeometry args={[0.1, 0.1, 0.014, 28, 1, true, 1.15, 3.98]} />
-                <meshStandardMaterial color="#20252a" side={THREE.DoubleSide} />
-              </mesh>
-            </group>
-          )}
-          {egz &&
-            [1, -1].map((s) => (
-              <mesh key={s} position={[s * 0.036, 0.115, 0.1]}>
-                <torusGeometry args={[0.02, 0.003, 8, 20]} />
-                <meshStandardMaterial color="#1c1c1e" />
-              </mesh>
-            ))}
-        </group>
-
-        {/* ramiona */}
-        {([0, 1] as const).map((i) => (
-          <group key={i}>
-            <mesh ref={ustaw(i, 'gora')} geometry={geo.ramieGora} castShadow>
-              <meshStandardMaterial color={kolorGory} roughness={0.82} />
-            </mesh>
-            <mesh ref={ustaw(i, 'lokiec')}>
-              <sphereGeometry args={[0.041, 12, 10]} />
-              <meshStandardMaterial color={kolorGory} roughness={0.82} />
-            </mesh>
-            <mesh ref={ustaw(i, 'dol')} geometry={geo.ramieDol} castShadow>
-              <meshStandardMaterial color={kolorGory} roughness={0.82} />
-            </mesh>
-            <group ref={ustaw(i, 'dlon')}>
-              {/* mankiet rękawicy */}
-              {rekawice && (
-                <mesh position={[0, 0.02, 0]}>
-                  <cylinderGeometry args={[0.036, 0.034, 0.06, 12]} />
-                  <meshStandardMaterial color={kolorDloni} roughness={0.35} />
-                </mesh>
-              )}
-              <mesh position={[0, -0.045, 0]} scale={[0.8, 1.25, 0.5]} castShadow>
-                <sphereGeometry args={[0.042, 14, 12]} />
-                <meshStandardMaterial color={kolorDloni} roughness={rekawice ? 0.35 : 0.65} />
-              </mesh>
-              <mesh position={[(i === 0 ? -1 : 1) * 0.03, -0.035, 0.012]} rotation={[0, 0, (i === 0 ? -1 : 1) * 0.7]} scale={[0.5, 1, 0.5]}>
-                <sphereGeometry args={[0.024, 10, 8]} />
-                <meshStandardMaterial color={kolorDloni} roughness={rekawice ? 0.35 : 0.65} />
-              </mesh>
-              {egz && i === 0 && (
-                // podkładka z kartą oceny w lewej ręce egzaminatora
-                <group position={[0, -0.12, 0.03]} rotation={[0.5, 0, 0]}>
-                  <mesh>
-                    <boxGeometry args={[0.2, 0.27, 0.008]} />
-                    <meshStandardMaterial color="#6b4a2f" roughness={0.6} />
-                  </mesh>
-                  <mesh position={[0, -0.005, 0.006]}>
-                    <boxGeometry args={[0.18, 0.24, 0.002]} />
-                    <meshStandardMaterial color="#fbfbf7" />
-                  </mesh>
-                </group>
-              )}
-            </group>
-          </group>
-        ))}
+      <group scale={SKALA}>
+        <primitive object={model} />
       </group>
+      {okulary &&
+        createPortal(
+          <group position={[0, 0.085, 0.025]}>
+            <mesh>
+              <cylinderGeometry args={[0.098, 0.098, 0.05, 28, 1, true, -1.15, 2.3]} />
+              <meshPhysicalMaterial color="#d8f0ff" transmission={0.9} thickness={0.01} roughness={0.05} side={THREE.DoubleSide} envMapIntensity={2} />
+            </mesh>
+            <mesh position={[0, 0.027, 0]}>
+              <cylinderGeometry args={[0.1, 0.1, 0.008, 28, 1, true, -1.2, 2.4]} />
+              <meshStandardMaterial color="#3d7fd9" side={THREE.DoubleSide} />
+            </mesh>
+            <mesh>
+              <cylinderGeometry args={[0.093, 0.093, 0.012, 28, 1, true, 1.15, 3.98]} />
+              <meshStandardMaterial color="#20252a" side={THREE.DoubleSide} />
+            </mesh>
+          </group>,
+          kosci.Head,
+        )}
     </group>
   );
 }
+
+useGLTF.preload(PLIK);
