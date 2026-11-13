@@ -118,13 +118,19 @@
           "zakład",
           "wkład",
           "umieszcz",
-          "przykręc"
+          "przykręc",
+          "zestawi",
+          "zestawiam",
+          "zestawienie"
         ],
         [
           "zestaw",
           "biuret",
           "statyw",
-          "łap"
+          "łap",
+          "sprzęt",
+          "sprzet",
+          "aparatur"
         ]
       ],
       "wykluczajace": [
