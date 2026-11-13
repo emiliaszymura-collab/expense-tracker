@@ -9,6 +9,7 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import type { ElementBhp, Krok } from '../silnik/typy';
 import { CZAS, nowaAnim, type Anim } from './animacje';
 import { STAL, SZKLO } from './materialy';
+import { Opcjonalnie } from './Opcjonalnie';
 import { Pomieszczenie } from './Pomieszczenie';
 import { Postac, nowePostacApi, nowySter } from './Postac';
 import { Butelka, Cylinder, Kolba, PojemnikOdpady, Statyw, Tryskawka, Waga, Zlew, Zlewka } from './Sprzet';
@@ -617,8 +618,12 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
       )}
       {pokazEtykiety && Object.keys(NAZWY_SPRZETU).map((id) => <Etykieta key={id} id={id} />)}
 
-      <Postac ster={sterL} api={apiL} rola="laborant" fartuch={bhp.includes('fartuch')} rekawice={bhp.includes('rekawice')} okulary={bhp.includes('okulary')} />
-      <Postac ster={sterE} api={apiE} rola="egzaminator" predkosc={1.9} />
+      <Opcjonalnie>
+        <Postac ster={sterL} api={apiL} rola="laborant" fartuch={bhp.includes('fartuch')} rekawice={bhp.includes('rekawice')} okulary={bhp.includes('okulary')} />
+      </Opcjonalnie>
+      <Opcjonalnie>
+        <Postac ster={sterE} api={apiE} rola="egzaminator" predkosc={1.9} />
+      </Opcjonalnie>
     </>
   );
 }
@@ -638,10 +643,16 @@ function Nakladka({ utracony }: { utracony: boolean }) {
         <button onClick={() => window.location.reload()}>Odśwież</button>
       </div>
     );
-  if (!active) return null;
+  // mały napis w rogu, nie zasłania sali; znika po 20 s, nawet jeśli któryś plik się nie wczyta
+  const [minelo, setMinelo] = useState(false);
+  useEffect(() => {
+    const t = window.setTimeout(() => setMinelo(true), 20000);
+    return () => window.clearTimeout(t);
+  }, []);
+  if (!active || minelo) return null;
   return (
-    <div className="nakladka-sceny" role="status">
-      <strong>Ładowanie laboratorium… {Math.round(progress)}%</strong>
+    <div className="ladowanie-rog" role="status">
+      Doczytuję modele… {Math.round(progress)}%
       <span className="pasek-ladowania">
         <span style={{ width: `${progress}%` }} />
       </span>
@@ -686,12 +697,12 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
       />
       <directionalLight position={[-1.5, 2.6, -3.2]} intensity={0.45} color="#eaf4ff" />
       {/* odbicia na szkle i metalu – otoczenie budowane w locie, bez zewnętrznych plików */}
-      <Suspense fallback={null}>
-        {/* światło i odbicia z prawdziwego wnętrza (HDRI z Poly Haven, CC0) */}
+      {/* każdy ciężki plik ładuje się osobno – jeśli któryś nie dojdzie, reszta sali i tak się rysuje */}
+      <Opcjonalnie>
         <Otoczenie />
-        <KameraDopasowanie kartkaOtwarta={kartkaOtwarta} />
-        <Scena {...reszta} />
-      </Suspense>
+      </Opcjonalnie>
+      <KameraDopasowanie kartkaOtwarta={kartkaOtwarta} />
+      <Scena {...reszta} />
       {/* fotorealizm: cieniowanie zakamarków (AO), filmowe mapowanie tonów, lekka winieta */}
       {!SLABY && (
       <EffectComposer multisampling={4} enableNormalPass={false}>

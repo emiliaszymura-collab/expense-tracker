@@ -1194,3 +1194,24 @@ button.sprawdz {
     flex: none;
   }
 }
+
+.ladowanie-rog {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 25;
+  pointer-events: none;
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2a33;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.ladowanie-rog .pasek-ladowania {
+  width: 140px;
+  height: 5px;
+}

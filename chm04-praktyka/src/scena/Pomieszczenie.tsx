@@ -1,5 +1,6 @@
 // Sala laboratoryjna: jasne ściany, okna ze światłem dziennym, panele LED, szafki, dygestorium, wyspa.
 import { useGLTF, useTexture } from '@react-three/drei';
+import { Opcjonalnie } from './Opcjonalnie';
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import { BLAT_MAT, CHROM, FRONT_NIEBIESKI, NIEBIESKI_CIEMNY, PLASTIK_CIEMNY, SZAFKA, SZKLO, STAL, etykieta } from './materialy';
@@ -603,6 +604,28 @@ function BlatyPbr() {
   return null;
 }
 
+/** Gładkie, jasne ściany – gdy tekstura tynku się nie wczyta. */
+function ScianyProste() {
+  return (
+    <group>
+      <mesh position={[0, SUFIT / 2, Z_SCIANY]}>
+        <planeGeometry args={[14, SUFIT]} />
+        <meshStandardMaterial color="#eef0ec" roughness={0.95} />
+      </mesh>
+      <mesh position={[0, SUFIT / 2, 5.6]} rotation={[0, Math.PI, 0]}>
+        <planeGeometry args={[14, SUFIT]} />
+        <meshStandardMaterial color="#eef0ec" roughness={0.95} />
+      </mesh>
+      {[-5.6, 5.6].map((x) => (
+        <mesh key={x} position={[x, SUFIT / 2, 0]} rotation={[0, x < 0 ? Math.PI / 2 : -Math.PI / 2, 0]}>
+          <planeGeometry args={[12, SUFIT]} />
+          <meshStandardMaterial color="#e8ebe7" roughness={0.95} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 export function Pomieszczenie() {
   const zegar = useMemo(teksturaZegara, []);
   const szerWyspy = WYSPA.x1 - WYSPA.x0;
@@ -613,9 +636,22 @@ export function Pomieszczenie() {
   return (
     <group>
       {/* podłoga, ściany, sufit */}
-      <Podloga />
-      <BlatyPbr />
-      <Sciany />
+      <Opcjonalnie
+        zastepstwo={
+          <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+            <planeGeometry args={[14, 12]} />
+            <meshStandardMaterial color="#d9dcda" roughness={0.6} />
+          </mesh>
+        }
+      >
+        <Podloga />
+      </Opcjonalnie>
+      <Opcjonalnie>
+        <BlatyPbr />
+      </Opcjonalnie>
+      <Opcjonalnie zastepstwo={<ScianyProste />}>
+        <Sciany />
+      </Opcjonalnie>
       <SufitPodwieszany />
       <Instalacje />
       <group position={[2.6, 0, 5.57]} rotation={[0, Math.PI, 0]}>
@@ -693,9 +729,15 @@ export function Pomieszczenie() {
             <boxGeometry args={[0.16, 0.012, 0.2]} />
           </mesh>
         </group>
-        <ZestawSzkla position={[-1.2, 0.915, 0.0]} scale={1.6} />
-        <Model plik="industrial_microscope" position={[-2.0, 0.915, 0.0]} rotation={[0, 0.5, 0]} />
-        <Model plik="bunsen_burner" position={[0.55, 0.915, 0.05]} />
+        <Opcjonalnie>
+          <ZestawSzkla position={[-1.2, 0.915, 0.0]} scale={1.6} />
+        </Opcjonalnie>
+        <Opcjonalnie>
+          <Model plik="industrial_microscope" position={[-2.0, 0.915, 0.0]} rotation={[0, 0.5, 0]} />
+        </Opcjonalnie>
+        <Opcjonalnie>
+          <Model plik="bunsen_burner" position={[0.55, 0.915, 0.05]} />
+        </Opcjonalnie>
         {/* gniazda elektryczne nad blatem */}
         {[-2.6, -1.4, -0.2, 1.0, 2.2].map((x) => (
           <group key={x} position={[x, 1.08, -0.3]}>
@@ -766,7 +808,9 @@ export function Pomieszczenie() {
 
       {/* stolik egzaminatora */}
       <group position={[3.55, 0, -2.1]}>
-        <Model plik="clipboard" position={[0.3, 0.75, 0.05]} rotation={[0, -0.3, 0]} />
+        <Opcjonalnie>
+          <Model plik="clipboard" position={[0.3, 0.75, 0.05]} rotation={[0, -0.3, 0]} />
+        </Opcjonalnie>
         <mesh position={[0, 0.73, 0]} castShadow receiveShadow>
           <boxGeometry args={[1.1, 0.035, 0.6]} />
           <meshStandardMaterial color="#c8a77d" roughness={0.6} />
