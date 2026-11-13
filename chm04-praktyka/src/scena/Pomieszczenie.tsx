@@ -2,7 +2,7 @@
 import { useGLTF, useTexture } from '@react-three/drei';
 import { useMemo } from 'react';
 import * as THREE from 'three';
-import { BLAT_MAT, CHROM, PLASTIK_CIEMNY, SZAFKA, SZKLO, STAL, etykieta } from './materialy';
+import { BLAT_MAT, CHROM, FRONT_NIEBIESKI, NIEBIESKI_CIEMNY, PLASTIK_CIEMNY, SZAFKA, SZKLO, STAL, etykieta } from './materialy';
 import { Butelka } from './Sprzet';
 import { BLAT, WYSPA } from './uklad';
 
@@ -72,7 +72,7 @@ function teksturaZegara() {
 }
 
 /** Rząd szafek z frontami i uchwytami; przód w stronę +z. */
-function Szafki({ szer, wys, gl, fronty, szuflady = false }: { szer: number; wys: number; gl: number; fronty: number; szuflady?: boolean }) {
+function Szafki({ szer, wys, gl, fronty, szuflady = false, front = SZAFKA }: { szer: number; wys: number; gl: number; fronty: number; szuflady?: boolean; front?: THREE.Material }) {
   const w = szer / fronty;
   return (
     <group>
@@ -102,7 +102,7 @@ function Szafki({ szer, wys, gl, fronty, szuflady = false }: { szer: number; wys
             {zSzuflada ? (
               [0.74, 0.5, 0.26].map((y) => (
                 <group key={y} position={[0, (y * (wys - 0.12)) / 0.87 + 0.02, 0]}>
-                  <mesh position={[0, 0, 0.008]} material={SZAFKA} castShadow>
+                  <mesh position={[0, 0, 0.008]} material={front} castShadow>
                     <boxGeometry args={[w - 0.012, (wys - 0.14) / 3 - 0.012, 0.018]} />
                   </mesh>
                   <mesh position={[0, 0.04, 0.026]} rotation={[0, 0, Math.PI / 2]} material={CHROM}>
@@ -112,7 +112,7 @@ function Szafki({ szer, wys, gl, fronty, szuflady = false }: { szer: number; wys
               ))
             ) : (
               <>
-                <mesh position={[0, wys / 2 + 0.05, 0.008]} material={SZAFKA} castShadow>
+                <mesh position={[0, wys / 2 + 0.05, 0.008]} material={front} castShadow>
                   <boxGeometry args={[w - 0.012, wys - 0.13, 0.018]} />
                 </mesh>
                 <mesh position={[(i % 2 ? -1 : 1) * (w / 2 - 0.05), wys * 0.78, 0.026]} material={CHROM}>
@@ -166,41 +166,229 @@ function Okno({ x }: { x: number }) {
 }
 
 function Dygestorium() {
+  const panel = useMemo(() => etykieta(['WYCIĄG  ●  ON', 'przepływ 0,5 m/s'], { w: 256, h: 96, tlo: '#0f2236', kolor: '#7ee2a8', rozmiar: 30 }), []);
+  const ostrzezenie = useMemo(() => etykieta(['Pracuj przy', 'opuszczonej szybie'], { w: 256, h: 96, tlo: '#ffd43b', kolor: '#1b1b1b', ramka: '#1b1b1b', rozmiar: 28 }), []);
   return (
-    <group position={[-3.9, 0, Z_SCIANY + 0.4]}>
+    <group position={[-3.9, 0, Z_SCIANY + 0.45]}>
+      {/* szafka podblatowa z niebieskimi frontami */}
       <mesh position={[0, 0.45, 0]} material={SZAFKA} castShadow>
-        <boxGeometry args={[1.3, 0.9, 0.8]} />
+        <boxGeometry args={[1.4, 0.9, 0.85]} />
       </mesh>
+      {[-0.35, 0.35].map((x) => (
+        <group key={x} position={[x, 0.47, 0.428]}>
+          <mesh material={FRONT_NIEBIESKI}>
+            <boxGeometry args={[0.68, 0.76, 0.018]} />
+          </mesh>
+          <mesh position={[x < 0 ? 0.28 : -0.28, 0.25, 0.015]} material={CHROM}>
+            <cylinderGeometry args={[0.005, 0.005, 0.14, 8]} />
+          </mesh>
+        </group>
+      ))}
       <mesh position={[0, 0.915, 0]} material={BLAT_MAT}>
-        <boxGeometry args={[1.32, 0.03, 0.82]} />
+        <boxGeometry args={[1.42, 0.03, 0.87]} />
       </mesh>
-      {/* komora */}
-      <mesh position={[0, 1.6, -0.38]}>
-        <boxGeometry args={[1.3, 1.35, 0.04]} />
-        <meshStandardMaterial color="#dfe3e4" roughness={0.6} />
+      {/* komora: białe wnętrze, niebieskie boki */}
+      <mesh position={[0, 1.65, -0.4]}>
+        <boxGeometry args={[1.32, 1.45, 0.03]} />
+        <meshStandardMaterial color="#f3f4f2" roughness={0.5} />
       </mesh>
-      {[-0.63, 0.63].map((x) => (
-        <mesh key={x} position={[x, 1.6, 0]} material={SZAFKA}>
-          <boxGeometry args={[0.04, 1.35, 0.8]} />
+      {[-0.69, 0.69].map((x) => (
+        <mesh key={x} position={[x, 1.65, 0]} material={NIEBIESKI_CIEMNY} castShadow>
+          <boxGeometry args={[0.07, 1.45, 0.85]} />
         </mesh>
       ))}
-      <mesh position={[0, 2.4, 0]} material={SZAFKA} castShadow>
-        <boxGeometry args={[1.3, 0.3, 0.8]} />
+      <mesh position={[0, 2.37, 0.0]} material={NIEBIESKI_CIEMNY} castShadow>
+        <boxGeometry args={[1.45, 0.08, 0.85]} />
       </mesh>
-      {/* szyba podniesiona do połowy */}
-      <mesh position={[0, 1.85, 0.38]} material={SZKLO}>
-        <boxGeometry args={[1.22, 0.8, 0.012]} />
+      <mesh position={[0, 2.56, -0.05]} material={SZAFKA}>
+        <boxGeometry args={[1.45, 0.3, 0.75]} />
       </mesh>
-      <mesh position={[0, 1.44, 0.39]} material={STAL}>
-        <boxGeometry args={[1.24, 0.03, 0.03]} />
+      {/* oświetlenie komory */}
+      <mesh position={[0, 2.31, -0.15]} rotation={[Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[1.1, 0.08]} />
+        <meshBasicMaterial color="#fffbea" toneMapped={false} />
       </mesh>
-      <mesh position={[0, 2.75, -0.1]}>
-        <cylinderGeometry args={[0.14, 0.14, 0.5, 16]} />
-        <meshStandardMaterial color="#c3c9cc" metalness={0.6} roughness={0.4} />
+      <pointLight position={[0, 2.1, -0.1]} intensity={0.6} distance={1.6} color="#fff8e6" />
+      {/* szyba przesuwna w niebieskiej ramie, podniesiona do połowy */}
+      <group position={[0, 1.83, 0.4]}>
+        <mesh material={SZKLO}>
+          <boxGeometry args={[1.26, 0.82, 0.012]} />
+        </mesh>
+        {[[0, -0.42, 1.3, 0.05], [0, 0.42, 1.3, 0.03], [-0.64, 0, 0.03, 0.86], [0.64, 0, 0.03, 0.86]].map(([px, py, w, h], i) => (
+          <mesh key={i} position={[px, py, 0.008]} material={NIEBIESKI_CIEMNY}>
+            <boxGeometry args={[w, h, 0.03]} />
+          </mesh>
+        ))}
+        <mesh position={[0, -0.42, 0.04]} rotation={[0, 0, Math.PI / 2]} material={CHROM}>
+          <cylinderGeometry args={[0.012, 0.012, 0.9, 12]} />
+        </mesh>
+      </group>
+      {/* panel sterowania i naklejka ostrzegawcza */}
+      <mesh position={[0.5, 2.37, 0.43]}>
+        <planeGeometry args={[0.24, 0.07]} />
+        <meshBasicMaterial map={panel} toneMapped={false} />
+      </mesh>
+      <mesh position={[-0.45, 1.36, 0.413]}>
+        <planeGeometry args={[0.24, 0.09]} />
+        <meshStandardMaterial map={ostrzezenie} roughness={0.7} />
+      </mesh>
+      <mesh position={[0, 2.85, -0.1]}>
+        <cylinderGeometry args={[0.14, 0.14, 0.3, 20]} />
+        <meshStandardMaterial color="#cfd4d6" metalness={0.7} roughness={0.35} />
       </mesh>
       <group position={[-0.3, 0.93, -0.1]}>
         <Butelka napis={['NH₃ · H₂O', 'bufor pH 10']} braz wys={0.2} r={0.045} zakretka="#111" />
       </group>
+      <group position={[0.25, 0.93, -0.15]}>
+        <Butelka napis={['HCl', '2 mol/dm³']} wys={0.2} r={0.045} zakretka="#c92a2a" />
+      </group>
+    </group>
+  );
+}
+
+/** Układ okresowy pierwiastków narysowany na canvasie (bloki s, p, d, f w kolorach). */
+function teksturaUkladu() {
+  const c = document.createElement('canvas');
+  c.width = 1024;
+  c.height = 600;
+  const g = c.getContext('2d')!;
+  g.fillStyle = '#f7f9fb';
+  g.fillRect(0, 0, 1024, 600);
+  g.fillStyle = '#1f466e';
+  g.fillRect(0, 0, 1024, 62);
+  g.fillStyle = '#fff';
+  g.font = '700 38px system-ui, sans-serif';
+  g.textAlign = 'center';
+  g.fillText('UKŁAD OKRESOWY PIERWIASTKÓW', 512, 44);
+  const sym = 'H,,,,,,,,,,,,,,,,,He|Li,Be,,,,,,,,,,,B,C,N,O,F,Ne|Na,Mg,,,,,,,,,,,Al,Si,P,S,Cl,Ar|K,Ca,Sc,Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Zn,Ga,Ge,As,Se,Br,Kr|Rb,Sr,Y,Zr,Nb,Mo,Tc,Ru,Rh,Pd,Ag,Cd,In,Sn,Sb,Te,I,Xe|Cs,Ba,La,Hf,Ta,W,Re,Os,Ir,Pt,Au,Hg,Tl,Pb,Bi,Po,At,Rn|Fr,Ra,Ac,Rf,Db,Sg,Bh,Hs,Mt,Ds,Rg,Cn,Nh,Fl,Mc,Lv,Ts,Og'.split('|').map((r) => r.split(','));
+  const kolor = (r: number, k: number) => (k < 2 ? (r === 0 && k === 0 ? '#9fd8a6' : '#f4a9a0') : k < 12 ? '#9cc3ea' : k === 17 ? '#c5b3e6' : r === 0 ? '#c5b3e6' : '#f6d38a');
+  const W = 54;
+  const H = 66;
+  sym.forEach((wiersz, r) =>
+    wiersz.forEach((el, k) => {
+      if (!el) return;
+      const x = 26 + k * W;
+      const y = 80 + r * H;
+      g.fillStyle = kolor(r, k);
+      g.fillRect(x, y, W - 3, H - 3);
+      g.fillStyle = '#1b2329';
+      g.font = '700 24px system-ui, sans-serif';
+      g.fillText(el, x + (W - 3) / 2, y + 40);
+    }),
+  );
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+
+/** Plakat GHS: czerwone romby z symbolami zagrożeń. */
+function teksturaGhs() {
+  const c = document.createElement('canvas');
+  c.width = 512;
+  c.height = 680;
+  const g = c.getContext('2d')!;
+  g.fillStyle = '#ffffff';
+  g.fillRect(0, 0, 512, 680);
+  g.fillStyle = '#c92a2a';
+  g.fillRect(0, 0, 512, 70);
+  g.fillStyle = '#fff';
+  g.textAlign = 'center';
+  g.font = '700 34px system-ui, sans-serif';
+  g.fillText('PIKTOGRAMY GHS', 256, 48);
+  const nazwy = ['wybuchowe', 'łatwopalne', 'utleniające', 'gazy pod ciśn.', 'żrące', 'toksyczne', 'szkodliwe', 'zagrożenie zdrowia', 'środowisko'];
+  const znaki = ['✸', '🔥', '◎', '⛽', '⚗', '☠', '!', '✦', '🐟'];
+  nazwy.forEach((n, i) => {
+    const cx = 90 + (i % 3) * 166;
+    const cy = 150 + Math.floor(i / 3) * 190;
+    g.save();
+    g.translate(cx, cy);
+    g.rotate(Math.PI / 4);
+    g.fillStyle = '#fff';
+    g.strokeStyle = '#d0021b';
+    g.lineWidth = 10;
+    g.fillRect(-44, -44, 88, 88);
+    g.strokeRect(-44, -44, 88, 88);
+    g.restore();
+    g.fillStyle = '#111';
+    g.font = '700 46px system-ui, "Segoe UI Emoji", sans-serif';
+    g.fillText(znaki[i], cx, cy + 16);
+    g.font = '600 20px system-ui, sans-serif';
+    g.fillText(n, cx, cy + 92);
+  });
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+
+/** Skala pH z barwami wskaźnika uniwersalnego. */
+function teksturaPh() {
+  const c = document.createElement('canvas');
+  c.width = 512;
+  c.height = 680;
+  const g = c.getContext('2d')!;
+  g.fillStyle = '#f7f9fb';
+  g.fillRect(0, 0, 512, 680);
+  g.fillStyle = '#1f466e';
+  g.fillRect(0, 0, 512, 70);
+  g.fillStyle = '#fff';
+  g.textAlign = 'center';
+  g.font = '700 34px system-ui, sans-serif';
+  g.fillText('SKALA pH', 256, 48);
+  const barwy = ['#d62828', '#e2452a', '#ee6c2c', '#f39c2f', '#f1c93b', '#c9d544', '#6fbf4a', '#35a26b', '#2a9a8f', '#2b78b5', '#3a55a4', '#4a3f98', '#5b2d8c', '#6a1f7a', '#4b1259'];
+  const przyklady = ['kwas solny', 'sok żołądkowy', 'sok cytrynowy', 'ocet', 'sok pomarańcz.', 'kawa', 'mleko', 'woda dest.', 'krew', 'soda oczyszcz.', 'mydło', 'woda amoniak.', 'woda wapienna', 'wybielacz', 'NaOH'];
+  barwy.forEach((b, i) => {
+    const y = 88 + i * 38;
+    g.fillStyle = b;
+    g.fillRect(40, y, 120, 34);
+    g.fillStyle = '#fff';
+    g.font = '700 22px system-ui, sans-serif';
+    g.fillText(String(i), 100, y + 25);
+    g.fillStyle = '#1b2329';
+    g.textAlign = 'left';
+    g.font = '500 22px system-ui, sans-serif';
+    g.fillText(przyklady[i], 180, y + 25);
+    g.textAlign = 'center';
+  });
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+
+function Tablica({ tex, x, y, w, h }: { tex: () => THREE.Texture; x: number; y: number; w: number; h: number }) {
+  const t = useMemo(tex, []);
+  return (
+    <group position={[x, y, Z_SCIANY + 0.015]}>
+      <mesh position={[0, 0, -0.004]}>
+        <boxGeometry args={[w + 0.03, h + 0.03, 0.01]} />
+        <meshStandardMaterial color="#c3c9cd" metalness={0.6} roughness={0.35} />
+      </mesh>
+      <mesh position={[0, 0, 0.002]}>
+        <planeGeometry args={[w, h]} />
+        <meshStandardMaterial map={t} roughness={0.55} />
+      </mesh>
+    </group>
+  );
+}
+
+/** Stołek laboratoryjny z niebieskim siedziskiem. */
+function Stolek({ x, z }: { x: number; z: number }) {
+  return (
+    <group position={[x, 0, z]}>
+      <mesh position={[0, 0.62, 0]} castShadow>
+        <cylinderGeometry args={[0.19, 0.18, 0.06, 28]} />
+        <meshStandardMaterial color="#2f6497" roughness={0.6} />
+      </mesh>
+      <mesh position={[0, 0.32, 0]} material={CHROM}>
+        <cylinderGeometry args={[0.025, 0.03, 0.58, 12]} />
+      </mesh>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <mesh key={i} position={[Math.cos((i * 2 * Math.PI) / 5) * 0.14, 0.04, Math.sin((i * 2 * Math.PI) / 5) * 0.14]} rotation={[0, -(i * 2 * Math.PI) / 5, Math.PI / 2 - 0.15]} material={PLASTIK_CIEMNY}>
+          <boxGeometry args={[0.04, 0.3, 0.03]} />
+        </mesh>
+      ))}
     </group>
   );
 }
@@ -310,7 +498,7 @@ function teksturaPlytek() {
   for (let i = 0; i < 16; i++)
     for (let j = 0; j < 2; j++) {
       const ton = 236 + ((i * 7 + j * 3) % 5);
-      g.fillStyle = `rgb(${ton},${ton + 1},${ton + 1})`;
+      g.fillStyle = j === 0 ? `rgb(${ton},${ton + 1},${ton + 1})` : `rgb(${60 + (ton - 236) * 2},${110 + (ton - 236) * 2},${165})`;
       g.fillRect(i * 32 + 1, j * 32 + 1, 30, 30);
     }
   const t = new THREE.CanvasTexture(c);
@@ -472,7 +660,7 @@ export function Pomieszczenie() {
 
       {/* stół przyścienny z szafkami i aparaturą */}
       <group position={[0.2, 0, Z_SCIANY + 0.32]}>
-        <Szafki szer={6.4} wys={0.88} gl={0.62} fronty={10} szuflady />
+        <Szafki szer={6.4} wys={0.88} gl={0.62} fronty={10} szuflady front={FRONT_NIEBIESKI} />
         <mesh position={[0, 0.895, 0.01]} material={BLAT_MAT} receiveShadow castShadow>
           <boxGeometry args={[6.46, 0.035, 0.68]} />
         </mesh>
@@ -556,7 +744,11 @@ export function Pomieszczenie() {
         <meshBasicMaterial map={zegar} />
       </mesh>
       <Plakat x={4.4} y={1.75} napis={['BHP', 'fartuch', 'rękawice', 'okulary']} tlo="#1864ab" kolor="#ffffff" />
-      <Plakat x={-2.85} y={1.75} napis={['GHS', '⚠', 'karty', 'charakterystyk']} tlo="#fff5f5" kolor="#c92a2a" />
+      <Tablica tex={teksturaUkladu} x={-0.1} y={2.42} w={1.02} h={0.6} />
+      <Tablica tex={teksturaGhs} x={-2.85} y={1.8} w={0.42} h={0.56} />
+      <Tablica tex={teksturaPh} x={2.85} y={1.85} w={0.42} h={0.56} />
+      <Stolek x={-2.4} z={Z_SCIANY + 0.95} />
+      <Stolek x={0.9} z={Z_SCIANY + 1.0} />
       <group position={[4.95, 1.65, Z_SCIANY + 0.06]}>
         <mesh>
           <boxGeometry args={[0.36, 0.36, 0.1]} />
@@ -596,7 +788,7 @@ export function Pomieszczenie() {
 
       {/* wyspa – stanowisko egzaminacyjne */}
       <group position={[srodekX, 0, srodekZ - 0.02]}>
-        <Szafki szer={szerWyspy - 0.08} wys={BLAT - 0.035} gl={glWyspy - 0.1} fronty={7} szuflady />
+        <Szafki szer={szerWyspy - 0.08} wys={BLAT - 0.035} gl={glWyspy - 0.1} fronty={7} szuflady front={FRONT_NIEBIESKI} />
       </group>
       <mesh position={[srodekX, BLAT - 0.018, srodekZ]} material={BLAT_MAT} castShadow receiveShadow>
         <boxGeometry args={[szerWyspy, 0.036, glWyspy]} />

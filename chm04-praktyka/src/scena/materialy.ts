@@ -78,3 +78,7 @@ export function rysujEtykiete(g: CanvasRenderingContext2D, w: number, h: number,
     g.fillText(l, w / 2, start + i * rozmiar * 1.15, w - 16);
   });
 }
+
+/** Niebieskie fronty szafek i obudowy (meble laboratoryjne). */
+export const FRONT_NIEBIESKI = new THREE.MeshStandardMaterial({ color: '#2f6497', roughness: 0.38, metalness: 0.05 });
+export const NIEBIESKI_CIEMNY = new THREE.MeshStandardMaterial({ color: '#1f466e', roughness: 0.4, metalness: 0.1 });

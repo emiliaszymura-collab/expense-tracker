@@ -200,8 +200,9 @@ export function Waga({ wlaczona, anim, masa = 2.01 }: { wlaczona: boolean; anim:
   });
   return (
     <group>
-      <mesh position={[0, 0.035, 0]} castShadow receiveShadow material={PLASTIK_BIALY}>
-        <boxGeometry args={[0.26, 0.07, 0.3]} />
+      {/* korpus wagi analitycznej */}
+      <mesh position={[0, 0.035, 0.01]} castShadow receiveShadow material={PLASTIK_BIALY}>
+        <boxGeometry args={[0.28, 0.07, 0.36]} />
       </mesh>
       <mesh position={[0, 0.071, -0.03]} material={PLASTIK_CIEMNY}>
         <cylinderGeometry args={[0.092, 0.092, 0.004, 32]} />
@@ -209,16 +210,46 @@ export function Waga({ wlaczona, anim, masa = 2.01 }: { wlaczona: boolean; anim:
       <mesh position={[0, 0.082, -0.03]} castShadow material={STAL}>
         <cylinderGeometry args={[0.085, 0.085, 0.006, 32]} />
       </mesh>
+      {/* tylna kolumna z elektroniką */}
+      <mesh position={[0, 0.2, -0.155]} castShadow material={PLASTIK_BIALY}>
+        <boxGeometry args={[0.28, 0.4, 0.05]} />
+      </mesh>
+      {/* osłona przeciwwiatrowa: szklane ścianki w szarej ramie */}
+      <group position={[0, 0.07, -0.03]}>
+        {[
+          [0, 0.165, 0, 0.26, 0.006, 0.25],
+          [-0.13, 0.08, 0, 0.006, 0.16, 0.25],
+          [0.13, 0.08, 0, 0.006, 0.16, 0.25],
+          [0, 0.08, 0.125, 0.26, 0.16, 0.006],
+        ].map(([x, y, z, w, h, d], i) => (
+          <mesh key={i} position={[x, y, z]} material={SZKLO}>
+            <boxGeometry args={[w, h, d]} />
+          </mesh>
+        ))}
+        {[[-0.13, 0.125], [0.13, 0.125], [-0.13, -0.125], [0.13, -0.125]].map(([x, z], i) => (
+          <mesh key={i} position={[x, 0.085, z]} material={PLASTIK_CIEMNY}>
+            <boxGeometry args={[0.012, 0.17, 0.012]} />
+          </mesh>
+        ))}
+        <mesh position={[0, 0.17, 0]} material={PLASTIK_CIEMNY}>
+          <boxGeometry args={[0.27, 0.01, 0.012]} />
+        </mesh>
+      </group>
       {/* panel z wyświetlaczem i przyciskami – od strony kamery */}
-      <mesh position={[0, 0.04, 0.1505]}>
+      <mesh position={[0, 0.035, 0.1905]} rotation={[-0.25, 0, 0]}>
         <planeGeometry args={[0.13, 0.045]} />
         <meshBasicMaterial map={tekstura} toneMapped={false} />
       </mesh>
-      {[-0.1, 0.1].map((x) => (
-        <mesh key={x} position={[x, 0.04, 0.152]} material={PLASTIK_CIEMNY}>
-          <boxGeometry args={[0.03, 0.02, 0.004]} />
+      {[-0.1, -0.08, 0.08, 0.1].map((x) => (
+        <mesh key={x} position={[x, 0.035, 0.192]} material={PLASTIK_CIEMNY}>
+          <boxGeometry args={[0.014, 0.014, 0.004]} />
         </mesh>
       ))}
+      {/* poziomica */}
+      <mesh position={[0.1, 0.071, 0.15]}>
+        <cylinderGeometry args={[0.012, 0.012, 0.004, 16]} />
+        <meshStandardMaterial color="#9fe0a8" roughness={0.1} />
+      </mesh>
     </group>
   );
 }
@@ -318,6 +349,37 @@ export function Tryskawka() {
 }
 
 /** Zlew wpuszczony w blat, z wysoką wylewką. Woda leci podczas mycia. */
+function teksturaMisy() {
+  const c = document.createElement('canvas');
+  c.width = 256;
+  c.height = 200;
+  const g = c.getContext('2d')!;
+  const gr = g.createRadialGradient(128, 100, 10, 128, 100, 150);
+  gr.addColorStop(0, '#4c5358');
+  gr.addColorStop(0.7, '#7d868c');
+  gr.addColorStop(1, '#b7bec3');
+  g.fillStyle = gr;
+  g.fillRect(0, 0, 256, 200);
+  g.strokeStyle = '#a7aeb3';
+  g.lineWidth = 10;
+  g.strokeRect(5, 5, 246, 190);
+  g.fillStyle = '#25292c';
+  g.beginPath();
+  g.arc(128, 100, 14, 0, Math.PI * 2);
+  g.fill();
+  g.strokeStyle = '#8f979c';
+  g.lineWidth = 2;
+  for (let i = -2; i <= 2; i++) {
+    g.beginPath();
+    g.moveTo(118, 100 + i * 5);
+    g.lineTo(138, 100 + i * 5);
+    g.stroke();
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
 export function Zlew({ anim }: { anim: AnimRef }) {
   const woda = useRef<THREE.Mesh>(null);
   useFrame(() => {
@@ -329,10 +391,28 @@ export function Zlew({ anim }: { anim: AnimRef }) {
       <mesh position={[0, -0.003, 0]} material={STAL} receiveShadow>
         <boxGeometry args={[0.5, 0.012, 0.4]} />
       </mesh>
-      <mesh position={[0, 0.0035, 0]}>
-        <boxGeometry args={[0.42, 0.002, 0.32]} />
-        <meshStandardMaterial color="#6d757b" metalness={0.9} roughness={0.4} />
+      {/* komora zlewu – gradient udaje głębię misy */}
+      <mesh position={[0, 0.0036, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[0.42, 0.32]} />
+        <meshStandardMaterial map={useMemo(teksturaMisy, [])} metalness={0.85} roughness={0.35} />
       </mesh>
+      {/* rant */}
+      {[[0, 0.16], [0, -0.16]].map(([x, z], i) => (
+        <mesh key={`r${i}`} position={[x, 0.006, z]} material={STAL}>
+          <boxGeometry args={[0.44, 0.006, 0.012]} />
+        </mesh>
+      ))}
+      {[-0.215, 0.215].map((x) => (
+        <mesh key={`b${x}`} position={[x, 0.006, 0]} material={STAL}>
+          <boxGeometry args={[0.012, 0.006, 0.33]} />
+        </mesh>
+      ))}
+      {/* ociekacz z rowkami obok komory */}
+      {Array.from({ length: 7 }, (_, i) => (
+        <mesh key={`o${i}`} position={[0.3 + i * 0.012, 0.002, 0]} material={STAL}>
+          <boxGeometry args={[0.004, 0.003, 0.3]} />
+        </mesh>
+      ))}
       <mesh position={[0, 0.005, 0]}>
         <cylinderGeometry args={[0.022, 0.022, 0.002, 16]} />
         <meshStandardMaterial color="#2b2f33" metalness={0.8} roughness={0.3} />
@@ -351,9 +431,40 @@ export function Zlew({ anim }: { anim: AnimRef }) {
           <cylinderGeometry args={[0.006, 0.008, 0.28, 8]} />
           <meshStandardMaterial color="#cfe9f7" transparent opacity={0.7} roughness={0.1} />
         </mesh>
-        <mesh position={[0.06, 0.03, 0]} material={CHROM}>
-          <cylinderGeometry args={[0.012, 0.012, 0.06, 10]} />
+        {/* pokrętła: ciepła i zimna woda */}
+        {[[-0.07, '#d9383a'], [0.07, '#2f6fd6']].map(([x, c]) => (
+          <group key={x as number} position={[x as number, 0.05, 0]}>
+            <mesh material={CHROM}>
+              <cylinderGeometry args={[0.013, 0.015, 0.06, 12]} />
+            </mesh>
+            <mesh position={[0, 0.035, 0]} rotation={[0, 0, Math.PI / 2]} material={CHROM}>
+              <boxGeometry args={[0.012, 0.07, 0.012]} />
+            </mesh>
+            <mesh position={[0, 0.043, 0]}>
+              <cylinderGeometry args={[0.009, 0.009, 0.004, 12]} />
+              <meshStandardMaterial color={c as string} />
+            </mesh>
+          </group>
+        ))}
+      </group>
+      {/* oczomyjka – stały element pracowni chemicznej */}
+      <group position={[-0.32, 0, -0.12]}>
+        <mesh position={[0, 0.12, 0]} castShadow>
+          <cylinderGeometry args={[0.014, 0.018, 0.24, 12]} />
+          <meshStandardMaterial color="#2f9e44" roughness={0.4} />
         </mesh>
+        {[-0.035, 0.035].map((x) => (
+          <group key={x} position={[x, 0.25, 0.02]}>
+            <mesh rotation={[0, 0, Math.PI / 2]}>
+              <cylinderGeometry args={[0.008, 0.008, 0.07, 8]} />
+              <meshStandardMaterial color="#2f9e44" roughness={0.4} />
+            </mesh>
+            <mesh position={[0, 0.02, 0]}>
+              <cylinderGeometry args={[0.022, 0.016, 0.025, 16]} />
+              <meshStandardMaterial color="#fab005" roughness={0.4} />
+            </mesh>
+          </group>
+        ))}
       </group>
     </group>
   );
