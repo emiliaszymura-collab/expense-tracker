@@ -1215,3 +1215,51 @@ button.sprawdz {
   width: 140px;
   height: 5px;
 }
+
+.diagnostyka {
+  position: absolute;
+  inset: 8px;
+  z-index: 35;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #1d2a33;
+  font-size: 13px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.diagnostyka table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.diagnostyka th,
+.diagnostyka td {
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #e3e8eb;
+  padding: 4px;
+  word-break: break-word;
+}
+
+.diagnostyka th {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.diagnostyka ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #a32222;
+  word-break: break-word;
+}
+
+.diagnostyka-przyciski {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

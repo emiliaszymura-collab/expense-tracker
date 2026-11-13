@@ -9,6 +9,8 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import type { ElementBhp, Krok } from '../silnik/typy';
 import { CZAS, nowaAnim, type Anim } from './animacje';
 import { STAL, SZKLO } from './materialy';
+import { Component, type ReactNode } from 'react';
+import { DIAG, TRYB_AWARYJNY, sprawdzWebgl, ustawTrybAwaryjny, zapiszBlad } from '../diagnostyka';
 import { Opcjonalnie } from './Opcjonalnie';
 import { Pomieszczenie } from './Pomieszczenie';
 import { Postac, nowePostacApi, nowySter } from './Postac';
@@ -630,7 +632,90 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
 
 /** Telefony i tablety: bez efektów AO, mniejsze cienie i rozdzielczość – inaczej iOS potrafi wyłączyć grafikę. */
 const SLABY =
-  typeof window !== 'undefined' && window.matchMedia('(max-width: 800px), (pointer: coarse)').matches;
+  TRYB_AWARYJNY || (typeof window !== 'undefined' && window.matchMedia('(max-width: 800px), (pointer: coarse)').matches);
+
+/** Liczy narysowane klatki i rozmiar sceny – do panelu diagnostyki. */
+function Licznik() {
+  const { size, gl } = useThree();
+  useFrame(() => {
+    DIAG.klatki++;
+    DIAG.rozmiarSceny = `${Math.round(size.width)}×${Math.round(size.height)} px`;
+    DIAG.bufor = `${gl.domElement.width}×${gl.domElement.height}`;
+  });
+  return null;
+}
+
+/** Łapie błąd przy tworzeniu sceny 3D, żeby pokazać go zamiast pustego pola. */
+class GranicaSceny extends Component<{ children: ReactNode }, { blad: string | null }> {
+  state = { blad: null as string | null };
+  static getDerivedStateFromError(e: unknown) {
+    return { blad: String(e) };
+  }
+  componentDidCatch(e: unknown) {
+    zapiszBlad(`scena 3D: ${String(e)}`);
+  }
+  render() {
+    return this.state.blad ? <PanelDiagnostyki wymus /> : this.props.children;
+  }
+}
+
+/** Panel diagnostyki: pokazuje się sam, gdy po 6 s nie ma żadnej narysowanej klatki (albo z #diag w adresie). */
+function PanelDiagnostyki({ wymus = false }: { wymus?: boolean }) {
+  const [, odswiez] = useState(0);
+  const [pokaz, setPokaz] = useState(wymus || location.hash === '#diag');
+  useEffect(() => {
+    const t = window.setInterval(() => {
+      odswiez((n) => n + 1);
+      if (Date.now() - DIAG.start > 6000 && DIAG.klatki === 0) setPokaz(true);
+      if (DIAG.utrataKontekstu) setPokaz(true);
+    }, 1000);
+    return () => window.clearInterval(t);
+  }, []);
+  if (!pokaz) return null;
+  const wiersze: [string, string][] = [
+    ['WebGL', DIAG.webgl],
+    ['Karta graficzna', DIAG.renderer],
+    ['Rozmiar sceny', DIAG.rozmiarSceny],
+    ['Bufor rysowania', DIAG.bufor],
+    ['Narysowane klatki', String(DIAG.klatki)],
+    ['Utrata grafiki', DIAG.utrataKontekstu ? 'TAK' : 'nie'],
+    ['Tryb', TRYB_AWARYJNY ? 'awaryjny' : SLABY ? 'lekki (telefon)' : 'pełny'],
+    ['Przeglądarka', navigator.userAgent],
+  ];
+  return (
+    <div className="diagnostyka" role="alert">
+      <strong>Laboratorium 3D się nie wyświetla – diagnostyka</strong>
+      <span>Zrób zrzut ekranu tego okienka i wyślij go w czacie.</span>
+      <table>
+        <tbody>
+          {wiersze.map(([k, v]) => (
+            <tr key={k}>
+              <th>{k}</th>
+              <td>{v}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {DIAG.bledy.length > 0 && (
+        <ul>
+          {DIAG.bledy.map((b) => (
+            <li key={b}>{b}</li>
+          ))}
+        </ul>
+      )}
+      <div className="diagnostyka-przyciski">
+        {TRYB_AWARYJNY ? (
+          <button onClick={() => ustawTrybAwaryjny(false)}>Wyłącz tryb awaryjny</button>
+        ) : (
+          <button onClick={() => ustawTrybAwaryjny(true)}>Spróbuj trybu awaryjnego</button>
+        )}
+        <button className="drugorzedny" onClick={() => setPokaz(false)}>
+          Zamknij
+        </button>
+      </div>
+    </div>
+  );
+}
 
 /** Pasek ładowania modeli i tekstur oraz komunikat, gdy przeglądarka wyłączy grafikę 3D. */
 function Nakladka({ utracony }: { utracony: boolean }) {
@@ -662,8 +747,11 @@ function Nakladka({ utracony }: { utracony: boolean }) {
 
 export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
   const [utracony, setUtracony] = useState(false);
+  const [webgl] = useState(sprawdzWebgl);
+  if (!webgl) return <PanelDiagnostyki wymus />;
   return (
     <>
+    <GranicaSceny>
     <Canvas
       shadows={!SLABY}
       flat
@@ -673,6 +761,7 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
       onCreated={({ gl }) => {
         gl.domElement.addEventListener('webglcontextlost', (e) => {
           e.preventDefault();
+          DIAG.utrataKontekstu = true;
           setUtracony(true);
         });
         if (SLABY) {
@@ -698,9 +787,11 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
       <directionalLight position={[-1.5, 2.6, -3.2]} intensity={0.45} color="#eaf4ff" />
       {/* odbicia na szkle i metalu – otoczenie budowane w locie, bez zewnętrznych plików */}
       {/* każdy ciężki plik ładuje się osobno – jeśli któryś nie dojdzie, reszta sali i tak się rysuje */}
-      <Opcjonalnie>
-        <Otoczenie />
-      </Opcjonalnie>
+      {!TRYB_AWARYJNY && (
+        <Opcjonalnie>
+          <Otoczenie />
+        </Opcjonalnie>
+      )}
       <KameraDopasowanie kartkaOtwarta={kartkaOtwarta} />
       <Scena {...reszta} />
       {/* fotorealizm: cieniowanie zakamarków (AO), filmowe mapowanie tonów, lekka winieta */}
@@ -721,8 +812,11 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
         maxPolarAngle={1.5}
         makeDefault
       />
+    <Licznik />
     </Canvas>
+    </GranicaSceny>
     <Nakladka utracony={utracony} />
+    <PanelDiagnostyki />
     </>
   );
 }
