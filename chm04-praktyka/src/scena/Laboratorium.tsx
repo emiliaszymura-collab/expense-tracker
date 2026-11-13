@@ -1,5 +1,7 @@
 // Scena 3D: sala, stanowisko, laborant i egzaminator. „Reżyser” odtwarza po kolei animacje przyjętych kroków.
 import { ContactShadows, Environment, Html, OrbitControls } from '@react-three/drei';
+import { EffectComposer, N8AO, ToneMapping, Vignette } from '@react-three/postprocessing';
+import { ToneMappingMode } from 'postprocessing';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -623,7 +625,7 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
 
 export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
   return (
-    <Canvas shadows camera={{ position: [-0.1, 1.72, 3.1], fov: 42 }} dpr={[1, 1.75]} gl={{ toneMappingExposure: 0.8 }}>
+    <Canvas shadows camera={{ position: [-0.1, 1.72, 3.1], fov: 42 }} dpr={[1, 1.75]} gl={{ toneMappingExposure: 1.25, antialias: false }}>
       <color attach="background" args={['#dfe3e4']} />
       <hemisphereLight args={['#ffffff', '#9aa5ab', 0.3]} />
       <directionalLight
@@ -646,6 +648,12 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
         <KameraDopasowanie kartkaOtwarta={kartkaOtwarta} />
         <Scena {...reszta} />
       </Suspense>
+      {/* fotorealizm: cieniowanie zakamarków (AO), filmowe mapowanie tonów, lekka winieta */}
+      <EffectComposer multisampling={4} enableNormalPass={false}>
+        <N8AO aoRadius={0.45} intensity={2.2} distanceFalloff={0.6} quality="medium" halfRes />
+        <ToneMapping mode={ToneMappingMode.AGX} />
+        <Vignette offset={0.3} darkness={0.35} />
+      </EffectComposer>
       <ContactShadows position={[0, 0.002, -0.4]} opacity={0.3} scale={9} blur={2.4} far={1.2} />
       <OrbitControls
         target={[-0.1, 1.24, -0.25]}

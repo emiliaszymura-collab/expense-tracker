@@ -224,6 +224,170 @@ export function ZestawSzkla(props: JSX.IntrinsicElements['group']) {
   );
 }
 
+/** Ładuje teksturę PBR (kolor, normalne, chropowatość) z powtarzaniem. */
+function usePbr(folder: string, rx: number, ry: number) {
+  const mapy = useTexture({ map: `zasoby/${folder}/diff.jpg`, normalMap: `zasoby/${folder}/nor_gl.jpg`, roughnessMap: `zasoby/${folder}/rough.jpg` });
+  return useMemo(() => {
+    const k = Object.fromEntries(
+      Object.entries(mapy).map(([n, t]) => {
+        const c = t.clone();
+        c.wrapS = c.wrapT = THREE.RepeatWrapping;
+        c.repeat.set(rx, ry);
+        c.anisotropy = 8;
+        if (n === 'map') c.colorSpace = THREE.SRGBColorSpace;
+        c.needsUpdate = true;
+        return [n, c];
+      }),
+    ) as typeof mapy;
+    return k;
+  }, [mapy, rx, ry]);
+}
+
+/** Ściany z prawdziwym tynkiem (Poly Haven, CC0) i lamperią do wysokości blatów. */
+function Sciany() {
+  const dluga = usePbr('sciana', 5, 1.1);
+  const krotka = usePbr('sciana', 4.3, 1.1);
+  const material = (m: ReturnType<typeof usePbr>) => <meshStandardMaterial {...m} color="#fbfaf6" roughness={0.92} />;
+  return (
+    <group>
+      <mesh position={[0, SUFIT / 2, Z_SCIANY]} receiveShadow>
+        <planeGeometry args={[14, SUFIT]} />
+        {material(dluga)}
+      </mesh>
+      <mesh position={[0, SUFIT / 2, 5.6]} rotation={[0, Math.PI, 0]}>
+        <planeGeometry args={[14, SUFIT]} />
+        {material(dluga)}
+      </mesh>
+      {[-5.6, 5.6].map((x) => (
+        <mesh key={x} position={[x, SUFIT / 2, 0]} rotation={[0, x < 0 ? Math.PI / 2 : -Math.PI / 2, 0]} receiveShadow>
+          <planeGeometry args={[12, SUFIT]} />
+          {material(krotka)}
+        </mesh>
+      ))}
+      {/* pas płytek ściennych nad blatem przyściennym */}
+      <mesh position={[0.2, 1.22, Z_SCIANY + 0.006]}>
+        <planeGeometry args={[6.46, 0.62]} />
+        <meshStandardMaterial map={useMemo(teksturaPlytek, [])} roughness={0.25} />
+      </mesh>
+    </group>
+  );
+}
+
+function teksturaPlytek() {
+  const c = document.createElement('canvas');
+  c.width = 512;
+  c.height = 64;
+  const g = c.getContext('2d')!;
+  g.fillStyle = '#c9cfd1';
+  g.fillRect(0, 0, 512, 64);
+  for (let i = 0; i < 16; i++)
+    for (let j = 0; j < 2; j++) {
+      const ton = 236 + ((i * 7 + j * 3) % 5);
+      g.fillStyle = `rgb(${ton},${ton + 1},${ton + 1})`;
+      g.fillRect(i * 32 + 1, j * 32 + 1, 30, 30);
+    }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.wrapS = THREE.RepeatWrapping;
+  t.repeat.set(6.46 / (16 * 0.15) / 1, 1);
+  return t;
+}
+
+/** Sufit podwieszany z płyt 60 × 60 cm w metalowym rastrze. */
+function SufitPodwieszany() {
+  const tex = useMemo(() => {
+    const c = document.createElement('canvas');
+    c.width = 128;
+    c.height = 128;
+    const g = c.getContext('2d')!;
+    g.fillStyle = '#f4f4f1';
+    g.fillRect(0, 0, 128, 128);
+    for (let i = 0; i < 900; i++) {
+      const v = 225 + Math.random() * 25;
+      g.fillStyle = `rgb(${v},${v},${v - 3})`;
+      g.fillRect(Math.random() * 128, Math.random() * 128, 1.3, 1.3);
+    }
+    g.fillStyle = '#c4c8ca';
+    g.fillRect(0, 0, 128, 3);
+    g.fillRect(0, 0, 3, 128);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(14 / 0.6, 12 / 0.6);
+    t.anisotropy = 8;
+    return t;
+  }, []);
+  return (
+    <mesh position={[0, SUFIT, 0]} rotation={[Math.PI / 2, 0, 0]}>
+      <planeGeometry args={[14, 12]} />
+      <meshStandardMaterial map={tex} roughness={1} />
+    </mesh>
+  );
+}
+
+/** Instalacje na ścianie: kanał kablowy, gaśnica, kran gazowy – detale, które widać w prawdziwych pracowniach. */
+function Instalacje() {
+  return (
+    <group>
+      <mesh position={[0.2, 1.56, Z_SCIANY + 0.03]}>
+        <boxGeometry args={[6.46, 0.07, 0.05]} />
+        <meshStandardMaterial color="#eef0ee" roughness={0.45} />
+      </mesh>
+      {/* gaśnica */}
+      <group position={[-5.4, 0, -1.3]}>
+        <mesh position={[0, 0.75, 0]} castShadow>
+          <cylinderGeometry args={[0.075, 0.075, 0.5, 24]} />
+          <meshStandardMaterial color="#c92a2a" roughness={0.3} metalness={0.2} />
+        </mesh>
+        <mesh position={[0, 1.04, 0]}>
+          <cylinderGeometry args={[0.03, 0.05, 0.08, 16]} />
+          <meshStandardMaterial color="#222" metalness={0.6} roughness={0.4} />
+        </mesh>
+        <mesh position={[0, 0.85, -0.09]}>
+          <boxGeometry args={[0.1, 0.4, 0.02]} />
+          <meshStandardMaterial color="#9aa1a5" metalness={0.7} roughness={0.35} />
+        </mesh>
+      </group>
+      {/* rura wyciągu dygestorium biegnąca pod sufitem */}
+      <mesh position={[-3.9, SUFIT - 0.12, Z_SCIANY + 0.3]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.1, 0.1, 1.2, 20]} />
+        <meshStandardMaterial color="#cfd4d6" metalness={0.7} roughness={0.35} />
+      </mesh>
+    </group>
+  );
+}
+
+/** Model z Poly Haven (CC0) wczytany z public/zasoby/modele/<plik>/model.json. */
+export function Model({ plik, ...props }: { plik: string } & JSX.IntrinsicElements['group']) {
+  const { scene } = useGLTF(`zasoby/modele/${plik}/model.json`);
+  const kopia = useMemo(() => {
+    const k = scene.clone(true);
+    k.traverse((o) => {
+      o.castShadow = true;
+      o.receiveShadow = true;
+    });
+    return k;
+  }, [scene]);
+  return (
+    <group {...props}>
+      <primitive object={kopia} />
+    </group>
+  );
+}
+
+/** Blaty z ciemnej żywicy epoksydowej: tekstura z granitu (Poly Haven) przyciemniona do czerni. */
+function BlatyPbr() {
+  const m = usePbr('blat', 6, 1);
+  useMemo(() => {
+    Object.assign(BLAT_MAT, { map: m.map, normalMap: m.normalMap, roughnessMap: m.roughnessMap });
+    BLAT_MAT.color.set('#ffffff');
+    BLAT_MAT.roughness = 0.55;
+    BLAT_MAT.normalScale.set(0.35, 0.35);
+    BLAT_MAT.needsUpdate = true;
+  }, [m]);
+  return null;
+}
+
 export function Pomieszczenie() {
   const zegar = useMemo(teksturaZegara, []);
   const szerWyspy = WYSPA.x1 - WYSPA.x0;
@@ -235,27 +399,10 @@ export function Pomieszczenie() {
     <group>
       {/* podłoga, ściany, sufit */}
       <Podloga />
-      <mesh position={[0, SUFIT / 2, Z_SCIANY]} receiveShadow>
-        <planeGeometry args={[14, SUFIT]} />
-        <meshStandardMaterial color="#e6e8e3" roughness={0.95} />
-      </mesh>
-      <mesh position={[-5.6, SUFIT / 2, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <planeGeometry args={[12, SUFIT]} />
-        <meshStandardMaterial color="#dfe2dd" roughness={0.95} />
-      </mesh>
-      <mesh position={[5.6, SUFIT / 2, 0]} rotation={[0, -Math.PI / 2, 0]}>
-        <planeGeometry args={[12, SUFIT]} />
-        <meshStandardMaterial color="#dfe2dd" roughness={0.95} />
-      </mesh>
-      <mesh position={[0, SUFIT, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[14, 12]} />
-        <meshStandardMaterial color="#fafaf8" roughness={1} />
-      </mesh>
-      {/* ściana od strony wejścia (widać ją w widoku zza pleców) */}
-      <mesh position={[0, SUFIT / 2, 5.6]} rotation={[0, Math.PI, 0]}>
-        <planeGeometry args={[14, SUFIT]} />
-        <meshStandardMaterial color="#e6e8e3" roughness={0.95} />
-      </mesh>
+      <BlatyPbr />
+      <Sciany />
+      <SufitPodwieszany />
+      <Instalacje />
       <group position={[2.6, 0, 5.57]} rotation={[0, Math.PI, 0]}>
         <mesh position={[0, 1.02, 0]}>
           <boxGeometry args={[0.95, 2.04, 0.05]} />
@@ -281,10 +428,16 @@ export function Pomieszczenie() {
       </mesh>
       {/* panele LED */}
       {[[-2.2, -1.2], [1.8, -1.2], [-2.2, 1.6], [1.8, 1.6]].map(([x, z]) => (
-        <mesh key={`${x}${z}`} position={[x, SUFIT - 0.01, z]} rotation={[Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[1.2, 0.6]} />
-          <meshBasicMaterial color="#ffffff" toneMapped={false} />
-        </mesh>
+        <group key={`${x}${z}`} position={[x, SUFIT - 0.012, z]}>
+          <mesh>
+            <boxGeometry args={[1.22, 0.02, 0.62]} />
+            <meshStandardMaterial color="#e9ebec" metalness={0.4} roughness={0.4} />
+          </mesh>
+          <mesh position={[0, -0.011, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[1.16, 0.56]} />
+            <meshBasicMaterial color="#fffdf8" toneMapped={false} />
+          </mesh>
+        </group>
       ))}
 
       <Okno x={-1.5} />
@@ -325,7 +478,24 @@ export function Pomieszczenie() {
             <boxGeometry args={[0.16, 0.012, 0.2]} />
           </mesh>
         </group>
-        <ZestawSzkla position={[-1.2, 0.915, 0.0]} />
+        <ZestawSzkla position={[-1.2, 0.915, 0.0]} scale={1.6} />
+        <Model plik="industrial_microscope" position={[-2.0, 0.915, 0.0]} rotation={[0, 0.5, 0]} />
+        <Model plik="bunsen_burner" position={[0.55, 0.915, 0.05]} />
+        {/* gniazda elektryczne nad blatem */}
+        {[-2.6, -1.4, -0.2, 1.0, 2.2].map((x) => (
+          <group key={x} position={[x, 1.08, -0.3]}>
+            <mesh>
+              <boxGeometry args={[0.16, 0.08, 0.025]} />
+              <meshStandardMaterial color="#f2f3f1" roughness={0.4} />
+            </mesh>
+            {[-0.04, 0.04].map((dx) => (
+              <mesh key={dx} position={[dx, 0, 0.013]} rotation={[Math.PI / 2, 0, 0]}>
+                <cylinderGeometry args={[0.022, 0.022, 0.004, 20]} />
+                <meshStandardMaterial color="#e4e6e3" roughness={0.5} />
+              </mesh>
+            ))}
+          </group>
+        ))}
         {/* szkło i odczynniki */}
         {[-2.7, -2.45, -2.2, -0.2, 0.05].map((x, i) => (
           <group key={x} position={[x, 0.915, -0.1 + (i % 2) * 0.12]}>
@@ -377,6 +547,7 @@ export function Pomieszczenie() {
 
       {/* stolik egzaminatora */}
       <group position={[3.55, 0, -2.1]}>
+        <Model plik="clipboard" position={[0.3, 0.75, 0.05]} rotation={[0, -0.3, 0]} />
         <mesh position={[0, 0.73, 0]} castShadow receiveShadow>
           <boxGeometry args={[1.1, 0.035, 0.6]} />
           <meshStandardMaterial color="#c8a77d" roughness={0.6} />
