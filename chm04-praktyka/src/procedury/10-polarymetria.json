@@ -6,16 +6,16 @@
   "czasMinut": 180,
   "protokol": [
     {
-      "tytul": "Uwaga",
-      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
-    },
-    {
-      "tytul": "Zadanie",
-      "tresc": "Oznacz stężenie sacharozy w syropie metodą polarymetryczną. Przygotuj rozcieńczenie próbki, wykonaj trzy odczyty kąta skręcenia, oblicz stężenie i porównaj z deklaracją producenta."
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Korzystając z zamieszczonej procedury, oznacz stężenie sacharozy w syropie metodą polarymetryczną.\nPrzygotuj rozcieńczenie próbki syropu w kolbie miarowej. Wyzeruj polarymetr na wodzie destylowanej, a następnie wykonaj trzy odczyty kąta skręcenia płaszczyzny polaryzacji dla badanego roztworu.\nOblicz stężenie sacharozy w roztworze mierzonym i w syropie (uwzględnij rozcieńczenie). Porównaj wynik z deklaracją producenta: 60 g sacharozy w 100 cm³ syropu (dopuszczalna różnica ±2 g/100 cm³).\nWyniki, obliczenia i wniosek zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj rurkę polarymetryczną, wyłącz lampę i uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania próbki i pomiarów (rozcieńczenie, zerowanie, napełnienie rurki bez pęcherzyka, odczyt),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy."
     },
     {
       "tytul": "Procedura",
       "tresc": "1. Przygotowanie próbki\nPobrać pipetą 25 cm³ syropu do kolby miarowej 100 cm³, uzupełnić wodą do kreski i wymieszać.\n2. Zerowanie polarymetru\nWłączyć lampę sodową i odczekać 5 minut. Rurkę polarymetryczną (2 dm) napełnić wodą destylowaną bez pęcherzyka powietrza, wytrzeć okienka, włożyć do przyrządu i ustawić zero – równe zaciemnienie obu pól.\n3. Pomiar\nRurkę przepłukać badanym roztworem, napełnić bez pęcherzyka powietrza, wytrzeć okienka. Obracać analizator do zrównania zaciemnienia pól i odczytać kąt z noniusza. Wykonać trzy odczyty.\n4. Zakończenie\nRurkę umyć wodą destylowaną.\nObliczenia\nc = (100 · α) / ([α] · l)\n- c – stężenie [g/100 cm³]\n- α – średni kąt skręcenia [°]\n- [α] – skręcalność właściwa sacharozy, +66,5\n- l – długość rurki [dm]\nStężenie w syropie = c · 4 (rozcieńczenie 25 → 100 cm³). Wyniki z dokładnością do 0,1."
+    },
+    {
+      "tytul": "Skąd ten poziom",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
     }
   ],
   "kroki": [

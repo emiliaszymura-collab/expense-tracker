@@ -45,6 +45,7 @@ export function PanelProtokolu({ poziom, otwarty, onPrzelacz }: Props) {
           Zwiń
         </button>
       </header>
+      <div className="kartka-przewin" aria-hidden="true">Przewiń w dół: zadanie, procedura ↓</div>
       <div className="kartka-tresc">
         {poziom.protokol.map((sekcja) => (
           <section key={sekcja.tytul}>

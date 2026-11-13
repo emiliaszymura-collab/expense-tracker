@@ -6,16 +6,16 @@
   "czasMinut": 180,
   "protokol": [
     {
-      "tytul": "Uwaga",
-      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
-    },
-    {
-      "tytul": "Zadanie",
-      "tresc": "Oznacz stężenie żelaza(III) w próbce wody metodą spektrofotometryczną z rodankiem potasu. Przygotuj roztwory wzorcowe, zmierz absorbancję, wyznacz krzywą wzorcową i odczytaj stężenie żelaza w próbce. Oceń, czy woda spełnia normę dla wody do picia: najwyżej 0,2 mg Fe/dm³ (próbka była zatężona 10-krotnie)."
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Korzystając z zamieszczonej procedury, oznacz stężenie żelaza(III) w próbce wody metodą spektrofotometryczną z rodankiem potasu.\nPrzygotuj serię pięciu roztworów wzorcowych, próbkę i ślepą próbę. Wywołaj barwę, zmierz absorbancję przy 480 nm, wyznacz krzywą wzorcową (współczynnik a = A/c) i oblicz stężenie żelaza w próbce.\nOceń, czy woda spełnia normę dla wody do picia: najwyżej 0,2 mg Fe/dm³. Badana próbka była przed analizą zatężona 10-krotnie.\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy uporządkuj stanowisko, mieszaniny poreakcyjne przelej do pojemnika na odpady ciekłe.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania roztworów i pomiarów (wzorce, ślepa próba, obsługa kuwety, zerowanie),\n- dokumentacja pomiarów i obliczeń – karta wyników z krzywą wzorcową,\n- uporządkowane stanowisko pracy."
     },
     {
       "tytul": "Procedura",
       "tresc": "1. Roztwory wzorcowe\nDo kolb miarowych 50 cm³ odmierzyć pipetą kolejno 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza(III) o stężeniu 50 mg/dm³. Do szóstej kolby – 25 cm³ badanej próbki. Siódma kolba to ślepa próba (bez żelaza).\n2. Wywołanie barwy\nDo każdej kolby dodać 2 cm³ HCl 2 mol/dm³ i 5 cm³ roztworu rodanku potasu 10%. Uzupełnić wodą do kreski i wymieszać. Powstaje czerwone zabarwienie.\n3. Pomiar\nWłączyć spektrofotometr, ustawić długość fali 480 nm. Kuwetę trzymać za matowe ścianki, przepłukać mierzonym roztworem, napełnić do ¾ i wytrzeć. Wyzerować przyrząd na ślepej próbie. Zmierzyć absorbancję wzorców od najmniejszego stężenia, na końcu próbki.\n4. Obliczenia\nStężenia wzorców w kolbach: 1, 2, 3, 4, 5 mg/dm³. Z krzywej wzorcowej A = a · c wyznaczyć współczynnik a (średnia z A/c) i obliczyć stężenie w kolbie z próbką: c = A / a. Próbkę rozcieńczono 2 razy (25 → 50 cm³). Wyniki stężeń z dokładnością do 0,01."
+    },
+    {
+      "tytul": "Skąd ten poziom",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
     }
   ],
   "kroki": [

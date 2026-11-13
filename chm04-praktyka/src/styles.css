@@ -617,7 +617,7 @@ input:focus-visible {
   bottom: 10px;
   width: calc(50% - 15px);
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   background: var(--papier);
   color: var(--papier-tekst);
   border: 1px solid var(--papier-linia);
@@ -717,7 +717,7 @@ button.kartka-zwin {
     width: auto;
     right: 10px;
     bottom: auto;
-    height: calc(50% - 15px);
+    height: calc(72% - 15px);
   }
 }
 
@@ -1262,4 +1262,53 @@ button.sprawdz {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+/* zanik u dołu kartki – sygnał, że treść ciągnie się dalej i trzeba przewinąć */
+.kartka-tresc {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent);
+  padding-bottom: 28px;
+}
+
+.kartka-przewin {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--papier-akcent);
+  padding: 0 16px 8px;
+}
+
+@media (max-width: 800px) {
+  .kartka-naglowek {
+    padding: 8px 12px 6px;
+    align-items: center;
+  }
+
+  .kartka-naglowek h1 {
+    font-size: 15px;
+    margin: 0;
+  }
+
+  .kartka-naglowek .metoda,
+  .kartka-zrodlo {
+    display: none;
+  }
+
+  button.kartka-zwin {
+    padding: 4px 10px;
+  }
+
+  .kartka-przewin {
+    padding: 2px 12px 4px;
+    font-size: 11px;
+  }
+
+  .kartka-tresc {
+    padding: 0 12px 28px;
+    font-size: 13.5px;
+  }
+
+  .kartka-tresc h2 {
+    margin-top: 6px;
+  }
 }

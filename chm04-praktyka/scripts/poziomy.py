@@ -521,8 +521,7 @@ def aparat_porzadki(po):
 P = {
  'id': '09-refraktometria', 'tytul': 'Ekstrakt w soku – refraktometr', 'zrodlo': 'Poziom przewidywany – podstawa programowa 2019', 'metoda': 'Refraktometria (refraktometr Abbego, skala Brix)', 'czasMinut': 180,
  'protokol': [
-  {'tytul': 'Uwaga', 'tresc': UWAGA},
-  {'tytul': 'Zadanie', 'tresc': 'Oznacz zawartość ekstraktu (cukrów) w soku owocowym refraktometrem Abbego w skali Brix. Wykonaj trzy pomiary, oblicz średnią i oceń, czy sok spełnia wymaganie producenta: co najmniej 11,2% Brix.\nSporządź roztwór wzorcowy sacharozy 10% i sprawdź na nim wskazanie przyrządu.'},
+  {'tytul': 'Zadanie egzaminacyjne', 'tresc': 'Korzystając z zamieszczonej procedury, oznacz zawartość ekstraktu (cukrów) w soku owocowym metodą refraktometryczną (refraktometr Abbego, skala Brix).\nSprawdź wskazanie refraktometru na wodzie destylowanej. Sporządź roztwór wzorcowy sacharozy 10% i zmierz go.\nWykonaj trzy pomiary soku, każdy z nową porcją próbki. Oblicz średnią, uwzględnij poprawkę temperaturową i oceń, czy sok spełnia wymaganie producenta: co najmniej 11,2% Brix.\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj i osusz pryzmat oraz uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg sprawdzenia przyrządu i pomiarów (przygotowanie pryzmatu, nanoszenie próbki, ustawienie granicy, odczyt),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy.'},
   {'tytul': 'Procedura', 'tresc': '1. Sprawdzenie refraktometru\nPryzmat przemyć wodą destylowaną i osuszyć miękką bibułą. Nanieść 2–3 krople wody destylowanej, zamknąć pryzmat i odczytać wskazanie: n = 1,3330, 0,0% Brix (20 °C).\n2. Roztwór wzorcowy\nOdważyć 10,00 g sacharozy, rozpuścić w wodzie w zlewce i uzupełnić wodą do masy 100,00 g. Zmierzyć – wskazanie powinno wynosić 10,0% Brix.\n3. Pomiar próbki\nPryzmat osuszyć. Nanieść bagietką 2–3 krople soku (nie dotykać pryzmatu szkłem), zamknąć pryzmat. Ustawić ostrą granicę światła i cienia na przecięciu nici, usunąć zabarwienie kompensatorem. Odczytać % Brix i temperaturę. Pomiar wykonać trzy razy, każdorazowo nanosząc nową porcję soku.\n4. Zakończenie\nPryzmat umyć wodą destylowaną i osuszyć.\nObliczenia\nWynik to średnia arytmetyczna trzech odczytów nieróżniących się o więcej niż 0,2% Brix, z dokładnością do 0,1.\nPoprawka temperaturowa: +0,07% Brix na każdy 1 °C powyżej 20 °C (poniżej 20 °C – odjąć).'}],
  'kroki': [
   K('pryzmat1', 'Pryzmat refraktometru przemyty wodą destylowaną i osuszony miękką bibułą.', 'przemy|umyj|myję|opłucz|osusz|wytrz|czyszcz|czyść;pryzmat', 'Przemyj pryzmat wodą destylowaną i osusz miękką bibułą.', 'Resztki poprzedniej próbki zmieniają współczynnik załamania.', 'przemywam pryzmat wodą destylowaną i osuszam bibułą', 'stol', 'siegnij', wykl='koniec|zakończ|po pomiar'),
@@ -554,14 +553,14 @@ P = {
    kr('Wniosek spójny z wynikiem (wymaganie: co najmniej 11,2% Brix)', 'Porównaj wynik po poprawce z 11,2% Brix.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '$wynik-11.2+0.000001', 'tak': ['spelnia'], 'nie': ['nie spelnia']}),
   ]},
 }
+P['protokol'].append({'tytul': 'Skąd ten poziom', 'tresc': UWAGA})
 zapisz('09-refraktometria.json', P)
 
 # ───────────────────────── 10. Polarymetria
 P = {
  'id': '10-polarymetria', 'tytul': 'Stężenie sacharozy – polarymetr', 'zrodlo': 'Poziom przewidywany – podstawa programowa 2019', 'metoda': 'Polarymetria (rurka 2 dm)', 'czasMinut': 180,
  'protokol': [
-  {'tytul': 'Uwaga', 'tresc': UWAGA},
-  {'tytul': 'Zadanie', 'tresc': 'Oznacz stężenie sacharozy w syropie metodą polarymetryczną. Przygotuj rozcieńczenie próbki, wykonaj trzy odczyty kąta skręcenia, oblicz stężenie i porównaj z deklaracją producenta.'},
+  {'tytul': 'Zadanie egzaminacyjne', 'tresc': 'Korzystając z zamieszczonej procedury, oznacz stężenie sacharozy w syropie metodą polarymetryczną.\nPrzygotuj rozcieńczenie próbki syropu w kolbie miarowej. Wyzeruj polarymetr na wodzie destylowanej, a następnie wykonaj trzy odczyty kąta skręcenia płaszczyzny polaryzacji dla badanego roztworu.\nOblicz stężenie sacharozy w roztworze mierzonym i w syropie (uwzględnij rozcieńczenie). Porównaj wynik z deklaracją producenta: 60 g sacharozy w 100 cm³ syropu (dopuszczalna różnica ±2 g/100 cm³).\nWyniki, obliczenia i wniosek zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj rurkę polarymetryczną, wyłącz lampę i uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania próbki i pomiarów (rozcieńczenie, zerowanie, napełnienie rurki bez pęcherzyka, odczyt),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy.'},
   {'tytul': 'Procedura', 'tresc': '1. Przygotowanie próbki\nPobrać pipetą 25 cm³ syropu do kolby miarowej 100 cm³, uzupełnić wodą do kreski i wymieszać.\n2. Zerowanie polarymetru\nWłączyć lampę sodową i odczekać 5 minut. Rurkę polarymetryczną (2 dm) napełnić wodą destylowaną bez pęcherzyka powietrza, wytrzeć okienka, włożyć do przyrządu i ustawić zero – równe zaciemnienie obu pól.\n3. Pomiar\nRurkę przepłukać badanym roztworem, napełnić bez pęcherzyka powietrza, wytrzeć okienka. Obracać analizator do zrównania zaciemnienia pól i odczytać kąt z noniusza. Wykonać trzy odczyty.\n4. Zakończenie\nRurkę umyć wodą destylowaną.\nObliczenia\nc = (100 · α) / ([α] · l)\n- c – stężenie [g/100 cm³]\n- α – średni kąt skręcenia [°]\n- [α] – skręcalność właściwa sacharozy, +66,5\n- l – długość rurki [dm]\nStężenie w syropie = c · 4 (rozcieńczenie 25 → 100 cm³). Wyniki z dokładnością do 0,1.'}],
  'kroki': [
   K('rozciencz', 'Pipetą pobrano 25 cm³ syropu do kolby miarowej 100 cm³, uzupełniono do kreski i wymieszano.', PIPETA + '|rozcieńcz;syrop|25|miarow', 'Pobierz pipetą 25 cm³ syropu do kolby miarowej 100 cm³ i uzupełnij wodą do kreski.', 'Syrop jest zbyt stężony i lepki – mierzy się rozcieńczenie 1 : 4.', 'pipetuję 25 cm3 syropu do kolby miarowej i rozcieńczam do kreski', 'kolba', 'pipetowanie', [], True, stan={'kolba': 'slomkowy'}),
@@ -591,14 +590,14 @@ P = {
    kr('Wniosek spójny z wynikiem (etykieta: 60 ± 2 g/100 cm³)', 'Porównaj stężenie w syropie z 60 g/100 cm³.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '2-abs($cs-60)+0.000001', 'tak': ['zgodny', 'zgodna'], 'nie': ['niezgodny', 'niezgodna', 'nie zgodny', 'nie jest']}),
   ]},
 }
+P['protokol'].append({'tytul': 'Skąd ten poziom', 'tresc': UWAGA})
 zapisz('10-polarymetria.json', P)
 
 # ───────────────────────── 11. Spektrofotometria UV-Vis
 P = {
  'id': '11-spektrofotometria', 'tytul': 'Żelazo w wodzie – spektrofotometr', 'zrodlo': 'Poziom przewidywany – podstawa programowa 2019', 'metoda': 'Spektrofotometria UV-Vis (krzywa wzorcowa, metoda rodankowa)', 'czasMinut': 180,
  'protokol': [
-  {'tytul': 'Uwaga', 'tresc': UWAGA},
-  {'tytul': 'Zadanie', 'tresc': 'Oznacz stężenie żelaza(III) w próbce wody metodą spektrofotometryczną z rodankiem potasu. Przygotuj roztwory wzorcowe, zmierz absorbancję, wyznacz krzywą wzorcową i odczytaj stężenie żelaza w próbce. Oceń, czy woda spełnia normę dla wody do picia: najwyżej 0,2 mg Fe/dm³ (próbka była zatężona 10-krotnie).'},
+  {'tytul': 'Zadanie egzaminacyjne', 'tresc': 'Korzystając z zamieszczonej procedury, oznacz stężenie żelaza(III) w próbce wody metodą spektrofotometryczną z rodankiem potasu.\nPrzygotuj serię pięciu roztworów wzorcowych, próbkę i ślepą próbę. Wywołaj barwę, zmierz absorbancję przy 480 nm, wyznacz krzywą wzorcową (współczynnik a = A/c) i oblicz stężenie żelaza w próbce.\nOceń, czy woda spełnia normę dla wody do picia: najwyżej 0,2 mg Fe/dm³. Badana próbka była przed analizą zatężona 10-krotnie.\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy uporządkuj stanowisko, mieszaniny poreakcyjne przelej do pojemnika na odpady ciekłe.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania roztworów i pomiarów (wzorce, ślepa próba, obsługa kuwety, zerowanie),\n- dokumentacja pomiarów i obliczeń – karta wyników z krzywą wzorcową,\n- uporządkowane stanowisko pracy.'},
   {'tytul': 'Procedura', 'tresc': '1. Roztwory wzorcowe\nDo kolb miarowych 50 cm³ odmierzyć pipetą kolejno 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza(III) o stężeniu 50 mg/dm³. Do szóstej kolby – 25 cm³ badanej próbki. Siódma kolba to ślepa próba (bez żelaza).\n2. Wywołanie barwy\nDo każdej kolby dodać 2 cm³ HCl 2 mol/dm³ i 5 cm³ roztworu rodanku potasu 10%. Uzupełnić wodą do kreski i wymieszać. Powstaje czerwone zabarwienie.\n3. Pomiar\nWłączyć spektrofotometr, ustawić długość fali 480 nm. Kuwetę trzymać za matowe ścianki, przepłukać mierzonym roztworem, napełnić do ¾ i wytrzeć. Wyzerować przyrząd na ślepej próbie. Zmierzyć absorbancję wzorców od najmniejszego stężenia, na końcu próbki.\n4. Obliczenia\nStężenia wzorców w kolbach: 1, 2, 3, 4, 5 mg/dm³. Z krzywej wzorcowej A = a · c wyznaczyć współczynnik a (średnia z A/c) i obliczyć stężenie w kolbie z próbką: c = A / a. Próbkę rozcieńczono 2 razy (25 → 50 cm³). Wyniki stężeń z dokładnością do 0,01.'}],
  'kroki': [
   K('wzorce', 'Do kolb miarowych 50 cm³ odmierzono pipetą 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza.', PIPETA + ';wzorc|podstawow|żelaz', 'Odmierz pipetą 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza do kolejnych kolb miarowych 50 cm³.', 'Wzorce o znanych stężeniach tworzą krzywą wzorcową.', 'odmierzam pipetą roztwór podstawowy żelaza do pięciu kolb miarowych', 'kolba', 'pipetowanie', [], True, wykl='próbk'),
@@ -634,5 +633,6 @@ P = {
    kr('Wniosek spójny z wynikiem (norma: najwyżej 0,2 mg/dm³)', 'Porównaj stężenie w wodzie z 0,2 mg/dm³.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '0.2-$cw+0.000001', 'tak': ['spelnia'], 'nie': ['nie spelnia']}),
   ]},
 }
+P['protokol'].append({'tytul': 'Skąd ten poziom', 'tresc': UWAGA})
 zapisz('11-spektrofotometria.json', P)
 print('ok 9-11')

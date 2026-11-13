@@ -58,13 +58,13 @@ function KameraDopasowanie({ kartkaOtwarta }: { kartkaOtwarta: boolean }) {
     if (!w || !h) return;
     const telefon = window.innerWidth <= 800;
     const wolneW = kartkaOtwarta && !telefon ? w / 2 : w;
-    const wolneH = kartkaOtwarta && telefon ? h / 2 : h;
+    const wolneH = kartkaOtwarta && telefon ? h * 0.28 : h;
     const poziomeFov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(42) / 2) * 2.0);
     const potrzebne = 2 * Math.atan(Math.tan(poziomeFov / 2) / (wolneW / wolneH));
     const ograniczone = THREE.MathUtils.clamp(potrzebne, THREE.MathUtils.degToRad(22), THREE.MathUtils.degToRad(80));
     const celTan = Math.tan(ograniczone / 2) * (h / wolneH);
     const celX = kartkaOtwarta && !telefon ? -w / 4 : 0;
-    const celY = kartkaOtwarta && telefon ? -h / 4 : 0;
+    const celY = kartkaOtwarta && telefon ? -h * 0.36 : 0;
     const b = biezace.current;
     const k = Math.min(1, dt * 8);
     b.x += (celX - b.x) * k;

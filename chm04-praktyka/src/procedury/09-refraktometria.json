@@ -6,16 +6,16 @@
   "czasMinut": 180,
   "protokol": [
     {
-      "tytul": "Uwaga",
-      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
-    },
-    {
-      "tytul": "Zadanie",
-      "tresc": "Oznacz zawartość ekstraktu (cukrów) w soku owocowym refraktometrem Abbego w skali Brix. Wykonaj trzy pomiary, oblicz średnią i oceń, czy sok spełnia wymaganie producenta: co najmniej 11,2% Brix.\nSporządź roztwór wzorcowy sacharozy 10% i sprawdź na nim wskazanie przyrządu."
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Korzystając z zamieszczonej procedury, oznacz zawartość ekstraktu (cukrów) w soku owocowym metodą refraktometryczną (refraktometr Abbego, skala Brix).\nSprawdź wskazanie refraktometru na wodzie destylowanej. Sporządź roztwór wzorcowy sacharozy 10% i zmierz go.\nWykonaj trzy pomiary soku, każdy z nową porcją próbki. Oblicz średnią, uwzględnij poprawkę temperaturową i oceń, czy sok spełnia wymaganie producenta: co najmniej 11,2% Brix.\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj i osusz pryzmat oraz uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg sprawdzenia przyrządu i pomiarów (przygotowanie pryzmatu, nanoszenie próbki, ustawienie granicy, odczyt),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy."
     },
     {
       "tytul": "Procedura",
       "tresc": "1. Sprawdzenie refraktometru\nPryzmat przemyć wodą destylowaną i osuszyć miękką bibułą. Nanieść 2–3 krople wody destylowanej, zamknąć pryzmat i odczytać wskazanie: n = 1,3330, 0,0% Brix (20 °C).\n2. Roztwór wzorcowy\nOdważyć 10,00 g sacharozy, rozpuścić w wodzie w zlewce i uzupełnić wodą do masy 100,00 g. Zmierzyć – wskazanie powinno wynosić 10,0% Brix.\n3. Pomiar próbki\nPryzmat osuszyć. Nanieść bagietką 2–3 krople soku (nie dotykać pryzmatu szkłem), zamknąć pryzmat. Ustawić ostrą granicę światła i cienia na przecięciu nici, usunąć zabarwienie kompensatorem. Odczytać % Brix i temperaturę. Pomiar wykonać trzy razy, każdorazowo nanosząc nową porcję soku.\n4. Zakończenie\nPryzmat umyć wodą destylowaną i osuszyć.\nObliczenia\nWynik to średnia arytmetyczna trzech odczytów nieróżniących się o więcej niż 0,2% Brix, z dokładnością do 0,1.\nPoprawka temperaturowa: +0,07% Brix na każdy 1 °C powyżej 20 °C (poniżej 20 °C – odjąć)."
+    },
+    {
+      "tytul": "Skąd ten poziom",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
     }
   ],
   "kroki": [
