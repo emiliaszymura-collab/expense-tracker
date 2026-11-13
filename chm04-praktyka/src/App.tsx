@@ -12,7 +12,25 @@ import { Lupa } from './ui/Lupa';
 import { PanelProtokolu } from './ui/PanelProtokolu';
 
 export default function App() {
-  const [wybor, setWybor] = useState<{ id: string; tryb: Tryb } | null>(null);
+  // Otwarty poziom zapamiętujemy, żeby po przeładowaniu strony (nowa wersja gry, iOS zwalniający pamięć)
+  // wrócić od razu do poziomu i egzaminu, a nie na listę.
+  const [wybor, setWyborStan] = useState<{ id: string; tryb: Tryb } | null>(() => {
+    try {
+      const z = JSON.parse(localStorage.getItem(KLUCZ_WIDOKU) ?? 'null');
+      return z && POZIOMY.some((p) => p.id === z.id) ? z : null;
+    } catch {
+      return null;
+    }
+  });
+  const setWybor = (w: { id: string; tryb: Tryb } | null) => {
+    try {
+      if (w) localStorage.setItem(KLUCZ_WIDOKU, JSON.stringify(w));
+      else localStorage.removeItem(KLUCZ_WIDOKU);
+    } catch {
+      /* bez storage – zostaje tylko w pamięci */
+    }
+    setWyborStan(w);
+  };
   const poziom = POZIOMY.find((p) => p.id === wybor?.id);
 
   if (!poziom || !wybor) return <WyborPoziomu onWybierz={(id, tryb) => setWybor({ id, tryb })} />;
@@ -20,6 +38,7 @@ export default function App() {
 }
 
 type Tryb = 'cwiczenie' | 'egzamin';
+const KLUCZ_WIDOKU = 'chm04-praktyka:widok:v1';
 
 function WyborPoziomu({ onWybierz }: { onWybierz: (id: string, tryb: Tryb) => void }) {
   return (
