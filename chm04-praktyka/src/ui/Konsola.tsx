@@ -110,9 +110,9 @@ export function Konsola({ stan, liczbaKrokow, ukonczony, onWpis, onPodpowiedz, o
         <button type="submit" disabled={ukonczony || zablokowana}>
           Wykonaj
         </button>
-        {!egzamin && (
+        {(
         <button type="button" className="drugorzedny" onClick={onPodpowiedz} disabled={ukonczony || zablokowana} aria-label="Podpowiedź">
-          <span className="tylko-szeroki">Podpowiedź</span>
+          <span className="tylko-szeroki">{egzamin ? 'Podpowiedź (−1 pkt)' : 'Podpowiedź'}</span>
           <span className="tylko-waski" aria-hidden="true">?</span>
         </button>
         )}

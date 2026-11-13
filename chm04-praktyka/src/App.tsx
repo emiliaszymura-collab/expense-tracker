@@ -3,7 +3,7 @@ import { formatCzasu, ocenEgzamin, PROG, pozostaloMs } from './silnik/egzamin';
 import { POZIOMY } from './procedury';
 import { usunStan, wczytajStan, zapiszStan } from './postep';
 import { Laboratorium } from './scena/Laboratorium';
-import { dodajPodpowiedz, nowyStan, ocenWpis, poziomUkonczony, type StanGry } from './silnik/gra';
+import { dodajPodpowiedz, nowyStan, ocenWpis, poziomUkonczony, prosiOPomoc, type StanGry } from './silnik/gra';
 import type { Poziom } from './silnik/typy';
 import { losujPomiary } from './silnik/karta';
 import { Karta } from './ui/Karta';
@@ -115,6 +115,10 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
 
   const wpisz = (tekst: string) => {
     if (stan.zakonczony) return;
+    if (prosiOPomoc(tekst)) {
+      setStan((s) => dodajPodpowiedz(poziom, s, tekst, egzamin));
+      return;
+    }
     const wynik = ocenWpis(poziom, stan, tekst, !egzamin);
     setStan(wynik.stan);
   };
@@ -229,7 +233,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
           ukonczony={ukonczony}
           onWpis={wpisz}
           onKarta={() => otworzKarte(true)}
-          onPodpowiedz={() => setStan((s) => dodajPodpowiedz(poziom, s))}
+          onPodpowiedz={() => setStan((s) => dodajPodpowiedz(poziom, s, undefined, egzamin))}
           egzamin={egzamin}
           zablokowana={Boolean(stan.zakonczony)}
         />
@@ -242,7 +246,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
               <table className="tabela-wyniku">
                 <tbody>
                   <tr>
-                    <th>Przebieg (kroki procedury, minus błędy: {stan.bledy})</th>
+                    <th>Przebieg (kroki procedury, minus błędy: {stan.bledy}, minus podpowiedzi: {stan.podpowiedzi ?? 0})</th>
                     <td>{wynikEgz.przebieg.pkt} / {wynikEgz.przebieg.max}</td>
                   </tr>
                   <tr>

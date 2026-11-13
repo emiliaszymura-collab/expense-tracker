@@ -14,12 +14,13 @@ export interface WynikEgzaminu {
 }
 
 /**
- * Przebieg: każdy wykonany krok = 1 pkt, każdy błąd (pominięty krok, praca bez BHP, błąd typowy) −1 pkt.
+ * Przebieg: każdy wykonany krok = 1 pkt, każdy błąd (pominięty krok, praca bez BHP, błąd typowy) i każda podpowiedź −1 pkt.
  * BHP: po 1 pkt za fartuch, rękawice i okulary. Karta: 1 pkt za każde spełnione kryterium z zasad oceniania.
  */
 export function ocenEgzamin(poziom: Poziom, stan: StanGry): WynikEgzaminu {
   const maxP = poziom.kroki.length;
-  const przebieg = { pkt: Math.max(0, stan.wykonane.length - stan.bledy), max: maxP };
+  // każda podpowiedź kosztuje 1 pkt – jak błąd
+  const przebieg = { pkt: Math.max(0, stan.wykonane.length - stan.bledy - (stan.podpowiedzi ?? 0)), max: maxP };
   const bhp = { pkt: stan.bhp.length, max: 3 };
   const kryteria = poziom.karta && stan.pomiary ? ocenKarte(poziom.karta, stan.pomiary, stan.karta ?? {}) : [];
   const karta = { pkt: kryteria.filter((k) => k.ok).length, max: kryteria.length, nieSpelnione: kryteria.filter((k) => !k.ok).map((k) => k.opis) };

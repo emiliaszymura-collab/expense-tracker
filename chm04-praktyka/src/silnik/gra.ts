@@ -221,19 +221,26 @@ export function stanSceny(poziom: Poziom, stan: StanGry): Record<string, string 
 }
 
 /** Podpowiedź na żądanie (tryb ćwiczenia): co zrobić teraz i dlaczego. */
-export function dodajPodpowiedz(poziom: Poziom, stan: StanGry): StanGry {
+export function dodajPodpowiedz(poziom: Poziom, stan: StanGry, tekstGracza = 'Podpowiedź', egzamin = false): StanGry {
   const brak = brakujaceBhp(stan);
   const krok = nastepnyKrok(poziom, stan.wykonane);
   const wpis: WpisDziennika =
     brak.length > 0
       ? {
           rodzaj: 'podpowiedz',
-          tekstGracza: 'Podpowiedź',
+          tekstGracza,
           komunikat: `Załóż środki ochrony: ${brak.map((b) => NAZWY_BHP[b]).join(', ')}.`,
           wyjasnienie: 'Środki ochrony indywidualnej są ocenianym kryterium w każdym arkuszu CHM.04.',
         }
       : krok
-        ? { rodzaj: 'podpowiedz', tekstGracza: 'Podpowiedź', komunikat: krok.podpowiedz, wyjasnienie: krok.dlaczego }
-        : { rodzaj: 'podpowiedz', tekstGracza: 'Podpowiedź', komunikat: 'Wszystkie kroki wykonane.' };
+        ? { rodzaj: 'podpowiedz', tekstGracza, komunikat: krok.podpowiedz, wyjasnienie: krok.dlaczego }
+        : { rodzaj: 'podpowiedz', tekstGracza, komunikat: 'Wszystkie kroki wykonane.' };
+  if (egzamin) wpis.komunikat = `${wpis.komunikat} (podpowiedź: −1 pkt)`;
   return { ...stan, podpowiedzi: (stan.podpowiedzi ?? 0) + 1, dziennik: [...stan.dziennik, wpis] };
+}
+
+/** Czy wpis to prośba o pomoc („nie wiem”, „pomóż mi”, „podpowiedź”, „co teraz?”). */
+export function prosiOPomoc(tekst: string): boolean {
+  const t = tokeny(tekst).join(' ');
+  return /(^| )(pomoc|pomoz|pomóz|podpowiedz|podpowiedź|podpowiedzi|help|hint)/.test(t) || /nie wiem|co (teraz|dalej|mam)|co robic|jak dalej/.test(t);
 }

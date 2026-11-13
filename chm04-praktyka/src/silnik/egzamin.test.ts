@@ -25,3 +25,15 @@ describe('egzamin', () => {
     expect(formatCzasu(179 * 60_000 + 5_000)).toBe('2:59:05');
   });
 });
+
+import { prosiOPomoc } from './gra';
+describe('podpowiedzi w egzaminie', () => {
+  it('rozpoznaje prośby o pomoc, nie myli z czynnościami', () => {
+    for (const t of ['nie wiem pomóż mi', 'pomocy', 'podpowiedź', 'co teraz?', 'co dalej', 'nie wiem co robić']) expect(prosiOPomoc(t), t).toBe(true);
+    for (const t of ['odważam mydło', 'napełniam biuretę', 'zgłaszam gotowość', 'wiem']) expect(prosiOPomoc(t), t).toBe(false);
+  });
+  it('podpowiedź odejmuje punkt', () => {
+    const baza = { ...nowyStan(poziom.id), wykonane: poziom.kroki.slice(0, 5).map((k) => k.id), bhp: ['fartuch', 'rekawice', 'okulary'] as ('fartuch' | 'rekawice' | 'okulary')[] };
+    expect(ocenEgzamin(poziom, { ...baza, podpowiedzi: 2 }).przebieg.pkt).toBe(3);
+  });
+});
