@@ -1,0 +1,1245 @@
+{
+  "id": "05-nacl-mohr",
+  "tytul": "Sól w marynacie do papryki",
+  "zrodlo": "CHM.04 – styczeń 2025",
+  "metoda": "Precypitometria – argentometria (metoda Mohra)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Przygotuj próbkę i wykonaj oznaczenie zawartości soli NaCl w marynacie do papryki.\nZmontuj zestaw do sączenia oraz zestaw do miareczkowania. Napełnij biuretę titrantem. Zgłoś gotowość do oceny obu zestawów przez podniesienie ręki.\nMieszaniny poreakcyjne przelej do pojemnika na odpady ciekłe. Niezużyte roztwory i próbkę pozostaw na stanowisku."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "1. Przygotowanie próbki\nPrzygotować sączek karbowany i przesączyć zalewę znad papryki. Odmierzyć pipetą 25 cm³ przesączu do kolby miarowej 100 cm³, dopełnić wodą do kreski i opisać (rodzaj próbki i produktu). Zawartość delikatnie wymieszać – energiczne mieszanie powoduje pienienie.\n2. Wykonanie oznaczenia\nDo czterech kolb stożkowych odmierzyć po 10 cm³ roztworu (odpowiada to 2,5 cm³ lub 2,5 g marynaty).\nW jednej próbce ustalić liczbę kropli NaOH 1% potrzebną do zobojętnienia: dodać 2 krople fenoloftaleiny i wkraplać NaOH do jasnoróżowego zabarwienia. Pozostałe próbki zobojętnić tą samą liczbą kropli, bez fenoloftaleiny.\nDodać po 1 cm³ chromianu(VI) potasu 10% i miareczkować azotanem(V) srebra(I) 0,1 mol/dm³ do trwałej ceglastopomarańczowej barwy.\n3. Obliczenia\nx = (a · n · 0,05845 · 100) / b\n- x – zawartość NaCl [% wagowe]\n- a – objętość AgNO₃ [cm³]\n- n – stężenie AgNO₃ [mol/dm³]\n- b – ilość marynaty w roztworze miareczkowanym [g lub cm³]\nWynik: średnia z co najmniej dwóch oznaczeń nieróżniących się o więcej niż 0,2; z dokładnością do 0,1%. Przeliczyć na gramy w 1 kg produktu."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "saczenie_zestaw",
+      "opis": "Zestaw do sączenia zmontowany: sączek karbowany w lejku, lejek w pierścieniu, nóżka lejka przy ściance zlewki.",
+      "wymagane": [
+        [
+          "zmont",
+          "montuj",
+          "montaż",
+          "złóż",
+          "składa",
+          "przygotow",
+          "ustaw"
+        ],
+        [
+          "sącz"
+        ]
+      ],
+      "wykluczajace": [
+        "rozmont",
+        "demont",
+        "miareczk"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Zmontuj zestaw do sączenia z sączkiem karbowanym.",
+      "dlaczego": "Rezultat 1: sączek nie wystaje poza lejek, lejek w pierścieniu, pod nim zlewka, nóżka dotyka ścianki.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "montuję zestaw do sączenia z sączkiem karbowanym"
+    },
+    {
+      "id": "montaz",
+      "opis": "Zestaw do miareczkowania zmontowany: statyw, łapa, biureta.",
+      "wymagane": [
+        [
+          "zmont",
+          "montuj",
+          "montaż",
+          "złóż",
+          "składa",
+          "przygotow",
+          "zamocow",
+          "mocuj",
+          "ustaw",
+          "zakład",
+          "wkład",
+          "umieszcz",
+          "przykręc"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw",
+          "łap"
+        ]
+      ],
+      "wykluczajace": [
+        "rozmont",
+        "demont",
+        "zero",
+        "zera",
+        "menisk",
+        "pęcherz",
+        "sącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Zmontuj zestaw do miareczkowania (statyw, łapa, biureta).",
+      "dlaczego": "Zmontowany zestaw jest osobnym rezultatem ocenianym po zgłoszeniu gotowości.",
+      "sprzet": "statyw",
+      "animacja": "montaz",
+      "stanSceny": {
+        "zestaw": true,
+        "lejek": true
+      },
+      "przyklad": "montuję zestaw do miareczkowania"
+    },
+    {
+      "id": "napelnij",
+      "opis": "Biureta napełniona titrantem – AgNO₃ 0,1 mol/dm³ (przez lejek).",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "nalej",
+          "wlew",
+          "wlej",
+          "uzupełn",
+          "wypełn"
+        ],
+        [
+          "biuret"
+        ]
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Napełnij biuretę titrantem – AgNO₃ 0,1 mol/dm³, używając lejka.",
+      "dlaczego": "Bez titranta nie ma miareczkowania; egzaminator sprawdza, czy biureta jest napełniona.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "biuretaPoziom": 0.95
+      },
+      "przyklad": "napełniam biuretę titrantem przez lejek",
+      "wymaga": [
+        "montaz"
+      ]
+    },
+    {
+      "id": "lejek",
+      "opis": "Lejek zdjęty z biurety.",
+      "wymagane": [
+        [
+          "zdejm",
+          "wyjm",
+          "usuń",
+          "ściąg",
+          "odstaw",
+          "zabier",
+          "odłóż",
+          "odkład",
+          "zdjąć",
+          "wyjąć"
+        ],
+        [
+          "lejek",
+          "lejk"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Zdejmij lejek z biurety.",
+      "dlaczego": "Lejek pozostawiony w biurecie może dolewać krople titranta i zafałszować odczyt – miareczkuje się bez lejka.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "lejek": false
+      },
+      "animacja": "siegnij_gora",
+      "przyklad": "zdejmuję lejek z biurety"
+    },
+    {
+      "id": "pecherz",
+      "opis": "Usunięto pęcherzyk powietrza spod kranika biurety.",
+      "wymagane": [
+        [
+          "pęcherz",
+          "powietrz",
+          "odpowietrz"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Usuń pęcherzyk powietrza spod kranika biurety (spuść trochę titranta).",
+      "dlaczego": "Pęcherz w kraniku zwiększa odczytaną objętość – kryterium: brak pęcherza powietrza w kraniku.",
+      "sprzet": "statyw",
+      "animacja": "kranik",
+      "przyklad": "usuwam pęcherzyk powietrza z kranika"
+    },
+    {
+      "id": "zero",
+      "opis": "Poziom titranta ustawiony na 0 cm³ (menisk dolny).",
+      "wymagane": [
+        [
+          "zero",
+          "zera",
+          "0",
+          "kresk",
+          "menisk",
+          "wyzer",
+          "poziom"
+        ]
+      ],
+      "wykluczajace": [
+        "wag",
+        "odczyt",
+        "objętość"
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Ustaw poziom titranta na zero – dolny menisk na kresce 0.",
+      "dlaczego": "Kryteria: biureta napełniona do poziomu 0 i zachowany menisk dolny (dla roztworów bezbarwnych).",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "animacja": "kranik",
+      "przyklad": "ustawiam menisk na zero"
+    },
+    {
+      "id": "zglos",
+      "opis": "Zgłoszono gotowość do oceny zestawu – egzaminator sprawdza biuretę.",
+      "wymagane": [
+        [
+          "zgłoś",
+          "zgłasz",
+          "podnieś",
+          "podnos",
+          "gotowoś",
+          "zgłoszenie"
+        ]
+      ],
+      "wymaga": [
+        "napelnij",
+        "lejek",
+        "pecherz",
+        "zero"
+      ],
+      "podpowiedz": "Podnieś rękę i zgłoś gotowość do oceny zestawu do miareczkowania.",
+      "dlaczego": "Polecenie z arkusza – bez zgłoszenia egzaminator nie oceni zestawu, a to osobny rezultat.",
+      "animacja": "reka",
+      "przyklad": "zgłaszam gotowość do oceny"
+    },
+    {
+      "id": "przesacz",
+      "opis": "Zalewę znad papryki przesączono przez sączek karbowany.",
+      "wymagane": [
+        [
+          "przesącz",
+          "sączę",
+          "sącz",
+          "przefiltr"
+        ],
+        [
+          "zalew",
+          "marynat",
+          "próbk"
+        ]
+      ],
+      "wykluczajace": [
+        "zestaw",
+        "montuj",
+        "zmont",
+        "rozmont"
+      ],
+      "wymaga": [
+        "saczenie_zestaw",
+        "zglos"
+      ],
+      "podpowiedz": "Przesącz zalewę znad papryki.",
+      "dlaczego": "Kryterium przebiegu: przygotowując próbkę, przesączył zalewę.",
+      "sprzet": "zlewka",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "zlewka": "roztwor"
+      },
+      "przyklad": "przesączam zalewę znad papryki"
+    },
+    {
+      "id": "pipeta25",
+      "opis": "Pipetą jednomiarową odmierzono 25 cm³ przesączu do kolby miarowej 100 cm³.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos"
+        ],
+        [
+          "25",
+          "przesącz",
+          "miarow"
+        ]
+      ],
+      "wykluczajace": [
+        "10 cm",
+        "stożkow",
+        "kresk"
+      ],
+      "wymaga": [
+        "przesacz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz pipetą 25 cm³ przesączu do kolby miarowej 100 cm³.",
+      "dlaczego": "Kryterium: pobrał pipetą jednomiarową zalewę i przeniósł ilościowo do kolby miarowej.",
+      "sprzet": "stol",
+      "animacja": "pipetowanie",
+      "przyklad": "pipetuję 25 cm3 przesączu do kolby miarowej"
+    },
+    {
+      "id": "kreska",
+      "opis": "Kolbę miarową dopełniono wodą do kreski, opisano i delikatnie wymieszano.",
+      "wymagane": [
+        [
+          "dopełn",
+          "uzupełn",
+          "dolew",
+          "dolej"
+        ],
+        [
+          "kresk",
+          "miarow",
+          "wod"
+        ]
+      ],
+      "wymaga": [
+        "pipeta25"
+      ],
+      "podpowiedz": "Dopełnij kolbę wodą do kreski, opisz ją i delikatnie wymieszaj.",
+      "dlaczego": "Kryterium: dopełnił kolbę do kreski, zamknął korkiem i wymieszał. Delikatnie – roztwór się pieni.",
+      "sprzet": "stol",
+      "animacja": "przelewanie",
+      "przyklad": "dopełniam kolbę miarową wodą do kreski i delikatnie mieszam"
+    },
+    {
+      "id": "porcje",
+      "opis": "Do czterech kolb stożkowych odmierzono po 10 cm³ roztworu.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos"
+        ],
+        [
+          "10",
+          "stożkow",
+          "czter",
+          "4 kolb"
+        ]
+      ],
+      "wykluczajace": [
+        "25",
+        "miarow"
+      ],
+      "wymaga": [
+        "kreska"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz pipetą po 10 cm³ roztworu do czterech kolb stożkowych.",
+      "dlaczego": "10 cm³ roztworu odpowiada 2,5 cm³ marynaty – to „b” we wzorze.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "bezbarwny"
+      },
+      "przyklad": "odmierzam pipetą po 10 cm3 roztworu do czterech kolb stożkowych"
+    },
+    {
+      "id": "zobojetnij1",
+      "opis": "W pierwszej próbce: 2 krople fenoloftaleiny i NaOH 1% do jasnoróżowej barwy – policzono krople.",
+      "wymagane": [
+        [
+          "fenoloft",
+          "policz",
+          "licz",
+          "ustal",
+          "pierwsz"
+        ],
+        [
+          "zoboj",
+          "naoh",
+          "kropl",
+          "wodorotlen"
+        ]
+      ],
+      "wykluczajace": [
+        "pozostał",
+        "bez fenol",
+        "resztę",
+        "tą samą"
+      ],
+      "wymaga": [
+        "porcje"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "W jednej próbce dodaj 2 krople fenoloftaleiny i wkraplaj NaOH 1% do jasnoróżowej barwy, licząc krople.",
+      "dlaczego": "Metoda Mohra wymaga odczynu obojętnego; liczbę kropli wpisujesz do karty.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "w pierwszej próbce dodaję fenoloftaleinę i wkraplam NaOH licząc krople"
+    },
+    {
+      "id": "zobojetnij2",
+      "opis": "Pozostałe próbki zobojętniono tą samą liczbą kropli NaOH – bez fenoloftaleiny.",
+      "wymagane": [
+        [
+          "pozostał",
+          "reszt",
+          "kolejn",
+          "tą samą",
+          "tyle samo",
+          "bez fenol"
+        ],
+        [
+          "zoboj",
+          "naoh",
+          "kropl",
+          "próbk"
+        ]
+      ],
+      "wymaga": [
+        "zobojetnij1"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Pozostałe próbki zobojętnij tą samą liczbą kropli NaOH, bez fenoloftaleiny.",
+      "dlaczego": "Fenoloftaleina utrudniłaby zauważenie ceglastej barwy w punkcie końcowym.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "pozostałe próbki zobojętniam tą samą liczbą kropli NaOH bez fenoloftaleiny"
+    },
+    {
+      "id": "chromian",
+      "opis": "Dodano po 1 cm³ chromianu(VI) potasu 10% – roztwór żółty.",
+      "wymagane": [
+        [
+          "chromian",
+          "k2cro4",
+          "wskaźnik"
+        ]
+      ],
+      "wymaga": [
+        "zobojetnij2"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj po 1 cm³ roztworu chromianu(VI) potasu.",
+      "dlaczego": "Chromian jest wskaźnikiem: po strąceniu chlorków powstaje ceglasty Ag₂CrO₄.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "zolty"
+      },
+      "przyklad": "dodaję po 1 cm3 chromianu potasu"
+    },
+    {
+      "id": "miareczkuj",
+      "opis": "Miareczkowanie AgNO₃ do trwałej ceglastopomarańczowej barwy.",
+      "wymagane": [
+        [
+          "miareczk",
+          "titruj",
+          "titrac"
+        ]
+      ],
+      "wykluczajace": [
+        "zestaw",
+        "powtórz",
+        "drug",
+        "trzec",
+        "kolejn",
+        "jeszcze",
+        "ponown"
+      ],
+      "wymaga": [
+        "zglos",
+        "chromian"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Miareczkuj roztworem AgNO₃ do trwałej ceglastopomarańczowej barwy.",
+      "dlaczego": "Najpierw strąca się biały AgCl, a po wyczerpaniu chlorków – ceglasty Ag₂CrO₄.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolba": "ceglasty",
+        "biuretaPoziom": 0.65,
+        "kolbaMiejsce": "biureta"
+      },
+      "przyklad": "miareczkuję do ceglastej barwy"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano i zapisano objętość zużytego titranta (V₁).",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "spisuj",
+          "sprawdz",
+          "patrz"
+        ],
+        [
+          "objętoś",
+          "biuret",
+          "wynik",
+          "cm3",
+          "ml",
+          "menisk",
+          "zużyt",
+          "v1"
+        ]
+      ],
+      "wykluczajace": [
+        "pęcherz",
+        "powietrz",
+        "wag",
+        "papier",
+        "ph"
+      ],
+      "wymaga": [
+        "miareczkuj"
+      ],
+      "podpowiedz": "Odczytaj z biurety objętość zużytego titranta (dolny menisk) i zapisz ją.",
+      "dlaczego": "Objętość V jest podstawą obliczeń – w tabeli zapisuje się ją w cm³ i przelicza na dm³.",
+      "sprzet": "statyw",
+      "animacja": "odczyt",
+      "przyklad": "odczytuję objętość z biurety"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano kolejne oznaczenia – razem co najmniej 3.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Powtórz oznaczenie – procedura wymaga co najmniej trzech równoległych oznaczeń.",
+      "dlaczego": "Kryterium: miareczkowanie wykonane co najmniej trzykrotnie; z wyników liczy się średnią.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolby": 3
+      },
+      "przyklad": "powtarzam oznaczenie jeszcze dwa razy"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam mieszaniny poreakcyjne do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "rozmontuj_sacz",
+      "opis": "Zestaw do sączenia rozmontowany.",
+      "wymagane": [
+        [
+          "rozmont",
+          "zdemont",
+          "demont",
+          "rozkład",
+          "rozbier",
+          "rozłóż"
+        ],
+        [
+          "sącz"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Rozmontuj zestaw do sączenia.",
+      "dlaczego": "Kryterium porządkowania: zestaw do sączenia jest rozmontowany.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "stanSceny": {
+        "zlewka": "pusta"
+      },
+      "przyklad": "rozmontowuję zestaw do sączenia"
+    },
+    {
+      "id": "rozmontuj",
+      "opis": "Zestaw do miareczkowania rozmontowany.",
+      "wymagane": [
+        [
+          "rozmont",
+          "zdemont",
+          "demont",
+          "rozkręć",
+          "rozłóż",
+          "rozbier",
+          "rozebr",
+          "rozkład"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Rozmontuj zestaw do miareczkowania (resztę titranta z biurety też do odpadów).",
+      "dlaczego": "Kryterium porządkowania: zestaw do miareczkowania rozmontowany.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "zestaw": false,
+        "biuretaPoziom": 0
+      },
+      "animacja": "montaz",
+      "przyklad": "rozmontowuję zestaw do miareczkowania",
+      "wykluczajace": [
+        "sącz"
+      ]
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj",
+        "rozmontuj",
+        "rozmontuj_sacz"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "AgNO₃",
+      "0,1 mol/dm³"
+    ],
+    "wskaznik": [
+      "K₂CrO₄",
+      "10%"
+    ],
+    "odczytBiureta": "v1",
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – sól w marynacie",
+    "losuj": [
+      {
+        "id": "zaw",
+        "od": 0.9,
+        "do": 1.1
+      },
+      {
+        "id": "krople",
+        "wybierz": [
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "id": "v1",
+        "wzor": "zaw*2.5/(0.1*0.05845*100)",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v2",
+        "wzor": "zaw*2.5/(0.1*0.05845*100)",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v3",
+        "wzor": "zaw*2.5/(0.1*0.05845*100)",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "wyswietlacz",
+        "id": "krople",
+        "etykieta": "Krople NaOH do zobojętnienia",
+        "jednostka": "kropli",
+        "miejsca": 0
+      },
+      {
+        "typ": "info",
+        "etykieta": "Etykieta marynaty",
+        "tekst": "Sól: 10,0 g w 1 kg produktu"
+      },
+      {
+        "typ": "biureta",
+        "id": "v1",
+        "etykieta": "Biureta – próbka 1"
+      },
+      {
+        "typ": "biureta",
+        "id": "v2",
+        "etykieta": "Biureta – próbka 2"
+      },
+      {
+        "typ": "biureta",
+        "id": "v3",
+        "etykieta": "Biureta – próbka 3"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Część A",
+        "opis": "Strzałkę zapisz jako -> albo =. Osad możesz oznaczyć strzałką w dół lub pominąć.",
+        "pola": [
+          {
+            "id": "r1",
+            "etykieta": "Reakcja oznaczania (cząsteczkowo):",
+            "szer": "max"
+          },
+          {
+            "id": "r2",
+            "etykieta": "Reakcja wskaźnika (cząsteczkowo):",
+            "szer": "max"
+          },
+          {
+            "id": "r3",
+            "etykieta": "Reakcja oznaczania (jonowo):",
+            "szer": "max"
+          },
+          {
+            "id": "r4",
+            "etykieta": "Reakcja wskaźnika (jonowo):",
+            "szer": "max"
+          },
+          {
+            "id": "wsk",
+            "etykieta": "Wskaźnik:",
+            "szer": "dl"
+          },
+          {
+            "id": "titrant",
+            "etykieta": "Titrant (wzór, nazwa, stężenie):",
+            "szer": "max"
+          },
+          {
+            "id": "krople",
+            "etykieta": "Liczba kropli NaOH do zobojętnienia:",
+            "szer": "kr"
+          }
+        ]
+      },
+      {
+        "tytul": "Część B",
+        "tabela": {
+          "wiersze": 3,
+          "kolumny": [
+            {
+              "naglowek": "Marynata w roztworze [cm³]",
+              "pole": "b{i}"
+            },
+            {
+              "naglowek": "V AgNO₃ [cm³]",
+              "pole": "v{i}"
+            },
+            {
+              "naglowek": "NaCl [% m/m]",
+              "pole": "x{i}"
+            },
+            {
+              "naglowek": "NaCl [g/kg]",
+              "pole": "g{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "xsr",
+            "etykieta": "Średnia zawartość NaCl:",
+            "szer": "kr",
+            "jednostka": "% (m/m)"
+          },
+          {
+            "id": "gsr",
+            "etykieta": "Średnia zawartość NaCl:",
+            "szer": "kr",
+            "jednostka": "g/1 kg"
+          },
+          {
+            "id": "etyk",
+            "etykieta": "Zawartość soli na etykiecie:",
+            "szer": "kr",
+            "jednostka": "g/kg"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Zawartość soli (zgodna / niezgodna) z etykietą:",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "1 cm³ AgNO₃ 0,1 mol/dm³ strąca chlorki z 0,005845 g NaCl (0,1 · 0,05845).",
+      "~1 cm³ AgNO₃ — 0,005845 g NaCl | a cm³ — y g NaCl",
+      "~2,5 g marynaty — 100% | y g — x%",
+      "Przeliczenie na 1 kg:",
+      "~100 g marynaty — x g NaCl | 1000 g — z g NaCl",
+      "Za zgodną z etykietą przyjmij zawartość 10,0 ± 1,0 g/kg."
+    ],
+    "kryteria": [
+      {
+        "opis": "Równanie: AgNO₃ + NaCl → AgCl↓ + NaNO₃",
+        "uwaga": "AgNO₃ + NaCl → AgCl↓ + NaNO₃",
+        "sprawdz": [
+          {
+            "typ": "rownanie",
+            "pole": "r1",
+            "lewa": [
+              "agno3",
+              "nacl"
+            ],
+            "prawa": [
+              "agcl",
+              "nano3"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Równanie: 2AgNO₃ + K₂CrO₄ → Ag₂CrO₄↓ + 2KNO₃",
+        "uwaga": "2AgNO₃ + K₂CrO₄ → Ag₂CrO₄↓ + 2KNO₃",
+        "sprawdz": [
+          {
+            "typ": "rownanie",
+            "pole": "r2",
+            "lewa": [
+              "2agno3",
+              "k2cro4"
+            ],
+            "prawa": [
+              "ag2cro4",
+              "2kno3"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Równanie jonowe: Ag⁺ + Cl⁻ → AgCl",
+        "uwaga": "Ag⁺ + Cl⁻ → AgCl↓",
+        "sprawdz": [
+          {
+            "typ": "rownanie",
+            "pole": "r3",
+            "lewa": [
+              "ag",
+              "cl"
+            ],
+            "prawa": [
+              "agcl"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Równanie jonowe: 2Ag⁺ + CrO₄²⁻ → Ag₂CrO₄",
+        "uwaga": "2Ag⁺ + CrO₄²⁻ → Ag₂CrO₄↓",
+        "sprawdz": [
+          {
+            "typ": "rownanie",
+            "pole": "r4",
+            "lewa": [
+              "2ag",
+              "cro42"
+            ],
+            "prawa": [
+              "ag2cro4"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Wskaźnik: chromian(VI) potasu",
+        "uwaga": "Wskaźnikiem jest chromian(VI) potasu, K₂CrO₄.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "wsk",
+            "zawiera": [
+              "chromian",
+              "k2cro4"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Titrant: AgNO₃, azotan(V) srebra(I), 0,1 mol/dm³",
+        "uwaga": "Podaj wzór, nazwę i stężenie.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "titrant",
+            "zawiera": [
+              "agno3",
+              "azotan"
+            ]
+          },
+          {
+            "typ": "tekst",
+            "pole": "titrant",
+            "zawiera": [
+              "0,1",
+              "0.1"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Liczba kropli NaOH zgodna ze stanem faktycznym",
+        "uwaga": "Przepisz liczbę kropli z odczytu.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "krople",
+            "wzor": "krople",
+            "tol": 0.1
+          }
+        ]
+      },
+      {
+        "opis": "Objętość marynaty w roztworze miareczkowanym: 2,5 cm³",
+        "uwaga": "10 cm³ roztworu odpowiada 2,5 cm³ marynaty.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "b1",
+            "wzor": "2.5",
+            "tol": 0.01
+          },
+          {
+            "typ": "liczba",
+            "pole": "b2",
+            "wzor": "2.5",
+            "tol": 0.01
+          },
+          {
+            "typ": "liczba",
+            "pole": "b3",
+            "wzor": "2.5",
+            "tol": 0.01
+          }
+        ]
+      },
+      {
+        "opis": "Trzy objętości AgNO₃ zgodne z odczytem",
+        "uwaga": "Odczytaj na dolnym menisku, ±0,05 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "v1",
+            "wzor": "v1",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "v2",
+            "wzor": "v2",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "v3",
+            "wzor": "v3",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Zawartość NaCl w % wagowych dla trzech próbek",
+        "uwaga": "x = a · 0,1 · 0,05845 · 100 / 2,5. Próbka 1:",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "x1",
+            "wzor": "$v1*0.1*0.05845*100/2.5",
+            "tol": 0.06
+          },
+          {
+            "typ": "liczba",
+            "pole": "x2",
+            "wzor": "$v2*0.1*0.05845*100/2.5",
+            "tol": 0.06
+          },
+          {
+            "typ": "liczba",
+            "pole": "x3",
+            "wzor": "$v3*0.1*0.05845*100/2.5",
+            "tol": 0.06
+          }
+        ],
+        "pokaz": {
+          "wzor": "$v1*0.1*0.05845*100/2.5",
+          "miejsca": 1,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Zawartość NaCl w g/1 kg dla trzech próbek",
+        "uwaga": "1% to 10 g w 1 kg.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "g1",
+            "wzor": "$x1*10",
+            "tol": 0.06
+          },
+          {
+            "typ": "liczba",
+            "pole": "g2",
+            "wzor": "$x2*10",
+            "tol": 0.06
+          },
+          {
+            "typ": "liczba",
+            "pole": "g3",
+            "wzor": "$x3*10",
+            "tol": 0.06
+          }
+        ]
+      },
+      {
+        "opis": "Średnie: w % wagowych i w g/1 kg",
+        "uwaga": "Średnia z trzech wyników.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "xsr",
+            "wzor": "sr($x1,$x2,$x3)",
+            "tol": 0.06
+          },
+          {
+            "typ": "liczba",
+            "pole": "gsr",
+            "wzor": "$xsr*10",
+            "tol": 0.06
+          }
+        ]
+      },
+      {
+        "opis": "Zawartość procentowa z dokładnością do jednego miejsca po przecinku",
+        "uwaga": "Zaokrąglij procenty do 0,1.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "x1",
+            "ile": 1
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x2",
+            "ile": 1
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x3",
+            "ile": 1
+          },
+          {
+            "typ": "miejsca",
+            "pole": "xsr",
+            "ile": 1
+          }
+        ]
+      },
+      {
+        "opis": "Zawartość NaCl podana na etykiecie",
+        "uwaga": "Na etykiecie: 10,0 g/kg.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "etyk",
+            "wzor": "10",
+            "tol": 0.01
+          }
+        ]
+      },
+      {
+        "opis": "Wniosek adekwatny do wyników i etykiety",
+        "uwaga": "Porównaj średnią w g/kg z 10,0 g/kg (tu: zgodna, jeśli różnica nie przekracza 1,0 g/kg).",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "1.0-abs($gsr-10)+0.000001",
+            "tak": [
+              "zgodna"
+            ],
+            "nie": [
+              "niezgodna",
+              "nie zgodna",
+              "nie jest zgodna"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

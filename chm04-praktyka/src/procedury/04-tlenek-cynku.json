@@ -1,0 +1,1299 @@
+{
+  "id": "04-tlenek-cynku",
+  "tytul": "Tlenek cynku w paście cynkowej",
+  "zrodlo": "CHM.04 – czerwiec 2026",
+  "metoda": "Kompleksometria (EDTA, czerń eriochromowa T)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Przygotuj stanowisko pracy i wykonaj oznaczenie zawartości tlenku cynku w paście cynkowej.\nZ magazynu pobierz i wyłóż na stanowisko tylko sprzęt i odczynniki niezbędne do przygotowania próbki (część A). Zgłoś gotowość do oceny stanowiska.\nPrzygotuj próbkę, opisz ją „Próbka do badań” i oznacz numerem stanowiska. Zgłoś gotowość do oceny próbki.\nNastępnie wykonaj oznaczenie (część B). Mieszaniny poreakcyjne i pozostałość próbki przelej do pojemnika na odpady ciekłe."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "A. Przygotowanie próbki\nW zlewce 100 cm³ odważyć około 1 g pasty (z dokładnością do 0,001 g). Dodać 20 cm³ kwasu solnego 2 mol/dm³ i, ciągle mieszając, ogrzewać kilka minut do roztworzenia tlenku cynku.\nRoztwór przesączyć i przenieść do kolby miarowej 100 cm³. Pozostałość w zlewce przemyć dwukrotnie porcjami po 3 cm³ HCl, a następnie trzykrotnie porcjami po 5 cm³ wody; roztwór z przemycia przesączyć przez ten sam sączek do kolby.\nUzupełnić wodą do kreski, zamknąć korkiem i wymieszać. Kolbę opisać „Próbka do badań” i numerem stanowiska.\nB. Wykonanie oznaczenia\nDo kolby stożkowej odmierzyć pipetą jednomiarową 25 cm³ roztworu, dodać 10 cm³ buforu amonowego pH 10 (pod dygestorium), 15 cm³ wody i szczyptę czerni eriochromowej T – roztwór fioletowy. Miareczkować EDTA 0,05 mol/dm³ do zmiany barwy na niebieską. Wykonać co najmniej dwa razy.\nObliczenia\nm ZnO = V · C · M · W\n- V – objętość EDTA [dm³], średnia z wyników różniących się najwyżej o 0,2 cm³\n- C – stężenie EDTA [mol/dm³]\n- M – masa molowa ZnO, 81,37 g/mol\n- W – współmierność kolby miarowej i pipety\nObliczyć zawartość procentową ZnO w paście i porównać z etykietą."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "stanowisko",
+      "opis": "Na stanowisko wyłożono tylko sprzęt i odczynniki do przygotowania próbki (część A).",
+      "wymagane": [
+        [
+          "wyłóż",
+          "wykład",
+          "pobier",
+          "pobierz",
+          "przygotow",
+          "przynos",
+          "przynieś",
+          "ustaw"
+        ],
+        [
+          "sprzęt",
+          "odczynnik",
+          "stanowisk",
+          "magazyn"
+        ]
+      ],
+      "wykluczajace": [
+        "uporządk",
+        "sprząt",
+        "wytrz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Pobierz z magazynu i wyłóż na stanowisko tylko sprzęt i odczynniki do części A.",
+      "dlaczego": "Rezultat 1: stanowisko – m.in. kryterium „wyłącznie niezbędne sprzęty i odczynniki”.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "pobieram z magazynu sprzęt i odczynniki do części A"
+    },
+    {
+      "id": "zglos1",
+      "opis": "Zgłoszono gotowość do oceny stanowiska pracy.",
+      "wymagane": [
+        [
+          "zgłoś",
+          "zgłasz",
+          "podnieś",
+          "podnos",
+          "gotowoś"
+        ],
+        [
+          "stanowisk"
+        ]
+      ],
+      "wykluczajace": [
+        "próbk"
+      ],
+      "wymaga": [
+        "stanowisko"
+      ],
+      "podpowiedz": "Zgłoś gotowość do oceny przygotowanego stanowiska.",
+      "dlaczego": "Stanowisko ocenia się bezpośrednio po podniesieniu ręki.",
+      "sprzet": "stol",
+      "animacja": "reka",
+      "przyklad": "zgłaszam gotowość do oceny stanowiska"
+    },
+    {
+      "id": "waga",
+      "opis": "Waga włączona, wypoziomowana i wytarowana.",
+      "wymagane": [
+        [
+          "włącz",
+          "wytar",
+          "tar",
+          "wyzer",
+          "zeruj",
+          "zerow",
+          "wypoziom",
+          "poziomuj",
+          "uruchom",
+          "przygotuj"
+        ],
+        [
+          "wag"
+        ]
+      ],
+      "wykluczajace": [
+        "wyłącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz wagę, sprawdź poziomicę i wytaruj ją z naczyniem.",
+      "dlaczego": "Ważenie zgodnie z zasadami: wypoziomowanie i tarowanie, inaczej masa próbki jest błędna.",
+      "sprzet": "waga",
+      "stanSceny": {
+        "waga": "wlaczona"
+      },
+      "animacja": "przycisk",
+      "przyklad": "włączam i taruję wagę"
+    },
+    {
+      "id": "odwaz",
+      "opis": "W zlewce 100 cm³ odważono ok. 1 g pasty (dokładność 0,001 g).",
+      "wymagane": [
+        [
+          "odważ",
+          "naważ",
+          "zważ",
+          "ważę"
+        ],
+        [
+          "past",
+          "1 g",
+          "próbk"
+        ]
+      ],
+      "wymaga": [
+        "waga",
+        "zglos1"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odważ w zlewce ok. 1 g pasty z dokładnością do 0,001 g.",
+      "dlaczego": "Kryterium: odważył w zlewce pastę zgodnie z zasadami ważenia.",
+      "sprzet": "waga",
+      "animacja": "siegnij",
+      "stanSceny": {
+        "zlewka": "roztwor"
+      },
+      "przyklad": "odważam 1 g pasty w zlewce"
+    },
+    {
+      "id": "hcl",
+      "opis": "Dodano 20 cm³ kwasu solnego 2 mol/dm³ (cylinder lub pipeta).",
+      "wymagane": [
+        [
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "dolew",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "wkrapl",
+          "wsyp",
+          "dodanie"
+        ],
+        [
+          "hcl",
+          "kwas",
+          "solnego",
+          "20"
+        ]
+      ],
+      "wykluczajace": [
+        "przemy",
+        "płucz",
+        "3 cm"
+      ],
+      "wymaga": [
+        "odwaz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj do zlewki 20 cm³ kwasu solnego 2 mol/dm³.",
+      "dlaczego": "Tlenek cynku roztwarza się w kwasie: ZnO + 2HCl → ZnCl₂ + H₂O.",
+      "sprzet": "zlewka",
+      "animacja": "przelewanie",
+      "przyklad": "dodaję 20 cm3 kwasu solnego do zlewki"
+    },
+    {
+      "id": "ogrzej",
+      "opis": "Mieszaninę ogrzewano, ciągle mieszając, do roztworzenia tlenku cynku.",
+      "wymagane": [
+        [
+          "ogrzew",
+          "ogrzej",
+          "podgrzew",
+          "podgrzej",
+          "grzej",
+          "grzeję"
+        ]
+      ],
+      "wymaga": [
+        "hcl"
+      ],
+      "podpowiedz": "Ogrzewaj mieszaninę na płycie grzewczej, ciągle mieszając bagietką.",
+      "dlaczego": "Kryterium: ogrzewał mieszaninę, ciągle mieszając, do roztworzenia tlenku cynku.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "ogrzewam mieszaninę na płycie grzewczej ciągle mieszając"
+    },
+    {
+      "id": "sacz",
+      "opis": "Roztwór przesączono (po bagietce, nóżka lejka przy ściance) do kolby miarowej 100 cm³.",
+      "wymagane": [
+        [
+          "sącz",
+          "przesącz",
+          "sączen",
+          "filtr"
+        ]
+      ],
+      "wykluczajace": [
+        "przemy",
+        "kosz",
+        "wyrzuc",
+        "wyrzuć"
+      ],
+      "wymaga": [
+        "ogrzej"
+      ],
+      "podpowiedz": "Przesącz roztwór do kolby miarowej, wlewając po bagietce na sączek.",
+      "dlaczego": "Kryteria: sączył po bagietce; nóżka lejka dotykała ścianki; przesącz w kolbie miarowej 100 cm³.",
+      "sprzet": "stol",
+      "animacja": "przelewanie",
+      "przyklad": "sączę roztwór po bagietce do kolby miarowej"
+    },
+    {
+      "id": "przemyj",
+      "opis": "Pozostałość w zlewce przemyto 2×3 cm³ HCl i 3×5 cm³ wody – przez ten sam sączek do kolby.",
+      "wymagane": [
+        [
+          "przemy",
+          "przepłuk",
+          "opłucz",
+          "płucz"
+        ],
+        [
+          "zlewk",
+          "pozostał",
+          "osad",
+          "sączek"
+        ]
+      ],
+      "wymaga": [
+        "sacz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Przemyj zlewkę dwa razy po 3 cm³ HCl i trzy razy po 5 cm³ wody, sącząc do tej samej kolby.",
+      "dlaczego": "Przeniesienie ilościowe – bez przemycia część cynku zostałaby w zlewce.",
+      "sprzet": "zlewka",
+      "animacja": "przelewanie",
+      "przyklad": "przemywam pozostałość w zlewce kwasem i wodą przez ten sam sączek"
+    },
+    {
+      "id": "kreska",
+      "opis": "Kolbę miarową uzupełniono wodą do kreski, zamknięto korkiem i wymieszano.",
+      "wymagane": [
+        [
+          "uzupełn",
+          "dopełn",
+          "dolew",
+          "dolej"
+        ],
+        [
+          "kresk",
+          "miarow"
+        ]
+      ],
+      "wymaga": [
+        "przemyj"
+      ],
+      "podpowiedz": "Uzupełnij kolbę miarową wodą do kreski (menisk dolny), zamknij korkiem i wymieszaj.",
+      "dlaczego": "Rezultat 2: kolba wypełniona do kreski, zamknięta, roztwór klarowny.",
+      "sprzet": "stol",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "zlewka": "pusta"
+      },
+      "przyklad": "uzupełniam kolbę miarową wodą do kreski i mieszam"
+    },
+    {
+      "id": "opisz",
+      "opis": "Kolbę opisano: „Próbka do badań” i numer stanowiska.",
+      "wymagane": [
+        [
+          "opisuj",
+          "opisz",
+          "opisać",
+          "podpis",
+          "oznacz",
+          "etykiet"
+        ]
+      ],
+      "wymaga": [
+        "kreska"
+      ],
+      "podpowiedz": "Opisz kolbę: „Próbka do badań” oraz numer stanowiska.",
+      "dlaczego": "Kryterium rezultatu 2 – łatwo o nim zapomnieć.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "opisuję kolbę próbka do badań i numer stanowiska"
+    },
+    {
+      "id": "zglos2",
+      "opis": "Zgłoszono gotowość do oceny przygotowanej próbki.",
+      "wymagane": [
+        [
+          "zgłoś",
+          "zgłasz",
+          "podnieś",
+          "podnos",
+          "gotowoś"
+        ],
+        [
+          "próbk"
+        ]
+      ],
+      "wymaga": [
+        "opisz"
+      ],
+      "podpowiedz": "Zgłoś gotowość do oceny przygotowanej próbki.",
+      "dlaczego": "Próbkę ocenia się bezpośrednio po podniesieniu ręki.",
+      "sprzet": "stol",
+      "animacja": "reka",
+      "przyklad": "zgłaszam gotowość do oceny próbki"
+    },
+    {
+      "id": "pipeta",
+      "opis": "Do kolby stożkowej odpipetowano 25 cm³ roztworu pipetą jednomiarową.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos"
+        ],
+        [
+          "25",
+          "próbk",
+          "roztw"
+        ]
+      ],
+      "wykluczajace": [
+        "bufor",
+        "wod",
+        "15"
+      ],
+      "wymaga": [
+        "zglos2"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz pipetą jednomiarową 25 cm³ roztworu z „próbki do badań” do kolby stożkowej.",
+      "dlaczego": "Z 100 cm³ bierzesz 25 cm³ – stąd współmierność W = 4.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "bezbarwny"
+      },
+      "przyklad": "pipetuję 25 cm3 roztworu do kolby stożkowej"
+    },
+    {
+      "id": "bufor",
+      "opis": "Dodano 10 cm³ buforu amonowego pH 10 – pod włączonym dygestorium.",
+      "wymagane": [
+        [
+          "bufor",
+          "amonow"
+        ]
+      ],
+      "wymaga": [
+        "pipeta"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj 10 cm³ buforu amonowego – pod dygestorium.",
+      "dlaczego": "Osobne kryterium: bufor amonowy dodawał pod włączonym dygestorium (drażniące opary amoniaku).",
+      "sprzet": "kolba",
+      "animacja": "przelewanie",
+      "przyklad": "dodaję 10 cm3 buforu amonowego pod dygestorium"
+    },
+    {
+      "id": "woda",
+      "opis": "Dodano 15 cm³ wody destylowanej (cylinder miarowy).",
+      "wymagane": [
+        [
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "dolew",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "wkrapl",
+          "wsyp",
+          "dodanie"
+        ],
+        [
+          "wod"
+        ]
+      ],
+      "wykluczajace": [
+        "kresk",
+        "miarow",
+        "przemy",
+        "zlewk"
+      ],
+      "wymaga": [
+        "bufor"
+      ],
+      "podpowiedz": "Dodaj 15 cm³ wody destylowanej odmierzonej cylindrem.",
+      "dlaczego": "Kryterium: dodał za pomocą cylindra miarowego wodę destylowaną.",
+      "sprzet": "kolba",
+      "animacja": "przelewanie",
+      "przyklad": "dodaję 15 cm3 wody destylowanej do kolby"
+    },
+    {
+      "id": "czern",
+      "opis": "Dodano szczyptę czerni eriochromowej T – roztwór fioletowy.",
+      "wymagane": [
+        [
+          "czerń",
+          "czerni",
+          "eriochrom",
+          "wskaźnik"
+        ]
+      ],
+      "wymaga": [
+        "woda"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj łyżeczką szczyptę czerni eriochromowej T.",
+      "dlaczego": "Wskaźnik tworzy z cynkiem fioletowy kompleks; EDTA wypiera go i barwa zmienia się na niebieską.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "fioletowy"
+      },
+      "przyklad": "dodaję szczyptę czerni eriochromowej"
+    },
+    {
+      "id": "montaz",
+      "opis": "Zestaw do miareczkowania zmontowany: statyw, łapa, biureta.",
+      "wymagane": [
+        [
+          "zmont",
+          "montuj",
+          "montaż",
+          "złóż",
+          "składa",
+          "przygotow",
+          "zamocow",
+          "mocuj",
+          "ustaw",
+          "zakład",
+          "wkład",
+          "umieszcz",
+          "przykręc"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw",
+          "łap"
+        ]
+      ],
+      "wykluczajace": [
+        "rozmont",
+        "demont",
+        "zero",
+        "zera",
+        "menisk",
+        "pęcherz"
+      ],
+      "wymaga": [
+        "zglos2"
+      ],
+      "podpowiedz": "Zmontuj zestaw do miareczkowania (statyw, łapa, biureta).",
+      "dlaczego": "Zmontowany zestaw jest osobnym rezultatem ocenianym po zgłoszeniu gotowości.",
+      "sprzet": "statyw",
+      "animacja": "montaz",
+      "stanSceny": {
+        "zestaw": true,
+        "lejek": true
+      },
+      "przyklad": "montuję zestaw do miareczkowania"
+    },
+    {
+      "id": "napelnij",
+      "opis": "Biureta napełniona titrantem – EDTA 0,05 mol/dm³ (przez lejek).",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "nalej",
+          "wlew",
+          "wlej",
+          "uzupełn",
+          "wypełn"
+        ],
+        [
+          "biuret"
+        ]
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Napełnij biuretę titrantem – EDTA 0,05 mol/dm³, używając lejka.",
+      "dlaczego": "Bez titranta nie ma miareczkowania; egzaminator sprawdza, czy biureta jest napełniona.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "biuretaPoziom": 0.95
+      },
+      "przyklad": "napełniam biuretę titrantem przez lejek",
+      "wymaga": [
+        "montaz"
+      ]
+    },
+    {
+      "id": "lejek",
+      "opis": "Lejek zdjęty z biurety.",
+      "wymagane": [
+        [
+          "zdejm",
+          "wyjm",
+          "usuń",
+          "ściąg",
+          "odstaw",
+          "zabier",
+          "odłóż",
+          "odkład",
+          "zdjąć",
+          "wyjąć"
+        ],
+        [
+          "lejek",
+          "lejk"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Zdejmij lejek z biurety.",
+      "dlaczego": "Lejek pozostawiony w biurecie może dolewać krople titranta i zafałszować odczyt – miareczkuje się bez lejka.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "lejek": false
+      },
+      "animacja": "siegnij_gora",
+      "przyklad": "zdejmuję lejek z biurety"
+    },
+    {
+      "id": "pecherz",
+      "opis": "Usunięto pęcherzyk powietrza spod kranika biurety.",
+      "wymagane": [
+        [
+          "pęcherz",
+          "powietrz",
+          "odpowietrz"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Usuń pęcherzyk powietrza spod kranika biurety (spuść trochę titranta).",
+      "dlaczego": "Pęcherz w kraniku zwiększa odczytaną objętość – kryterium: brak pęcherza powietrza w kraniku.",
+      "sprzet": "statyw",
+      "animacja": "kranik",
+      "przyklad": "usuwam pęcherzyk powietrza z kranika"
+    },
+    {
+      "id": "zero",
+      "opis": "Poziom titranta ustawiony na 0 cm³ (menisk dolny).",
+      "wymagane": [
+        [
+          "zero",
+          "zera",
+          "0",
+          "kresk",
+          "menisk",
+          "wyzer",
+          "poziom"
+        ]
+      ],
+      "wykluczajace": [
+        "wag",
+        "odczyt",
+        "objętość"
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Ustaw poziom titranta na zero – dolny menisk na kresce 0.",
+      "dlaczego": "Kryteria: biureta napełniona do poziomu 0 i zachowany menisk dolny (dla roztworów bezbarwnych).",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "animacja": "kranik",
+      "przyklad": "ustawiam menisk na zero"
+    },
+    {
+      "id": "miareczkuj",
+      "opis": "Miareczkowanie EDTA do zmiany barwy z fioletowej na niebieską.",
+      "wymagane": [
+        [
+          "miareczk",
+          "titruj",
+          "titrac"
+        ]
+      ],
+      "wykluczajace": [
+        "zestaw",
+        "powtórz",
+        "drug",
+        "trzec",
+        "kolejn",
+        "jeszcze",
+        "ponown"
+      ],
+      "wymaga": [
+        "zero",
+        "lejek",
+        "pecherz",
+        "czern"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Miareczkuj roztworem EDTA do zmiany barwy na niebieską.",
+      "dlaczego": "Niebieska barwa wolnego wskaźnika oznacza, że cały cynk związał się z EDTA.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolba": "niebieski",
+        "biuretaPoziom": 0.65,
+        "kolbaMiejsce": "biureta"
+      },
+      "przyklad": "miareczkuję do niebieskiej barwy"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano i zapisano objętość zużytego titranta (V₁).",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "spisuj",
+          "sprawdz",
+          "patrz"
+        ],
+        [
+          "objętoś",
+          "biuret",
+          "wynik",
+          "cm3",
+          "ml",
+          "menisk",
+          "zużyt",
+          "v1"
+        ]
+      ],
+      "wykluczajace": [
+        "pęcherz",
+        "powietrz",
+        "wag",
+        "papier",
+        "ph"
+      ],
+      "wymaga": [
+        "miareczkuj"
+      ],
+      "podpowiedz": "Odczytaj z biurety objętość zużytego titranta (dolny menisk) i zapisz ją.",
+      "dlaczego": "Objętość V jest podstawą obliczeń – w tabeli zapisuje się ją w cm³ i przelicza na dm³.",
+      "sprzet": "statyw",
+      "animacja": "odczyt",
+      "przyklad": "odczytuję objętość z biurety"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano drugie miareczkowanie.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Powtórz miareczkowanie – wymagane są co najmniej dwa.",
+      "dlaczego": "Kryterium: miareczkowanie wykonane co najmniej trzykrotnie; z wyników liczy się średnią.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolby": 2
+      },
+      "przyklad": "powtarzam oznaczenie drugi raz"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam mieszaniny poreakcyjne do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "saczek",
+      "opis": "Zużyty sączek wyrzucono do kosza na odpady.",
+      "wymagane": [
+        [
+          "sączek",
+          "sączk"
+        ],
+        [
+          "kosz",
+          "wyrzuc",
+          "wyrzuć",
+          "odpad"
+        ]
+      ],
+      "wykluczajace": [
+        "przemy",
+        "ten sam"
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Wyrzuć zużyty sączek do kosza na odpady.",
+      "dlaczego": "Kryterium przebiegu 1 (zaliczane także podczas porządkowania).",
+      "sprzet": "odpady",
+      "animacja": "siegnij",
+      "przyklad": "wyrzucam zużyty sączek do kosza"
+    },
+    {
+      "id": "rozmontuj",
+      "opis": "Zestaw do miareczkowania rozmontowany.",
+      "wymagane": [
+        [
+          "rozmont",
+          "zdemont",
+          "demont",
+          "rozkręć",
+          "rozłóż",
+          "rozbier",
+          "rozebr",
+          "rozkład"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Rozmontuj zestaw do miareczkowania (resztę titranta z biurety też do odpadów).",
+      "dlaczego": "Kryterium porządkowania: zestaw do miareczkowania rozmontowany.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "zestaw": false,
+        "biuretaPoziom": 0
+      },
+      "animacja": "montaz",
+      "przyklad": "rozmontowuję zestaw do miareczkowania"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "wylacz_wage",
+      "opis": "Waga wyłączona.",
+      "wymagane": [
+        [
+          "=wyłącz",
+          "=odłącz"
+        ],
+        [
+          "wag"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Wyłącz wagę.",
+      "dlaczego": "Kryterium porządkowania: waga wyłączona.",
+      "sprzet": "waga",
+      "stanSceny": {
+        "waga": "wylaczona"
+      },
+      "animacja": "przycisk",
+      "przyklad": "wyłączam wagę"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj",
+        "rozmontuj",
+        "wylacz_wage"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "EDTA",
+      "0,05 mol/dm³"
+    ],
+    "wskaznik": [
+      "czerń",
+      "eriochromowa T"
+    ],
+    "masaWagi": "m",
+    "odczytBiureta": "v1",
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – tlenek cynku",
+    "losuj": [
+      {
+        "id": "zaw",
+        "od": 23.6,
+        "do": 26.4
+      },
+      {
+        "id": "m",
+        "od": 0.985,
+        "do": 1.045,
+        "miejsca": 3
+      },
+      {
+        "id": "v1",
+        "wzor": "zaw/100*m/(0.05*81.37*4)*1000",
+        "szum": 0.06,
+        "krok": 0.1,
+        "miejsca": 1
+      },
+      {
+        "id": "v2",
+        "wzor": "zaw/100*m/(0.05*81.37*4)*1000",
+        "szum": 0.06,
+        "krok": 0.1,
+        "miejsca": 1
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "waga",
+        "id": "m",
+        "etykieta": "Waga – pasta",
+        "jednostka": "g",
+        "miejsca": 3
+      },
+      {
+        "typ": "info",
+        "etykieta": "Etykieta pasty",
+        "tekst": "Zawartość tlenku cynku: 25%"
+      },
+      {
+        "typ": "biureta",
+        "id": "v1",
+        "etykieta": "Biureta – miareczkowanie 1"
+      },
+      {
+        "typ": "biureta",
+        "id": "v2",
+        "etykieta": "Biureta – miareczkowanie 2"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Wyniki miareczkowania",
+        "opis": "cm³ – jedno miejsce po przecinku, dm³ – cztery miejsca.",
+        "tabela": {
+          "wiersze": 2,
+          "kolumny": [
+            {
+              "naglowek": "V EDTA [cm³]",
+              "pole": "v{i}"
+            },
+            {
+              "naglowek": "V EDTA [dm³]",
+              "pole": "vd{i}"
+            }
+          ]
+        }
+      },
+      {
+        "tytul": "Dane do obliczeń",
+        "pola": [
+          {
+            "id": "vsr",
+            "etykieta": "V EDTA (średnia) =",
+            "szer": "sr",
+            "jednostka": "dm³"
+          },
+          {
+            "id": "c",
+            "etykieta": "C EDTA =",
+            "szer": "kr",
+            "jednostka": "mol/dm³"
+          },
+          {
+            "id": "mm",
+            "etykieta": "M ZnO =",
+            "szer": "kr",
+            "jednostka": "g/mol"
+          },
+          {
+            "id": "w",
+            "etykieta": "W =",
+            "szer": "kr"
+          },
+          {
+            "id": "m",
+            "etykieta": "Masa odważki pasty m =",
+            "szer": "sr",
+            "jednostka": "g"
+          }
+        ]
+      },
+      {
+        "tytul": "Obliczenia i ocena",
+        "pola": [
+          {
+            "id": "mzno",
+            "etykieta": "Zawartość ZnO w próbce do badań:",
+            "szer": "sr",
+            "jednostka": "g"
+          },
+          {
+            "id": "proc",
+            "etykieta": "Zawartość procentowa ZnO w paście:",
+            "szer": "kr",
+            "jednostka": "%"
+          },
+          {
+            "id": "ocena",
+            "etykieta": "Zawartość ZnO (jest zgodna / nie jest zgodna) z etykietą:",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "EDTA reaguje z cynkiem 1 : 1. Stężenie EDTA 0,05 mol/dm³, M ZnO = 81,37 g/mol.",
+      "~1 dm³ EDTA — 0,05 mol | V dm³ — n mol (tyle ZnO jest w 25 cm³)",
+      "~25 cm³ — n mol | 100 cm³ — 4 · n mol (współmierność W = 4)",
+      "~1 mol ZnO — 81,37 g | 4n mol — a g",
+      "~m pasty [g] — 100% | a [g] — X%"
+    ],
+    "kryteria": [
+      {
+        "opis": "Dwie objętości EDTA [cm³] zgodne z odczytem",
+        "uwaga": "Odczytaj na dolnym menisku, ±0,1 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "v1",
+            "wzor": "v1",
+            "tol": 0.1
+          },
+          {
+            "typ": "liczba",
+            "pole": "v2",
+            "wzor": "v2",
+            "tol": 0.1
+          }
+        ]
+      },
+      {
+        "opis": "Dwie objętości EDTA [dm³]",
+        "uwaga": "cm³ dzielisz przez 1000.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "vd1",
+            "wzor": "$v1/1000",
+            "tol": 5.1e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "vd2",
+            "wzor": "$v2/1000",
+            "tol": 5.1e-05
+          }
+        ]
+      },
+      {
+        "opis": "cm³ z dokładnością do 1 miejsca, dm³ do 4 miejsc po przecinku",
+        "uwaga": "Np. 15,4 cm³ = 0,0154 dm³.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "v1",
+            "ile": 1
+          },
+          {
+            "typ": "miejsca",
+            "pole": "v2",
+            "ile": 1
+          },
+          {
+            "typ": "miejsca",
+            "pole": "vd1",
+            "ile": 4
+          },
+          {
+            "typ": "miejsca",
+            "pole": "vd2",
+            "ile": 4
+          }
+        ]
+      },
+      {
+        "opis": "Średnia objętość EDTA [dm³] z wyników różniących się najwyżej o 0,2 cm³",
+        "uwaga": "Średnia z V₁ i V₂ w dm³.",
+        "sprawdz": [
+          {
+            "typ": "rozrzut",
+            "pola": [
+              "v1",
+              "v2"
+            ],
+            "max": 0.2
+          },
+          {
+            "typ": "liczba",
+            "pole": "vsr",
+            "wzor": "sr($vd1,$vd2)",
+            "tol": 5.1e-05
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($vd1,$vd2)",
+          "miejsca": 5,
+          "jednostka": " dm³"
+        }
+      },
+      {
+        "opis": "Współmierność kolby miarowej i pipety W = 4",
+        "uwaga": "Kolba 100 cm³, pipeta 25 cm³: 100 / 25 = 4.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "w",
+            "wzor": "4",
+            "tol": 0.001
+          }
+        ]
+      },
+      {
+        "opis": "Masa odważki pasty z dokładnością do 0,001 g",
+        "uwaga": "Przepisz masę z wagi – trzy miejsca po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "m",
+            "wzor": "m",
+            "tol": 0.0005
+          },
+          {
+            "typ": "miejsca",
+            "pole": "m",
+            "ile": 3
+          }
+        ]
+      },
+      {
+        "opis": "Obliczona zawartość ZnO w próbce do badań [g]",
+        "uwaga": "m ZnO = V · C · M · W, z V w dm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "c",
+            "wzor": "0.05",
+            "tol": 0.0001
+          },
+          {
+            "typ": "liczba",
+            "pole": "mm",
+            "wzor": "81.37",
+            "tol": 0.01
+          },
+          {
+            "typ": "liczba",
+            "pole": "mzno",
+            "wzor": "$vsr*0.05*81.37*4",
+            "tol": 0.0015
+          }
+        ],
+        "pokaz": {
+          "wzor": "$vsr*0.05*81.37*4",
+          "miejsca": 3,
+          "jednostka": " g"
+        }
+      },
+      {
+        "opis": "Obliczona zawartość procentowa ZnO w paście",
+        "uwaga": "m pasty — 100%, m ZnO — x%.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "proc",
+            "wzor": "$mzno/$m*100",
+            "tol": 0.6
+          }
+        ],
+        "pokaz": {
+          "wzor": "$mzno/$m*100",
+          "miejsca": 0,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "m ZnO do trzeciego miejsca po przecinku, zawartość procentowa do całości",
+        "uwaga": "Zaokrąglij: gramy do 0,001, procenty do całości.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "mzno",
+            "ile": 3
+          },
+          {
+            "typ": "miejsca",
+            "pole": "proc",
+            "ile": 0
+          }
+        ]
+      },
+      {
+        "opis": "Ocena adekwatna do wyniku i etykiety (25%)",
+        "uwaga": "Porównaj swój wynik (zaokrąglony do całości) z 25%.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "ocena",
+            "wzor": "0.5-abs($proc-25)",
+            "tak": [
+              "jest zgodna",
+              "zgodna"
+            ],
+            "nie": [
+              "nie jest zgodna",
+              "niezgodna",
+              "nie zgodna"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -38,6 +38,16 @@ export const BARWY: Record<string, string> = {
   roztwor: '#dfe9ec',
   niebieskozielony: '#2aa58f',
   titrant: '#a9d3ea',
+  rozowy: '#f29bbb',
+  malinowy: '#d6336c',
+  slomkowy: '#efe2a0',
+  brunatny: '#9c5a2c',
+  granatowy: '#2b3a67',
+  ceglasty: '#c9683a',
+  fioletowy: '#7b4bb3',
+  niebieski: '#2f7fd6',
+  czerwony: '#e0483e',
+  zielony: '#4c9f5f',
 };
 
 export const gladko = (a: number, b: number, x: number) => {

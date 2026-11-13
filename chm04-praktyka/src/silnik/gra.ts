@@ -1,7 +1,6 @@
 // Logika rozgrywki: ocena wpisu gracza względem procedury poziomu.
 import { frazaPasuje, grupaPasuje, tokeny } from './dopasowanie';
-import type { Odpowiedzi } from './karta';
-import { losujPomiary, type Pomiary } from './pomiary';
+import type { Odpowiedzi, Pomiary } from './karta';
 import type { ElementBhp, Krok, Poziom } from './typy';
 
 export interface StanGry {
@@ -52,7 +51,7 @@ const NAZWY_BHP: Record<ElementBhp, string> = {
 const SLOWA_ZAKLADANIA = ['zaloz', 'zakladam', 'ubier', 'nakladam', 'naloz', 'wkladam', 'wloz', 'zakladac', 'zalozyc', 'nosz', 'mam na sobie'];
 
 export function nowyStan(poziomId: string): StanGry {
-  return { poziomId, wykonane: [], bhp: [], bledy: 0, dziennik: [], pomiary: losujPomiary() };
+  return { poziomId, wykonane: [], bhp: [], bledy: 0, dziennik: [] };
 }
 
 /** Kroki, które muszą być wykonane przed danym krokiem. */

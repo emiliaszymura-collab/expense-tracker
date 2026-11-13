@@ -4,7 +4,7 @@ import { usunStan, wczytajStan, zapiszStan } from './postep';
 import { Laboratorium } from './scena/Laboratorium';
 import { dodajPodpowiedz, nowyStan, ocenWpis, poziomUkonczony, type StanGry } from './silnik/gra';
 import type { Poziom } from './silnik/typy';
-import { losujPomiary } from './silnik/pomiary';
+import { losujPomiary } from './silnik/karta';
 import { Karta } from './ui/Karta';
 import { Konsola } from './ui/Konsola';
 import { Lupa } from './ui/Lupa';
@@ -57,9 +57,11 @@ function WyborPoziomu({ onWybierz }: { onWybierz: (id: string) => void }) {
 function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
   const [stan, setStan] = useState<StanGry>(() => {
     const zapis = wczytajStan(poziom.id) ?? nowyStan(poziom.id);
-    return zapis.pomiary ? zapis : { ...zapis, pomiary: losujPomiary() };
+    // brak pomiarów albo zapis w starym formacie → losujemy od nowa
+    const aktualne = zapis.pomiary && poziom.karta?.losuj.every((l) => typeof zapis.pomiary![l.id] === 'number');
+    return aktualne || !poziom.karta ? zapis : { ...zapis, karta: undefined, pomiary: losujPomiary(poziom.karta) };
   });
-  const pomiary = stan.pomiary!;
+  const pomiary = stan.pomiary ?? {};
   const [kartaOtwarta, setKartaOtwarta] = useState(false);
   const [widok, setWidok] = useState<'przod' | 'tyl'>('przod');
   const [lupa, setLupa] = useState(false);
@@ -75,7 +77,7 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
     [poziom, stan.wykonane],
   );
   const ukonczony = poziomUkonczony(poziom, stan);
-  const poOdczycie = stan.wykonane.includes('odczyt');
+  const poOdczycie = Boolean(poziom.karta) && (ukonczony || (poziom.scena?.kartaPo ? stan.wykonane.includes(poziom.scena.kartaPo) : false));
   const otworzKarte = (otwarta: boolean) => {
     setKartaOtwarta(otwarta);
     if (otwarta) setProtokolOtwarty(false);
@@ -88,7 +90,7 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
 
   const resetuj = () => {
     usunStan(poziom.id);
-    setStan(nowyStan(poziom.id));
+    setStan({ ...nowyStan(poziom.id), pomiary: poziom.karta ? losujPomiary(poziom.karta) : undefined });
     setPytanieReset(false);
     setKartaOtwarta(false);
   };
@@ -102,7 +104,7 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
         <span className="tryb">
           <span className="tylko-szeroki">Tryb:&nbsp;</span>ćwiczenie
         </span>
-        <button className="drugorzedny" onClick={() => otworzKarte(!kartaOtwarta)} disabled={!poOdczycie} title={poOdczycie ? '' : 'Dostępna po pierwszym odczycie z biurety'}>
+        <button className="drugorzedny" onClick={() => otworzKarte(!kartaOtwarta)} disabled={!poOdczycie} title={poOdczycie ? '' : 'Dostępna po pierwszym odczycie wyniku'}>
           Karta<span className="tylko-szeroki">&nbsp;wyników</span>
         </button>
         <button className="drugorzedny" onClick={() => setWidok((w) => (w === 'przod' ? 'tyl' : 'przod'))}>
@@ -137,7 +139,8 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
             kartkaOtwarta={protokolOtwarty || kartaOtwarta}
             pisanie={kartaOtwarta}
             widok={widok}
-            masa={pomiary.m[0]}
+            masa={pomiary[poziom.scena?.masaWagi ?? 'm1'] ?? 2}
+            napisy={poziom.scena}
             onZblizenie={setLupa}
           />
           {!kartaOtwarta && (
@@ -152,12 +155,13 @@ function Gra({ poziom, onWyjdz }: { poziom: Poziom; onWyjdz: () => void }) {
           )}
           {lupa && (
             <div className="lupa-plywajaca">
-              <Lupa v={pomiary.v[0]} podpis="Odczytaj V₁ na dolnym menisku" />
+              <Lupa v={pomiary[poziom.scena?.odczytBiureta ?? 'v1'] ?? 0} podpis="Odczytaj objętość na dolnym menisku" />
             </div>
           )}
         </div>
-        {kartaOtwarta && (
+        {kartaOtwarta && poziom.karta && (
           <Karta
+            spec={poziom.karta}
             pomiary={pomiary}
             odpowiedzi={stan.karta ?? {}}
             onZmiana={(karta) => setStan((s) => ({ ...s, karta }))}

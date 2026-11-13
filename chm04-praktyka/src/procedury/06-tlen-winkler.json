@@ -1,0 +1,1107 @@
+{
+  "id": "06-tlen-winkler",
+  "tytul": "Tlen rozpuszczony w wodzie",
+  "zrodlo": "CHM.04 – czerwiec 2023",
+  "metoda": "Redoksymetria – jodometria (metoda Winklera) + pH-metr",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Wykonaj oznaczenie zawartości tlenu rozpuszczonego w badanej wodzie metodą Winklera oraz zmierz pH badanej wody.\nOceń wodę, porównując wyniki z wartościami granicznymi dla klas jakości wód powierzchniowych.\nMieszaniny poreakcyjne przelej do pojemnika na odpady ciekłe."
+    },
+    {
+      "tytul": "Procedura – tlen metodą Winklera",
+      "tresc": "Do butelki z badaną wodą dodać możliwie najgłębiej pod powierzchnię 2 cm³ roztworu MnSO₄ i 4 cm³ zasadowego roztworu KI. Zamknąć szczelnie korkiem bez pęcherzyka powietrza, dokładnie wymieszać i pozostawić w ciemnym miejscu do opadnięcia osadu (około 10 minut).\nPod powierzchnię wprowadzić 2 cm³ H₂SO₄ 95%, zamknąć i mieszać do całkowitego rozpuszczenia osadu. Pozostawić w ciemnym miejscu na 5 minut.\nDo kolby stożkowej odmierzyć pipetą 100 cm³ roztworu i miareczkować Na₂S₂O₃ 0,0250 mol/dm³ do słomkowego zabarwienia. Dodać około 2 cm³ skrobi i szybko miareczkować do odbarwienia.\nObliczenia\nX = (0,2 · V śr · 1000) / V\n- X – zawartość tlenu [mg O₂/dm³]\n- 0,2 – mg tlenu odpowiadające 1 cm³ Na₂S₂O₃\n- V śr – średnia objętość Na₂S₂O₃ [cm³] z wyników różniących się najwyżej o 0,2 cm³\n- V – objętość próbki wody [cm³]\nXn = X · 100 / Xt\n- Xn – stopień nasycenia [%]\n- Xt – rozpuszczalność tlenu w danej temperaturze (tabela A)\nWyniki z dokładnością do 0,1."
+    },
+    {
+      "tytul": "Tabela A – rozpuszczalność tlenu [mg O₂/dm³]",
+      "tresc": "- 16 °C – 9,84\n- 17 °C – 9,66\n- 18 °C – 9,46\n- 19 °C – 9,27\n- 20 °C – 9,08\n- 21 °C – 8,90\n- 22 °C – 8,73\n- 23 °C – 8,57\n- 24 °C – 8,41"
+    },
+    {
+      "tytul": "Tabela B – klasy jakości wód",
+      "tresc": "Tlen rozpuszczony [mg O₂/dm³]\n- klasa I: 7 i powyżej\n- klasa II: 6 i powyżej\n- klasa III: 5 i powyżej\n- klasa IV: 4 i powyżej\n- klasa V: poniżej 4\nWartość pH\n- klasa I: 6,6–8,5\n- klasa II: 6,0–8,5\n- klasa III: 6,0–9,0\n- klasa IV: 5,5–9,0\n- klasa V: poniżej 5,5 lub powyżej 9,0"
+    },
+    {
+      "tytul": "Procedura – pomiar pH",
+      "tresc": "Uruchomić pehametr. Elektrodę spłukać wodą destylowaną i osuszyć bibułą. Do zlewki odmierzyć 50 cm³ badanej wody i wykonać pomiar pH z dokładnością do 0,1."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "utrwal",
+      "opis": "Pod powierzchnię wody dodano 2 cm³ MnSO₄ i 4 cm³ zasadowego KI.",
+      "wymagane": [
+        [
+          "mnso4",
+          "mangan",
+          "jodek",
+          "ki "
+        ]
+      ],
+      "wymaga": [],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj pod powierzchnię wody 2 cm³ MnSO₄ i 4 cm³ zasadowego roztworu KI.",
+      "dlaczego": "Tlen utlenia mangan(II) w środowisku zasadowym – tak „utrwala się” tlen w próbce.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "bezbarwny"
+      },
+      "przyklad": "dodaję pod powierzchnię wody MnSO4 i zasadowy jodek potasu"
+    },
+    {
+      "id": "zamknij1",
+      "opis": "Butelkę zamknięto bez pęcherzyka powietrza, wymieszano i odstawiono w ciemne miejsce do opadnięcia osadu.",
+      "wymagane": [
+        [
+          "zamyk",
+          "zamkn",
+          "zakork",
+          "korkiem",
+          "odstaw",
+          "ciemn"
+        ]
+      ],
+      "wykluczajace": [
+        "kwas",
+        "h2so4"
+      ],
+      "wymaga": [
+        "utrwal"
+      ],
+      "podpowiedz": "Zamknij butelkę korkiem bez pęcherzyka powietrza, wymieszaj i odstaw w ciemne miejsce na ok. 10 minut.",
+      "dlaczego": "Pęcherzyk powietrza dostarczyłby dodatkowy tlen i zawyżył wynik.",
+      "sprzet": "kolba",
+      "animacja": "mieszanie",
+      "stanSceny": {
+        "kolba": "brunatny"
+      },
+      "przyklad": "zamykam butelkę korkiem, mieszam i odstawiam w ciemne miejsce"
+    },
+    {
+      "id": "kwas",
+      "opis": "Pod powierzchnię wprowadzono 2 cm³ H₂SO₄ 95%, zamknięto, wymieszano do rozpuszczenia osadu i odstawiono na 5 minut.",
+      "wymagane": [
+        [
+          "h2so4",
+          "kwas",
+          "siarkow"
+        ]
+      ],
+      "wymaga": [
+        "zamknij1"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Wprowadź pod powierzchnię 2 cm³ stężonego H₂SO₄, zamknij, wymieszaj do rozpuszczenia osadu i odstaw na 5 minut.",
+      "dlaczego": "W środowisku kwasowym wydziela się jod w ilości równoważnej tlenowi.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "zolty"
+      },
+      "przyklad": "dodaję pod powierzchnię 2 cm3 kwasu siarkowego, zamykam i mieszam"
+    },
+    {
+      "id": "montaz",
+      "opis": "Zestaw do miareczkowania zmontowany: statyw, łapa, biureta 10 cm³.",
+      "wymagane": [
+        [
+          "zmont",
+          "montuj",
+          "montaż",
+          "złóż",
+          "składa",
+          "przygotow",
+          "zamocow",
+          "mocuj",
+          "ustaw",
+          "zakład",
+          "wkład",
+          "umieszcz",
+          "przykręc"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw",
+          "łap"
+        ]
+      ],
+      "wykluczajace": [
+        "rozmont",
+        "demont",
+        "zero",
+        "zera",
+        "menisk",
+        "pęcherz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Zmontuj zestaw do miareczkowania (statyw, łapa, biureta).",
+      "dlaczego": "Zmontowany zestaw jest osobnym rezultatem ocenianym po zgłoszeniu gotowości.",
+      "sprzet": "statyw",
+      "animacja": "montaz",
+      "stanSceny": {
+        "zestaw": true,
+        "lejek": true
+      },
+      "przyklad": "montuję zestaw do miareczkowania"
+    },
+    {
+      "id": "napelnij",
+      "opis": "Biureta napełniona titrantem – Na₂S₂O₃ 0,0250 mol/dm³ (przez lejek).",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "nalej",
+          "wlew",
+          "wlej",
+          "uzupełn",
+          "wypełn"
+        ],
+        [
+          "biuret"
+        ]
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Napełnij biuretę titrantem – Na₂S₂O₃ 0,0250 mol/dm³, używając lejka.",
+      "dlaczego": "Bez titranta nie ma miareczkowania; egzaminator sprawdza, czy biureta jest napełniona.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "biuretaPoziom": 0.95
+      },
+      "przyklad": "napełniam biuretę titrantem przez lejek",
+      "wymaga": [
+        "montaz"
+      ]
+    },
+    {
+      "id": "lejek",
+      "opis": "Lejek zdjęty z biurety.",
+      "wymagane": [
+        [
+          "zdejm",
+          "wyjm",
+          "usuń",
+          "ściąg",
+          "odstaw",
+          "zabier",
+          "odłóż",
+          "odkład",
+          "zdjąć",
+          "wyjąć"
+        ],
+        [
+          "lejek",
+          "lejk"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Zdejmij lejek z biurety.",
+      "dlaczego": "Lejek pozostawiony w biurecie może dolewać krople titranta i zafałszować odczyt – miareczkuje się bez lejka.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "lejek": false
+      },
+      "animacja": "siegnij_gora",
+      "przyklad": "zdejmuję lejek z biurety"
+    },
+    {
+      "id": "pecherz",
+      "opis": "Usunięto pęcherzyk powietrza spod kranika biurety.",
+      "wymagane": [
+        [
+          "pęcherz",
+          "powietrz",
+          "odpowietrz"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Usuń pęcherzyk powietrza spod kranika biurety (spuść trochę titranta).",
+      "dlaczego": "Pęcherz w kraniku zwiększa odczytaną objętość – kryterium: brak pęcherza powietrza w kraniku.",
+      "sprzet": "statyw",
+      "animacja": "kranik",
+      "przyklad": "usuwam pęcherzyk powietrza z kranika"
+    },
+    {
+      "id": "zero",
+      "opis": "Poziom titranta ustawiony na 0 cm³ (menisk dolny).",
+      "wymagane": [
+        [
+          "zero",
+          "zera",
+          "0",
+          "kresk",
+          "menisk",
+          "wyzer",
+          "poziom"
+        ]
+      ],
+      "wykluczajace": [
+        "wag",
+        "odczyt",
+        "objętość"
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Ustaw poziom titranta na zero – dolny menisk na kresce 0.",
+      "dlaczego": "Kryteria: biureta napełniona do poziomu 0 i zachowany menisk dolny (dla roztworów bezbarwnych).",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "animacja": "kranik",
+      "przyklad": "ustawiam menisk na zero"
+    },
+    {
+      "id": "pipeta100",
+      "opis": "Pipetą jednomiarową odmierzono 100 cm³ roztworu do kolby stożkowej.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos"
+        ],
+        [
+          "100",
+          "stożkow",
+          "roztw"
+        ]
+      ],
+      "wykluczajace": [
+        "50",
+        "zlewk"
+      ],
+      "wymaga": [
+        "kwas"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz pipetą jednomiarową 100 cm³ roztworu do kolby stożkowej.",
+      "dlaczego": "Kryterium: odmierzył pipetą jednomiarową 100 cm³; V = 100 cm³ we wzorze.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "pipetuję 100 cm3 roztworu do kolby stożkowej"
+    },
+    {
+      "id": "miareczkuj",
+      "opis": "Miareczkowanie Na₂S₂O₃ do słomkowego zabarwienia.",
+      "wymagane": [
+        [
+          "miareczk",
+          "titruj",
+          "titrac"
+        ]
+      ],
+      "wykluczajace": [
+        "zestaw",
+        "powtórz",
+        "drug",
+        "trzec",
+        "kolejn",
+        "jeszcze",
+        "ponown",
+        "odbarw",
+        "bezbarw",
+        "skrobi"
+      ],
+      "wymaga": [
+        "zero",
+        "lejek",
+        "pecherz",
+        "pipeta100"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Miareczkuj tiosiarczanem do słomkowego (jasnożółtego) zabarwienia.",
+      "dlaczego": "Skrobię dodaje się dopiero przy słomkowej barwie – przy dużym stężeniu jodu kompleks ze skrobią trudno się rozkłada.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolba": "slomkowy",
+        "biuretaPoziom": 0.8,
+        "kolbaMiejsce": "biureta"
+      },
+      "przyklad": "miareczkuję do słomkowej barwy"
+    },
+    {
+      "id": "skrobia",
+      "opis": "Dodano ok. 2 cm³ roztworu skrobi – roztwór granatowy.",
+      "wymagane": [
+        [
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "dolew",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "wkrapl",
+          "wsyp",
+          "dodanie"
+        ],
+        [
+          "skrobi"
+        ]
+      ],
+      "wykluczajace": [
+        "miareczk"
+      ],
+      "wymaga": [
+        "miareczkuj"
+      ],
+      "podpowiedz": "Dodaj wkraplaczem około 2 cm³ roztworu skrobi.",
+      "dlaczego": "Skrobia z jodem daje granatowe zabarwienie – wyraźnie widać koniec miareczkowania.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "granatowy"
+      },
+      "przyklad": "dodaję 2 cm3 skrobi"
+    },
+    {
+      "id": "odbarw",
+      "opis": "Miareczkowanie dokończono do odbarwienia próbki.",
+      "wymagane": [
+        [
+          "miareczk",
+          "dokańcz",
+          "dokończ"
+        ],
+        [
+          "odbarw",
+          "bezbarw",
+          "zanik",
+          "znikn",
+          "końca"
+        ]
+      ],
+      "wymaga": [
+        "skrobia"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Miareczkuj szybko do odbarwienia się próbki.",
+      "dlaczego": "Odbarwienie oznacza, że cały jod przereagował z tiosiarczanem.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolba": "bezbarwny",
+        "biuretaPoziom": 0.6
+      },
+      "przyklad": "miareczkuję do odbarwienia"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano i zapisano objętość zużytego titranta (V₁).",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "spisuj",
+          "sprawdz",
+          "patrz"
+        ],
+        [
+          "objętoś",
+          "biuret",
+          "wynik",
+          "cm3",
+          "ml",
+          "menisk",
+          "zużyt",
+          "v1"
+        ]
+      ],
+      "wykluczajace": [
+        "pęcherz",
+        "powietrz",
+        "wag",
+        "papier",
+        "ph"
+      ],
+      "wymaga": [
+        "odbarw"
+      ],
+      "podpowiedz": "Odczytaj z biurety objętość zużytego titranta (dolny menisk) i zapisz ją.",
+      "dlaczego": "Objętość V jest podstawą obliczeń – w tabeli zapisuje się ją w cm³ i przelicza na dm³.",
+      "sprzet": "statyw",
+      "animacja": "odczyt",
+      "przyklad": "odczytuję objętość z biurety"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano drugie miareczkowanie.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Powtórz miareczkowanie – wymagane są co najmniej dwa.",
+      "dlaczego": "Kryterium: miareczkowanie wykonane co najmniej trzykrotnie; z wyników liczy się średnią.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolby": 2
+      },
+      "przyklad": "powtarzam oznaczenie drugi raz"
+    },
+    {
+      "id": "temperatura",
+      "opis": "Zmierzono temperaturę badanej wody.",
+      "wymagane": [
+        [
+          "temperatur",
+          "termometr"
+        ]
+      ],
+      "wymaga": [],
+      "podpowiedz": "Zmierz temperaturę badanej wody termometrem.",
+      "dlaczego": "Temperatura jest potrzebna, żeby odczytać rozpuszczalność tlenu Xt z tabeli A.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "mierzę temperaturę wody termometrem"
+    },
+    {
+      "id": "elektroda1",
+      "opis": "Elektroda opłukana wodą destylowaną i osuszona bibułą.",
+      "wymagane": [
+        [
+          "opłucz",
+          "spłucz",
+          "przemy",
+          "płucz",
+          "osusz"
+        ],
+        [
+          "elektrod"
+        ]
+      ],
+      "wykluczajace": [
+        "po pomiar",
+        "ponown"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Opłucz elektrodę wodą destylowaną i osusz bibułą.",
+      "dlaczego": "Kryterium przebiegu 2.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "opłukuję elektrodę wodą destylowaną i osuszam bibułą"
+    },
+    {
+      "id": "ph",
+      "opis": "Do zlewki odmierzono 50 cm³ badanej wody i zmierzono pH.",
+      "wymagane": [
+        [
+          "zmierz",
+          "mierz",
+          "pomiar",
+          "odczyt",
+          "zanurz"
+        ],
+        [
+          "ph",
+          "pehametr"
+        ]
+      ],
+      "wykluczajace": [
+        "biuret",
+        "temperatur"
+      ],
+      "wymaga": [
+        "elektroda1"
+      ],
+      "podpowiedz": "Odmierz do zlewki 50 cm³ badanej wody i zmierz pH z dokładnością do 0,1.",
+      "dlaczego": "Kryterium: pobrał do zlewki około 50 cm³ wody i wykonał pomiar pH.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "stanSceny": {
+        "zlewka": "roztwor"
+      },
+      "przyklad": "odmierzam 50 cm3 wody do zlewki i mierzę pH"
+    },
+    {
+      "id": "elektroda2",
+      "opis": "Po pomiarze elektrodę ponownie opłukano i osuszono.",
+      "wymagane": [
+        [
+          "po pomiar",
+          "ponown",
+          "znów",
+          "znowu",
+          "jeszcze raz"
+        ],
+        [
+          "elektrod"
+        ]
+      ],
+      "wymaga": [
+        "ph"
+      ],
+      "podpowiedz": "Po pomiarze ponownie opłucz i osusz elektrodę.",
+      "dlaczego": "Osobne kryterium: po wykonaniu pomiaru przemył elektrodę.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "po pomiarze ponownie opłukuję elektrodę"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "powtorz",
+        "elektroda2",
+        "temperatura"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam mieszaniny poreakcyjne do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "rozmontuj",
+      "opis": "Zestaw do miareczkowania rozmontowany.",
+      "wymagane": [
+        [
+          "rozmont",
+          "zdemont",
+          "demont",
+          "rozkręć",
+          "rozłóż",
+          "rozbier",
+          "rozebr",
+          "rozkład"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw"
+        ]
+      ],
+      "wymaga": [
+        "powtorz",
+        "elektroda2",
+        "temperatura"
+      ],
+      "podpowiedz": "Rozmontuj zestaw do miareczkowania (resztę titranta z biurety też do odpadów).",
+      "dlaczego": "Kryterium porządkowania: zestaw do miareczkowania rozmontowany.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "zestaw": false,
+        "biuretaPoziom": 0
+      },
+      "animacja": "montaz",
+      "przyklad": "rozmontowuję zestaw do miareczkowania"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj",
+        "rozmontuj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "Na₂S₂O₃",
+      "0,0250 mol/dm³"
+    ],
+    "wskaznik": [
+      "skrobia",
+      "0,5%"
+    ],
+    "odczytBiureta": "v1",
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – tlen rozpuszczony",
+    "losuj": [
+      {
+        "id": "x",
+        "od": 5.2,
+        "do": 9.4
+      },
+      {
+        "id": "t",
+        "wybierz": [
+          18,
+          19,
+          20,
+          21,
+          22
+        ]
+      },
+      {
+        "id": "xt",
+        "wzor": "9.46-0.1825*(t-18)"
+      },
+      {
+        "id": "ph",
+        "od": 6.8,
+        "do": 8.3,
+        "miejsca": 1
+      },
+      {
+        "id": "v1",
+        "wzor": "x/2",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v2",
+        "wzor": "x/2",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "biureta",
+        "id": "v1",
+        "etykieta": "Biureta – miareczkowanie 1"
+      },
+      {
+        "typ": "biureta",
+        "id": "v2",
+        "etykieta": "Biureta – miareczkowanie 2"
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "t",
+        "etykieta": "Termometr",
+        "jednostka": "°C",
+        "miejsca": 0
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "ph",
+        "etykieta": "Pehametr",
+        "jednostka": "pH",
+        "miejsca": 1
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Tabela 3. Dokumentacja z badań",
+        "pola": [
+          {
+            "id": "vp",
+            "etykieta": "Objętość próbki wody użytej do miareczkowania V =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          },
+          {
+            "id": "v1",
+            "etykieta": "V₁ =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          },
+          {
+            "id": "v2",
+            "etykieta": "V₂ =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          },
+          {
+            "id": "vsr",
+            "etykieta": "V śr =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          },
+          {
+            "id": "x",
+            "etykieta": "Zawartość tlenu rozpuszczonego X =",
+            "szer": "kr",
+            "jednostka": "mg O₂/dm³"
+          },
+          {
+            "id": "t",
+            "etykieta": "Temperatura badanej wody:",
+            "szer": "kr",
+            "jednostka": "°C"
+          },
+          {
+            "id": "xt",
+            "etykieta": "Rozpuszczalność tlenu Xt (tabela A):",
+            "szer": "kr",
+            "jednostka": "mg O₂/dm³"
+          },
+          {
+            "id": "xn",
+            "etykieta": "Stopień nasycenia wody tlenem Xn =",
+            "szer": "kr",
+            "jednostka": "%"
+          },
+          {
+            "id": "ph",
+            "etykieta": "pH badanej wody:",
+            "szer": "kr"
+          }
+        ]
+      },
+      {
+        "tytul": "Tabela 4. Ocena wody",
+        "opis": "Klasę wpisz cyfrą od 1 do 5.",
+        "pola": [
+          {
+            "id": "kt",
+            "etykieta": "Klasa czystości – tlen rozpuszczony:",
+            "szer": "kr"
+          },
+          {
+            "id": "kph",
+            "etykieta": "Klasa czystości – pH:",
+            "szer": "kr"
+          },
+          {
+            "id": "ocena",
+            "etykieta": "Ocena wody – klasa czystości (wg gorszego wskaźnika):",
+            "szer": "kr"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "1 cm³ Na₂S₂O₃ 0,0250 mol/dm³ odpowiada 0,2 mg tlenu.",
+      "~1 cm³ Na₂S₂O₃ — 0,2 mg O₂ | V śr cm³ — a mg O₂ (w 100 cm³ wody)",
+      "~100 cm³ wody — a mg O₂ | 1000 cm³ — X mg O₂",
+      "Stopień nasycenia:",
+      "~Xt (z tabeli A) — 100% | X — Xn%"
+    ],
+    "kryteria": [
+      {
+        "opis": "Objętość próbki wody pobranej do analizy – 100 cm³",
+        "uwaga": "Do miareczkowania odmierzasz 100 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "vp",
+            "wzor": "100",
+            "tol": 0.1
+          }
+        ]
+      },
+      {
+        "opis": "Dwa wyniki miareczkowania w cm³",
+        "uwaga": "Odczytaj na dolnym menisku, ±0,05 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "v1",
+            "wzor": "v1",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "v2",
+            "wzor": "v2",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Średnia z wyników nieróżniących się o więcej niż 0,2 cm³",
+        "uwaga": "Średnia arytmetyczna V₁ i V₂.",
+        "sprawdz": [
+          {
+            "typ": "rozrzut",
+            "pola": [
+              "v1",
+              "v2"
+            ],
+            "max": 0.2
+          },
+          {
+            "typ": "liczba",
+            "pole": "vsr",
+            "wzor": "sr($v1,$v2)",
+            "tol": 0.03
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($v1,$v2)",
+          "miejsca": 2,
+          "jednostka": " cm³"
+        }
+      },
+      {
+        "opis": "Obliczona zawartość tlenu rozpuszczonego",
+        "uwaga": "X = 0,2 · V śr · 1000 / 100.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "x",
+            "wzor": "0.2*$vsr*1000/100",
+            "tol": 0.06
+          }
+        ],
+        "pokaz": {
+          "wzor": "0.2*$vsr*1000/100",
+          "miejsca": 1,
+          "jednostka": " mg O₂/dm³"
+        }
+      },
+      {
+        "opis": "Wartość zmierzonej temperatury wody",
+        "uwaga": "Przepisz temperaturę z termometru.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "t",
+            "wzor": "t",
+            "tol": 0.1
+          }
+        ]
+      },
+      {
+        "opis": "Rozpuszczalność tlenu odczytana z tabeli A",
+        "uwaga": "Znajdź w tabeli A wiersz dla swojej temperatury.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "xt",
+            "wzor": "xt",
+            "tol": 0.03
+          }
+        ]
+      },
+      {
+        "opis": "Obliczony stopień nasycenia wody tlenem",
+        "uwaga": "Xn = X · 100 / Xt.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "xn",
+            "wzor": "$x*100/$xt",
+            "tol": 0.6
+          }
+        ],
+        "pokaz": {
+          "wzor": "$x*100/$xt",
+          "miejsca": 1,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Zawartość tlenu i stopień nasycenia z dokładnością do 0,1",
+        "uwaga": "Jedno miejsce po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "x",
+            "ile": 1
+          },
+          {
+            "typ": "miejsca",
+            "pole": "xn",
+            "ile": 1
+          }
+        ]
+      },
+      {
+        "opis": "Wynik pomiaru pH badanej wody",
+        "uwaga": "Przepisz pH z pehametru.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "ph",
+            "wzor": "ph",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Klasa czystości pod względem tlenu rozpuszczonego",
+        "uwaga": "Porównaj X z tabelą B: I ≥ 7, II ≥ 6, III ≥ 5, IV ≥ 4, V < 4.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "kt",
+            "wzor": "5-min(1,max(0,($x-4)*1000000+1))-min(1,max(0,($x-5)*1000000+1))-min(1,max(0,($x-6)*1000000+1))-min(1,max(0,($x-7)*1000000+1))",
+            "tol": 0.1
+          }
+        ]
+      },
+      {
+        "opis": "Klasa czystości pod względem pH",
+        "uwaga": "pH w zakresie 6,6–8,5 to klasa I.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "kph",
+            "wzor": "1",
+            "tol": 0.1
+          }
+        ]
+      },
+      {
+        "opis": "Ocena wody – zakwalifikowanie do klasy",
+        "uwaga": "O klasie decyduje gorszy wskaźnik (wyższy numer klasy).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "ocena",
+            "wzor": "max($kt,$kph)",
+            "tol": 0.1
+          }
+        ]
+      }
+    ]
+  }
+}

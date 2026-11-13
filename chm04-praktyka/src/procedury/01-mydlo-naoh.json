@@ -61,7 +61,8 @@
       "stanSceny": {
         "zestaw": true,
         "lejek": true
-      }
+      },
+      "przyklad": "montuję zestaw do miareczkowania"
     },
     {
       "id": "napelnij",
@@ -87,7 +88,8 @@
       "animacja": "przelewanie",
       "stanSceny": {
         "biuretaPoziom": 0.95
-      }
+      },
+      "przyklad": "napełniam biuretę kwasem solnym przez lejek"
     },
     {
       "id": "lejek",
@@ -119,7 +121,8 @@
       "stanSceny": {
         "lejek": false
       },
-      "animacja": "siegnij_gora"
+      "animacja": "siegnij_gora",
+      "przyklad": "zdejmuję lejek z biurety"
     },
     {
       "id": "pecherz",
@@ -137,7 +140,8 @@
       "podpowiedz": "Usuń pęcherzyk powietrza spod kranika biurety (spuść trochę titranta).",
       "dlaczego": "Pęcherz w kraniku zwiększa odczytaną objętość – kryterium: brak pęcherza powietrza w kraniku.",
       "sprzet": "statyw",
-      "animacja": "kranik"
+      "animacja": "kranik",
+      "przyklad": "usuwam pęcherzyk powietrza z kranika"
     },
     {
       "id": "zero",
@@ -167,7 +171,8 @@
       "stanSceny": {
         "biuretaPoziom": 1
       },
-      "animacja": "kranik"
+      "animacja": "kranik",
+      "przyklad": "ustawiam menisk na zero"
     },
     {
       "id": "zglos",
@@ -190,7 +195,8 @@
       ],
       "podpowiedz": "Podnieś rękę i zgłoś gotowość do oceny zestawu do miareczkowania.",
       "dlaczego": "Polecenie z arkusza – bez zgłoszenia egzaminator nie oceni zestawu, a to osobny rezultat.",
-      "animacja": "reka"
+      "animacja": "reka",
+      "przyklad": "zgłaszam gotowość do oceny"
     },
     {
       "id": "waga",
@@ -222,7 +228,8 @@
       "stanSceny": {
         "waga": "wlaczona"
       },
-      "animacja": "przycisk"
+      "animacja": "przycisk",
+      "przyklad": "włączam i taruję wagę"
     },
     {
       "id": "odwaz",
@@ -260,7 +267,8 @@
       "animacja": "wazenie",
       "stanSceny": {
         "kolba": "mydlo"
-      }
+      },
+      "przyklad": "odważam 2 g mydła do kolby stożkowej"
     },
     {
       "id": "woda",
@@ -298,7 +306,8 @@
       "animacja": "przelewanie",
       "stanSceny": {
         "kolba": "bezbarwny"
-      }
+      },
+      "przyklad": "dodaję 100 cm3 wody destylowanej do kolby"
     },
     {
       "id": "mieszaj",
@@ -325,7 +334,8 @@
       "podpowiedz": "Dokładnie wymieszaj zawartość kolby.",
       "dlaczego": "Kryterium przebiegu: wymieszał zawartość kolby stożkowej – próbka musi być jednorodna.",
       "sprzet": "kolba",
-      "animacja": "mieszanie"
+      "animacja": "mieszanie",
+      "przyklad": "mieszam zawartość kolby"
     },
     {
       "id": "oranz",
@@ -361,7 +371,8 @@
       "animacja": "pipetowanie",
       "stanSceny": {
         "kolba": "zolty"
-      }
+      },
+      "przyklad": "dodaję 3 krople oranżu metylowego"
     },
     {
       "id": "miareczkuj",
@@ -395,7 +406,8 @@
         "kolba": "pomaranczowy",
         "biuretaPoziom": 0.6,
         "kolbaMiejsce": "biureta"
-      }
+      },
+      "przyklad": "miareczkuję do zmiany barwy"
     },
     {
       "id": "odczyt",
@@ -433,7 +445,8 @@
       "podpowiedz": "Odczytaj z biurety objętość zużytego titranta (dolny menisk) i zapisz ją.",
       "dlaczego": "Objętość V jest podstawą obliczeń – w tabeli zapisuje się ją w cm³ i przelicza na dm³.",
       "sprzet": "statyw",
-      "animacja": "odczyt"
+      "animacja": "odczyt",
+      "przyklad": "odczytuję objętość z biurety"
     },
     {
       "id": "powtorz",
@@ -464,7 +477,8 @@
       "animacja": "miareczkowanie",
       "stanSceny": {
         "kolby": 3
-      }
+      },
+      "przyklad": "powtarzam oznaczenie jeszcze dwa razy"
     },
     {
       "id": "odczyn_roztwor",
@@ -498,7 +512,8 @@
       "animacja": "przelewanie",
       "stanSceny": {
         "zlewka": "roztwor"
-      }
+      },
+      "przyklad": "do zlewki odważam 2 g mydła i dodaję 50 cm3 wody"
     },
     {
       "id": "papierek",
@@ -533,7 +548,8 @@
       "animacja": "odczyt",
       "stanSceny": {
         "papierek": "niebieskozielony"
-      }
+      },
+      "przyklad": "zanurzam papierek wskaźnikowy"
     },
     {
       "id": "odpady",
@@ -571,7 +587,8 @@
         "kolby": 1,
         "papierek": "brak",
         "kolbaMiejsce": "stol"
-      }
+      },
+      "przyklad": "przelewam mieszaniny do pojemnika na odpady ciekłe"
     },
     {
       "id": "rozmontuj",
@@ -604,7 +621,8 @@
         "zestaw": false,
         "biuretaPoziom": 0
       },
-      "animacja": "montaz"
+      "animacja": "montaz",
+      "przyklad": "rozmontowuję zestaw do miareczkowania"
     },
     {
       "id": "myj",
@@ -638,7 +656,8 @@
       "podpowiedz": "Umyj szkło laboratoryjne.",
       "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
       "sprzet": "zlew",
-      "animacja": "mycie"
+      "animacja": "mycie",
+      "przyklad": "myję szkło"
     },
     {
       "id": "wylacz_wage",
@@ -662,7 +681,8 @@
       "stanSceny": {
         "waga": "wylaczona"
       },
-      "animacja": "przycisk"
+      "animacja": "przycisk",
+      "przyklad": "wyłączam wagę"
     },
     {
       "id": "stol",
@@ -697,7 +717,8 @@
       "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
       "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
       "sprzet": "stol",
-      "animacja": "mycie"
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
     }
   ],
   "bledy": [
@@ -749,5 +770,475 @@
       ],
       "komunikat": "Titrantem jest tu kwas solny HCl 0,01 mol/dm³ – NaOH to substancja oznaczana w mydle, nie odczynnik w biurecie."
     }
-  ]
+  ],
+  "scena": {
+    "titrant": [
+      "HCl",
+      "0,01 mol/dm³"
+    ],
+    "wskaznik": [
+      "oranż",
+      "metylowy 0,1%"
+    ],
+    "masaWagi": "m1",
+    "odczytBiureta": "v1",
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – NaOH w mydle",
+    "losuj": [
+      {
+        "id": "x",
+        "od": 0.03,
+        "do": 0.08
+      },
+      {
+        "id": "m1",
+        "od": 1.95,
+        "do": 2.07,
+        "miejsca": 2
+      },
+      {
+        "id": "m2",
+        "od": 1.95,
+        "do": 2.07,
+        "miejsca": 2
+      },
+      {
+        "id": "m3",
+        "od": 1.95,
+        "do": 2.07,
+        "miejsca": 2
+      },
+      {
+        "id": "v1",
+        "wzor": "x/100*m1/(0.01*40)*1000",
+        "szum": 0.05,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v2",
+        "wzor": "x/100*m2/(0.01*40)*1000",
+        "szum": 0.05,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v3",
+        "wzor": "x/100*m3/(0.01*40)*1000",
+        "szum": 0.05,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "ph",
+        "wybierz": [
+          9,
+          10
+        ]
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "waga",
+        "id": "m1",
+        "etykieta": "Waga – próbka 1",
+        "jednostka": "g",
+        "miejsca": 2
+      },
+      {
+        "typ": "biureta",
+        "id": "v1",
+        "etykieta": "Biureta – próbka 1"
+      },
+      {
+        "typ": "waga",
+        "id": "m2",
+        "etykieta": "Waga – próbka 2",
+        "jednostka": "g",
+        "miejsca": 2
+      },
+      {
+        "typ": "biureta",
+        "id": "v2",
+        "etykieta": "Biureta – próbka 2"
+      },
+      {
+        "typ": "waga",
+        "id": "m3",
+        "etykieta": "Waga – próbka 3",
+        "jednostka": "g",
+        "miejsca": 2
+      },
+      {
+        "typ": "biureta",
+        "id": "v3",
+        "etykieta": "Biureta – próbka 3"
+      },
+      {
+        "typ": "papierek",
+        "id": "ph",
+        "etykieta": "Papierek wskaźnikowy i skala barw"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Wyniki oznaczenia zawartości NaOH",
+        "tabela": {
+          "wiersze": 3,
+          "kolumny": [
+            {
+              "naglowek": "Masa próbki [g]",
+              "pole": "m{i}"
+            },
+            {
+              "naglowek": "V titranta [cm³]",
+              "pole": "v{i}"
+            },
+            {
+              "naglowek": "V titranta [dm³]",
+              "pole": "vd{i}"
+            },
+            {
+              "naglowek": "X [%]",
+              "pole": "x{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "xsr",
+            "etykieta": "Zawartość NaOH w mydle (średnia) X =",
+            "szer": "sr",
+            "jednostka": "%"
+          }
+        ]
+      },
+      {
+        "tytul": "Wyniki badania odczynu",
+        "pola": [
+          {
+            "id": "barwa",
+            "etykieta": "Zabarwienie papierka:",
+            "szer": "dl"
+          },
+          {
+            "id": "ph",
+            "etykieta": "Przybliżona wartość pH (0–14):",
+            "szer": "kr"
+          },
+          {
+            "id": "odczyn",
+            "etykieta": "Odczyn (kwasowy / obojętny / zasadowy):",
+            "szer": "dl"
+          }
+        ]
+      },
+      {
+        "tytul": "Równanie reakcji podczas miareczkowania",
+        "opis": "Strzałkę możesz zapisać jako -> albo =, ładunki jako + i -.",
+        "pola": [
+          {
+            "id": "r1",
+            "etykieta": "1. Cząsteczkowo:",
+            "szer": "max"
+          },
+          {
+            "id": "r2",
+            "etykieta": "2. Jonowo (pełne):",
+            "szer": "max"
+          },
+          {
+            "id": "r3",
+            "etykieta": "3. Jonowo (skrócone):",
+            "szer": "max"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "Stężenie HCl: 0,01 mol/dm³. Masa molowa NaOH: 40 g/mol. HCl i NaOH reagują 1 : 1.",
+      "~1000 cm³ — 1 dm³ | V cm³ — x dm³",
+      "~1 dm³ roztworu — 0,01 mol HCl | V dm³ — n mol HCl",
+      "Z równania reakcji: n NaOH = n HCl.",
+      "~1 mol NaOH — 40 g | n mol — a g",
+      "~m próbki [g] — 100% | a [g] — X%",
+      "Przykład na innych liczbach: V = 3,00 cm³ = 0,00300 dm³ → n = 0,00003 mol → a = 0,0012 g → dla m = 2,00 g: X = 0,06%."
+    ],
+    "kryteria": [
+      {
+        "opis": "Zapisane trzy masy próbek [g], zgodne z odczytem z wagi",
+        "uwaga": "Przepisz masy dokładnie z wyświetlacza wagi.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "m1",
+            "wzor": "m1",
+            "tol": 0.005
+          },
+          {
+            "typ": "liczba",
+            "pole": "m2",
+            "wzor": "m2",
+            "tol": 0.005
+          },
+          {
+            "typ": "liczba",
+            "pole": "m3",
+            "wzor": "m3",
+            "tol": 0.005
+          }
+        ]
+      },
+      {
+        "opis": "Masy zapisane z dokładnością do drugiego miejsca po przecinku",
+        "uwaga": "Każda masa musi mieć dwa miejsca po przecinku, np. 2,00.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "m1",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "m2",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "m3",
+            "ile": 2
+          }
+        ]
+      },
+      {
+        "opis": "Zapisane trzy objętości titranta [cm³], zgodne z odczytem z biurety",
+        "uwaga": "Odczytaj objętość na dolnym menisku; dopuszczalna różnica to 0,05 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "v1",
+            "wzor": "v1",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "v2",
+            "wzor": "v2",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "v3",
+            "wzor": "v3",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Zapisane trzy objętości titranta [dm³]",
+        "uwaga": "1 dm³ = 1000 cm³, więc cm³ dzielisz przez 1000 (np. 2,55 cm³ = 0,00255 dm³).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "vd1",
+            "wzor": "$v1/1000",
+            "tol": 1.1e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "vd2",
+            "wzor": "$v2/1000",
+            "tol": 1.1e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "vd3",
+            "wzor": "$v3/1000",
+            "tol": 1.1e-05
+          }
+        ]
+      },
+      {
+        "opis": "Obliczona zawartość NaOH dla trzech próbek (adekwatnie do Twoich danych)",
+        "uwaga": "Sprawdź obliczenia – pamiętaj o objętości w dm³. Próbka 1:",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "x1",
+            "wzor": "$v1/1000*0.01*40/$m1*100",
+            "tol": 0.006
+          },
+          {
+            "typ": "liczba",
+            "pole": "x2",
+            "wzor": "$v2/1000*0.01*40/$m2*100",
+            "tol": 0.006
+          },
+          {
+            "typ": "liczba",
+            "pole": "x3",
+            "wzor": "$v3/1000*0.01*40/$m3*100",
+            "tol": 0.006
+          }
+        ],
+        "pokaz": {
+          "wzor": "$v1/1000*0.01*40/$m1*100",
+          "miejsca": 2,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Średnia z co najmniej dwóch wyników nieróżniących się o więcej niż 0,05%",
+        "uwaga": "Policz średnią arytmetyczną z X₁, X₂, X₃.",
+        "sprawdz": [
+          {
+            "typ": "rozrzut",
+            "pola": [
+              "x1",
+              "x2",
+              "x3"
+            ],
+            "max": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "xsr",
+            "wzor": "sr($x1,$x2,$x3)",
+            "tol": 0.006
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($x1,$x2,$x3)",
+          "miejsca": 2,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Wyniki zawartości NaOH z dokładnością do drugiego miejsca po przecinku",
+        "uwaga": "Każdy wynik X zaokrąglij do dwóch miejsc po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "x1",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x2",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x3",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "xsr",
+            "ile": 2
+          }
+        ]
+      },
+      {
+        "opis": "Zapisane zabarwienie papierka wskaźnikowego",
+        "uwaga": "W odczynie zasadowym papierek uniwersalny robi się zielononiebieski / niebieski.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "barwa",
+            "zawiera": [
+              "nieb",
+              "ziel",
+              "gran",
+              "turkus",
+              "fiolet"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Przybliżona wartość pH adekwatna do zabarwienia",
+        "uwaga": "Porównaj barwę papierka ze skalą.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "ph",
+            "wzor": "ph",
+            "tol": 1
+          }
+        ]
+      },
+      {
+        "opis": "Odczyn adekwatny do wartości pH",
+        "uwaga": "pH powyżej 7 oznacza odczyn zasadowy.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "odczyn",
+            "zawiera": [
+              "zasad"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Równanie w formie cząsteczkowej",
+        "uwaga": "NaOH + HCl → NaCl + H₂O",
+        "sprawdz": [
+          {
+            "typ": "rownanie",
+            "pole": "r1",
+            "lewa": [
+              "naoh",
+              "hcl"
+            ],
+            "prawa": [
+              "nacl",
+              "h2o"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Równanie w formie jonowej pełnej",
+        "uwaga": "Na⁺ + OH⁻ + H⁺ + Cl⁻ → Na⁺ + Cl⁻ + H₂O",
+        "sprawdz": [
+          {
+            "typ": "rownanie",
+            "pole": "r2",
+            "lewa": [
+              "na",
+              "oh",
+              "h",
+              "cl"
+            ],
+            "prawa": [
+              "na",
+              "cl",
+              "h2o"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Równanie w formie jonowej skróconej",
+        "uwaga": "H⁺ + OH⁻ → H₂O",
+        "sprawdz": [
+          {
+            "typ": "rownanie",
+            "pole": "r3",
+            "lewa": [
+              "h",
+              "oh"
+            ],
+            "prawa": [
+              "h2o"
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

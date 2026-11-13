@@ -1,0 +1,1268 @@
+{
+  "id": "03-wodoroweglan",
+  "tytul": "Wodorowęglan sodu",
+  "zrodlo": "CHM.04 – czerwiec 2025",
+  "metoda": "Alkacymetria (HCl, oranż metylowy) + pH-metr",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Na podstawie fragmentu monografii substancji Wodorowęglan sodu dokonaj oceny właściwości, wykonaj badanie tożsamości i oznaczenie zawartości procentowej (m/m) NaHCO₃.\nWykonaj pomiar pH roztworu za pomocą pH-metru (jest wykalibrowany).\nZmontuj zestaw do miareczkowania, napełnij biuretę titrantem i zgłoś gotowość do oceny przez podniesienie ręki.\nUporządkuj stanowisko: rozmontuj zestaw, mieszaniny poreakcyjne przelej do pojemnika na odpady ciekłe."
+    },
+    {
+      "tytul": "Fragment monografii",
+      "tresc": "1. Pomiar pH roztworu\nRozpuścić 3,0 g substancji w 37 cm³ wody destylowanej. Do zlewki 25 cm³ odmierzyć 20 cm³ roztworu i zmierzyć pH pH-metrem. Elektrodę przed pomiarem i po nim przemyć wodą destylowaną i osuszyć bibułą. Po pracy odłączyć pH-metr od zasilania.\n2. Badanie tożsamości\nPozostałą część roztworu przenieść do kolby miarowej 100 cm³, uzupełnić wodą do kreski, zamknąć korkiem i wymieszać. Odmierzyć do probówki 5 cm³ roztworu, dodać 2–3 krople fenoloftaleiny. Roztwór zmienia barwę na różową.\n3. Oznaczanie zawartości\nOdważyć około 1,5 g substancji z dokładnością do 0,01 g, przenieść ilościowo do kolby stożkowej, rozpuścić w 50 cm³ wody i dodać 2–3 krople oranżu metylowego. Miareczkować kwasem solnym 1 mol/dm³ do pierwszej trwałej zmiany zabarwienia na czerwone. Oznaczenie wykonać trzy razy.\n1 cm³ HCl 1 mol/dm³ odpowiada 84,0 mg NaHCO₃.\nWymagana zawartość: od 99,00% do 101,00% (m/m)."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "waga",
+      "opis": "Waga włączona, wypoziomowana i wytarowana.",
+      "wymagane": [
+        [
+          "włącz",
+          "wytar",
+          "tar",
+          "wyzer",
+          "zeruj",
+          "zerow",
+          "wypoziom",
+          "poziomuj",
+          "uruchom",
+          "przygotuj"
+        ],
+        [
+          "wag"
+        ]
+      ],
+      "wykluczajace": [
+        "wyłącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz wagę, sprawdź poziomicę i wytaruj ją z naczyniem.",
+      "dlaczego": "Ważenie zgodnie z zasadami: wypoziomowanie i tarowanie, inaczej masa próbki jest błędna.",
+      "sprzet": "waga",
+      "stanSceny": {
+        "waga": "wlaczona"
+      },
+      "animacja": "przycisk",
+      "przyklad": "włączam i taruję wagę"
+    },
+    {
+      "id": "roztwor",
+      "opis": "Rozpuszczono 3,0 g substancji w 37 cm³ wody; 20 cm³ roztworu odmierzono do zlewki.",
+      "wymagane": [
+        [
+          "rozpuść",
+          "rozpuszcz",
+          "sporządz",
+          "przygotow",
+          "odważ"
+        ],
+        [
+          "3 g",
+          "3.0",
+          "37",
+          "roztw"
+        ]
+      ],
+      "wykluczajace": [
+        "1.5",
+        "kolb",
+        "50"
+      ],
+      "wymaga": [
+        "waga"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Rozpuść 3,0 g substancji w 37 cm³ wody i odmierz 20 cm³ roztworu do zlewki.",
+      "dlaczego": "To roztwór do pomiaru pH i badania tożsamości.",
+      "sprzet": "zlewka",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "zlewka": "roztwor"
+      },
+      "przyklad": "rozpuszczam 3,0 g substancji w 37 cm3 wody"
+    },
+    {
+      "id": "elektroda1",
+      "opis": "Elektroda przemyta wodą destylowaną i osuszona bibułą.",
+      "wymagane": [
+        [
+          "przemy",
+          "opłucz",
+          "płucz",
+          "spłucz",
+          "umyj",
+          "osusz"
+        ],
+        [
+          "elektrod"
+        ]
+      ],
+      "wykluczajace": [
+        "po pomiar",
+        "odłącz",
+        "ponown"
+      ],
+      "wymaga": [
+        "roztwor"
+      ],
+      "podpowiedz": "Przemyj elektrodę wodą destylowaną i osusz ją bibułą.",
+      "dlaczego": "Dwa kryteria przebiegu: przemył elektrodę i osuszył ją przed pomiarem.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "przemywam elektrodę wodą destylowaną i osuszam bibułą"
+    },
+    {
+      "id": "ph",
+      "opis": "Elektroda zanurzona w roztworze – odczytano pH.",
+      "wymagane": [
+        [
+          "zmierz",
+          "mierz",
+          "pomiar",
+          "zanurz",
+          "odczyt",
+          "sprawdz"
+        ],
+        [
+          "ph",
+          "elektrod",
+          "pehametr"
+        ]
+      ],
+      "wykluczajace": [
+        "przemy",
+        "opłucz",
+        "osusz",
+        "biuret"
+      ],
+      "wymaga": [
+        "elektroda1"
+      ],
+      "podpowiedz": "Zanurz elektrodę w roztworze i odczytaj pH z dokładnością do 0,1.",
+      "dlaczego": "Kryterium: zanurzył elektrodę w roztworze; wynik zapisujesz w tabeli 1.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "zanurzam elektrodę i mierzę pH"
+    },
+    {
+      "id": "elektroda2",
+      "opis": "Po pomiarze elektroda przemyta, pH-metr odłączony od zasilania.",
+      "wymagane": [
+        [
+          "przemy",
+          "opłucz",
+          "płucz",
+          "odłącz",
+          "wyłącz"
+        ],
+        [
+          "elektrod",
+          "pehametr",
+          "ph-metr",
+          "ph metr",
+          "phmetr"
+        ]
+      ],
+      "wymaga": [
+        "ph"
+      ],
+      "podpowiedz": "Po pomiarze przemyj elektrodę i odłącz pH-metr od zasilania.",
+      "dlaczego": "Dwa kryteria: przemył elektrodę po pomiarach, odłączył pH-metr.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "po pomiarze przemywam elektrodę i odłączam pehametr"
+    },
+    {
+      "id": "miarowa",
+      "opis": "Resztę roztworu przeniesiono do kolby miarowej 100 cm³, uzupełniono do kreski, zamknięto i wymieszano.",
+      "wymagane": [
+        [
+          "przenoś",
+          "przenieś",
+          "przelew",
+          "przelej",
+          "uzupełn",
+          "dopełn"
+        ],
+        [
+          "miarow"
+        ]
+      ],
+      "wymaga": [
+        "ph"
+      ],
+      "podpowiedz": "Przenieś resztę roztworu do kolby miarowej 100 cm³, uzupełnij wodą do kreski, zamknij i wymieszaj.",
+      "dlaczego": "Kryterium: sporządził roztwór w kolbie miarowej.",
+      "sprzet": "stol",
+      "animacja": "przelewanie",
+      "przyklad": "przenoszę roztwór do kolby miarowej i uzupełniam do kreski"
+    },
+    {
+      "id": "probowka",
+      "opis": "Do probówki odmierzono 5 cm³ roztworu i dodano fenoloftaleinę – barwa różowa.",
+      "wymagane": [
+        [
+          "probówk"
+        ]
+      ],
+      "wymaga": [
+        "miarowa"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz 5 cm³ roztworu do probówki i dodaj 2–3 krople fenoloftaleiny.",
+      "dlaczego": "Różowe zabarwienie potwierdza odczyn zasadowy – to badanie tożsamości.",
+      "sprzet": "stol",
+      "animacja": "pipetowanie",
+      "przyklad": "do probówki odmierzam 5 cm3 roztworu i dodaję fenoloftaleinę"
+    },
+    {
+      "id": "odwaz",
+      "opis": "Odważono ok. 1,5 g substancji i przeniesiono ilościowo do kolby stożkowej.",
+      "wymagane": [
+        [
+          "odważ",
+          "naważ",
+          "zważ",
+          "ważę"
+        ],
+        [
+          "1.5",
+          "substancj",
+          "próbk",
+          "wodorowęglan",
+          "naważk",
+          "odważk"
+        ]
+      ],
+      "wykluczajace": [
+        "3 g",
+        "3.0",
+        "37",
+        "zlewk"
+      ],
+      "wymaga": [
+        "waga"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odważ ok. 1,5 g substancji (do 0,01 g) i przenieś ilościowo do kolby stożkowej.",
+      "dlaczego": "Kryteria: odważył zgodnie z zasadami, przeniósł odważkę ilościowo.",
+      "sprzet": "waga",
+      "animacja": "wazenie",
+      "stanSceny": {
+        "kolba": "mydlo"
+      },
+      "przyklad": "odważam 1,5 g substancji do kolby stożkowej"
+    },
+    {
+      "id": "woda",
+      "opis": "Dodano 50 cm³ wody destylowanej i 2–3 krople oranżu metylowego – roztwór żółty.",
+      "wymagane": [
+        [
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "dolew",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "wkrapl",
+          "wsyp",
+          "dodanie",
+          "rozpuść",
+          "rozpuszcz"
+        ],
+        [
+          "oranż",
+          "wskaźnik"
+        ]
+      ],
+      "wykluczajace": [
+        "probówk"
+      ],
+      "wymaga": [
+        "odwaz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Rozpuść odważkę w 50 cm³ wody i dodaj 2–3 krople oranżu metylowego.",
+      "dlaczego": "Kryterium: dodał wodę destylowaną oraz roztwór oranżu metylowego.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "zolty"
+      },
+      "przyklad": "dodaję 50 cm3 wody i 3 krople oranżu metylowego"
+    },
+    {
+      "id": "montaz",
+      "opis": "Zestaw do miareczkowania zmontowany: statyw, łapa, biureta 50 cm³.",
+      "wymagane": [
+        [
+          "zmont",
+          "montuj",
+          "montaż",
+          "złóż",
+          "składa",
+          "przygotow",
+          "zamocow",
+          "mocuj",
+          "ustaw",
+          "zakład",
+          "wkład",
+          "umieszcz",
+          "przykręc"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw",
+          "łap"
+        ]
+      ],
+      "wykluczajace": [
+        "rozmont",
+        "demont",
+        "zero",
+        "zera",
+        "menisk",
+        "pęcherz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Zmontuj zestaw do miareczkowania (statyw, łapa, biureta).",
+      "dlaczego": "Zmontowany zestaw jest osobnym rezultatem ocenianym po zgłoszeniu gotowości.",
+      "sprzet": "statyw",
+      "animacja": "montaz",
+      "stanSceny": {
+        "zestaw": true,
+        "lejek": true
+      },
+      "przyklad": "montuję zestaw do miareczkowania"
+    },
+    {
+      "id": "plucz",
+      "opis": "Biureta przepłukana roztworem titranta.",
+      "wymagane": [
+        [
+          "przepłuk",
+          "przepłucz",
+          "płucz",
+          "opłucz"
+        ],
+        [
+          "biuret"
+        ]
+      ],
+      "wykluczajace": [
+        "wodą po",
+        "myj"
+      ],
+      "wymaga": [
+        "montaz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Przepłucz biuretę niewielką ilością titranta.",
+      "dlaczego": "Osobne kryterium w tym arkuszu: przepłukał biuretę roztworem titranta – woda w biurecie rozcieńczyłaby HCl.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "przyklad": "przepłukuję biuretę titrantem"
+    },
+    {
+      "id": "napelnij",
+      "opis": "Biureta napełniona titrantem – HCl 1 mol/dm³.",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "nalej",
+          "wlew",
+          "wlej",
+          "uzupełn",
+          "wypełn"
+        ],
+        [
+          "biuret"
+        ]
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Napełnij biuretę kwasem solnym 1 mol/dm³.",
+      "dlaczego": "Bez titranta nie ma miareczkowania; egzaminator sprawdza, czy biureta jest napełniona.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "biuretaPoziom": 0.95
+      },
+      "przyklad": "napełniam biuretę kwasem solnym przez lejek",
+      "wymaga": [
+        "plucz"
+      ],
+      "wykluczajace": [
+        "przepłuk",
+        "przepłucz",
+        "płucz"
+      ]
+    },
+    {
+      "id": "lejek",
+      "opis": "Lejek zdjęty z biurety.",
+      "wymagane": [
+        [
+          "zdejm",
+          "wyjm",
+          "usuń",
+          "ściąg",
+          "odstaw",
+          "zabier",
+          "odłóż",
+          "odkład",
+          "zdjąć",
+          "wyjąć"
+        ],
+        [
+          "lejek",
+          "lejk"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Zdejmij lejek z biurety.",
+      "dlaczego": "Lejek pozostawiony w biurecie może dolewać krople titranta i zafałszować odczyt – miareczkuje się bez lejka.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "lejek": false
+      },
+      "animacja": "siegnij_gora",
+      "przyklad": "zdejmuję lejek z biurety"
+    },
+    {
+      "id": "pecherz",
+      "opis": "Usunięto pęcherzyk powietrza spod kranika biurety.",
+      "wymagane": [
+        [
+          "pęcherz",
+          "powietrz",
+          "odpowietrz"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Usuń pęcherzyk powietrza spod kranika biurety (spuść trochę titranta).",
+      "dlaczego": "Pęcherz w kraniku zwiększa odczytaną objętość – kryterium: brak pęcherza powietrza w kraniku.",
+      "sprzet": "statyw",
+      "animacja": "kranik",
+      "przyklad": "usuwam pęcherzyk powietrza z kranika"
+    },
+    {
+      "id": "zero",
+      "opis": "Poziom titranta ustawiony na 0 cm³ (menisk dolny).",
+      "wymagane": [
+        [
+          "zero",
+          "zera",
+          "0",
+          "kresk",
+          "menisk",
+          "wyzer",
+          "poziom"
+        ]
+      ],
+      "wykluczajace": [
+        "wag",
+        "odczyt",
+        "objętość"
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Ustaw poziom titranta na zero – dolny menisk na kresce 0.",
+      "dlaczego": "Kryteria: biureta napełniona do poziomu 0 i zachowany menisk dolny (dla roztworów bezbarwnych).",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "animacja": "kranik",
+      "przyklad": "ustawiam menisk na zero"
+    },
+    {
+      "id": "zglos",
+      "opis": "Zgłoszono gotowość do oceny zestawu – egzaminator sprawdza biuretę.",
+      "wymagane": [
+        [
+          "zgłoś",
+          "zgłasz",
+          "podnieś",
+          "podnos",
+          "gotowoś",
+          "zgłoszenie"
+        ]
+      ],
+      "wymaga": [
+        "napelnij",
+        "lejek",
+        "pecherz",
+        "zero"
+      ],
+      "podpowiedz": "Podnieś rękę i zgłoś gotowość do oceny zestawu do miareczkowania.",
+      "dlaczego": "Polecenie z arkusza – bez zgłoszenia egzaminator nie oceni zestawu, a to osobny rezultat.",
+      "animacja": "reka",
+      "przyklad": "zgłaszam gotowość do oceny"
+    },
+    {
+      "id": "miareczkuj",
+      "opis": "Miareczkowanie HCl, mieszając, do pierwszej trwałej barwy czerwonej.",
+      "wymagane": [
+        [
+          "miareczk",
+          "titruj",
+          "titrac"
+        ]
+      ],
+      "wykluczajace": [
+        "zestaw",
+        "powtórz",
+        "drug",
+        "trzec",
+        "kolejn",
+        "jeszcze",
+        "ponown"
+      ],
+      "wymaga": [
+        "zglos",
+        "woda"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Miareczkuj kwasem solnym do pierwszej trwałej zmiany barwy na czerwoną.",
+      "dlaczego": "Oranż metylowy w środowisku kwasowym jest czerwony – to punkt końcowy.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolba": "czerwony",
+        "biuretaPoziom": 0.6,
+        "kolbaMiejsce": "biureta"
+      },
+      "przyklad": "miareczkuję do czerwonej barwy"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano i zapisano objętość zużytego titranta (V₁).",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "spisuj",
+          "sprawdz",
+          "patrz"
+        ],
+        [
+          "objętoś",
+          "biuret",
+          "wynik",
+          "cm3",
+          "ml",
+          "menisk",
+          "zużyt",
+          "v1"
+        ]
+      ],
+      "wykluczajace": [
+        "pęcherz",
+        "powietrz",
+        "wag",
+        "papier",
+        "ph"
+      ],
+      "wymaga": [
+        "miareczkuj"
+      ],
+      "podpowiedz": "Odczytaj z biurety objętość zużytego titranta (dolny menisk) i zapisz ją.",
+      "dlaczego": "Objętość V jest podstawą obliczeń – w tabeli zapisuje się ją w cm³ i przelicza na dm³.",
+      "sprzet": "statyw",
+      "animacja": "odczyt",
+      "przyklad": "odczytuję objętość z biurety"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano kolejne oznaczenia – razem co najmniej 3 równoległe miareczkowania.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Powtórz oznaczenie – procedura wymaga co najmniej trzech równoległych oznaczeń.",
+      "dlaczego": "Kryterium: miareczkowanie wykonane co najmniej trzykrotnie; z wyników liczy się średnią.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolby": 3
+      },
+      "przyklad": "powtarzam oznaczenie jeszcze dwa razy"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "powtorz",
+        "probowka",
+        "elektroda2"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam mieszaniny poreakcyjne do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "rozmontuj",
+      "opis": "Zestaw do miareczkowania rozmontowany.",
+      "wymagane": [
+        [
+          "rozmont",
+          "zdemont",
+          "demont",
+          "rozkręć",
+          "rozłóż",
+          "rozbier",
+          "rozebr",
+          "rozkład"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw"
+        ]
+      ],
+      "wymaga": [
+        "powtorz",
+        "probowka",
+        "elektroda2"
+      ],
+      "podpowiedz": "Rozmontuj zestaw do miareczkowania (resztę titranta z biurety też do odpadów).",
+      "dlaczego": "Kryterium porządkowania: zestaw do miareczkowania rozmontowany.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "zestaw": false,
+        "biuretaPoziom": 0
+      },
+      "animacja": "montaz",
+      "przyklad": "rozmontowuję zestaw do miareczkowania"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "wylacz_wage",
+      "opis": "Waga wyłączona.",
+      "wymagane": [
+        [
+          "=wyłącz",
+          "=odłącz"
+        ],
+        [
+          "wag"
+        ]
+      ],
+      "wymaga": [
+        "powtorz",
+        "probowka",
+        "elektroda2"
+      ],
+      "podpowiedz": "Wyłącz wagę.",
+      "dlaczego": "Kryterium porządkowania: waga wyłączona.",
+      "sprzet": "waga",
+      "stanSceny": {
+        "waga": "wylaczona"
+      },
+      "animacja": "przycisk",
+      "przyklad": "wyłączam wagę"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj",
+        "rozmontuj",
+        "wylacz_wage"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "HCl",
+      "1 mol/dm³"
+    ],
+    "wskaznik": [
+      "oranż",
+      "metylowy 0,5%"
+    ],
+    "masaWagi": "m1",
+    "odczytBiureta": "v1",
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – wodorowęglan sodu",
+    "losuj": [
+      {
+        "id": "pr",
+        "od": 98.7,
+        "do": 101.2
+      },
+      {
+        "id": "ph",
+        "od": 8.1,
+        "do": 8.6,
+        "miejsca": 1
+      },
+      {
+        "id": "m1",
+        "od": 1.46,
+        "do": 1.56,
+        "miejsca": 2
+      },
+      {
+        "id": "m2",
+        "od": 1.46,
+        "do": 1.56,
+        "miejsca": 2
+      },
+      {
+        "id": "m3",
+        "od": 1.46,
+        "do": 1.56,
+        "miejsca": 2
+      },
+      {
+        "id": "v1",
+        "wzor": "pr/100*m1*1000/84",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v2",
+        "wzor": "pr/100*m2*1000/84",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v3",
+        "wzor": "pr/100*m3*1000/84",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "wyswietlacz",
+        "id": "ph",
+        "etykieta": "pH-metr",
+        "jednostka": "pH",
+        "miejsca": 1
+      },
+      {
+        "typ": "waga",
+        "id": "m1",
+        "etykieta": "Waga – próbka 1",
+        "jednostka": "g",
+        "miejsca": 2
+      },
+      {
+        "typ": "biureta",
+        "id": "v1",
+        "etykieta": "Biureta – próbka 1"
+      },
+      {
+        "typ": "waga",
+        "id": "m2",
+        "etykieta": "Waga – próbka 2",
+        "jednostka": "g",
+        "miejsca": 2
+      },
+      {
+        "typ": "biureta",
+        "id": "v2",
+        "etykieta": "Biureta – próbka 2"
+      },
+      {
+        "typ": "waga",
+        "id": "m3",
+        "etykieta": "Waga – próbka 3",
+        "jednostka": "g",
+        "miejsca": 2
+      },
+      {
+        "typ": "biureta",
+        "id": "v3",
+        "etykieta": "Biureta – próbka 3"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Tabela 1. Właściwości i tożsamość",
+        "pola": [
+          {
+            "id": "wyglad",
+            "etykieta": "Wygląd:",
+            "szer": "max"
+          },
+          {
+            "id": "ph",
+            "etykieta": "pH:",
+            "szer": "kr"
+          },
+          {
+            "id": "tozsamosc",
+            "etykieta": "Tożsamość (obserwacja po dodaniu fenoloftaleiny):",
+            "szer": "max"
+          }
+        ]
+      },
+      {
+        "tytul": "Tabela 2. Oznaczenie zawartości NaHCO₃",
+        "tabela": {
+          "wiersze": 3,
+          "kolumny": [
+            {
+              "naglowek": "Masa substancji [g]",
+              "pole": "m{i}"
+            },
+            {
+              "naglowek": "V HCl [cm³]",
+              "pole": "v{i}"
+            },
+            {
+              "naglowek": "Zawartość [% m/m]",
+              "pole": "x{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "xsr",
+            "etykieta": "Zawartość NaHCO₃ w substancji (średnia):",
+            "szer": "sr",
+            "jednostka": "% (m/m)"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Badana substancja (spełnia wymagania / nie spełnia wymagań):",
+            "szer": "dl"
+          }
+        ]
+      },
+      {
+        "tytul": "Tabela 3. Sprzęt miarowy",
+        "opis": "Podaj nazwę i pojemność.",
+        "pola": [
+          {
+            "id": "sprzet1",
+            "etykieta": "1.",
+            "szer": "dl"
+          },
+          {
+            "id": "sprzet2",
+            "etykieta": "2.",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "1 cm³ HCl 1 mol/dm³ odpowiada 84,0 mg NaHCO₃.",
+      "~1 cm³ HCl — 84,0 mg NaHCO₃ | V cm³ — a mg",
+      "Zamień mg na g (1000 mg = 1 g), potem:",
+      "~m próbki [g] — 100% | a [g] — X%"
+    ],
+    "kryteria": [
+      {
+        "opis": "Wygląd: biały, krystaliczny proszek",
+        "uwaga": "Opisz barwę i postać, np. „biały krystaliczny proszek”.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "wyglad",
+            "zawiera": [
+              "bial"
+            ]
+          },
+          {
+            "typ": "tekst",
+            "pole": "wyglad",
+            "zawiera": [
+              "prosz",
+              "kryszt",
+              "stal"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "pH zapisane z dokładnością do pierwszego miejsca po przecinku",
+        "uwaga": "Przepisz pH z wyświetlacza pH-metru.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "ph",
+            "wzor": "ph",
+            "tol": 0.05
+          },
+          {
+            "typ": "miejsca",
+            "pole": "ph",
+            "ile": 1
+          }
+        ]
+      },
+      {
+        "opis": "Tożsamość: różowe zabarwienie i/lub odczyn zasadowy",
+        "uwaga": "Zapisz obserwację: roztwór zabarwił się na różowo.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "tozsamosc",
+            "zawiera": [
+              "roz",
+              "malin",
+              "zasad"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Trzy masy odważonej substancji",
+        "uwaga": "Przepisz masy z wagi.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "m1",
+            "wzor": "m1",
+            "tol": 0.005
+          },
+          {
+            "typ": "liczba",
+            "pole": "m2",
+            "wzor": "m2",
+            "tol": 0.005
+          },
+          {
+            "typ": "liczba",
+            "pole": "m3",
+            "wzor": "m3",
+            "tol": 0.005
+          }
+        ]
+      },
+      {
+        "opis": "Trzy objętości kwasu solnego",
+        "uwaga": "Odczytaj na dolnym menisku, ±0,05 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "v1",
+            "wzor": "v1",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "v2",
+            "wzor": "v2",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "v3",
+            "wzor": "v3",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Obliczone zawartości NaHCO₃ adekwatne do wyników miareczkowania",
+        "uwaga": "1 cm³ HCl odpowiada 84 mg NaHCO₃. Próbka 1:",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "x1",
+            "wzor": "$v1*0.084/$m1*100",
+            "tol": 0.02
+          },
+          {
+            "typ": "liczba",
+            "pole": "x2",
+            "wzor": "$v2*0.084/$m2*100",
+            "tol": 0.02
+          },
+          {
+            "typ": "liczba",
+            "pole": "x3",
+            "wzor": "$v3*0.084/$m3*100",
+            "tol": 0.02
+          }
+        ],
+        "pokaz": {
+          "wzor": "$v1*0.084/$m1*100",
+          "miejsca": 2,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Średnia zawartość z próbek 1–3",
+        "uwaga": "Średnia arytmetyczna trzech wyników.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "xsr",
+            "wzor": "sr($x1,$x2,$x3)",
+            "tol": 0.011
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($x1,$x2,$x3)",
+          "miejsca": 2,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Wniosek spójny z wynikiem (wymaganie 99,00–101,00%)",
+        "uwaga": "Porównaj swoją średnią z przedziałem 99,00–101,00%.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "min($xsr-99,101-$xsr)+0.000001",
+            "tak": [
+              "spelnia"
+            ],
+            "nie": [
+              "nie spelnia"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Wyniki ważenia i zawartości z dokładnością do drugiego miejsca po przecinku",
+        "uwaga": "Dwa miejsca po przecinku w masach i zawartościach.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "m1",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "m2",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "m3",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x1",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x2",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x3",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "xsr",
+            "ile": 2
+          }
+        ]
+      },
+      {
+        "opis": "Sprzęt miarowy: cylinder miarowy 50 cm³",
+        "uwaga": "Do odmierzenia 50 cm³ wody służy cylinder miarowy 50 cm³.",
+        "sprawdz": [
+          {
+            "typ": "tekstRazem",
+            "pola": [
+              "sprzet1",
+              "sprzet2"
+            ],
+            "zawiera": [
+              "cylind"
+            ],
+            "oraz": [
+              "50"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Sprzęt miarowy: biureta 25 cm³",
+        "uwaga": "Miareczkujesz z biurety 25 cm³.",
+        "sprawdz": [
+          {
+            "typ": "tekstRazem",
+            "pola": [
+              "sprzet1",
+              "sprzet2"
+            ],
+            "zawiera": [
+              "biuret"
+            ],
+            "oraz": [
+              "25"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

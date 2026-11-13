@@ -28,6 +28,8 @@ interface Props {
   masa: number;
   /** Zgłasza, że trwa odczyt z biurety (pokaż powiększenie). */
   onZblizenie?: (aktywne: boolean) => void;
+  /** Napisy na butelkach dla bieżącego poziomu. */
+  napisy?: { titrant?: string[]; wskaznik?: string[] };
 }
 
 const scal = (kroki: Krok[]): StanSceny => Object.assign({}, ...kroki.map((k) => k.stanSceny ?? {}));
@@ -157,7 +159,9 @@ function Etykieta({ id }: { id: string }) {
   );
 }
 
-function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie }: Omit<Props, 'kartkaOtwarta'>) {
+function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, napisy }: Omit<Props, 'kartkaOtwarta'>) {
+  const titrant = napisy?.titrant ?? ['HCl', '0,01 mol/dm³'];
+  const wskaznik = napisy?.wskaznik ?? ['oranż', 'metylowy 0,1%'];
   const zblizenie = useRef(false);
   const nRef = useRef(kroki.length);
   const [n, setN] = useState(kroki.length);
@@ -324,11 +328,14 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie }:
           sL.pochyl = 0.11;
           sL.glowa = 0.3;
           a.rekwizyt = 'pipeta';
-          sL.prawa = P.set(kPos.x - 0.01, kPos.y + 0.4, kPos.z);
-          sL.lewa = L.set(kPos.x + 0.04, kPos.y + 0.17, kPos.z);
+          // przy kolbie celujemy w jej szyjkę; przy innych stanowiskach – w naczynie stojące na blacie
+          if (sprzet === 'kolba') cel.copy(kPos);
+          else cel.set(sx, BLAT, sz);
+          sL.prawa = P.set(cel.x - 0.01, cel.y + 0.4, cel.z);
+          sL.lewa = L.set(cel.x + 0.04, cel.y + 0.17, cel.z);
           if (p > 0.25 && p < 0.8) {
-            kroplaOd = [kPos.x, kPos.y + 0.27, kPos.z];
-            kroplaDo = kPos.y + 0.07;
+            kroplaOd = [cel.x, cel.y + 0.27, cel.z];
+            kroplaDo = cel.y + 0.07;
           }
           break;
         case 'mieszanie':
@@ -494,10 +501,10 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie }:
         <Cylinder />
       </group>
       <group position={[-0.16, BLAT, 0.27]}>
-        <Butelka napis={['oranż', 'metylowy 0,1%']} braz wys={0.075} r={0.022} zakretka="#111" />
+        <Butelka napis={wskaznik} braz wys={0.075} r={0.022} zakretka="#111" />
       </group>
       <group ref={(g) => (chowane.current.butelka = g)} position={[0.0, BLAT, 0.24]}>
-        <Butelka napis={['HCl', '0,01 mol/dm³']} />
+        <Butelka napis={titrant} />
       </group>
 
       <group position={POZYCJE.statyw}>
@@ -536,7 +543,7 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie }:
       <group ref={rekwizyt}>
         <group ref={rekwizytObrot}>
           <group name="butelka" position={[0, -0.09, 0]} visible={false}>
-            <Butelka napis={['HCl', '0,01 mol/dm³']} />
+            <Butelka napis={titrant} />
           </group>
           <group name="cylinder" position={[0, -0.11, 0]} visible={false}>
             <Cylinder />

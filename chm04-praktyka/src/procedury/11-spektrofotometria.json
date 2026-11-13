@@ -1,0 +1,764 @@
+{
+  "id": "11-spektrofotometria",
+  "tytul": "Żelazo w wodzie – spektrofotometr",
+  "zrodlo": "Poziom przewidywany – podstawa programowa 2019",
+  "metoda": "Spektrofotometria UV-Vis (krzywa wzorcowa, metoda rodankowa)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Uwaga",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
+    },
+    {
+      "tytul": "Zadanie",
+      "tresc": "Oznacz stężenie żelaza(III) w próbce wody metodą spektrofotometryczną z rodankiem potasu. Przygotuj roztwory wzorcowe, zmierz absorbancję, wyznacz krzywą wzorcową i odczytaj stężenie żelaza w próbce. Oceń, czy woda spełnia normę dla wody do picia: najwyżej 0,2 mg Fe/dm³ (próbka była zatężona 10-krotnie)."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "1. Roztwory wzorcowe\nDo kolb miarowych 50 cm³ odmierzyć pipetą kolejno 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza(III) o stężeniu 50 mg/dm³. Do szóstej kolby – 25 cm³ badanej próbki. Siódma kolba to ślepa próba (bez żelaza).\n2. Wywołanie barwy\nDo każdej kolby dodać 2 cm³ HCl 2 mol/dm³ i 5 cm³ roztworu rodanku potasu 10%. Uzupełnić wodą do kreski i wymieszać. Powstaje czerwone zabarwienie.\n3. Pomiar\nWłączyć spektrofotometr, ustawić długość fali 480 nm. Kuwetę trzymać za matowe ścianki, przepłukać mierzonym roztworem, napełnić do ¾ i wytrzeć. Wyzerować przyrząd na ślepej próbie. Zmierzyć absorbancję wzorców od najmniejszego stężenia, na końcu próbki.\n4. Obliczenia\nStężenia wzorców w kolbach: 1, 2, 3, 4, 5 mg/dm³. Z krzywej wzorcowej A = a · c wyznaczyć współczynnik a (średnia z A/c) i obliczyć stężenie w kolbie z próbką: c = A / a. Próbkę rozcieńczono 2 razy (25 → 50 cm³). Wyniki stężeń z dokładnością do 0,01."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "wzorce",
+      "opis": "Do kolb miarowych 50 cm³ odmierzono pipetą 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos"
+        ],
+        [
+          "wzorc",
+          "podstawow",
+          "żelaz"
+        ]
+      ],
+      "wykluczajace": [
+        "próbk"
+      ],
+      "wymaga": [],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz pipetą 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza do kolejnych kolb miarowych 50 cm³.",
+      "dlaczego": "Wzorce o znanych stężeniach tworzą krzywą wzorcową.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "odmierzam pipetą roztwór podstawowy żelaza do pięciu kolb miarowych"
+    },
+    {
+      "id": "probka",
+      "opis": "Do szóstej kolby odmierzono 25 cm³ badanej próbki; siódma kolba to ślepa próba.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos"
+        ],
+        [
+          "próbk",
+          "25"
+        ]
+      ],
+      "wykluczajace": [
+        "wzorc",
+        "podstawow"
+      ],
+      "wymaga": [
+        "wzorce"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz 25 cm³ badanej próbki do szóstej kolby; siódmą zostaw jako ślepą próbę.",
+      "dlaczego": "Ślepa próba zawiera wszystkie odczynniki oprócz żelaza – na niej zeruje się przyrząd.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "odmierzam pipetą 25 cm3 badanej próbki do szóstej kolby"
+    },
+    {
+      "id": "barwa",
+      "opis": "Do każdej kolby dodano 2 cm³ HCl i 5 cm³ rodanku potasu – czerwone zabarwienie.",
+      "wymagane": [
+        [
+          "rodan",
+          "kscn",
+          "hcl",
+          "kwas"
+        ]
+      ],
+      "wymaga": [
+        "probka"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj do każdej kolby 2 cm³ HCl 2 mol/dm³ i 5 cm³ rodanku potasu 10%.",
+      "dlaczego": "Żelazo(III) z rodankiem daje czerwony kompleks; środowisko kwasowe zapobiega hydrolizie.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "czerwony"
+      },
+      "przyklad": "dodaję do każdej kolby kwas solny i rodanek potasu"
+    },
+    {
+      "id": "kreska",
+      "opis": "Kolby uzupełniono wodą do kreski i wymieszano.",
+      "wymagane": [
+        [
+          "uzupełn",
+          "dopełn",
+          "dolew",
+          "dolej"
+        ],
+        [
+          "kresk",
+          "wod"
+        ]
+      ],
+      "wymaga": [
+        "barwa"
+      ],
+      "podpowiedz": "Uzupełnij kolby wodą destylowaną do kreski i wymieszaj.",
+      "dlaczego": "Objętość musi być dokładnie 50 cm³, bo od niej zależy stężenie wzorców.",
+      "sprzet": "kolba",
+      "animacja": "przelewanie",
+      "przyklad": "uzupełniam kolby wodą do kreski i mieszam"
+    },
+    {
+      "id": "fala",
+      "opis": "Włączono spektrofotometr i ustawiono długość fali 480 nm.",
+      "wymagane": [
+        [
+          "włącz",
+          "ustaw",
+          "nastaw"
+        ],
+        [
+          "spektrofot",
+          "fal",
+          "480"
+        ]
+      ],
+      "wykluczajace": [
+        "=wyłącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz spektrofotometr i ustaw długość fali 480 nm.",
+      "dlaczego": "Przy 480 nm kompleks rodankowy żelaza pochłania najsilniej – pomiar jest najczulszy.",
+      "sprzet": "stol",
+      "animacja": "przycisk",
+      "przyklad": "włączam spektrofotometr i ustawiam długość fali 480 nm"
+    },
+    {
+      "id": "kuweta",
+      "opis": "Kuwetę (trzymaną za matowe ścianki) przepłukano, napełniono do ¾ i wytarto.",
+      "wymagane": [
+        [
+          "kuwet"
+        ]
+      ],
+      "wykluczajace": [
+        "ślep",
+        "zer"
+      ],
+      "wymaga": [
+        "kreska",
+        "fala"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Przepłucz kuwetę mierzonym roztworem, napełnij do ¾ i wytrzyj; trzymaj za matowe ścianki.",
+      "dlaczego": "Odciski palców i krople na przezroczystych ściankach zawyżają absorbancję.",
+      "sprzet": "stol",
+      "animacja": "przelewanie",
+      "przyklad": "przepłukuję kuwetę, napełniam do trzech czwartych i wycieram"
+    },
+    {
+      "id": "slepa",
+      "opis": "Przyrząd wyzerowano na ślepej próbie.",
+      "wymagane": [
+        [
+          "zeruj",
+          "wyzer",
+          "zero",
+          "ślep"
+        ]
+      ],
+      "wymaga": [
+        "kuweta"
+      ],
+      "podpowiedz": "Wyzeruj spektrofotometr na ślepej próbie.",
+      "dlaczego": "Dzięki temu absorbancja pochodzi tylko od kompleksu żelaza, a nie od odczynników.",
+      "sprzet": "stol",
+      "animacja": "przycisk",
+      "przyklad": "zeruję spektrofotometr na ślepej próbie"
+    },
+    {
+      "id": "pomiar_wz",
+      "opis": "Zmierzono absorbancję wzorców – od najmniejszego stężenia.",
+      "wymagane": [
+        [
+          "mierz",
+          "zmierz",
+          "pomiar",
+          "odczyt"
+        ],
+        [
+          "wzorc"
+        ]
+      ],
+      "wykluczajace": [
+        "próbk"
+      ],
+      "wymaga": [
+        "slepa"
+      ],
+      "podpowiedz": "Zmierz absorbancję wzorców, zaczynając od najmniejszego stężenia.",
+      "dlaczego": "Kolejność od najmniejszego stężenia ogranicza błąd przenoszenia między pomiarami.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "mierzę absorbancję wzorców od najmniejszego stężenia"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Zmierzono absorbancję próbki.",
+      "wymagane": [
+        [
+          "mierz",
+          "zmierz",
+          "pomiar",
+          "odczyt"
+        ],
+        [
+          "próbk"
+        ]
+      ],
+      "wykluczajace": [
+        "wzorc"
+      ],
+      "wymaga": [
+        "pomiar_wz"
+      ],
+      "podpowiedz": "Na końcu zmierz absorbancję badanej próbki.",
+      "dlaczego": "Absorbancję próbki porównujesz z krzywą wzorcową.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "mierzę absorbancję próbki"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam roztwory do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "Fe³⁺",
+      "50 mg/dm³"
+    ],
+    "wskaznik": [
+      "KSCN",
+      "10%"
+    ],
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – spektrofotometria",
+    "losuj": [
+      {
+        "id": "a",
+        "od": 0.118,
+        "do": 0.132
+      },
+      {
+        "id": "cx",
+        "od": 0.7,
+        "do": 1.3
+      },
+      {
+        "id": "A1",
+        "wzor": "a*1",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A2",
+        "wzor": "a*2",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A3",
+        "wzor": "a*3",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A4",
+        "wzor": "a*4",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A5",
+        "wzor": "a*5",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "Ax",
+        "wzor": "a*cx",
+        "szum": 0.002,
+        "miejsca": 3
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "wyswietlacz",
+        "id": "A1",
+        "etykieta": "Wzorzec 1 mg/dm³",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A2",
+        "etykieta": "Wzorzec 2 mg/dm³",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A3",
+        "etykieta": "Wzorzec 3 mg/dm³",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A4",
+        "etykieta": "Wzorzec 4 mg/dm³",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A5",
+        "etykieta": "Wzorzec 5 mg/dm³",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "Ax",
+        "etykieta": "Próbka",
+        "jednostka": "A",
+        "miejsca": 3
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Krzywa wzorcowa",
+        "opis": "Stężenia wzorców w kolbach: 1, 2, 3, 4, 5 mg/dm³.",
+        "tabela": {
+          "wiersze": 5,
+          "kolumny": [
+            {
+              "naglowek": "Absorbancja A",
+              "pole": "A{i}"
+            },
+            {
+              "naglowek": "A / c",
+              "pole": "k{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "a",
+            "etykieta": "Współczynnik a (średnia z A/c) =",
+            "szer": "kr"
+          }
+        ]
+      },
+      {
+        "tytul": "Próbka",
+        "pola": [
+          {
+            "id": "Ax",
+            "etykieta": "Absorbancja próbki:",
+            "szer": "kr"
+          },
+          {
+            "id": "ck",
+            "etykieta": "Stężenie Fe w kolbie c =",
+            "szer": "kr",
+            "jednostka": "mg/dm³"
+          },
+          {
+            "id": "cp",
+            "etykieta": "Stężenie Fe w próbce (zatężonej) =",
+            "szer": "kr",
+            "jednostka": "mg/dm³"
+          },
+          {
+            "id": "cw",
+            "etykieta": "Stężenie Fe w wodzie =",
+            "szer": "kr",
+            "jednostka": "mg/dm³"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Woda (spełnia / nie spełnia) normę 0,2 mg/dm³:",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "Prawo Lamberta-Beera: absorbancja jest proporcjonalna do stężenia.",
+      "~a (absorbancja dla 1 mg/dm³) — 1 mg/dm³ | A próbki — c mg/dm³",
+      "Próbkę rozcieńczono 2 razy (25 cm³ → 50 cm³): stężenie w próbce = 2 · c.",
+      "Próbka była zatężona 10 razy: stężenie w wodzie = stężenie w próbce / 10."
+    ],
+    "kryteria": [
+      {
+        "opis": "Absorbancje pięciu wzorców zgodne ze wskazaniami",
+        "uwaga": "Przepisz absorbancje z wyświetlacza.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "A1",
+            "wzor": "A1",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A2",
+            "wzor": "A2",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A3",
+            "wzor": "A3",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A4",
+            "wzor": "A4",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A5",
+            "wzor": "A5",
+            "tol": 0.0005
+          }
+        ]
+      },
+      {
+        "opis": "Ilorazy A/c dla wzorców",
+        "uwaga": "Podziel absorbancję przez stężenie wzorca (1, 2, 3, 4, 5 mg/dm³).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "k1",
+            "wzor": "$A1/1",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k2",
+            "wzor": "$A2/2",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k3",
+            "wzor": "$A3/3",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k4",
+            "wzor": "$A4/4",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k5",
+            "wzor": "$A5/5",
+            "tol": 0.0011
+          }
+        ]
+      },
+      {
+        "opis": "Współczynnik a krzywej wzorcowej",
+        "uwaga": "Średnia z pięciu ilorazów A/c.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "a",
+            "wzor": "sr($k1,$k2,$k3,$k4,$k5)",
+            "tol": 0.0011
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($k1,$k2,$k3,$k4,$k5)",
+          "miejsca": 3,
+          "jednostka": ""
+        }
+      },
+      {
+        "opis": "Absorbancja próbki zgodna ze wskazaniem",
+        "uwaga": "Przepisz absorbancję próbki.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "Ax",
+            "wzor": "Ax",
+            "tol": 0.0005
+          }
+        ]
+      },
+      {
+        "opis": "Stężenie żelaza w kolbie z próbką",
+        "uwaga": "c = A próbki / a.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "ck",
+            "wzor": "$Ax/$a",
+            "tol": 0.011
+          }
+        ],
+        "pokaz": {
+          "wzor": "$Ax/$a",
+          "miejsca": 2,
+          "jednostka": " mg/dm³"
+        }
+      },
+      {
+        "opis": "Stężenie w próbce z uwzględnieniem rozcieńczenia",
+        "uwaga": "Pomnóż przez 2 (25 cm³ → 50 cm³).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "cp",
+            "wzor": "$ck*2",
+            "tol": 0.021
+          }
+        ],
+        "pokaz": {
+          "wzor": "$ck*2",
+          "miejsca": 2,
+          "jednostka": " mg/dm³"
+        }
+      },
+      {
+        "opis": "Stężenie w wodzie z uwzględnieniem zatężenia",
+        "uwaga": "Podziel przez 10.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "cw",
+            "wzor": "$cp/10",
+            "tol": 0.006
+          }
+        ],
+        "pokaz": {
+          "wzor": "$cp/10",
+          "miejsca": 2,
+          "jednostka": " mg/dm³"
+        }
+      },
+      {
+        "opis": "Stężenia z dokładnością do 0,01",
+        "uwaga": "Dwa miejsca po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "ck",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "cp",
+            "ile": 2
+          },
+          {
+            "typ": "miejsca",
+            "pole": "cw",
+            "ile": 2
+          }
+        ]
+      },
+      {
+        "opis": "Wniosek spójny z wynikiem (norma: najwyżej 0,2 mg/dm³)",
+        "uwaga": "Porównaj stężenie w wodzie z 0,2 mg/dm³.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "0.2-$cw+0.000001",
+            "tak": [
+              "spelnia"
+            ],
+            "nie": [
+              "nie spelnia"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

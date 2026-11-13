@@ -1,0 +1,638 @@
+{
+  "id": "10-polarymetria",
+  "tytul": "Stężenie sacharozy – polarymetr",
+  "zrodlo": "Poziom przewidywany – podstawa programowa 2019",
+  "metoda": "Polarymetria (rurka 2 dm)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Uwaga",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
+    },
+    {
+      "tytul": "Zadanie",
+      "tresc": "Oznacz stężenie sacharozy w syropie metodą polarymetryczną. Przygotuj rozcieńczenie próbki, wykonaj trzy odczyty kąta skręcenia, oblicz stężenie i porównaj z deklaracją producenta."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "1. Przygotowanie próbki\nPobrać pipetą 25 cm³ syropu do kolby miarowej 100 cm³, uzupełnić wodą do kreski i wymieszać.\n2. Zerowanie polarymetru\nWłączyć lampę sodową i odczekać 5 minut. Rurkę polarymetryczną (2 dm) napełnić wodą destylowaną bez pęcherzyka powietrza, wytrzeć okienka, włożyć do przyrządu i ustawić zero – równe zaciemnienie obu pól.\n3. Pomiar\nRurkę przepłukać badanym roztworem, napełnić bez pęcherzyka powietrza, wytrzeć okienka. Obracać analizator do zrównania zaciemnienia pól i odczytać kąt z noniusza. Wykonać trzy odczyty.\n4. Zakończenie\nRurkę umyć wodą destylowaną.\nObliczenia\nc = (100 · α) / ([α] · l)\n- c – stężenie [g/100 cm³]\n- α – średni kąt skręcenia [°]\n- [α] – skręcalność właściwa sacharozy, +66,5\n- l – długość rurki [dm]\nStężenie w syropie = c · 4 (rozcieńczenie 25 → 100 cm³). Wyniki z dokładnością do 0,1."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "rozciencz",
+      "opis": "Pipetą pobrano 25 cm³ syropu do kolby miarowej 100 cm³, uzupełniono do kreski i wymieszano.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos",
+          "rozcieńcz"
+        ],
+        [
+          "syrop",
+          "25",
+          "miarow"
+        ]
+      ],
+      "wymaga": [],
+      "wymagaBhp": true,
+      "podpowiedz": "Pobierz pipetą 25 cm³ syropu do kolby miarowej 100 cm³ i uzupełnij wodą do kreski.",
+      "dlaczego": "Syrop jest zbyt stężony i lepki – mierzy się rozcieńczenie 1 : 4.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "slomkowy"
+      },
+      "przyklad": "pipetuję 25 cm3 syropu do kolby miarowej i rozcieńczam do kreski"
+    },
+    {
+      "id": "lampa",
+      "opis": "Włączono lampę sodową polarymetru i odczekano 5 minut.",
+      "wymagane": [
+        [
+          "włącz",
+          "uruchom",
+          "zapal"
+        ],
+        [
+          "lamp",
+          "polarymetr"
+        ]
+      ],
+      "wykluczajace": [
+        "=wyłącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz lampę sodową i odczekaj 5 minut.",
+      "dlaczego": "Lampa sodowa musi się nagrzać, żeby świeciła stabilnym światłem o długości fali 589 nm.",
+      "sprzet": "stol",
+      "animacja": "przycisk",
+      "przyklad": "włączam lampę sodową polarymetru"
+    },
+    {
+      "id": "rurka_woda",
+      "opis": "Rurkę napełniono wodą destylowaną bez pęcherzyka powietrza i wytarto okienka.",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "wlew",
+          "wlej"
+        ],
+        [
+          "rurk"
+        ],
+        [
+          "wod"
+        ]
+      ],
+      "wymaga": [
+        "lampa"
+      ],
+      "podpowiedz": "Napełnij rurkę polarymetryczną wodą destylowaną bez pęcherzyka powietrza i wytrzyj okienka.",
+      "dlaczego": "Pęcherzyk powietrza na drodze światła uniemożliwia poprawny odczyt.",
+      "sprzet": "stol",
+      "animacja": "przelewanie",
+      "przyklad": "napełniam rurkę wodą destylowaną bez pęcherzyka powietrza"
+    },
+    {
+      "id": "zero",
+      "opis": "Polarymetr wyzerowano na wodzie – równe zaciemnienie obu pól.",
+      "wymagane": [
+        [
+          "zeruj",
+          "wyzer",
+          "zero",
+          "ustaw"
+        ],
+        [
+          "polarymetr",
+          "zero",
+          "pól",
+          "pola",
+          "wod"
+        ]
+      ],
+      "wykluczajace": [
+        "napełn"
+      ],
+      "wymaga": [
+        "rurka_woda"
+      ],
+      "podpowiedz": "Włóż rurkę z wodą do polarymetru i ustaw zero – równe zaciemnienie obu pól.",
+      "dlaczego": "Woda nie skręca płaszczyzny polaryzacji; to punkt odniesienia dla pomiaru.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "zeruję polarymetr na wodzie destylowanej"
+    },
+    {
+      "id": "rurka_proba",
+      "opis": "Rurkę przepłukano badanym roztworem i napełniono bez pęcherzyka powietrza.",
+      "wymagane": [
+        [
+          "przepłuk",
+          "przepłucz",
+          "napełn",
+          "nalew",
+          "wlew",
+          "wlej"
+        ],
+        [
+          "rurk"
+        ],
+        [
+          "roztw",
+          "próbk",
+          "syrop",
+          "badan"
+        ]
+      ],
+      "wymaga": [
+        "zero",
+        "rozciencz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Przepłucz rurkę badanym roztworem, napełnij ją bez pęcherzyka i wytrzyj okienka.",
+      "dlaczego": "Resztki wody rozcieńczyłyby próbkę i zaniżyły kąt skręcenia.",
+      "sprzet": "stol",
+      "animacja": "przelewanie",
+      "przyklad": "przepłukuję i napełniam rurkę badanym roztworem"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Obrócono analizator do zrównania pól i odczytano kąt skręcenia z noniusza.",
+      "wymagane": [
+        [
+          "odczyt",
+          "zmierz",
+          "mierz",
+          "pomiar"
+        ],
+        [
+          "kąt",
+          "skręc",
+          "nonius",
+          "analizator",
+          "polarymetr"
+        ]
+      ],
+      "wymaga": [
+        "rurka_proba"
+      ],
+      "podpowiedz": "Obracaj analizator do zrównania zaciemnienia pól i odczytaj kąt z noniusza.",
+      "dlaczego": "Kąt skręcenia jest proporcjonalny do stężenia sacharozy i długości rurki.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "odczytuję kąt skręcenia z noniusza"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano kolejne odczyty – razem trzy.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Wykonaj jeszcze dwa odczyty kąta.",
+      "dlaczego": "Wynik to średnia z trzech odczytów.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "stanSceny": {},
+      "przyklad": "powtarzam odczyt jeszcze dwa razy"
+    },
+    {
+      "id": "rurka_myj",
+      "opis": "Rurkę polarymetryczną umyto wodą destylowaną, lampę wyłączono.",
+      "wymagane": [
+        [
+          "umyj",
+          "myję",
+          "wypłucz",
+          "opłucz",
+          "płucz"
+        ],
+        [
+          "rurk"
+        ]
+      ],
+      "wykluczajace": [
+        "przepłuk",
+        "napełn"
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Umyj rurkę wodą destylowaną i wyłącz lampę.",
+      "dlaczego": "Zaschnięty cukier zabrudzi okienka rurki.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję rurkę polarymetryczną wodą destylowaną"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "rurka_myj"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam roztwory do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "syrop",
+      "próbka"
+    ],
+    "wskaznik": [
+      "sacharoza",
+      "[α] = +66,5"
+    ],
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – polarymetria",
+    "losuj": [
+      {
+        "id": "c",
+        "od": 14.0,
+        "do": 16.6
+      },
+      {
+        "id": "a1",
+        "wzor": "c*66.5*2/100",
+        "szum": 0.04,
+        "miejsca": 2
+      },
+      {
+        "id": "a2",
+        "wzor": "c*66.5*2/100",
+        "szum": 0.04,
+        "miejsca": 2
+      },
+      {
+        "id": "a3",
+        "wzor": "c*66.5*2/100",
+        "szum": 0.04,
+        "miejsca": 2
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "wyswietlacz",
+        "id": "a1",
+        "etykieta": "Polarymetr – odczyt 1",
+        "jednostka": "°",
+        "miejsca": 2
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "a2",
+        "etykieta": "Polarymetr – odczyt 2",
+        "jednostka": "°",
+        "miejsca": 2
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "a3",
+        "etykieta": "Polarymetr – odczyt 3",
+        "jednostka": "°",
+        "miejsca": 2
+      },
+      {
+        "typ": "info",
+        "etykieta": "Dane",
+        "tekst": "rurka l = 2 dm, [α] = +66,5"
+      },
+      {
+        "typ": "info",
+        "etykieta": "Etykieta syropu",
+        "tekst": "sacharoza: 60 g w 100 cm³"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Dokumentacja z pomiarów",
+        "pola": [
+          {
+            "id": "a1",
+            "etykieta": "α₁ =",
+            "szer": "kr",
+            "jednostka": "°"
+          },
+          {
+            "id": "a2",
+            "etykieta": "α₂ =",
+            "szer": "kr",
+            "jednostka": "°"
+          },
+          {
+            "id": "a3",
+            "etykieta": "α₃ =",
+            "szer": "kr",
+            "jednostka": "°"
+          },
+          {
+            "id": "asr",
+            "etykieta": "α średnie =",
+            "szer": "kr",
+            "jednostka": "°"
+          },
+          {
+            "id": "c",
+            "etykieta": "Stężenie w roztworze mierzonym c =",
+            "szer": "kr",
+            "jednostka": "g/100 cm³"
+          },
+          {
+            "id": "cs",
+            "etykieta": "Stężenie w syropie =",
+            "szer": "kr",
+            "jednostka": "g/100 cm³"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Wynik (zgodny / niezgodny) z etykietą (±2 g/100 cm³):",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "Roztwór 1 g/100 cm³ w rurce 1 dm skręca o 0,665°. W rurce 2 dm – dwa razy więcej.",
+      "~1,33° — 1 g/100 cm³ (rurka 2 dm) | α° — c g/100 cm³",
+      "Rozcieńczenie 25 cm³ → 100 cm³, czyli 4 razy:",
+      "~25 cm³ syropu — w 100 cm³ roztworu | stężenie syropu = 4 · c"
+    ],
+    "kryteria": [
+      {
+        "opis": "Trzy odczyty kąta zgodne ze wskazaniami",
+        "uwaga": "Przepisz odczyty z polarymetru.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "a1",
+            "wzor": "a1",
+            "tol": 0.005
+          },
+          {
+            "typ": "liczba",
+            "pole": "a2",
+            "wzor": "a2",
+            "tol": 0.005
+          },
+          {
+            "typ": "liczba",
+            "pole": "a3",
+            "wzor": "a3",
+            "tol": 0.005
+          }
+        ]
+      },
+      {
+        "opis": "Średni kąt skręcenia",
+        "uwaga": "Średnia arytmetyczna trzech odczytów.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "asr",
+            "wzor": "sr($a1,$a2,$a3)",
+            "tol": 0.011
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($a1,$a2,$a3)",
+          "miejsca": 2,
+          "jednostka": "°"
+        }
+      },
+      {
+        "opis": "Stężenie w roztworze mierzonym",
+        "uwaga": "c = 100 · α / (66,5 · 2).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "c",
+            "wzor": "100*$asr/(66.5*2)",
+            "tol": 0.06
+          }
+        ],
+        "pokaz": {
+          "wzor": "100*$asr/(66.5*2)",
+          "miejsca": 1,
+          "jednostka": " g/100 cm³"
+        }
+      },
+      {
+        "opis": "Stężenie w syropie z uwzględnieniem rozcieńczenia",
+        "uwaga": "Pomnóż przez 4 (25 cm³ → 100 cm³).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "cs",
+            "wzor": "$c*4",
+            "tol": 0.25
+          }
+        ],
+        "pokaz": {
+          "wzor": "$c*4",
+          "miejsca": 1,
+          "jednostka": " g/100 cm³"
+        }
+      },
+      {
+        "opis": "Wyniki stężeń z dokładnością do 0,1",
+        "uwaga": "Jedno miejsce po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "c",
+            "ile": 1
+          },
+          {
+            "typ": "miejsca",
+            "pole": "cs",
+            "ile": 1
+          }
+        ]
+      },
+      {
+        "opis": "Wniosek spójny z wynikiem (etykieta: 60 ± 2 g/100 cm³)",
+        "uwaga": "Porównaj stężenie w syropie z 60 g/100 cm³.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "2-abs($cs-60)+0.000001",
+            "tak": [
+              "zgodny",
+              "zgodna"
+            ],
+            "nie": [
+              "niezgodny",
+              "niezgodna",
+              "nie zgodny",
+              "nie jest"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

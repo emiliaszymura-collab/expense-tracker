@@ -1,10 +1,12 @@
-// Sprawdzanie karty wyników (tabela 2 i 3 z arkusza CHM.04 styczeń 2026) według zasad oceniania CKE.
-import { zawartoscNaOH, type Pomiary } from './pomiary';
+// Karta wyników sterowana danymi z pliku poziomu: losowanie pomiarów i sprawdzanie wpisów
+// według kryteriów z zasad oceniania CKE.
+import type { KartaSpec, Sprawdzenie } from './typy';
+import { oblicz } from './wyrazenia';
 
 export type Odpowiedzi = Record<string, string>;
+export type Pomiary = Record<string, number>;
 
 export interface Kryterium {
-  id: string;
   opis: string;
   ok: boolean;
   /** Co poprawić (gdy niespełnione). */
@@ -21,8 +23,23 @@ const miejsca = (s: string | undefined) => {
   const m = (s ?? '').trim().match(/[.,](\d+)/);
   return m ? m[1].length : 0;
 };
-const blisko = (a: number, b: number, tol: number) => Number.isFinite(a) && Math.abs(a - b) <= tol + 1e-9;
 const fmt = (x: number, n: number) => x.toFixed(n).replace('.', ',');
+const bezZnakow = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l');
+
+export function losujPomiary(spec: KartaSpec, los: () => number = Math.random): Pomiary {
+  const p: Pomiary = {};
+  for (const l of spec.losuj) {
+    let w: number;
+    if (l.wybierz) w = l.wybierz[Math.floor(los() * l.wybierz.length)];
+    else if (l.wzor) w = oblicz(l.wzor, (n) => p[n]);
+    else w = (l.od ?? 0) + los() * ((l.do ?? 0) - (l.od ?? 0));
+    if (l.szum) w += (los() - 0.5) * 2 * l.szum;
+    if (l.krok) w = Math.round(w / l.krok) * l.krok;
+    if (l.miejsca !== undefined) w = Number(w.toFixed(l.miejsca));
+    p[l.id] = w;
+  }
+  return p;
+}
 
 /** Strona równania bez ładunków, spacji, plusów i indeksów – same symbole, np. "naohhcl". */
 function symbole(strona: string): string {
@@ -44,47 +61,59 @@ export function rownaniePasuje(wpis: string | undefined, lewa: string[], prawa: 
   return permutacje(lewa).includes(symbole(strony[0])) && permutacje(prawa).includes(symbole(strony[1]));
 }
 
-export function ocenKarte(p: Pomiary, o: Odpowiedzi): Kryterium[] {
-  const m = [1, 2, 3].map((i) => liczba(o[`m${i}`]));
-  const v = [1, 2, 3].map((i) => liczba(o[`v${i}`]));
-  const vd = [1, 2, 3].map((i) => liczba(o[`vd${i}`]));
-  const x = [1, 2, 3].map((i) => liczba(o[`x${i}`]));
-  const xsr = liczba(o.xsr);
-  const k: Kryterium[] = [];
-  const dodaj = (id: string, opis: string, ok: boolean, uwaga: string) => k.push({ id, opis, ok, uwaga: ok ? undefined : uwaga });
+function zmienne(p: Pomiary, o: Odpowiedzi) {
+  return (nazwa: string) => (nazwa.startsWith('$') ? liczba(o[nazwa.slice(1)]) : p[nazwa] ?? NaN);
+}
 
-  dodaj('R3.1', 'Zapisane trzy masy próbek [g], ok. 2 g, zgodne z odczytem z wagi', m.every((mi, i) => blisko(mi, p.m[i], 0.005)),
-    'Przepisz masy dokładnie z wyświetlacza wagi.');
-  dodaj('R3.2', 'Masy zapisane z dokładnością do drugiego miejsca po przecinku', [1, 2, 3].every((i) => miejsca(o[`m${i}`]) === 2),
-    'Każda masa musi mieć dwa miejsca po przecinku, np. 2,00.');
-  dodaj('R3.3', 'Zapisane trzy objętości titranta [cm³], zgodne z odczytem z biurety', v.every((vi, i) => blisko(vi, p.v[i], 0.05)),
-    'Odczytaj objętość na dolnym menisku; dopuszczalna różnica to 0,05 cm³.');
-  dodaj('R3.4', 'Zapisane trzy objętości titranta [dm³]', vd.every((vdi, i) => blisko(vdi, v[i] / 1000, 0.000011)),
-    '1 dm³ = 1000 cm³, więc cm³ dzielisz przez 1000 (np. 2,55 cm³ = 0,00255 dm³).');
-  const xOk = x.every((xi, i) => blisko(xi, zawartoscNaOH(v[i], m[i]), 0.006));
-  dodaj('R3.5', 'Obliczona zawartość NaOH dla trzech próbek (adekwatnie do Twoich danych)', xOk,
-    Number.isFinite(v[0]) && Number.isFinite(m[0])
-      ? `Sprawdź obliczenia. Dla próbki 1 z Twoich danych wychodzi ${fmt(zawartoscNaOH(v[0], m[0]), 2)}%. Pamiętaj: objętość w dm³.`
-      : 'Najpierw wpisz masy i objętości.');
-  const zgodne = x.filter((xi) => Number.isFinite(xi));
-  const rozrzut = zgodne.length ? Math.max(...zgodne) - Math.min(...zgodne) : NaN;
-  const srednia = zgodne.reduce((a, b) => a + b, 0) / (zgodne.length || 1);
-  dodaj('R3.6', 'Średnia z co najmniej dwóch wyników nieróżniących się o więcej niż 0,05%', zgodne.length >= 2 && rozrzut <= 0.05 + 1e-9 && blisko(xsr, srednia, 0.006),
-    zgodne.length >= 2 ? `Średnia z Twoich wyników to ${fmt(srednia, 2)}%.` : 'Najpierw oblicz X₁, X₂, X₃.');
-  dodaj('R3.7', 'Wyniki zawartości NaOH z dokładnością do drugiego miejsca po przecinku', ['x1', 'x2', 'x3', 'xsr'].every((id) => miejsca(o[id]) === 2),
-    'Każdy wynik X zaokrąglij do dwóch miejsc po przecinku.');
-  const barwa = (o.barwa ?? '').toLowerCase();
-  dodaj('R3.8', 'Zapisane zabarwienie papierka wskaźnikowego', /nieb|ziel|gran|turkus|fiolet/.test(barwa),
-    'W odczynie zasadowym papierek uniwersalny robi się zielononiebieski / niebieski.');
-  dodaj('R3.9', 'Przybliżona wartość pH adekwatna do zabarwienia', blisko(liczba(o.ph), p.ph, 1),
-    'Porównaj barwę papierka ze skalą – tu pH wynosi około ' + p.ph + '.');
-  dodaj('R3.10', 'Odczyn adekwatny do wartości pH', /zasad/.test((o.odczyn ?? '').toLowerCase()),
-    'pH powyżej 7 oznacza odczyn zasadowy.');
-  dodaj('R4.1', 'Równanie w formie cząsteczkowej', rownaniePasuje(o.r1, ['naoh', 'hcl'], ['nacl', 'h2o']),
-    'NaOH + HCl → NaCl + H₂O');
-  dodaj('R4.2', 'Równanie w formie jonowej pełnej', rownaniePasuje(o.r2, ['na', 'oh', 'h', 'cl'], ['na', 'cl', 'h2o']),
-    'Na⁺ + OH⁻ + H⁺ + Cl⁻ → Na⁺ + Cl⁻ + H₂O');
-  dodaj('R4.3', 'Równanie w formie jonowej skróconej', rownaniePasuje(o.r3, ['h', 'oh'], ['h2o']),
-    'H⁺ + OH⁻ → H₂O');
-  return k;
+function sprawdz(s: Sprawdzenie, p: Pomiary, o: Odpowiedzi): boolean {
+  const z = zmienne(p, o);
+  switch (s.typ) {
+    case 'liczba': {
+      const wpis = liczba(o[s.pole]);
+      const cel = oblicz(s.wzor, z);
+      return Number.isFinite(wpis) && Number.isFinite(cel) && Math.abs(wpis - cel) <= s.tol + 1e-9;
+    }
+    case 'miejsca':
+      return Number.isFinite(liczba(o[s.pole])) && miejsca(o[s.pole]) === s.ile;
+    case 'tekst': {
+      const t = bezZnakow(o[s.pole] ?? '');
+      return s.zawiera.some((x) => t.includes(bezZnakow(x)));
+    }
+    case 'rownanie':
+      return rownaniePasuje(o[s.pole], s.lewa, s.prawa);
+    case 'rozrzut': {
+      const w = s.pola.map((id) => liczba(o[id])).filter(Number.isFinite);
+      return w.length >= 2 && Math.max(...w) - Math.min(...w) <= s.max + 1e-9;
+    }
+    case 'wybor': {
+      // Wniosek zależny od wyniku: wzór > 0 → odpowiedź „tak”, inaczej „nie” (frazy „nie” sprawdzamy pierwsze).
+      const t = bezZnakow(o[s.pole] ?? '');
+      const w = oblicz(s.wzor, z);
+      if (!Number.isFinite(w) || t.trim() === '') return false;
+      const mowiNie = s.nie.some((x) => t.includes(bezZnakow(x)));
+      const mowiTak = !mowiNie && s.tak.some((x) => t.includes(bezZnakow(x)));
+      return w > 0 ? mowiTak : mowiNie;
+    }
+    case 'tekstRazem': {
+      // Któreś z pól zawiera jednocześnie słowo z „zawiera” i słowo z „oraz” (np. „cylinder” i „50”).
+      return s.pola.some((id) => {
+        const t = bezZnakow(o[id] ?? '');
+        return s.zawiera.some((x) => t.includes(bezZnakow(x))) && s.oraz.every((x) => t.includes(bezZnakow(x)));
+      });
+    }
+    case 'niepuste':
+      return (o[s.pole] ?? '').trim().length > 0;
+  }
+}
+
+export function ocenKarte(spec: KartaSpec, p: Pomiary, o: Odpowiedzi): Kryterium[] {
+  return spec.kryteria.map((k) => {
+    const ok = k.sprawdz.every((s) => sprawdz(s, p, o));
+    let uwaga = k.uwaga;
+    if (!ok && k.pokaz) {
+      const w = oblicz(k.pokaz.wzor, zmienne(p, o));
+      if (Number.isFinite(w)) uwaga = `${uwaga ?? ''} Z Twoich danych wychodzi ${fmt(w, k.pokaz.miejsca)}${k.pokaz.jednostka ?? ''}.`.trim();
+    }
+    return { opis: k.opis, ok, uwaga: ok ? undefined : uwaga };
+  });
 }

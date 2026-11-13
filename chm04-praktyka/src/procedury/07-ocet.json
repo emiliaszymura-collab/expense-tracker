@@ -1,0 +1,1109 @@
+{
+  "id": "07-ocet",
+  "tytul": "Kwas octowy w occie",
+  "zrodlo": "CHM.04 – styczeń 2024",
+  "metoda": "Miareczkowanie potencjometryczne + alkacymetria wobec wskaźnika",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Przygotuj próbkę octu (procedura 1). Wykonaj oznaczenie kwasu octowego metodą miareczkowania potencjometrycznego (procedura 2): zapisz wyniki, sporządź krzywą pH = f(V NaOH), wyznacz graficznie punkt końcowy (PK), jego pH i objętość V PK.\nNa podstawie krzywej dobierz wskaźnik i wykonaj oznaczenie metodą miareczkowania wobec wskaźnika (procedura 3).\nPorównaj wyniki ze stężeniem deklarowanym przez producenta. Przed miareczkowaniem potencjometrycznym zgłoś gotowość do oceny zestawu."
+    },
+    {
+      "tytul": "Procedury",
+      "tresc": "Procedura 1. Przygotowanie próbki\nDo kolby miarowej 100 cm³ pobrać pipetą 10 cm³ octu i rozcieńczyć wodą do kreski. Gęstość octu przyjąć 1 g/cm³.\nProcedura 2. Miareczkowanie potencjometryczne\nDo zlewki 250 cm³ pobrać pipetą 20 cm³ roztworu octu i dodać 80 cm³ wody. Zlewkę umieścić na mieszadle magnetycznym, zanurzyć element mieszający i elektrodę. Biuretę z NaOH 0,250 mol/dm³ ustawić nad zlewką. Dodawać NaOH porcjami, po każdej porcji wymieszać, zatrzymać mieszadło i odczytać pH. Pehametr jest wykalibrowany.\nProcedura 3. Miareczkowanie wobec wskaźnika\nDo kolby stożkowej pobrać pipetą 20 cm³ roztworu octu, dodać 30 cm³ wody i 2 krople wskaźnika: oranż metylowy (pH 3,1–4,4) albo fenoloftaleina (pH 8,2–10,0). Miareczkować NaOH 0,250 mol/dm³ do pierwszej trwałej zmiany barwy. Wykonać co najmniej dwa razy.\nObliczenia\nX = (V · C · M · 5) / 100\n- X – zawartość kwasu octowego [%]\n- V – objętość NaOH [cm³]\n- C – 0,250 mol/dm³\n- M – 60,05 g/mol\n- 5 – współmierność kolby miarowej i pipety\nWynik z dokładnością do całości.\nProcedura 4. Porządkowanie\nOdłączyć pehametr, elektrodę przemyć wodą destylowaną i osuszyć. Rozmontować zestaw. Mieszaniny poreakcyjne przelać do pojemnika na odpady ciekłe."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "rozciencz",
+      "opis": "Pipetą pobrano 10 cm³ octu do kolby miarowej 100 cm³ i rozcieńczono wodą do kreski.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos",
+          "rozcieńcz"
+        ],
+        [
+          "10",
+          "ocet",
+          "octu",
+          "miarow"
+        ]
+      ],
+      "wykluczajace": [
+        "20",
+        "zlewk",
+        "stożkow",
+        "80",
+        "30"
+      ],
+      "wymaga": [],
+      "wymagaBhp": true,
+      "podpowiedz": "Pobierz pipetą 10 cm³ octu do kolby miarowej 100 cm³ i rozcieńcz wodą do kreski.",
+      "dlaczego": "Kryterium wykazu sprzętu: kolba miarowa 100 cm³ i pipeta jednomiarowa 10 cm³.",
+      "sprzet": "stol",
+      "animacja": "pipetowanie",
+      "przyklad": "pipetuję 10 cm3 octu do kolby miarowej i rozcieńczam do kreski"
+    },
+    {
+      "id": "zlewka20",
+      "opis": "Do zlewki 250 cm³ pobrano pipetą 20 cm³ roztworu octu i dodano 80 cm³ wody.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos",
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "dolew",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "wkrapl",
+          "wsyp",
+          "dodanie"
+        ],
+        [
+          "zlewk",
+          "80"
+        ]
+      ],
+      "wykluczajace": [
+        "stożkow",
+        "30",
+        "fenoloft"
+      ],
+      "wymaga": [
+        "rozciencz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Pobierz pipetą 20 cm³ roztworu do zlewki 250 cm³ i dodaj 80 cm³ wody.",
+      "dlaczego": "Kryteria: pobrał roztwór pipetą z gruszką, dodał wodę destylowaną.",
+      "sprzet": "zlewka",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "zlewka": "roztwor"
+      },
+      "przyklad": "pipetuję 20 cm3 roztworu do zlewki i dodaję 80 cm3 wody"
+    },
+    {
+      "id": "mieszadlo",
+      "opis": "Zlewka stoi na mieszadle magnetycznym, w roztworze element mieszający i elektroda.",
+      "wymagane": [
+        [
+          "mieszadł",
+          "mieszadeł",
+          "dipol",
+          "elektrod"
+        ],
+        [
+          "umieszcz",
+          "staw",
+          "ustaw",
+          "zanurz",
+          "wkład",
+          "włóż",
+          "włącz"
+        ]
+      ],
+      "wykluczajace": [
+        "opłucz",
+        "przemy",
+        "osusz",
+        "odłącz"
+      ],
+      "wymaga": [
+        "zlewka20"
+      ],
+      "podpowiedz": "Postaw zlewkę na mieszadle magnetycznym, włóż element mieszający i zanurz elektrodę.",
+      "dlaczego": "Kryterium: zlewka na mieszadle, element mieszający zanurzony, elektroda i czujnik na statywie.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "stawiam zlewkę na mieszadle magnetycznym i zanurzam elektrodę"
+    },
+    {
+      "id": "montaz",
+      "opis": "Zestaw do miareczkowania zmontowany: statyw, łapa, biureta 25 cm³.",
+      "wymagane": [
+        [
+          "zmont",
+          "montuj",
+          "montaż",
+          "złóż",
+          "składa",
+          "przygotow",
+          "zamocow",
+          "mocuj",
+          "ustaw",
+          "zakład",
+          "wkład",
+          "umieszcz",
+          "przykręc"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw",
+          "łap"
+        ]
+      ],
+      "wykluczajace": [
+        "rozmont",
+        "demont",
+        "zero",
+        "zera",
+        "menisk",
+        "pęcherz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Zmontuj zestaw do miareczkowania (statyw, łapa, biureta).",
+      "dlaczego": "Zmontowany zestaw jest osobnym rezultatem ocenianym po zgłoszeniu gotowości.",
+      "sprzet": "statyw",
+      "animacja": "montaz",
+      "stanSceny": {
+        "zestaw": true,
+        "lejek": true
+      },
+      "przyklad": "montuję zestaw do miareczkowania"
+    },
+    {
+      "id": "napelnij",
+      "opis": "Biureta napełniona titrantem – NaOH 0,250 mol/dm³ (przez lejek).",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "nalej",
+          "wlew",
+          "wlej",
+          "uzupełn",
+          "wypełn"
+        ],
+        [
+          "biuret"
+        ]
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Napełnij biuretę titrantem – NaOH 0,250 mol/dm³, używając lejka.",
+      "dlaczego": "Bez titranta nie ma miareczkowania; egzaminator sprawdza, czy biureta jest napełniona.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "biuretaPoziom": 0.95
+      },
+      "przyklad": "napełniam biuretę titrantem przez lejek",
+      "wymaga": [
+        "montaz"
+      ]
+    },
+    {
+      "id": "lejek",
+      "opis": "Lejek zdjęty z biurety.",
+      "wymagane": [
+        [
+          "zdejm",
+          "wyjm",
+          "usuń",
+          "ściąg",
+          "odstaw",
+          "zabier",
+          "odłóż",
+          "odkład",
+          "zdjąć",
+          "wyjąć"
+        ],
+        [
+          "lejek",
+          "lejk"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Zdejmij lejek z biurety.",
+      "dlaczego": "Lejek pozostawiony w biurecie może dolewać krople titranta i zafałszować odczyt – miareczkuje się bez lejka.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "lejek": false
+      },
+      "animacja": "siegnij_gora",
+      "przyklad": "zdejmuję lejek z biurety"
+    },
+    {
+      "id": "pecherz",
+      "opis": "Usunięto pęcherzyk powietrza spod kranika biurety.",
+      "wymagane": [
+        [
+          "pęcherz",
+          "powietrz",
+          "odpowietrz"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Usuń pęcherzyk powietrza spod kranika biurety (spuść trochę titranta).",
+      "dlaczego": "Pęcherz w kraniku zwiększa odczytaną objętość – kryterium: brak pęcherza powietrza w kraniku.",
+      "sprzet": "statyw",
+      "animacja": "kranik",
+      "przyklad": "usuwam pęcherzyk powietrza z kranika"
+    },
+    {
+      "id": "zero",
+      "opis": "Poziom titranta ustawiony na 0 cm³ (menisk dolny).",
+      "wymagane": [
+        [
+          "zero",
+          "zera",
+          "0",
+          "kresk",
+          "menisk",
+          "wyzer",
+          "poziom"
+        ]
+      ],
+      "wykluczajace": [
+        "wag",
+        "odczyt",
+        "objętość"
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Ustaw poziom titranta na zero – dolny menisk na kresce 0.",
+      "dlaczego": "Kryteria: biureta napełniona do poziomu 0 i zachowany menisk dolny (dla roztworów bezbarwnych).",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "animacja": "kranik",
+      "przyklad": "ustawiam menisk na zero"
+    },
+    {
+      "id": "zglos",
+      "opis": "Zgłoszono gotowość do oceny zestawu – egzaminator sprawdza biuretę.",
+      "wymagane": [
+        [
+          "zgłoś",
+          "zgłasz",
+          "podnieś",
+          "podnos",
+          "gotowoś",
+          "zgłoszenie"
+        ]
+      ],
+      "wymaga": [
+        "napelnij",
+        "lejek",
+        "pecherz",
+        "zero"
+      ],
+      "podpowiedz": "Podnieś rękę i zgłoś gotowość do oceny zestawu do miareczkowania.",
+      "dlaczego": "Polecenie z arkusza – bez zgłoszenia egzaminator nie oceni zestawu, a to osobny rezultat.",
+      "animacja": "reka",
+      "przyklad": "zgłaszam gotowość do oceny"
+    },
+    {
+      "id": "potencjo",
+      "opis": "Miareczkowanie potencjometryczne: NaOH dodawano porcjami, po każdej odczytano pH (19 punktów).",
+      "wymagane": [
+        [
+          "miareczk",
+          "dodaj",
+          "dodaję"
+        ],
+        [
+          "porcj",
+          "potencjometr",
+          "ph"
+        ]
+      ],
+      "wykluczajace": [
+        "fenoloft",
+        "wskaźnik",
+        "różow"
+      ],
+      "wymaga": [
+        "zglos",
+        "mieszadlo"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodawaj NaOH porcjami z tabeli; po każdej porcji wymieszaj, zatrzymaj mieszadło i odczytaj pH.",
+      "dlaczego": "Kryterium: po każdej porcji odczytywał pH po wymieszaniu i ustabilizowaniu wskazań.",
+      "sprzet": "statyw",
+      "animacja": "kranik",
+      "stanSceny": {
+        "biuretaPoziom": 0.3
+      },
+      "przyklad": "miareczkuję potencjometrycznie porcjami i odczytuję pH po każdej porcji"
+    },
+    {
+      "id": "elektroda",
+      "opis": "Po miareczkowaniu elektrodę opłukano wodą destylowaną i osuszono.",
+      "wymagane": [
+        [
+          "opłucz",
+          "przemy",
+          "spłucz",
+          "płucz",
+          "osusz"
+        ],
+        [
+          "elektrod"
+        ]
+      ],
+      "wykluczajace": [
+        "odłącz"
+      ],
+      "wymaga": [
+        "potencjo"
+      ],
+      "podpowiedz": "Opłucz elektrodę wodą destylowaną i osusz bibułą.",
+      "dlaczego": "Kryterium: po zakończeniu miareczkowania opłukał elektrodę i osuszył.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "opłukuję elektrodę wodą destylowaną i osuszam"
+    },
+    {
+      "id": "kolba20",
+      "opis": "Do kolby stożkowej pobrano 20 cm³ roztworu octu i dodano 30 cm³ wody.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos",
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "dolew",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "wkrapl",
+          "wsyp",
+          "dodanie"
+        ],
+        [
+          "stożkow",
+          "30"
+        ]
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "80",
+        "fenoloft"
+      ],
+      "wymaga": [
+        "potencjo"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Pobierz pipetą 20 cm³ roztworu do kolby stożkowej i dodaj 30 cm³ wody.",
+      "dlaczego": "Kryteria przebiegu 2: pobrał roztwór pipetą, dodał wodę.",
+      "sprzet": "kolba",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "bezbarwny"
+      },
+      "przyklad": "pipetuję 20 cm3 roztworu do kolby stożkowej i dodaję 30 cm3 wody"
+    },
+    {
+      "id": "fenol",
+      "opis": "Dodano 2 krople fenoloftaleiny (wskaźnik dobrany z krzywej).",
+      "wymagane": [
+        [
+          "fenoloft"
+        ]
+      ],
+      "wymaga": [
+        "kolba20"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj 2 krople fenoloftaleiny – jej zakres pH 8,2–10 obejmuje punkt końcowy.",
+      "dlaczego": "Skok krzywej wypada powyżej pH 7, więc pasuje fenoloftaleina, a nie oranż metylowy.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "dodaję 2 krople fenoloftaleiny"
+    },
+    {
+      "id": "uzupelnij",
+      "opis": "Biuretę ponownie napełniono NaOH i ustawiono na zero.",
+      "wymagane": [
+        [
+          "ponown",
+          "znów",
+          "znowu",
+          "jeszcze raz",
+          "uzupełn",
+          "dopełn"
+        ],
+        [
+          "biuret"
+        ]
+      ],
+      "wymaga": [
+        "potencjo"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Uzupełnij biuretę NaOH i ustaw na zero przed miareczkowaniem wobec wskaźnika.",
+      "dlaczego": "Każde miareczkowanie zaczynasz od zera, żeby odczyt był objętością zużytą.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "przyklad": "ponownie napełniam biuretę do zera"
+    },
+    {
+      "id": "miareczkuj",
+      "opis": "Miareczkowanie NaOH, stale mieszając, do pierwszej trwałej barwy różowej.",
+      "wymagane": [
+        [
+          "miareczk",
+          "titruj",
+          "titrac"
+        ]
+      ],
+      "wykluczajace": [
+        "zestaw",
+        "powtórz",
+        "drug",
+        "trzec",
+        "kolejn",
+        "jeszcze",
+        "ponown",
+        "porcj",
+        "potencjometr"
+      ],
+      "wymaga": [
+        "fenol",
+        "uzupelnij"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Miareczkuj NaOH do pierwszej trwałej różowej barwy.",
+      "dlaczego": "Kryterium: miareczkował stale mieszając do pierwszej zmiany barwy na różową.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolba": "rozowy",
+        "biuretaPoziom": 0.45,
+        "kolbaMiejsce": "biureta"
+      },
+      "przyklad": "miareczkuję do różowej barwy"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano i zapisano objętość zużytego titranta (V₁).",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "spisuj",
+          "sprawdz",
+          "patrz"
+        ],
+        [
+          "objętoś",
+          "biuret",
+          "wynik",
+          "cm3",
+          "ml",
+          "menisk",
+          "zużyt",
+          "v1"
+        ]
+      ],
+      "wykluczajace": [
+        "pęcherz",
+        "powietrz",
+        "wag",
+        "papier",
+        "ph"
+      ],
+      "wymaga": [
+        "miareczkuj"
+      ],
+      "podpowiedz": "Odczytaj z biurety objętość zużytego titranta (dolny menisk) i zapisz ją.",
+      "dlaczego": "Objętość V jest podstawą obliczeń – w tabeli zapisuje się ją w cm³ i przelicza na dm³.",
+      "sprzet": "statyw",
+      "animacja": "odczyt",
+      "przyklad": "odczytuję objętość z biurety"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano drugie miareczkowanie wobec wskaźnika.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Powtórz oznaczenie – co najmniej dwa razy.",
+      "dlaczego": "Kryterium: miareczkowanie wykonane co najmniej trzykrotnie; z wyników liczy się średnią.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolby": 2
+      },
+      "przyklad": "powtarzam oznaczenie drugi raz"
+    },
+    {
+      "id": "odlacz",
+      "opis": "Pehametr odłączony od zasilania.",
+      "wymagane": [
+        [
+          "=odłącz",
+          "=wyłącz"
+        ],
+        [
+          "pehametr",
+          "ph-metr",
+          "ph metr",
+          "zasilan"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Odłącz pehametr od zasilania.",
+      "dlaczego": "Procedura 4 – element uporządkowanego zestawu do pomiaru pH.",
+      "sprzet": "zlewka",
+      "animacja": "przycisk",
+      "przyklad": "odłączam pehametr od zasilania"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam mieszaniny poreakcyjne do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "rozmontuj",
+      "opis": "Zestaw do miareczkowania rozmontowany.",
+      "wymagane": [
+        [
+          "rozmont",
+          "zdemont",
+          "demont",
+          "rozkręć",
+          "rozłóż",
+          "rozbier",
+          "rozebr",
+          "rozkład"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Rozmontuj zestaw do miareczkowania (resztę titranta z biurety też do odpadów).",
+      "dlaczego": "Kryterium porządkowania: zestaw do miareczkowania rozmontowany.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "zestaw": false,
+        "biuretaPoziom": 0
+      },
+      "animacja": "montaz",
+      "przyklad": "rozmontowuję zestaw do miareczkowania"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj",
+        "rozmontuj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    },
+    {
+      "slowa": [
+        "oranż"
+      ],
+      "komunikat": "Oranż metylowy zmienia barwę w pH 3,1–4,4, a skok krzywej jest powyżej pH 7 – właściwym wskaźnikiem jest fenoloftaleina."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "NaOH",
+      "0,250 mol/dm³"
+    ],
+    "wskaznik": [
+      "fenoloftaleina",
+      "1%"
+    ],
+    "odczytBiureta": "v1",
+    "kartaPo": "potencjo"
+  },
+  "karta": {
+    "tytul": "Karta wyników – kwas octowy w occie",
+    "losuj": [
+      {
+        "id": "zaw",
+        "od": 9.5,
+        "do": 10.5
+      },
+      {
+        "id": "vpk",
+        "wzor": "zaw*100/(0.25*60.05*5)",
+        "krok": 0.1,
+        "miejsca": 1
+      },
+      {
+        "id": "v1",
+        "wzor": "vpk",
+        "szum": 0.05,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v2",
+        "wzor": "vpk",
+        "szum": 0.05,
+        "krok": 0.05,
+        "miejsca": 2
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "krzywa",
+        "id": "vpk",
+        "etykieta": "Wyniki pomiarów pH podczas miareczkowania potencjometrycznego"
+      },
+      {
+        "typ": "info",
+        "etykieta": "Etykieta octu",
+        "tekst": "Kwas octowy: 10%"
+      },
+      {
+        "typ": "biureta",
+        "id": "v1",
+        "etykieta": "Biureta – wobec wskaźnika 1"
+      },
+      {
+        "typ": "biureta",
+        "id": "v2",
+        "etykieta": "Biureta – wobec wskaźnika 2"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Tabela 1. Miareczkowanie potencjometryczne",
+        "opis": "Punkt końcowy wyznacz graficznie – leży w połowie skoku krzywej.",
+        "pola": [
+          {
+            "id": "vpk",
+            "etykieta": "Objętość NaOH w punkcie końcowym V PK =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          },
+          {
+            "id": "phpk",
+            "etykieta": "pH w punkcie końcowym:",
+            "szer": "kr"
+          },
+          {
+            "id": "xpot",
+            "etykieta": "Zawartość kwasu octowego X =",
+            "szer": "kr",
+            "jednostka": "%"
+          }
+        ]
+      },
+      {
+        "tytul": "Tabela 2. Miareczkowanie wobec wskaźnika",
+        "pola": [
+          {
+            "id": "wsk",
+            "etykieta": "Zastosowany wskaźnik:",
+            "szer": "dl"
+          },
+          {
+            "id": "v1",
+            "etykieta": "V₁ =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          },
+          {
+            "id": "v2",
+            "etykieta": "V₂ =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          },
+          {
+            "id": "vsr",
+            "etykieta": "Średnia V NaOH =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          },
+          {
+            "id": "xwsk",
+            "etykieta": "Zawartość kwasu octowego X =",
+            "szer": "kr",
+            "jednostka": "%"
+          }
+        ]
+      },
+      {
+        "tytul": "Tabela 3. Ocena badanego octu",
+        "pola": [
+          {
+            "id": "dekl",
+            "etykieta": "Zawartość deklarowana przez producenta:",
+            "szer": "kr",
+            "jednostka": "%"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Wnioski:",
+            "szer": "max"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "NaOH 0,250 mol/dm³, M kwasu octowego = 60,05 g/mol, reakcja 1 : 1.",
+      "~1000 cm³ NaOH — 0,250 mol | V cm³ — n mol (tyle kwasu jest w 20 cm³ roztworu)",
+      "~20 cm³ — n mol | 100 cm³ — 5 · n mol (to kwas z 10 cm³ octu)",
+      "~1 mol kwasu — 60,05 g | 5n mol — a g",
+      "~10 g octu (10 cm³, gęstość 1 g/cm³) — 100% | a g — X%"
+    ],
+    "kryteria": [
+      {
+        "opis": "Wartość V PK w punkcie końcowym miareczkowania",
+        "uwaga": "Punkt końcowy leży w połowie pionowego skoku krzywej; odczytaj objętość z osi poziomej (±0,5 cm³).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "vpk",
+            "wzor": "vpk",
+            "tol": 0.5
+          }
+        ]
+      },
+      {
+        "opis": "Wartość pH w punkcie końcowym",
+        "uwaga": "Dla słabego kwasu i mocnej zasady punkt końcowy wypada w pH ok. 8–9.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "phpk",
+            "wzor": "8.6",
+            "tol": 1.0
+          }
+        ]
+      },
+      {
+        "opis": "Obliczona zawartość kwasu octowego (metoda potencjometryczna)",
+        "uwaga": "X = V PK · 0,250 · 60,05 · 5 / 100.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "xpot",
+            "wzor": "$vpk*0.25*60.05*5/100",
+            "tol": 0.6
+          }
+        ],
+        "pokaz": {
+          "wzor": "$vpk*0.25*60.05*5/100",
+          "miejsca": 0,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Wskaźnik zastosowany w miareczkowaniu – fenoloftaleina",
+        "uwaga": "Zakres zmiany barwy fenoloftaleiny (8,2–10) obejmuje punkt końcowy.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "wsk",
+            "zawiera": [
+              "fenoloft"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Co najmniej dwa wyniki V₁ i V₂ zgodne z odczytem",
+        "uwaga": "Odczytaj na dolnym menisku, ±0,05 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "v1",
+            "wzor": "v1",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "v2",
+            "wzor": "v2",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Średnia z wyników nieróżniących się o więcej niż 0,2 cm³",
+        "uwaga": "Średnia arytmetyczna V₁ i V₂.",
+        "sprawdz": [
+          {
+            "typ": "rozrzut",
+            "pola": [
+              "v1",
+              "v2"
+            ],
+            "max": 0.2
+          },
+          {
+            "typ": "liczba",
+            "pole": "vsr",
+            "wzor": "sr($v1,$v2)",
+            "tol": 0.06
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($v1,$v2)",
+          "miejsca": 1,
+          "jednostka": " cm³"
+        }
+      },
+      {
+        "opis": "Obliczona zawartość kwasu octowego (wobec wskaźnika)",
+        "uwaga": "X = V · 0,250 · 60,05 · 5 / 100.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "xwsk",
+            "wzor": "$vsr*0.25*60.05*5/100",
+            "tol": 0.6
+          }
+        ],
+        "pokaz": {
+          "wzor": "$vsr*0.25*60.05*5/100",
+          "miejsca": 0,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Wyniki zawartości kwasu octowego z dokładnością do całości",
+        "uwaga": "Zaokrąglij procenty do całości.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "xpot",
+            "ile": 0
+          },
+          {
+            "typ": "miejsca",
+            "pole": "xwsk",
+            "ile": 0
+          }
+        ]
+      },
+      {
+        "opis": "Zawartość deklarowana przez producenta: 10%",
+        "uwaga": "Przepisz z etykiety.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "dekl",
+            "wzor": "10",
+            "tol": 0.01
+          }
+        ]
+      },
+      {
+        "opis": "Wnioski – ocena badanego octu",
+        "uwaga": "Napisz, czy wyniki obu metod są zgodne z deklaracją producenta.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "wniosek",
+            "zawiera": [
+              "zgod",
+              "potwierdz",
+              "mniejsz",
+              "wieksz",
+              "rown",
+              "odpowiada",
+              "niezgod"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

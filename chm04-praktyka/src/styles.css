@@ -970,3 +970,53 @@ button.sprawdz {
     height: auto;
   }
 }
+
+.odczyt-info {
+  justify-items: start;
+  background: var(--papier-wzor);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-weight: 400;
+}
+
+.odczyt-info strong {
+  font-size: 14px;
+}
+
+.odczyt-szeroki {
+  justify-items: start;
+}
+
+.odczyt {
+  align-content: start;
+}
+
+.brudnopis .drobne {
+  margin: 6px 0;
+  color: var(--papier-tekst);
+}
+
+.krzywa {
+  line-height: 1.2;
+  max-width: 100%;
+}
+
+.krzywa svg {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  display: block;
+}
+
+.tabela-ph {
+  font-size: 10.5px;
+  display: block;
+  overflow-x: auto;
+  color: #23303a;
+}
+
+.tabela-ph th,
+.tabela-ph td {
+  padding: 2px 4px;
+  white-space: nowrap;
+}

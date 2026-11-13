@@ -1,0 +1,722 @@
+{
+  "id": "09-refraktometria",
+  "tytul": "Ekstrakt w soku – refraktometr",
+  "zrodlo": "Poziom przewidywany – podstawa programowa 2019",
+  "metoda": "Refraktometria (refraktometr Abbego, skala Brix)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Uwaga",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
+    },
+    {
+      "tytul": "Zadanie",
+      "tresc": "Oznacz zawartość ekstraktu (cukrów) w soku owocowym refraktometrem Abbego w skali Brix. Wykonaj trzy pomiary, oblicz średnią i oceń, czy sok spełnia wymaganie producenta: co najmniej 11,2% Brix.\nSporządź roztwór wzorcowy sacharozy 10% i sprawdź na nim wskazanie przyrządu."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "1. Sprawdzenie refraktometru\nPryzmat przemyć wodą destylowaną i osuszyć miękką bibułą. Nanieść 2–3 krople wody destylowanej, zamknąć pryzmat i odczytać wskazanie: n = 1,3330, 0,0% Brix (20 °C).\n2. Roztwór wzorcowy\nOdważyć 10,00 g sacharozy, rozpuścić w wodzie w zlewce i uzupełnić wodą do masy 100,00 g. Zmierzyć – wskazanie powinno wynosić 10,0% Brix.\n3. Pomiar próbki\nPryzmat osuszyć. Nanieść bagietką 2–3 krople soku (nie dotykać pryzmatu szkłem), zamknąć pryzmat. Ustawić ostrą granicę światła i cienia na przecięciu nici, usunąć zabarwienie kompensatorem. Odczytać % Brix i temperaturę. Pomiar wykonać trzy razy, każdorazowo nanosząc nową porcję soku.\n4. Zakończenie\nPryzmat umyć wodą destylowaną i osuszyć.\nObliczenia\nWynik to średnia arytmetyczna trzech odczytów nieróżniących się o więcej niż 0,2% Brix, z dokładnością do 0,1.\nPoprawka temperaturowa: +0,07% Brix na każdy 1 °C powyżej 20 °C (poniżej 20 °C – odjąć)."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "pryzmat1",
+      "opis": "Pryzmat refraktometru przemyty wodą destylowaną i osuszony miękką bibułą.",
+      "wymagane": [
+        [
+          "przemy",
+          "umyj",
+          "myję",
+          "opłucz",
+          "osusz",
+          "wytrz",
+          "czyszcz",
+          "czyść"
+        ],
+        [
+          "pryzmat"
+        ]
+      ],
+      "wykluczajace": [
+        "koniec",
+        "zakończ",
+        "po pomiar"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Przemyj pryzmat wodą destylowaną i osusz miękką bibułą.",
+      "dlaczego": "Resztki poprzedniej próbki zmieniają współczynnik załamania.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "przemywam pryzmat wodą destylowaną i osuszam bibułą"
+    },
+    {
+      "id": "zero",
+      "opis": "Sprawdzono wskazanie na wodzie destylowanej: n = 1,3330, 0,0% Brix.",
+      "wymagane": [
+        [
+          "sprawdz",
+          "kalibr",
+          "zeruj",
+          "wzorc",
+          "nanoś",
+          "nanieś",
+          "naniesi"
+        ],
+        [
+          "wod"
+        ]
+      ],
+      "wykluczajace": [
+        "sok",
+        "sacharoz",
+        "pryzmat wod"
+      ],
+      "wymaga": [
+        "pryzmat1"
+      ],
+      "podpowiedz": "Nanieś 2–3 krople wody destylowanej i sprawdź, czy przyrząd wskazuje 1,3330 (0,0% Brix).",
+      "dlaczego": "Bez sprawdzenia na wodzie nie wiesz, czy przyrząd nie ma błędu systematycznego.",
+      "sprzet": "stol",
+      "animacja": "pipetowanie",
+      "przyklad": "nanoszę wodę destylowaną i sprawdzam wskazanie refraktometru"
+    },
+    {
+      "id": "waga",
+      "opis": "Waga włączona, wypoziomowana i wytarowana.",
+      "wymagane": [
+        [
+          "włącz",
+          "wytar",
+          "tar",
+          "wyzer",
+          "zeruj",
+          "zerow",
+          "wypoziom",
+          "poziomuj",
+          "uruchom",
+          "przygotuj"
+        ],
+        [
+          "wag"
+        ]
+      ],
+      "wykluczajace": [
+        "wyłącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz wagę, sprawdź poziomicę i wytaruj ją z naczyniem.",
+      "dlaczego": "Ważenie zgodnie z zasadami: wypoziomowanie i tarowanie, inaczej masa próbki jest błędna.",
+      "sprzet": "waga",
+      "stanSceny": {
+        "waga": "wlaczona"
+      },
+      "animacja": "przycisk",
+      "przyklad": "włączam i taruję wagę"
+    },
+    {
+      "id": "wzorzec",
+      "opis": "Sporządzono roztwór wzorcowy: 10,00 g sacharozy uzupełnione wodą do 100,00 g.",
+      "wymagane": [
+        [
+          "odważ",
+          "sporządz",
+          "przygotow",
+          "rozpuść",
+          "rozpuszcz"
+        ],
+        [
+          "sacharoz",
+          "cukr",
+          "wzorc"
+        ]
+      ],
+      "wykluczajace": [
+        "pomiar",
+        "mierz",
+        "nanoś"
+      ],
+      "wymaga": [
+        "waga"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odważ 10,00 g sacharozy, rozpuść w wodzie i uzupełnij wodą do masy 100,00 g.",
+      "dlaczego": "10 g cukru w 100 g roztworu to dokładnie 10% (m/m), czyli 10,0% Brix.",
+      "sprzet": "waga",
+      "animacja": "siegnij",
+      "stanSceny": {
+        "zlewka": "roztwor"
+      },
+      "przyklad": "odważam 10 g sacharozy i sporządzam roztwór wzorcowy"
+    },
+    {
+      "id": "pomiar_wz",
+      "opis": "Zmierzono roztwór wzorcowy – wskazanie 10,0% Brix.",
+      "wymagane": [
+        [
+          "mierz",
+          "zmierz",
+          "pomiar",
+          "nanoś",
+          "nanieś",
+          "odczyt"
+        ],
+        [
+          "wzorc",
+          "sacharoz"
+        ]
+      ],
+      "wykluczajace": [
+        "odważ",
+        "sporządz"
+      ],
+      "wymaga": [
+        "wzorzec",
+        "zero"
+      ],
+      "podpowiedz": "Nanieś roztwór wzorcowy na pryzmat i odczytaj wskazanie.",
+      "dlaczego": "Potwierdzasz, że przyrząd mierzy poprawnie także w zakresie próbki.",
+      "sprzet": "stol",
+      "animacja": "pipetowanie",
+      "przyklad": "mierzę roztwór wzorcowy sacharozy na refraktometrze"
+    },
+    {
+      "id": "sok",
+      "opis": "Na osuszony pryzmat naniesiono bagietką 2–3 krople soku i zamknięto pryzmat.",
+      "wymagane": [
+        [
+          "nanoś",
+          "nanieś",
+          "naniesi",
+          "nakład",
+          "nakrapl",
+          "kropl"
+        ],
+        [
+          "sok",
+          "próbk"
+        ]
+      ],
+      "wymaga": [
+        "pomiar_wz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Osusz pryzmat i nanieś bagietką 2–3 krople soku; zamknij pryzmat.",
+      "dlaczego": "Szklaną pipetą łatwo zarysować pryzmat – próbkę nanosi się bagietką, nie dotykając szkła.",
+      "sprzet": "stol",
+      "animacja": "pipetowanie",
+      "przyklad": "nanoszę bagietką 3 krople soku na pryzmat"
+    },
+    {
+      "id": "granica",
+      "opis": "Ustawiono ostrą granicę światła i cienia na przecięciu nici, usunięto zabarwienie kompensatorem.",
+      "wymagane": [
+        [
+          "granic",
+          "ostroś",
+          "nici",
+          "krzyż",
+          "kompensat",
+          "pokrętł"
+        ]
+      ],
+      "wymaga": [
+        "sok"
+      ],
+      "podpowiedz": "Ustaw ostrą granicę jasnego i ciemnego pola na przecięciu nici krzyża; zabarwienie usuń kompensatorem.",
+      "dlaczego": "Rozmyta lub kolorowa granica daje błędny odczyt.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "ustawiam ostrą granicę na przecięciu nici"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano % Brix i temperaturę.",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj"
+        ],
+        [
+          "brix",
+          "skal",
+          "wynik",
+          "temperatur",
+          "wskazan"
+        ]
+      ],
+      "wykluczajace": [
+        "wod",
+        "wzorc"
+      ],
+      "wymaga": [
+        "granica"
+      ],
+      "podpowiedz": "Odczytaj ze skali % Brix oraz temperaturę.",
+      "dlaczego": "Wskazanie zależy od temperatury – bez niej nie zrobisz poprawki.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "odczytuję Brix i temperaturę"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano kolejne pomiary – razem trzy, każdy z nową porcją soku.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Powtórz pomiar jeszcze dwa razy, nanosząc nową porcję soku.",
+      "dlaczego": "Wynik to średnia z trzech zgodnych odczytów.",
+      "sprzet": "stol",
+      "animacja": "pipetowanie",
+      "stanSceny": {},
+      "przyklad": "powtarzam pomiar jeszcze dwa razy"
+    },
+    {
+      "id": "pryzmat2",
+      "opis": "Po pomiarach pryzmat umyto wodą destylowaną i osuszono.",
+      "wymagane": [
+        [
+          "koniec",
+          "zakończ",
+          "po pomiar",
+          "na koniec",
+          "ponown"
+        ],
+        [
+          "pryzmat"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Po zakończeniu pomiarów umyj pryzmat wodą destylowaną i osusz.",
+      "dlaczego": "Zaschnięty sok niszczy pryzmat i fałszuje kolejne pomiary.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "po pomiarach myję i osuszam pryzmat"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "pryzmat2"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam roztwory do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "sok",
+      "próbka"
+    ],
+    "wskaznik": [
+      "sacharoza",
+      "wzorzec 10%"
+    ],
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – refraktometria",
+    "losuj": [
+      {
+        "id": "bx",
+        "od": 10.4,
+        "do": 12.4
+      },
+      {
+        "id": "t",
+        "wybierz": [
+          20,
+          21,
+          22,
+          23
+        ]
+      },
+      {
+        "id": "b1",
+        "wzor": "bx",
+        "szum": 0.08,
+        "miejsca": 1
+      },
+      {
+        "id": "b2",
+        "wzor": "bx",
+        "szum": 0.08,
+        "miejsca": 1
+      },
+      {
+        "id": "b3",
+        "wzor": "bx",
+        "szum": 0.08,
+        "miejsca": 1
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "wyswietlacz",
+        "id": "b1",
+        "etykieta": "Refraktometr – pomiar 1",
+        "jednostka": "% Brix",
+        "miejsca": 1
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "b2",
+        "etykieta": "Refraktometr – pomiar 2",
+        "jednostka": "% Brix",
+        "miejsca": 1
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "b3",
+        "etykieta": "Refraktometr – pomiar 3",
+        "jednostka": "% Brix",
+        "miejsca": 1
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "t",
+        "etykieta": "Temperatura",
+        "jednostka": "°C",
+        "miejsca": 0
+      },
+      {
+        "typ": "info",
+        "etykieta": "Wymaganie producenta",
+        "tekst": "co najmniej 11,2% Brix"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Dokumentacja z pomiarów",
+        "pola": [
+          {
+            "id": "b1",
+            "etykieta": "Odczyt 1:",
+            "szer": "kr",
+            "jednostka": "% Brix"
+          },
+          {
+            "id": "b2",
+            "etykieta": "Odczyt 2:",
+            "szer": "kr",
+            "jednostka": "% Brix"
+          },
+          {
+            "id": "b3",
+            "etykieta": "Odczyt 3:",
+            "szer": "kr",
+            "jednostka": "% Brix"
+          },
+          {
+            "id": "t",
+            "etykieta": "Temperatura pomiaru:",
+            "szer": "kr",
+            "jednostka": "°C"
+          },
+          {
+            "id": "bsr",
+            "etykieta": "Średnia:",
+            "szer": "kr",
+            "jednostka": "% Brix"
+          },
+          {
+            "id": "popr",
+            "etykieta": "Poprawka temperaturowa:",
+            "szer": "kr",
+            "jednostka": "% Brix"
+          },
+          {
+            "id": "wynik",
+            "etykieta": "Wynik po poprawce:",
+            "szer": "kr",
+            "jednostka": "% Brix"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Sok (spełnia / nie spełnia) wymaganie:",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "Poprawka: +0,07% Brix na każdy stopień powyżej 20 °C.",
+      "~1 °C — 0,07% Brix | (t − 20) °C — poprawka",
+      "Wynik po poprawce = średnia + poprawka."
+    ],
+    "kryteria": [
+      {
+        "opis": "Trzy odczyty zgodne ze wskazaniami przyrządu",
+        "uwaga": "Przepisz odczyty z refraktometru.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "b1",
+            "wzor": "b1",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "b2",
+            "wzor": "b2",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "b3",
+            "wzor": "b3",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Zapisana temperatura pomiaru",
+        "uwaga": "Przepisz temperaturę.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "t",
+            "wzor": "t",
+            "tol": 0.1
+          }
+        ]
+      },
+      {
+        "opis": "Średnia z trzech odczytów nieróżniących się o więcej niż 0,2",
+        "uwaga": "Średnia arytmetyczna.",
+        "sprawdz": [
+          {
+            "typ": "rozrzut",
+            "pola": [
+              "b1",
+              "b2",
+              "b3"
+            ],
+            "max": 0.2
+          },
+          {
+            "typ": "liczba",
+            "pole": "bsr",
+            "wzor": "sr($b1,$b2,$b3)",
+            "tol": 0.06
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($b1,$b2,$b3)",
+          "miejsca": 1,
+          "jednostka": "% Brix"
+        }
+      },
+      {
+        "opis": "Poprawka temperaturowa",
+        "uwaga": "0,07% Brix na każdy stopień powyżej 20 °C.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "popr",
+            "wzor": "($t-20)*0.07",
+            "tol": 0.011
+          }
+        ],
+        "pokaz": {
+          "wzor": "($t-20)*0.07",
+          "miejsca": 2,
+          "jednostka": "% Brix"
+        }
+      },
+      {
+        "opis": "Wynik po poprawce z dokładnością do 0,1",
+        "uwaga": "Średnia + poprawka, jedno miejsce po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "wynik",
+            "wzor": "$bsr+$popr",
+            "tol": 0.06
+          },
+          {
+            "typ": "miejsca",
+            "pole": "wynik",
+            "ile": 1
+          }
+        ],
+        "pokaz": {
+          "wzor": "$bsr+$popr",
+          "miejsca": 1,
+          "jednostka": "% Brix"
+        }
+      },
+      {
+        "opis": "Wniosek spójny z wynikiem (wymaganie: co najmniej 11,2% Brix)",
+        "uwaga": "Porównaj wynik po poprawce z 11,2% Brix.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "$wynik-11.2+0.000001",
+            "tak": [
+              "spelnia"
+            ],
+            "nie": [
+              "nie spelnia"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

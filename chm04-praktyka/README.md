@@ -69,3 +69,32 @@ Najważniejsze pola kroku:
 Sekcja `bledy` na końcu pliku to typowe błędy (np. wylewanie do zlewu) – gra zawsze je wytknie.
 
 Po dopisaniu poziomu warto uruchomić `npm test` i przejść go raz w grze.
+
+## Karta wyników i pomiary (pole `karta` w pliku poziomu)
+
+Każdy poziom może mieć kartę wyników jak w arkuszu. Opisuje się ją w polu `karta`:
+
+- **`losuj`** – pomiary losowane dla każdego podejścia. Wartość z przedziału (`od`, `do`), z listy (`wybierz`) albo ze wzoru (`wzor`) z wcześniejszych wartości; `szum` to błąd pomiaru, `krok` – zaokrąglenie (np. 0.05 cm³ dla biurety), `miejsca` – liczba miejsc po przecinku.
+- **`odczyty`** – co gracz widzi i musi przepisać: `waga`, `wyswietlacz` (pehametr, refraktometr…), `biureta` (powiększenie z meniskiem), `papierek` (pasek i skala pH), `krzywa` (krzywa miareczkowania), `info` (np. etykieta produktu).
+- **`sekcje`** – tabele i pola do wypełnienia. W tabeli `"pole": "m{i}"` daje pola `m1`, `m2`, `m3`.
+- **`brudnopis`** – podpowiedź, jak liczyć proporcjami; linia zaczynająca się od `~` to proporcja (wiersze rozdzielone ` | `).
+- **`kryteria`** – co jest oceniane. Każde kryterium ma listę sprawdzeń (`sprawdz`), wszystkie muszą być spełnione:
+  - `liczba` – wpis równy wzorowi ± `tol`. We wzorze `m1` to wylosowany pomiar, a `$m1` to wpis gracza (dzięki temu obliczenia z własnych danych są zaliczane nawet po złym odczycie),
+  - `miejsca` – wymagana liczba miejsc po przecinku,
+  - `tekst` – wpis zawiera jedno ze słów,
+  - `rownanie` – równanie reakcji (cząstki po lewej i prawej stronie, w dowolnej kolejności),
+  - `rozrzut` – wyniki nie różnią się o więcej niż `max`,
+  - `wybor` – wniosek zależny od wyniku („spełnia” / „nie spełnia”),
+  - `tekstRazem` – nazwa sprzętu razem z pojemnością.
+
+We wzorach działają: `+ - * / ( )`, `sr(...)`, `abs`, `min`, `max`, `zaokr(x, n)`.
+
+Pole `scena` ustawia napisy na butelkach i to, który pomiar pokazuje waga (`masaWagi`) i powiększenie biurety (`odczytBiureta`).
+
+## Lista poziomów
+
+Poziomy 1–8 są z arkuszy CHM.04 (2023–2026). Poziomy 9–11 to metody z podstawy programowej, których jeszcze nie było w arkuszach (refraktometria, polarymetria, spektrofotometria) – procedury typowe, liczby przykładowe.
+
+Wszystkie poziomy generuje `scripts/poziomy.py` (wspólne kroki, np. zestaw do miareczkowania i porządkowanie, są tam zapisane raz). Pliki JSON można edytować ręcznie, ale ponowne uruchomienie skryptu je nadpisze.
+
+`npm test` sprawdza dla każdego poziomu, że da się go przejść wpisami z pól `przyklad` i że poprawnie wypełniona karta dostaje komplet punktów.

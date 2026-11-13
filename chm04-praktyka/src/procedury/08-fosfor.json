@@ -1,0 +1,1116 @@
+{
+  "id": "08-fosfor",
+  "tytul": "Fosfor w nawozie mineralnym",
+  "zrodlo": "CHM.04 – czerwiec 2024",
+  "metoda": "Alkacymetria dwustopniowa (oranż metylowy, potem fenoloftaleina)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Przygotuj próbkę do badań, zbadaj odczyn roztworu próbki i wykonaj oznaczenie zawartości fosforu w nawozie mineralnym metodą miareczkowania alkacymetrycznego.\nMieszaniny poreakcyjne przelej do pojemnika na odpady ciekłe. Niezużyte odczynniki, próbkę nawozu i wodę destylowaną pozostaw na stanowisku."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "I. Przygotowanie próbki\nPróbkę nawozu utrzeć w moździerzu. Odważyć około 5 g i przenieść ilościowo do zlewki 400–500 cm³. Dodać 200 cm³ wody, przykryć szkiełkiem zegarkowym i mieszać około 20 minut na mieszadle magnetycznym. Przenieść do kolby miarowej 250 cm³, uzupełnić wodą do kreski, wymieszać, a po opadnięciu osadu przesączyć do suchej zlewki.\nII. Badanie odczynu\nDo małej zlewki odmierzyć 20 cm³ roztworu. Zanurzyć papierek wskaźnikowy, porównać barwę ze skalą pH.\nIII. Oznaczenie fosforu\nDo zlewki 400–500 cm³ odmierzyć 50 cm³ roztworu, dodać 150 cm³ wody i 4 krople oranżu metylowego. Miareczkować na mieszadle roztworem NaOH 0,1 mol/dm³ do barwy żółtej (30 s). Zapisać V₁.\nDo tej samej mieszaniny dodać 50 cm³ CaCl₂ 30% i 3 krople fenoloftaleiny. Miareczkować NaOH 0,5 mol/dm³ do barwy malinowej (30 s). Zapisać V₂.\nIV. Obliczenia\nX₁ = (V₁ · 0,007098 · 5 / m) · 100%\nX₂ = (V₂ · 0,017745 · 5 / m) · 100%\n- X₁ – wolny kwas fosforowy(V) jako P₂O₅\n- X₂ – łącznie kwas fosforowy(V) i diwodorofosforan(V) wapnia jako P₂O₅\n- 5 – współmierność kolby i pipety\n- m – masa odważki nawozu [g]\nWyniki do pierwszego miejsca po przecinku."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "mozdzierz",
+      "opis": "Próbka nawozu utarta w moździerzu.",
+      "wymagane": [
+        [
+          "utrzyj",
+          "ucier",
+          "rozetrz",
+          "rozcier",
+          "rozdrobn",
+          "utrze"
+        ],
+        [
+          "nawóz",
+          "nawoz",
+          "próbk",
+          "moździerz"
+        ]
+      ],
+      "wymaga": [],
+      "podpowiedz": "Utrzyj próbkę nawozu w moździerzu.",
+      "dlaczego": "Kryterium przebiegu 1: rozdrobnił próbkę nawozu w moździerzu.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "ucieram nawóz w moździerzu"
+    },
+    {
+      "id": "waga",
+      "opis": "Waga włączona, wypoziomowana i wytarowana.",
+      "wymagane": [
+        [
+          "włącz",
+          "wytar",
+          "tar",
+          "wyzer",
+          "zeruj",
+          "zerow",
+          "wypoziom",
+          "poziomuj",
+          "uruchom",
+          "przygotuj"
+        ],
+        [
+          "wag"
+        ]
+      ],
+      "wykluczajace": [
+        "wyłącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz wagę, sprawdź poziomicę i wytaruj ją z naczyniem.",
+      "dlaczego": "Ważenie zgodnie z zasadami: wypoziomowanie i tarowanie, inaczej masa próbki jest błędna.",
+      "sprzet": "waga",
+      "stanSceny": {
+        "waga": "wlaczona"
+      },
+      "animacja": "przycisk",
+      "przyklad": "włączam i taruję wagę"
+    },
+    {
+      "id": "odwaz",
+      "opis": "Odważono ok. 5 g rozdrobnionego nawozu (dokładność 0,001 g).",
+      "wymagane": [
+        [
+          "odważ",
+          "naważ",
+          "zważ",
+          "ważę"
+        ],
+        [
+          "nawóz",
+          "nawoz",
+          "5 g",
+          "próbk"
+        ]
+      ],
+      "wymaga": [
+        "mozdzierz",
+        "waga"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odważ około 5 g rozdrobnionego nawozu z dokładnością do 0,001 g.",
+      "dlaczego": "Masa odważki m wchodzi do obu wzorów.",
+      "sprzet": "waga",
+      "animacja": "siegnij",
+      "przyklad": "odważam 5 g nawozu"
+    },
+    {
+      "id": "woda200",
+      "opis": "Odważkę przeniesiono do zlewki i dodano 200 cm³ wody destylowanej.",
+      "wymagane": [
+        [
+          "przenoś",
+          "przenieś",
+          "przesyp",
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "dolew",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "wkrapl",
+          "wsyp",
+          "dodanie"
+        ],
+        [
+          "200",
+          "zlewk"
+        ]
+      ],
+      "wykluczajace": [
+        "150",
+        "oranż",
+        "papier"
+      ],
+      "wymaga": [
+        "odwaz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Przenieś odważkę ilościowo do zlewki i dodaj 200 cm³ wody.",
+      "dlaczego": "Kryterium: przeniósł odważkę nawozu do zlewki i dodał wodę destylowaną.",
+      "sprzet": "zlewka",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "zlewka": "roztwor"
+      },
+      "przyklad": "przenoszę odważkę do zlewki i dodaję 200 cm3 wody"
+    },
+    {
+      "id": "mieszaj20",
+      "opis": "Zlewkę przykryto szkiełkiem zegarkowym i mieszano ok. 20 minut na mieszadle magnetycznym.",
+      "wymagane": [
+        [
+          "przykry",
+          "szkiełk",
+          "20 min",
+          "mieszadł"
+        ]
+      ],
+      "wykluczajace": [
+        "miareczk"
+      ],
+      "wymaga": [
+        "woda200"
+      ],
+      "podpowiedz": "Przykryj zlewkę szkiełkiem zegarkowym i mieszaj 20 minut na mieszadle magnetycznym.",
+      "dlaczego": "Kryterium: przykrył zlewkę szkiełkiem i mieszał około 20 minut.",
+      "sprzet": "zlewka",
+      "animacja": "siegnij",
+      "przyklad": "przykrywam zlewkę szkiełkiem zegarkowym i mieszam 20 minut na mieszadle"
+    },
+    {
+      "id": "miarowa",
+      "opis": "Zawartość zlewki przeniesiono do kolby miarowej 250 cm³, uzupełniono do kreski i wymieszano.",
+      "wymagane": [
+        [
+          "miarow",
+          "kresk"
+        ]
+      ],
+      "wymaga": [
+        "mieszaj20"
+      ],
+      "podpowiedz": "Przenieś zawartość do kolby miarowej 250 cm³, uzupełnij wodą do kreski i wymieszaj.",
+      "dlaczego": "Dwa kryteria: przeniósł do kolby miarowej; uzupełnił do kreski i wymieszał.",
+      "sprzet": "stol",
+      "animacja": "przelewanie",
+      "przyklad": "przenoszę do kolby miarowej 250 cm3 i uzupełniam do kreski"
+    },
+    {
+      "id": "sacz",
+      "opis": "Roztwór przesączono do suchej zlewki.",
+      "wymagane": [
+        [
+          "sącz",
+          "przesącz",
+          "filtr"
+        ]
+      ],
+      "wymaga": [
+        "miarowa"
+      ],
+      "podpowiedz": "Po opadnięciu osadu przesącz roztwór do suchej zlewki.",
+      "dlaczego": "Kryterium: przesączył roztwór do zlewki.",
+      "sprzet": "zlewka",
+      "animacja": "przelewanie",
+      "przyklad": "przesączam roztwór do suchej zlewki"
+    },
+    {
+      "id": "papierek",
+      "opis": "Odmierzono 20 cm³ roztworu, zanurzono papierek wskaźnikowy i porównano ze skalą pH.",
+      "wymagane": [
+        [
+          "papier",
+          "uniwersaln",
+          "odczyn"
+        ]
+      ],
+      "wymaga": [
+        "sacz"
+      ],
+      "podpowiedz": "Odmierz 20 cm³ roztworu do małej zlewki i zbadaj odczyn papierkiem wskaźnikowym.",
+      "dlaczego": "Zapisujesz barwę papierka, przybliżone pH i odczyn – muszą być ze sobą spójne.",
+      "sprzet": "zlewka",
+      "animacja": "odczyt",
+      "stanSceny": {
+        "papierek": "czerwony"
+      },
+      "przyklad": "badam odczyn papierkiem wskaźnikowym"
+    },
+    {
+      "id": "porcja",
+      "opis": "Do zlewki odmierzono 50 cm³ roztworu, dodano 150 cm³ wody i 4 krople oranżu metylowego.",
+      "wymagane": [
+        [
+          "oranż",
+          "150"
+        ]
+      ],
+      "wymaga": [
+        "sacz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz 50 cm³ roztworu do zlewki, dodaj 150 cm³ wody i 4 krople oranżu metylowego.",
+      "dlaczego": "Kryteria: odmierzył roztwór; dodał wodę i wskaźnik – oranż metylowy.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "czerwony"
+      },
+      "przyklad": "odmierzam 50 cm3 roztworu, dodaję 150 cm3 wody i 4 krople oranżu metylowego"
+    },
+    {
+      "id": "montaz",
+      "opis": "Zestaw do miareczkowania zmontowany: statyw, łapa, biureta 25 cm³.",
+      "wymagane": [
+        [
+          "zmont",
+          "montuj",
+          "montaż",
+          "złóż",
+          "składa",
+          "przygotow",
+          "zamocow",
+          "mocuj",
+          "ustaw",
+          "zakład",
+          "wkład",
+          "umieszcz",
+          "przykręc"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw",
+          "łap"
+        ]
+      ],
+      "wykluczajace": [
+        "rozmont",
+        "demont",
+        "zero",
+        "zera",
+        "menisk",
+        "pęcherz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Zmontuj zestaw do miareczkowania (statyw, łapa, biureta).",
+      "dlaczego": "Zmontowany zestaw jest osobnym rezultatem ocenianym po zgłoszeniu gotowości.",
+      "sprzet": "statyw",
+      "animacja": "montaz",
+      "stanSceny": {
+        "zestaw": true,
+        "lejek": true
+      },
+      "przyklad": "montuję zestaw do miareczkowania"
+    },
+    {
+      "id": "napelnij",
+      "opis": "Biureta napełniona titrantem – NaOH 0,1 mol/dm³ (przez lejek).",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "nalej",
+          "wlew",
+          "wlej",
+          "uzupełn",
+          "wypełn"
+        ],
+        [
+          "biuret"
+        ]
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Napełnij biuretę titrantem – NaOH 0,1 mol/dm³, używając lejka.",
+      "dlaczego": "Bez titranta nie ma miareczkowania; egzaminator sprawdza, czy biureta jest napełniona.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "biuretaPoziom": 0.95
+      },
+      "przyklad": "napełniam biuretę titrantem przez lejek",
+      "wymaga": [
+        "montaz"
+      ]
+    },
+    {
+      "id": "lejek",
+      "opis": "Lejek zdjęty z biurety.",
+      "wymagane": [
+        [
+          "zdejm",
+          "wyjm",
+          "usuń",
+          "ściąg",
+          "odstaw",
+          "zabier",
+          "odłóż",
+          "odkład",
+          "zdjąć",
+          "wyjąć"
+        ],
+        [
+          "lejek",
+          "lejk"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Zdejmij lejek z biurety.",
+      "dlaczego": "Lejek pozostawiony w biurecie może dolewać krople titranta i zafałszować odczyt – miareczkuje się bez lejka.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "lejek": false
+      },
+      "animacja": "siegnij_gora",
+      "przyklad": "zdejmuję lejek z biurety"
+    },
+    {
+      "id": "pecherz",
+      "opis": "Usunięto pęcherzyk powietrza spod kranika biurety.",
+      "wymagane": [
+        [
+          "pęcherz",
+          "powietrz",
+          "odpowietrz"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Usuń pęcherzyk powietrza spod kranika biurety (spuść trochę titranta).",
+      "dlaczego": "Pęcherz w kraniku zwiększa odczytaną objętość – kryterium: brak pęcherza powietrza w kraniku.",
+      "sprzet": "statyw",
+      "animacja": "kranik",
+      "przyklad": "usuwam pęcherzyk powietrza z kranika"
+    },
+    {
+      "id": "zero",
+      "opis": "Poziom titranta ustawiony na 0 cm³ (menisk dolny).",
+      "wymagane": [
+        [
+          "zero",
+          "zera",
+          "0",
+          "kresk",
+          "menisk",
+          "wyzer",
+          "poziom"
+        ]
+      ],
+      "wykluczajace": [
+        "wag",
+        "odczyt",
+        "objętość"
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Ustaw poziom titranta na zero – dolny menisk na kresce 0.",
+      "dlaczego": "Kryteria: biureta napełniona do poziomu 0 i zachowany menisk dolny (dla roztworów bezbarwnych).",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "animacja": "kranik",
+      "przyklad": "ustawiam menisk na zero"
+    },
+    {
+      "id": "miareczkuj",
+      "opis": "Miareczkowanie NaOH 0,1 mol/dm³ na mieszadle do barwy żółtej (V₁).",
+      "wymagane": [
+        [
+          "miareczk",
+          "titruj",
+          "titrac"
+        ]
+      ],
+      "wykluczajace": [
+        "zestaw",
+        "powtórz",
+        "drug",
+        "trzec",
+        "kolejn",
+        "jeszcze",
+        "ponown",
+        "malin",
+        "0.5"
+      ],
+      "wymaga": [
+        "zero",
+        "lejek",
+        "pecherz",
+        "porcja"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Miareczkuj NaOH 0,1 mol/dm³ do barwy żółtej utrzymującej się 30 sekund.",
+      "dlaczego": "Pierwszy punkt końcowy: zobojętnienie wolnego kwasu fosforowego(V) do H₂PO₄⁻.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolba": "zolty",
+        "biuretaPoziom": 0.85,
+        "kolbaMiejsce": "biureta"
+      },
+      "przyklad": "miareczkuję do żółtej barwy"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano i zapisano objętość V₁.",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "spisuj",
+          "sprawdz",
+          "patrz"
+        ],
+        [
+          "objętoś",
+          "biuret",
+          "wynik",
+          "cm3",
+          "ml",
+          "menisk",
+          "zużyt",
+          "v1"
+        ]
+      ],
+      "wykluczajace": [
+        "pęcherz",
+        "powietrz",
+        "wag",
+        "papier",
+        "ph"
+      ],
+      "wymaga": [
+        "miareczkuj"
+      ],
+      "podpowiedz": "Odczytaj z biurety objętość zużytego titranta (dolny menisk) i zapisz ją.",
+      "dlaczego": "Objętość V jest podstawą obliczeń – w tabeli zapisuje się ją w cm³ i przelicza na dm³.",
+      "sprzet": "statyw",
+      "animacja": "odczyt",
+      "przyklad": "odczytuję objętość V1 z biurety"
+    },
+    {
+      "id": "cacl2",
+      "opis": "Do mieszaniny dodano 50 cm³ CaCl₂ 30% i 3 krople fenoloftaleiny.",
+      "wymagane": [
+        [
+          "cacl2",
+          "chlorek",
+          "wapni",
+          "fenoloft"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj 50 cm³ roztworu CaCl₂ 30% i 3 krople fenoloftaleiny.",
+      "dlaczego": "Kryterium: dodał do mieszaniny po pierwszym miareczkowaniu CaCl₂ i fenoloftaleinę.",
+      "sprzet": "statyw",
+      "animacja": "siegnij",
+      "przyklad": "dodaję 50 cm3 chlorku wapnia i 3 krople fenoloftaleiny"
+    },
+    {
+      "id": "oproznij",
+      "opis": "Biuretę opróżniono po pierwszym miareczkowaniu.",
+      "wymagane": [
+        [
+          "opróżn",
+          "wylew",
+          "wylej",
+          "spuść",
+          "spuszcz",
+          "zlew"
+        ],
+        [
+          "biuret",
+          "titrant"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "podpowiedz": "Opróżnij biuretę z NaOH 0,1 mol/dm³.",
+      "dlaczego": "Osobne kryterium: opróżnił biuretę po pierwszym miareczkowaniu. Bez tego V₂ nie jest zaliczane.",
+      "sprzet": "statyw",
+      "animacja": "kranik",
+      "stanSceny": {
+        "biuretaPoziom": 0
+      },
+      "przyklad": "opróżniam biuretę po pierwszym miareczkowaniu"
+    },
+    {
+      "id": "napelnij2",
+      "opis": "Biuretę napełniono NaOH 0,5 mol/dm³ i ustawiono na zero.",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "nalej",
+          "wlew",
+          "wlej"
+        ],
+        [
+          "0.5",
+          "drug",
+          "mocniejsz",
+          "nowym"
+        ]
+      ],
+      "wymaga": [
+        "oproznij"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Napełnij biuretę roztworem NaOH 0,5 mol/dm³.",
+      "dlaczego": "Osobne kryterium: napełnił biuretę titrantem NaOH 0,5 mol/dm³.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "przyklad": "napełniam biuretę roztworem NaOH 0,5 mol/dm3"
+    },
+    {
+      "id": "miareczkuj2",
+      "opis": "Miareczkowanie NaOH 0,5 mol/dm³ do barwy malinowej (V₂).",
+      "wymagane": [
+        [
+          "miareczk"
+        ],
+        [
+          "malin",
+          "drug",
+          "ponown",
+          "0.5",
+          "różow"
+        ]
+      ],
+      "wymaga": [
+        "napelnij2",
+        "cacl2"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Miareczkuj NaOH 0,5 mol/dm³ do barwy malinowej utrzymującej się 30 sekund.",
+      "dlaczego": "Drugi punkt końcowy – suma kwasu fosforowego(V) i diwodorofosforanu(V) wapnia.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolba": "malinowy",
+        "biuretaPoziom": 0.15
+      },
+      "przyklad": "miareczkuję drugi raz do malinowej barwy"
+    },
+    {
+      "id": "odczyt2",
+      "opis": "Odczytano i zapisano objętość V₂.",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj"
+        ],
+        [
+          "v2",
+          "drug",
+          "objętoś",
+          "biuret"
+        ]
+      ],
+      "wykluczajace": [
+        "v1"
+      ],
+      "wymaga": [
+        "miareczkuj2"
+      ],
+      "podpowiedz": "Odczytaj z biurety objętość V₂.",
+      "dlaczego": "V₂ wchodzi do wzoru na łączną zawartość fosforu.",
+      "sprzet": "statyw",
+      "animacja": "odczyt",
+      "przyklad": "odczytuję objętość V2 z biurety"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "odczyt2",
+        "papierek"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam mieszaniny poreakcyjne do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "rozmontuj",
+      "opis": "Zestaw do miareczkowania rozmontowany.",
+      "wymagane": [
+        [
+          "rozmont",
+          "zdemont",
+          "demont",
+          "rozkręć",
+          "rozłóż",
+          "rozbier",
+          "rozebr",
+          "rozkład"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw"
+        ]
+      ],
+      "wymaga": [
+        "odczyt2",
+        "papierek"
+      ],
+      "podpowiedz": "Rozmontuj zestaw do miareczkowania (resztę titranta z biurety też do odpadów).",
+      "dlaczego": "Kryterium porządkowania: zestaw do miareczkowania rozmontowany.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "zestaw": false,
+        "biuretaPoziom": 0
+      },
+      "animacja": "montaz",
+      "przyklad": "rozmontowuję zestaw do miareczkowania"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "wylacz_wage",
+      "opis": "Waga wyłączona.",
+      "wymagane": [
+        [
+          "=wyłącz",
+          "=odłącz"
+        ],
+        [
+          "wag"
+        ]
+      ],
+      "wymaga": [
+        "odczyt2",
+        "papierek"
+      ],
+      "podpowiedz": "Wyłącz wagę.",
+      "dlaczego": "Kryterium porządkowania: waga wyłączona.",
+      "sprzet": "waga",
+      "stanSceny": {
+        "waga": "wylaczona"
+      },
+      "animacja": "przycisk",
+      "przyklad": "wyłączam wagę"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj",
+        "rozmontuj",
+        "wylacz_wage"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "NaOH",
+      "0,1 mol/dm³"
+    ],
+    "wskaznik": [
+      "oranż",
+      "metylowy"
+    ],
+    "masaWagi": "m",
+    "odczytBiureta": "v1",
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – fosfor w nawozie",
+    "losuj": [
+      {
+        "id": "z1",
+        "od": 1.6,
+        "do": 3.0
+      },
+      {
+        "id": "z2",
+        "od": 38,
+        "do": 46
+      },
+      {
+        "id": "m",
+        "od": 4.95,
+        "do": 5.1,
+        "miejsca": 3
+      },
+      {
+        "id": "ph",
+        "wybierz": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": "v1",
+        "wzor": "z1*m/(0.007098*5*100)",
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v2",
+        "wzor": "z2*m/(0.017745*5*100)",
+        "krok": 0.05,
+        "miejsca": 2
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "waga",
+        "id": "m",
+        "etykieta": "Waga – odważka nawozu",
+        "jednostka": "g",
+        "miejsca": 3
+      },
+      {
+        "typ": "papierek",
+        "id": "ph",
+        "etykieta": "Papierek wskaźnikowy i skala barw"
+      },
+      {
+        "typ": "biureta",
+        "id": "v1",
+        "etykieta": "Biureta – V₁ (NaOH 0,1 mol/dm³)"
+      },
+      {
+        "typ": "biureta",
+        "id": "v2",
+        "etykieta": "Biureta – V₂ (NaOH 0,5 mol/dm³)"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Tabela 2. Dokumentacja z badań",
+        "pola": [
+          {
+            "id": "m",
+            "etykieta": "Masa odważki nawozu m =",
+            "szer": "sr",
+            "jednostka": "g"
+          },
+          {
+            "id": "barwa",
+            "etykieta": "Barwa papierka wskaźnikowego:",
+            "szer": "dl"
+          },
+          {
+            "id": "ph",
+            "etykieta": "Przybliżona wartość pH:",
+            "szer": "kr"
+          },
+          {
+            "id": "odczyn",
+            "etykieta": "Odczyn (kwasowy, obojętny, zasadowy):",
+            "szer": "dl"
+          },
+          {
+            "id": "v1",
+            "etykieta": "V₁ (NaOH 0,1 mol/dm³, wobec oranżu) =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          },
+          {
+            "id": "v2",
+            "etykieta": "V₂ (NaOH 0,5 mol/dm³, wobec fenoloftaleiny) =",
+            "szer": "kr",
+            "jednostka": "cm³"
+          }
+        ]
+      },
+      {
+        "tytul": "Tabela 3. Obliczenia zawartości fosforu",
+        "pola": [
+          {
+            "id": "x1",
+            "etykieta": "Wolny kwas fosforowy(V) jako P₂O₅: X₁ =",
+            "szer": "kr",
+            "jednostka": "%"
+          },
+          {
+            "id": "x2",
+            "etykieta": "Łącznie kwas fosforowy(V) i Ca(H₂PO₄)₂ jako P₂O₅: X₂ =",
+            "szer": "kr",
+            "jednostka": "%"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "1 cm³ NaOH 0,1 mol/dm³ odpowiada 0,007098 g P₂O₅; 1 cm³ NaOH 0,5 mol/dm³ odpowiada 0,017745 g P₂O₅.",
+      "~1 cm³ NaOH — 0,007098 g P₂O₅ | V₁ cm³ — a g (w 50 cm³ roztworu)",
+      "~50 cm³ — a g | 250 cm³ — 5 · a g (w całej odważce)",
+      "~m odważki [g] — 100% | 5a [g] — X₁%",
+      "Dla X₂ tak samo, z V₂ i 0,017745."
+    ],
+    "kryteria": [
+      {
+        "opis": "Masa odważki nawozu – około 5 g, zgodna z odczytem",
+        "uwaga": "Przepisz masę z wagi.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "m",
+            "wzor": "m",
+            "tol": 0.0005
+          }
+        ]
+      },
+      {
+        "opis": "Masa odważki z dokładnością do 0,001 g",
+        "uwaga": "Trzy miejsca po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "m",
+            "ile": 3
+          }
+        ]
+      },
+      {
+        "opis": "Zapisana barwa papierka wskaźnikowego",
+        "uwaga": "W odczynie kwasowym papierek uniwersalny jest czerwony / pomarańczowy.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "barwa",
+            "zawiera": [
+              "czerw",
+              "pomar",
+              "roz"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Przybliżona wartość pH spójna z barwą papierka",
+        "uwaga": "Porównaj papierek ze skalą barw.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "ph",
+            "wzor": "ph",
+            "tol": 1
+          }
+        ]
+      },
+      {
+        "opis": "Odczyn spójny z wartością pH",
+        "uwaga": "pH poniżej 7 oznacza odczyn kwasowy.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "odczyn",
+            "zawiera": [
+              "kwas"
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Objętość V₁ zgodna z odczytem",
+        "uwaga": "Odczytaj na dolnym menisku, ±0,05 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "v1",
+            "wzor": "v1",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Objętość V₂ zgodna z odczytem",
+        "uwaga": "Odczytaj na dolnym menisku, ±0,05 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "v2",
+            "wzor": "v2",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Obliczenie X₁ z wartości zgodnych z wynikami analizy",
+        "uwaga": "X₁ = V₁ · 0,007098 · 5 / m · 100%.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "x1",
+            "wzor": "$v1*0.007098*5/$m*100",
+            "tol": 0.06
+          }
+        ],
+        "pokaz": {
+          "wzor": "$v1*0.007098*5/$m*100",
+          "miejsca": 1,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Obliczenie X₂ z wartości zgodnych z wynikami analizy",
+        "uwaga": "X₂ = V₂ · 0,017745 · 5 / m · 100%.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "x2",
+            "wzor": "$v2*0.017745*5/$m*100",
+            "tol": 0.06
+          }
+        ],
+        "pokaz": {
+          "wzor": "$v2*0.017745*5/$m*100",
+          "miejsca": 1,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Wyniki w procentach, do pierwszego miejsca po przecinku",
+        "uwaga": "Jedno miejsce po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "x1",
+            "ile": 1
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x2",
+            "ile": 1
+          }
+        ]
+      }
+    ]
+  }
+}

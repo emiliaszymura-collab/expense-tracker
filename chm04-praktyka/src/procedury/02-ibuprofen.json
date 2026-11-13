@@ -1,0 +1,1117 @@
+{
+  "id": "02-ibuprofen",
+  "tytul": "Ibuprofen w tabletce",
+  "zrodlo": "CHM.04 – styczeń 2023",
+  "metoda": "Alkacymetria (NaOH, fenoloftaleina)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Wykonaj oznaczenie zawartości ibuprofenu w tabletce przez miareczkowanie mianowanym roztworem NaOH.\nPo zmontowaniu zestawu do miareczkowania i napełnieniu biurety titrantem zgłoś gotowość do oceny przez podniesienie ręki.\nOblicz błąd bezwzględny i względny oznaczenia. We wniosku porównaj zawartość otrzymaną z deklarowaną przez producenta.\nMieszaniny poreakcyjne przelej do pojemnika na odpady ciekłe, resztki roztartej tabletki przesyp do pojemnika na odpady stałe."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "Przygotowanie próbki\nZważyć tabletkę na wadze laboratoryjnej z dokładnością do 0,001 g. Rozetrzeć ją dokładnie w moździerzu na jednorodny proszek.\nWykonanie oznaczenia\nOdważyć próbkę proszku o masie około 0,1 g z dokładnością do 0,001 g, przenieść ilościowo do kolby stożkowej i dodać 25 cm³ etanolu 96%. Mieszać do rozpuszczenia.\nDodać trzy krople fenoloftaleiny i miareczkować roztworem NaOH o stężeniu 0,1 mol/dm³ do zmiany zabarwienia na różowe. Wykonać co najmniej dwa oznaczenia.\nObliczenia\nXi = (V · c · 206,28 · m tabletki) / m próbki\n- Xi – masa ibuprofenu [mg]\n- V – objętość NaOH [cm³]\n- c – stężenie NaOH [mmol/cm³]\n- 206,28 – masa molowa ibuprofenu [mg/mmol]\n- masy tabletki i próbki w mg\nWynik: średnia z co najmniej dwóch wyników nieróżniących się o więcej niż 20 mg, z dokładnością do całości.\nBłąd bezwzględny = |x − xi|, błąd względny = błąd bezwzględny / x · 100%."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "waga",
+      "opis": "Waga włączona, wypoziomowana i wytarowana.",
+      "wymagane": [
+        [
+          "włącz",
+          "wytar",
+          "tar",
+          "wyzer",
+          "zeruj",
+          "zerow",
+          "wypoziom",
+          "poziomuj",
+          "uruchom",
+          "przygotuj"
+        ],
+        [
+          "wag"
+        ]
+      ],
+      "wykluczajace": [
+        "wyłącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz wagę, sprawdź poziomicę i wytaruj ją z naczyniem.",
+      "dlaczego": "Ważenie zgodnie z zasadami: wypoziomowanie i tarowanie, inaczej masa próbki jest błędna.",
+      "sprzet": "waga",
+      "stanSceny": {
+        "waga": "wlaczona"
+      },
+      "animacja": "przycisk",
+      "przyklad": "włączam i taruję wagę"
+    },
+    {
+      "id": "tabletka",
+      "opis": "Tabletka zważona na szkiełku zegarkowym (dokładność 0,001 g).",
+      "wymagane": [
+        [
+          "zważ",
+          "waż",
+          "odważ",
+          "ważę"
+        ],
+        [
+          "tabletk"
+        ]
+      ],
+      "wykluczajace": [
+        "proszk",
+        "rozt"
+      ],
+      "wymaga": [
+        "waga"
+      ],
+      "podpowiedz": "Zważ całą tabletkę na szkiełku zegarkowym z dokładnością do 0,001 g.",
+      "dlaczego": "Masa tabletki wchodzi do wzoru; kryterium: wynik ważenia z jednostką, do 0,001 g.",
+      "sprzet": "waga",
+      "animacja": "siegnij",
+      "przyklad": "ważę tabletkę na szkiełku zegarkowym"
+    },
+    {
+      "id": "mozdzierz",
+      "opis": "Tabletka roztarta w moździerzu na jednorodny proszek.",
+      "wymagane": [
+        [
+          "rozetrz",
+          "rozciera",
+          "utrzyj",
+          "ucier",
+          "rozdrobn",
+          "rozgni",
+          "utrze",
+          "rozcier"
+        ],
+        [
+          "tabletk",
+          "moździerz"
+        ]
+      ],
+      "wymaga": [
+        "tabletka"
+      ],
+      "podpowiedz": "Rozetrzyj tabletkę w moździerzu na jednorodny proszek.",
+      "dlaczego": "Kryterium przebiegu: dokładnie rozdrobnił tabletkę w moździerzu.",
+      "sprzet": "stol",
+      "animacja": "siegnij",
+      "przyklad": "rozcieram tabletkę w moździerzu"
+    },
+    {
+      "id": "montaz",
+      "opis": "Zestaw do miareczkowania zmontowany: statyw, łapa, biureta 10 cm³.",
+      "wymagane": [
+        [
+          "zmont",
+          "montuj",
+          "montaż",
+          "złóż",
+          "składa",
+          "przygotow",
+          "zamocow",
+          "mocuj",
+          "ustaw",
+          "zakład",
+          "wkład",
+          "umieszcz",
+          "przykręc"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw",
+          "łap"
+        ]
+      ],
+      "wykluczajace": [
+        "rozmont",
+        "demont",
+        "zero",
+        "zera",
+        "menisk",
+        "pęcherz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Zmontuj zestaw do miareczkowania (statyw, łapa, biureta).",
+      "dlaczego": "Zmontowany zestaw jest osobnym rezultatem ocenianym po zgłoszeniu gotowości.",
+      "sprzet": "statyw",
+      "animacja": "montaz",
+      "stanSceny": {
+        "zestaw": true,
+        "lejek": true
+      },
+      "przyklad": "montuję zestaw do miareczkowania"
+    },
+    {
+      "id": "napelnij",
+      "opis": "Biureta napełniona titrantem – NaOH 0,1 mol/dm³ (przez lejek).",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "nalej",
+          "wlew",
+          "wlej",
+          "uzupełn",
+          "wypełn"
+        ],
+        [
+          "biuret"
+        ]
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Napełnij biuretę titrantem – NaOH 0,1 mol/dm³, używając lejka.",
+      "dlaczego": "Bez titranta nie ma miareczkowania; egzaminator sprawdza, czy biureta jest napełniona.",
+      "sprzet": "statyw",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "biuretaPoziom": 0.95
+      },
+      "przyklad": "napełniam biuretę titrantem przez lejek",
+      "wymaga": [
+        "montaz"
+      ]
+    },
+    {
+      "id": "lejek",
+      "opis": "Lejek zdjęty z biurety.",
+      "wymagane": [
+        [
+          "zdejm",
+          "wyjm",
+          "usuń",
+          "ściąg",
+          "odstaw",
+          "zabier",
+          "odłóż",
+          "odkład",
+          "zdjąć",
+          "wyjąć"
+        ],
+        [
+          "lejek",
+          "lejk"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Zdejmij lejek z biurety.",
+      "dlaczego": "Lejek pozostawiony w biurecie może dolewać krople titranta i zafałszować odczyt – miareczkuje się bez lejka.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "lejek": false
+      },
+      "animacja": "siegnij_gora",
+      "przyklad": "zdejmuję lejek z biurety"
+    },
+    {
+      "id": "pecherz",
+      "opis": "Usunięto pęcherzyk powietrza spod kranika biurety.",
+      "wymagane": [
+        [
+          "pęcherz",
+          "powietrz",
+          "odpowietrz"
+        ]
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Usuń pęcherzyk powietrza spod kranika biurety (spuść trochę titranta).",
+      "dlaczego": "Pęcherz w kraniku zwiększa odczytaną objętość – kryterium: brak pęcherza powietrza w kraniku.",
+      "sprzet": "statyw",
+      "animacja": "kranik",
+      "przyklad": "usuwam pęcherzyk powietrza z kranika"
+    },
+    {
+      "id": "zero",
+      "opis": "Poziom titranta ustawiony na 0 cm³ (menisk dolny).",
+      "wymagane": [
+        [
+          "zero",
+          "zera",
+          "0",
+          "kresk",
+          "menisk",
+          "wyzer",
+          "poziom"
+        ]
+      ],
+      "wykluczajace": [
+        "wag",
+        "odczyt",
+        "objętość"
+      ],
+      "wymaga": [
+        "napelnij"
+      ],
+      "podpowiedz": "Ustaw poziom titranta na zero – dolny menisk na kresce 0.",
+      "dlaczego": "Kryteria: biureta napełniona do poziomu 0 i zachowany menisk dolny (dla roztworów bezbarwnych).",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "biuretaPoziom": 1
+      },
+      "animacja": "kranik",
+      "przyklad": "ustawiam menisk na zero"
+    },
+    {
+      "id": "zglos",
+      "opis": "Zgłoszono gotowość do oceny zestawu – egzaminator sprawdza biuretę.",
+      "wymagane": [
+        [
+          "zgłoś",
+          "zgłasz",
+          "podnieś",
+          "podnos",
+          "gotowoś",
+          "zgłoszenie"
+        ]
+      ],
+      "wymaga": [
+        "napelnij",
+        "lejek",
+        "pecherz",
+        "zero"
+      ],
+      "podpowiedz": "Podnieś rękę i zgłoś gotowość do oceny zestawu do miareczkowania.",
+      "dlaczego": "Polecenie z arkusza – bez zgłoszenia egzaminator nie oceni zestawu, a to osobny rezultat.",
+      "animacja": "reka",
+      "przyklad": "zgłaszam gotowość do oceny"
+    },
+    {
+      "id": "odwaz",
+      "opis": "Odważono ok. 0,1 g proszku i przeniesiono ilościowo do kolby stożkowej.",
+      "wymagane": [
+        [
+          "odważ",
+          "naważ",
+          "zważ",
+          "ważę"
+        ],
+        [
+          "proszk",
+          "próbk",
+          "0.1",
+          "naważk",
+          "odważk"
+        ]
+      ],
+      "wykluczajace": [
+        "tabletk"
+      ],
+      "wymaga": [
+        "mozdzierz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odważ ok. 0,1 g proszku (do 0,001 g) i przenieś ilościowo do kolby stożkowej.",
+      "dlaczego": "Masa próbki mp jest w mianowniku wzoru – musi być znana do 0,001 g.",
+      "sprzet": "waga",
+      "animacja": "wazenie",
+      "stanSceny": {
+        "kolba": "mydlo"
+      },
+      "przyklad": "odważam 0,1 g proszku do kolby"
+    },
+    {
+      "id": "etanol",
+      "opis": "Dodano 25 cm³ etanolu 96% (cylinder miarowy 25 cm³).",
+      "wymagane": [
+        [
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "dolew",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "wkrapl",
+          "wsyp",
+          "dodanie"
+        ],
+        [
+          "etanol",
+          "alkohol",
+          "spirytus"
+        ]
+      ],
+      "wymaga": [
+        "odwaz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj 25 cm³ etanolu 96% odmierzonego cylindrem.",
+      "dlaczego": "Ibuprofen nie rozpuszcza się w wodzie, ale rozpuszcza się w etanolu.",
+      "sprzet": "kolba",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "bezbarwny"
+      },
+      "przyklad": "dodaję 25 cm3 etanolu"
+    },
+    {
+      "id": "mieszaj",
+      "opis": "Zawartość kolby wymieszana do rozpuszczenia proszku.",
+      "wymagane": [
+        [
+          "miesz",
+          "wymiesz",
+          "zamiesz",
+          "rozpuść",
+          "rozpuszcz",
+          "wstrząs"
+        ]
+      ],
+      "wykluczajace": [
+        "moździerz"
+      ],
+      "wymaga": [
+        "etanol"
+      ],
+      "podpowiedz": "Mieszaj do rozpuszczenia proszku.",
+      "dlaczego": "Kryterium: rozpuścił odważkę.",
+      "sprzet": "kolba",
+      "animacja": "mieszanie",
+      "przyklad": "mieszam do rozpuszczenia"
+    },
+    {
+      "id": "fenol",
+      "opis": "Dodano 3 krople fenoloftaleiny.",
+      "wymagane": [
+        [
+          "dodaj",
+          "dodaję",
+          "dolej",
+          "dolew",
+          "wlej",
+          "wlew",
+          "nalej",
+          "nalew",
+          "odmierz",
+          "wprowadz",
+          "wkrapl",
+          "wsyp",
+          "dodanie",
+          "kropl"
+        ],
+        [
+          "fenoloft",
+          "wskaźnik"
+        ]
+      ],
+      "wymaga": [
+        "mieszaj"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj trzy krople fenoloftaleiny.",
+      "dlaczego": "Fenoloftaleina zmienia barwę w pH 8,2–10 – wskaże koniec miareczkowania słabego kwasu mocną zasadą.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "dodaję 3 krople fenoloftaleiny"
+    },
+    {
+      "id": "miareczkuj",
+      "opis": "Miareczkowanie NaOH, stale mieszając, do zmiany barwy na różową.",
+      "wymagane": [
+        [
+          "miareczk",
+          "titruj",
+          "titrac"
+        ]
+      ],
+      "wykluczajace": [
+        "zestaw",
+        "powtórz",
+        "drug",
+        "trzec",
+        "kolejn",
+        "jeszcze",
+        "ponown"
+      ],
+      "wymaga": [
+        "zglos",
+        "fenol"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Miareczkuj roztworem NaOH do pierwszej trwałej różowej barwy.",
+      "dlaczego": "Różowa barwa fenoloftaleiny oznacza punkt końcowy.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolba": "rozowy",
+        "biuretaPoziom": 0.65,
+        "kolbaMiejsce": "biureta"
+      },
+      "przyklad": "miareczkuję do różowej barwy"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano i zapisano objętość zużytego titranta (V₁).",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "spisuj",
+          "sprawdz",
+          "patrz"
+        ],
+        [
+          "objętoś",
+          "biuret",
+          "wynik",
+          "cm3",
+          "ml",
+          "menisk",
+          "zużyt",
+          "v1"
+        ]
+      ],
+      "wykluczajace": [
+        "pęcherz",
+        "powietrz",
+        "wag",
+        "papier",
+        "ph"
+      ],
+      "wymaga": [
+        "miareczkuj"
+      ],
+      "podpowiedz": "Odczytaj z biurety objętość zużytego titranta (dolny menisk) i zapisz ją.",
+      "dlaczego": "Objętość V jest podstawą obliczeń – w tabeli zapisuje się ją w cm³ i przelicza na dm³.",
+      "sprzet": "statyw",
+      "animacja": "odczyt",
+      "przyklad": "odczytuję objętość z biurety"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano drugie oznaczenie – razem co najmniej 2.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Powtórz oznaczenie – wymagane są co najmniej dwa.",
+      "dlaczego": "Kryterium: miareczkowanie wykonane co najmniej trzykrotnie; z wyników liczy się średnią.",
+      "sprzet": "statyw",
+      "animacja": "miareczkowanie",
+      "stanSceny": {
+        "kolby": 2
+      },
+      "przyklad": "powtarzam oznaczenie drugi raz"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam mieszaniny poreakcyjne do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "stale",
+      "opis": "Resztki roztartej tabletki przesypane do pojemnika na odpady stałe.",
+      "wymagane": [
+        [
+          "przesyp",
+          "wysyp",
+          "wyrzuc",
+          "wyrzuć",
+          "usuw"
+        ],
+        [
+          "tabletk",
+          "proszk",
+          "resztk",
+          "stałe"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Przesyp resztki roztartej tabletki do pojemnika na odpady stałe.",
+      "dlaczego": "Kryterium porządkowania z arkusza.",
+      "sprzet": "odpady",
+      "animacja": "siegnij",
+      "przyklad": "przesypuję resztki tabletki do pojemnika na odpady stałe"
+    },
+    {
+      "id": "rozmontuj",
+      "opis": "Zestaw do miareczkowania rozmontowany.",
+      "wymagane": [
+        [
+          "rozmont",
+          "zdemont",
+          "demont",
+          "rozkręć",
+          "rozłóż",
+          "rozbier",
+          "rozebr",
+          "rozkład"
+        ],
+        [
+          "zestaw",
+          "biuret",
+          "statyw"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Rozmontuj zestaw do miareczkowania (resztę titranta z biurety też do odpadów).",
+      "dlaczego": "Kryterium porządkowania: zestaw do miareczkowania rozmontowany.",
+      "sprzet": "statyw",
+      "stanSceny": {
+        "zestaw": false,
+        "biuretaPoziom": 0
+      },
+      "animacja": "montaz",
+      "przyklad": "rozmontowuję zestaw do miareczkowania"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "wylacz_wage",
+      "opis": "Waga wyłączona.",
+      "wymagane": [
+        [
+          "=wyłącz",
+          "=odłącz"
+        ],
+        [
+          "wag"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Wyłącz wagę.",
+      "dlaczego": "Kryterium porządkowania: waga wyłączona.",
+      "sprzet": "waga",
+      "stanSceny": {
+        "waga": "wylaczona"
+      },
+      "animacja": "przycisk",
+      "przyklad": "wyłączam wagę"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj",
+        "rozmontuj",
+        "wylacz_wage"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    },
+    {
+      "slowa": [
+        "oranż"
+      ],
+      "komunikat": "W tej procedurze wskaźnikiem jest fenoloftaleina, nie oranż metylowy."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "NaOH",
+      "0,1 mol/dm³"
+    ],
+    "wskaznik": [
+      "fenoloftaleina",
+      "2%"
+    ],
+    "masaWagi": "m1",
+    "odczytBiureta": "v1",
+    "kartaPo": "odczyt"
+  },
+  "karta": {
+    "tytul": "Karta wyników – ibuprofen",
+    "losuj": [
+      {
+        "id": "xi",
+        "od": 385,
+        "do": 415
+      },
+      {
+        "id": "mt",
+        "od": 0.585,
+        "do": 0.635,
+        "miejsca": 3
+      },
+      {
+        "id": "m1",
+        "od": 0.096,
+        "do": 0.109,
+        "miejsca": 3
+      },
+      {
+        "id": "m2",
+        "od": 0.096,
+        "do": 0.109,
+        "miejsca": 3
+      },
+      {
+        "id": "v1",
+        "wzor": "xi*m1/(0.1*206.28*mt)",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "v2",
+        "wzor": "xi*m2/(0.1*206.28*mt)",
+        "szum": 0.04,
+        "krok": 0.05,
+        "miejsca": 2
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "waga",
+        "id": "mt",
+        "etykieta": "Waga – tabletka",
+        "jednostka": "g",
+        "miejsca": 3
+      },
+      {
+        "typ": "info",
+        "etykieta": "Opakowanie",
+        "tekst": "Producent deklaruje 400 mg ibuprofenu w tabletce"
+      },
+      {
+        "typ": "waga",
+        "id": "m1",
+        "etykieta": "Waga – próbka 1",
+        "jednostka": "g",
+        "miejsca": 3
+      },
+      {
+        "typ": "biureta",
+        "id": "v1",
+        "etykieta": "Biureta – próbka 1"
+      },
+      {
+        "typ": "waga",
+        "id": "m2",
+        "etykieta": "Waga – próbka 2",
+        "jednostka": "g",
+        "miejsca": 3
+      },
+      {
+        "typ": "biureta",
+        "id": "v2",
+        "etykieta": "Biureta – próbka 2"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Tabela 1. Dokumentacja z wykonania badania",
+        "pola": [
+          {
+            "id": "mt",
+            "etykieta": "Masa tabletki m =",
+            "szer": "sr",
+            "jednostka": "g"
+          }
+        ],
+        "tabela": {
+          "wiersze": 2,
+          "kolumny": [
+            {
+              "naglowek": "Masa próbki [g]",
+              "pole": "m{i}"
+            },
+            {
+              "naglowek": "V NaOH [cm³]",
+              "pole": "v{i}"
+            },
+            {
+              "naglowek": "Xi [mg]",
+              "pole": "x{i}"
+            }
+          ]
+        }
+      },
+      {
+        "tytul": "Wynik i błędy",
+        "pola": [
+          {
+            "id": "xsr",
+            "etykieta": "Zawartość ibuprofenu (średnia) Xi śr =",
+            "szer": "sr",
+            "jednostka": "mg"
+          },
+          {
+            "id": "prod",
+            "etykieta": "Zawartość wg producenta:",
+            "szer": "sr",
+            "jednostka": "mg"
+          },
+          {
+            "id": "db",
+            "etykieta": "Błąd bezwzględny:",
+            "szer": "sr",
+            "jednostka": "mg"
+          },
+          {
+            "id": "dw",
+            "etykieta": "Błąd względny:",
+            "szer": "sr",
+            "jednostka": "%"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Wniosek:",
+            "szer": "max"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "Stężenie NaOH: 0,1 mol/dm³ = 0,1 mmol/cm³. Masa molowa ibuprofenu: 206,28 mg/mmol. Ibuprofen i NaOH reagują 1 : 1.",
+      "~1 cm³ NaOH — 0,1 mmol | V cm³ — n mmol",
+      "~1 mmol ibuprofenu — 206,28 mg | n mmol — a mg (tyle jest w próbce)",
+      "~m próbki — a mg | m tabletki — Xi mg",
+      "Błąd bezwzględny = |400 − Xi śr|. Błąd względny:",
+      "~400 mg — 100% | błąd bezwzględny — x%"
+    ],
+    "kryteria": [
+      {
+        "opis": "Masa tabletki z dokładnością do 0,001 g, zgodna z odczytem",
+        "uwaga": "Przepisz masę tabletki z wagi – trzy miejsca po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "mt",
+            "wzor": "mt",
+            "tol": 0.0005
+          },
+          {
+            "typ": "miejsca",
+            "pole": "mt",
+            "ile": 3
+          }
+        ]
+      },
+      {
+        "opis": "Masy dwóch próbek (ok. 0,1 g), zgodne z odczytem",
+        "uwaga": "Przepisz masy próbek z wagi.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "m1",
+            "wzor": "m1",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "m2",
+            "wzor": "m2",
+            "tol": 0.0005
+          }
+        ]
+      },
+      {
+        "opis": "Masy próbek z dokładnością do 0,001 g",
+        "uwaga": "Trzy miejsca po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "m1",
+            "ile": 3
+          },
+          {
+            "typ": "miejsca",
+            "pole": "m2",
+            "ile": 3
+          }
+        ]
+      },
+      {
+        "opis": "Dwie objętości NaOH zgodne z odczytem z biurety",
+        "uwaga": "Odczytaj na dolnym menisku, ±0,05 cm³.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "v1",
+            "wzor": "v1",
+            "tol": 0.05
+          },
+          {
+            "typ": "liczba",
+            "pole": "v2",
+            "wzor": "v2",
+            "tol": 0.05
+          }
+        ]
+      },
+      {
+        "opis": "Obliczone zawartości ibuprofenu dla dwóch naważek",
+        "uwaga": "Sprawdź obliczenia. Próbka 1:",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "x1",
+            "wzor": "$v1*0.1*206.28*$mt/$m1",
+            "tol": 1.5
+          },
+          {
+            "typ": "liczba",
+            "pole": "x2",
+            "wzor": "$v2*0.1*206.28*$mt/$m2",
+            "tol": 1.5
+          }
+        ],
+        "pokaz": {
+          "wzor": "$v1*0.1*206.28*$mt/$m1",
+          "miejsca": 0,
+          "jednostka": " mg"
+        }
+      },
+      {
+        "opis": "Średnia z wyników nieróżniących się o więcej niż 20 mg",
+        "uwaga": "Policz średnią z Xi1 i Xi2.",
+        "sprawdz": [
+          {
+            "typ": "rozrzut",
+            "pola": [
+              "x1",
+              "x2"
+            ],
+            "max": 20
+          },
+          {
+            "typ": "liczba",
+            "pole": "xsr",
+            "wzor": "sr($x1,$x2)",
+            "tol": 1
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($x1,$x2)",
+          "miejsca": 0,
+          "jednostka": " mg"
+        }
+      },
+      {
+        "opis": "Wynik podany z dokładnością do całości",
+        "uwaga": "Zaokrąglij średnią do całych mg.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "xsr",
+            "ile": 0
+          }
+        ]
+      },
+      {
+        "opis": "Poprawnie obliczony błąd bezwzględny",
+        "uwaga": "Błąd bezwzględny = |400 − Xi śr|.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "prod",
+            "wzor": "400",
+            "tol": 0.1
+          },
+          {
+            "typ": "liczba",
+            "pole": "db",
+            "wzor": "abs(400-$xsr)",
+            "tol": 1
+          }
+        ],
+        "pokaz": {
+          "wzor": "abs(400-$xsr)",
+          "miejsca": 0,
+          "jednostka": " mg"
+        }
+      },
+      {
+        "opis": "Poprawnie obliczony błąd względny",
+        "uwaga": "Błąd względny = błąd bezwzględny / 400 · 100%.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "dw",
+            "wzor": "$db/400*100",
+            "tol": 0.15
+          }
+        ],
+        "pokaz": {
+          "wzor": "$db/400*100",
+          "miejsca": 1,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Wniosek porównujący wynik z deklaracją producenta",
+        "uwaga": "Napisz, czy zawartość jest zgodna, większa czy mniejsza od deklarowanej.",
+        "sprawdz": [
+          {
+            "typ": "tekst",
+            "pole": "wniosek",
+            "zawiera": [
+              "zgod",
+              "potwierdz",
+              "mniejsz",
+              "wieksz",
+              "maly",
+              "duzy",
+              "niezgod"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
