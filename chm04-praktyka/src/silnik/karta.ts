@@ -117,3 +117,41 @@ export function ocenKarte(spec: KartaSpec, p: Pomiary, o: Odpowiedzi): Kryterium
     return { opis: k.opis, ok, uwaga: ok ? undefined : uwaga };
   });
 }
+
+/** Arkusz wzorcowy: każde pole policzone ze wzorów kryteriów i zaokrąglone tak, jak wymaga karta. */
+export function wzorcoweWypelnienie(spec: KartaSpec, p: Pomiary): Odpowiedzi {
+  const o: Odpowiedzi = {};
+  const spr = spec.kryteria.flatMap((k) => k.sprawdz);
+  const miejsc: Record<string, number> = {};
+  for (const s of spr) if (s.typ === 'miejsca') miejsc[s.pole] = s.ile;
+  const z = (n: string) => (n.startsWith('$') ? liczba(o[n.slice(1)]) : p[n]);
+  for (let runda = 0; runda < 8; runda++) {
+    for (const s of spr) {
+      if (s.typ === 'liczba') {
+        const w = oblicz(s.wzor, z);
+        if (Number.isFinite(w)) {
+          // bez wymogu miejsc: tyle miejsc, ile wynika z tolerancji (błąd zaokrąglenia ≤ połowa tolerancji)
+          const d = miejsc[s.pole] ?? Math.min(6, Math.max(0, Math.ceil(-Math.log10(s.tol || 1e-6))));
+          o[s.pole] = w.toFixed(d).replace('.', ',');
+        }
+      } else if (s.typ === 'tekst') {
+        if (!(o[s.pole] ?? '').includes(s.zawiera[0])) o[s.pole] = [o[s.pole] ?? '', s.zawiera[0]].join(' ').trim();
+      } else if (s.typ === 'rownanie') o[s.pole] = `${s.lewa.join(' + ')} → ${s.prawa.join(' + ')}`;
+      else if (s.typ === 'wybor') {
+        const w = oblicz(s.wzor, z);
+        if (Number.isFinite(w)) o[s.pole] = w > 0 ? s.tak[0] : s.nie[0];
+      } else if (s.typ === 'tekstRazem') {
+        if (s.pola.some((id) => (o[id] ?? '').includes(s.zawiera[0]))) continue;
+        const wolne = s.pola.find((id) => !o[id]) ?? s.pola[0];
+        o[wolne] = `${s.zawiera[0]} ${s.oraz.join(' ')}`;
+      }
+    }
+  }
+  return o;
+}
+
+/** Pola, których dotyczy kryterium (do zaznaczania błędów w arkuszu). */
+export function polaKryterium(s: Sprawdzenie): string[] {
+  const x = s as unknown as { pole?: string; pola?: string[] };
+  return [...(x.pole ? [x.pole] : []), ...(x.pola ?? [])];
+}

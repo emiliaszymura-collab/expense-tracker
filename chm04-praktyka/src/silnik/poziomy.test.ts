@@ -42,33 +42,9 @@ describe.each(poziomy.map((p) => [p.id, p] as const))('poziom %s', (_, poziom) =
 
 // Automatyczne „idealne wypełnienie” karty: wartości liczymy ze wzorów kryteriów, zaokrąglamy tak,
 // jak wymaga karta, i oczekujemy kompletu punktów. Wyłapuje zbyt ciasne tolerancje i błędy we wzorach.
-import { liczba } from './karta';
-import { oblicz } from './wyrazenia';
+import { wzorcoweWypelnienie } from './karta';
 
-function idealne(poziom: Poziom, p: Record<string, number>): Record<string, string> {
-  const o: Record<string, string> = {};
-  const spr = poziom.karta!.kryteria.flatMap((k) => k.sprawdz);
-  const miejsc: Record<string, number> = {};
-  for (const s of spr) if (s.typ === 'miejsca') miejsc[s.pole] = s.ile;
-  const z = (n: string) => (n.startsWith('$') ? liczba(o[n.slice(1)]) : p[n]);
-  for (let runda = 0; runda < 8; runda++) {
-    for (const s of spr) {
-      if (s.typ === 'liczba') {
-        const w = oblicz(s.wzor, z);
-        if (Number.isFinite(w)) o[s.pole] = w.toFixed(miejsc[s.pole] ?? 6).replace('.', ',');
-      } else if (s.typ === 'tekst') o[s.pole] = [o[s.pole] ?? '', s.zawiera[0]].join(' ');
-      else if (s.typ === 'rownanie') o[s.pole] = `${s.lewa.join(' + ')} -> ${s.prawa.join(' + ')}`;
-      else if (s.typ === 'wybor') {
-        const w = oblicz(s.wzor, z);
-        if (Number.isFinite(w)) o[s.pole] = w > 0 ? s.tak[0] : s.nie[0];
-      } else if (s.typ === 'tekstRazem') {
-        const wolne = s.pola.find((id) => !o[id] || o[id].includes(s.zawiera[0]))!;
-        o[wolne] = `${s.zawiera[0]} ${s.oraz.join(' ')}`;
-      }
-    }
-  }
-  return o;
-}
+const idealne = (poziom: Poziom, p: Record<string, number>) => wzorcoweWypelnienie(poziom.karta!, p);
 
 describe.each(poziomy.filter((p) => p.karta).map((p) => [p.id, p] as const))('karta %s', (_, poziom) => {
   it('poprawnie wypełniona karta dostaje komplet punktów (200 losowań)', () => {

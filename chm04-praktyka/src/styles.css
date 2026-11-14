@@ -1312,3 +1312,20 @@ button.sprawdz {
     margin-top: 6px;
   }
 }
+
+/* wynik egzaminu zawsze na wierzchu i przewijalny */
+.wynik-egzaminu { position: fixed; z-index: 1000; overflow-y: auto; place-items: start center; }
+.wynik-karta { width: min(760px, 100%); margin: 16px auto; }
+.wzorcowy h3 { margin: 14px 0 6px; font-size: 1rem; }
+.wzorcowy h4 { margin: 10px 0 4px; font-size: 0.9rem; color: var(--akcent, #0f766e); text-transform: uppercase; letter-spacing: 0.04em; }
+.wzorcowy ul { padding-left: 0; list-style: none; }
+.wzorcowy li { margin: 4px 0; }
+.tabela-wzorcowa { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tabela-wzorcowa th, .tabela-wzorcowa td { border: 1px solid rgba(128,128,128,0.3); padding: 4px 6px; text-align: left; vertical-align: top; }
+.tabela-wzorcowa thead th { font-weight: 600; }
+.tabela-wzorcowa tr.zle td:first-of-type { color: #c62828; }
+.tabela-wzorcowa tr.zle { background: rgba(198, 40, 40, 0.08); }
+.wzorcowy .proporcja { display: inline-grid; gap: 2px; margin: 4px 0 8px; padding: 6px 10px; border-left: 3px solid #1d6fb8; background: rgba(29,111,184,0.07); font-family: ui-monospace, monospace; font-size: 0.88rem; }
+
+.zegar { font-variant-numeric: tabular-nums; display: inline-block; min-width: 7.5ch; text-align: center; flex-shrink: 0; }
+.gorny-pasek .oddaj { order: -1; flex-shrink: 0; }

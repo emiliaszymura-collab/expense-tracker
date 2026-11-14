@@ -1,5 +1,6 @@
 // Karta wyników – tabele jak w arkuszu, zbudowane z opisu w pliku poziomu (pole "karta").
 // Wartości odczytuje się z wagi i biurety, obliczenia robi samodzielnie.
+import { ArkuszWzorcowy } from './Wzorcowy';
 import { useState, useEffect, useRef } from 'react';
 import { ocenKarte, type Kryterium, type Odpowiedzi, type Pomiary } from '../silnik/karta';
 import type { KartaSpec, Odczyt, PoleKarty } from '../silnik/typy';
@@ -252,6 +253,9 @@ export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi
             <strong>
               Wynik: {punkty} / {wynik.length} kryteriów
             </strong>
+            <ArkuszWzorcowy spec={spec} pomiary={pomiary} odpowiedzi={odpowiedzi} />
+            <details>
+              <summary>Wszystkie kryteria</summary>
             <ul>
               {wynik.map((k, i) => (
                 <li key={i} className={k.ok ? 'kr-ok' : 'kr-zle'}>
@@ -260,6 +264,7 @@ export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi
                 </li>
               ))}
             </ul>
+            </details>
           </div>
         )}
       </div>
@@ -268,14 +273,9 @@ export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi
 }
 
 function OddajPrace({ onOddaj }: { onOddaj: () => void }) {
-  const [pytaj, setPytaj] = useState(false);
-  return pytaj ? (
-    <p className="potwierdz">
-      Oddać pracę? Po oddaniu nie można już nic zmienić.{' '}
-      <button className="niebezpieczny" onClick={onOddaj}>Tak, oddaję</button>{' '}
-      <button className="drugorzedny" onClick={() => setPytaj(false)}>Nie</button>
-    </p>
-  ) : (
-    <button className="sprawdz" onClick={() => setPytaj(true)}>Zakończ egzamin i oddaj pracę</button>
+  return (
+    <button className="sprawdz" onClick={onOddaj}>
+      Zakończ egzamin i oddaj pracę
+    </button>
   );
 }

@@ -6,6 +6,7 @@ import { Laboratorium } from './scena/Laboratorium';
 import { dodajPodpowiedz, nowyStan, ocenWpis, poziomUkonczony, prosiOPomoc, type StanGry } from './silnik/gra';
 import type { Poziom } from './silnik/typy';
 import { losujPomiary } from './silnik/karta';
+import { ArkuszWzorcowy } from './ui/Wzorcowy';
 import { Karta } from './ui/Karta';
 import { Konsola } from './ui/Konsola';
 import { Lupa } from './ui/Lupa';
@@ -91,7 +92,8 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
     const nowy = (): StanGry => ({ ...nowyStan(poziom.id), tryb, start: egzamin ? Date.now() : undefined });
     const stary = wczytajStan(poziom.id);
     // zapis z innego trybu nie przechodzi: egzamin zawsze zaczyna się od zera, ćwiczenie nie dziedziczy egzaminu
-    const zapis = stary && (stary.tryb ?? 'cwiczenie') === tryb && !(egzamin && stary.zakonczony) ? stary : nowy();
+    let zapis = stary && (stary.tryb ?? 'cwiczenie') === tryb && !(egzamin && stary.zakonczony) ? stary : nowy();
+    if (egzamin && !zapis.start) zapis = { ...zapis, start: Date.now() };
     // brak pomiarów albo zapis w starym formacie → losujemy od nowa
     const aktualne = zapis.pomiary && poziom.karta?.losuj.every((l) => typeof zapis.pomiary![l.id] === 'number');
     return aktualne || !poziom.karta ? zapis : { ...zapis, karta: undefined, pomiary: losujPomiary(poziom.karta) };
@@ -164,22 +166,27 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
             <span className="tylko-szeroki">Tryb:&nbsp;</span>ćwiczenie
           </span>
         )}
-        {egzamin && !stan.zakonczony &&
-          (pytanieOddaj ? (
-            <span className="potwierdz">
-              Oddać pracę?
-              <button className="niebezpieczny" onClick={() => setStan((s) => ({ ...s, zakonczony: true }))}>
-                Tak, oddaję
-              </button>
-              <button className="drugorzedny" onClick={() => setPytanieOddaj(false)}>
-                Nie
-              </button>
-            </span>
-          ) : (
-            <button className="drugorzedny" onClick={() => setPytanieOddaj(true)}>
-              Zakończ egzamin
-            </button>
-          ))}
+        {egzamin && !stan.zakonczony && (
+          <button className="niebezpieczny oddaj" onClick={() => setPytanieOddaj(true)}>
+            Zakończ egzamin
+          </button>
+        )}
+        {egzamin && !stan.zakonczony && pytanieOddaj && (
+          <div className="wynik-egzaminu" role="dialog" aria-label="Oddanie pracy">
+            <div className="wynik-karta">
+              <h2>Oddać pracę?</h2>
+              <p>Po oddaniu nie można już nic zmienić. Zobaczysz wynik i arkusz wzorcowy.</p>
+              <div className="wynik-przyciski">
+                <button className="niebezpieczny" onClick={() => { setPytanieOddaj(false); setKartaOtwarta(false); setStan((s) => ({ ...s, zakonczony: true })); }}>
+                  Tak, oddaję
+                </button>
+                <button className="drugorzedny" onClick={() => setPytanieOddaj(false)}>
+                  Nie, wracam
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <button className="drugorzedny" onClick={() => otworzKarte(!kartaOtwarta)} disabled={!poOdczycie && !egzamin} title={poOdczycie || egzamin ? '' : 'Dostępna po pierwszym odczycie wyniku'}>
           Karta<span className="tylko-szeroki">&nbsp;wyników</span>
         </button>
@@ -244,7 +251,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
             onZwin={() => setKartaOtwarta(false)}
             podpowiedzi={!egzamin}
             bezSprawdzania={egzamin}
-            onOddaj={egzamin && !stan.zakonczony ? () => setStan((s) => ({ ...s, zakonczony: true })) : undefined}
+            onOddaj={egzamin && !stan.zakonczony ? () => setPytanieOddaj(true) : undefined}
           />
         )}
         <Konsola
@@ -279,14 +286,10 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
                   </tr>
                 </tbody>
               </table>
-              {wynikEgz.karta.nieSpelnione.length > 0 && (
-                <details>
-                  <summary>Niespełnione kryteria karty ({wynikEgz.karta.nieSpelnione.length})</summary>
-                  <ul>
-                    {wynikEgz.karta.nieSpelnione.map((k) => (
-                      <li key={k}>{k}</li>
-                    ))}
-                  </ul>
+              {poziom.karta && stan.pomiary && (
+                <details open>
+                  <summary>Co masz źle i arkusz wzorcowy</summary>
+                  <ArkuszWzorcowy spec={poziom.karta} pomiary={stan.pomiary} odpowiedzi={stan.karta ?? {}} />
                 </details>
               )}
               <div className="wynik-przyciski">
