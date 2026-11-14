@@ -667,7 +667,7 @@ function PanelDiagnostyki({ wymus = false }: { wymus?: boolean }) {
     const t = window.setInterval(() => {
       odswiez((n) => n + 1);
       if (Date.now() - DIAG.start > 6000 && DIAG.klatki === 0) setPokaz(true);
-      if (DIAG.utrataKontekstu) setPokaz(true);
+      if (DIAG.utrataKontekstu && (DIAG.odtworzenia ?? 0) >= 5) setPokaz(true);
     }, 1000);
     return () => window.clearInterval(t);
   }, []);
@@ -678,7 +678,7 @@ function PanelDiagnostyki({ wymus = false }: { wymus?: boolean }) {
     ['Rozmiar sceny', DIAG.rozmiarSceny],
     ['Bufor rysowania', DIAG.bufor],
     ['Narysowane klatki', String(DIAG.klatki)],
-    ['Utrata grafiki', DIAG.utrataKontekstu ? 'TAK' : 'nie'],
+    ['Utrata grafiki', `${DIAG.utrataKontekstu ? 'TAK' : 'nie'} (automatyczne odtworzenia: ${DIAG.odtworzenia ?? 0})`],
     ['Tryb', TRYB_AWARYJNY ? 'awaryjny' : SLABY ? 'lekki (telefon)' : 'pełny'],
     ['Przeglądarka', navigator.userAgent],
   ];
@@ -748,10 +748,32 @@ function Nakladka({ utracony }: { utracony: boolean }) {
 export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
   const [utracony, setUtracony] = useState(false);
   const [webgl] = useState(sprawdzWebgl);
+  // Po utracie grafiki (komputer uśpiony, aplikacja długo w tle, brak pamięci karty) tworzymy scenę od nowa.
+  // Zmiana `pokolenie` w kluczu Canvas = nowy kontekst WebGL. Stan gry jest poza sceną, więc nic nie ginie.
+  const [pokolenie, setPokolenie] = useState(0);
+  useEffect(() => {
+    if (!utracony) return;
+    if (pokolenie >= 5) return; // po 5 próbach zostawiamy komunikat z przyciskiem „Odśwież”
+    const t = window.setTimeout(() => {
+      DIAG.utrataKontekstu = false;
+      DIAG.odtworzenia = (DIAG.odtworzenia ?? 0) + 1;
+      setUtracony(false);
+      setPokolenie((n) => n + 1);
+    }, 800);
+    return () => window.clearTimeout(t);
+  }, [utracony, pokolenie]);
+  // Gdy karta wraca na pierwszy plan po długim czasie, a grafika zdążyła zniknąć – też odtwarzamy.
+  useEffect(() => {
+    const f = () => {
+      if (document.visibilityState === 'visible' && DIAG.utrataKontekstu) setUtracony(true);
+    };
+    document.addEventListener('visibilitychange', f);
+    return () => document.removeEventListener('visibilitychange', f);
+  }, []);
   if (!webgl) return <PanelDiagnostyki wymus />;
   return (
     <>
-    <GranicaSceny>
+    <GranicaSceny key={pokolenie}>
     <Canvas
       shadows={!SLABY}
       flat
@@ -815,7 +837,7 @@ export function Laboratorium({ kartkaOtwarta, ...reszta }: Props) {
     <Licznik />
     </Canvas>
     </GranicaSceny>
-    <Nakladka utracony={utracony} />
+    <Nakladka utracony={utracony && pokolenie >= 5} />
     <PanelDiagnostyki />
     </>
   );

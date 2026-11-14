@@ -6,6 +6,7 @@ export interface Diagnoza {
   bufor: string;
   klatki: number;
   utrataKontekstu: boolean;
+  odtworzenia?: number;
   bledy: string[];
   start: number;
 }
