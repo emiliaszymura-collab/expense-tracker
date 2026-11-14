@@ -1,6 +1,6 @@
 // Karta wyników – tabele jak w arkuszu, zbudowane z opisu w pliku poziomu (pole "karta").
 // Wartości odczytuje się z wagi i biurety, obliczenia robi samodzielnie.
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ocenKarte, type Kryterium, type Odpowiedzi, type Pomiary } from '../silnik/karta';
 import type { KartaSpec, Odczyt, PoleKarty } from '../silnik/typy';
 import { Lupa } from './Lupa';
@@ -130,6 +130,10 @@ function WidokOdczytu({ o, p }: { o: Odczyt; p: Pomiary }) {
 
 export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi, bezSprawdzania = false }: Props) {
   const [wynik, setWynik] = useState<Kryterium[] | null>(null);
+  const wynikRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (wynik) wynikRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [wynik]);
   const pole = (id: string, etykieta: string, szer = 'sr') => (
     <input
       id={`karta-${id}`}
@@ -234,12 +238,12 @@ export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi
         {bezSprawdzania ? (
           <p className="drobne">Egzamin: kartę oceni egzaminator po oddaniu pracy (przycisk „Zakończ egzamin”).</p>
         ) : (
-          <button className="sprawdz" onClick={() => setWynik(ocenKarte(spec, pomiary, odpowiedzi))}>
+          <button className="sprawdz" onClick={() => setWynik([...ocenKarte(spec, pomiary, odpowiedzi)])}>
             Sprawdź kartę
           </button>
         )}
         {wynik && (
-          <div className="wynik-karty" role="status">
+          <div className="wynik-karty" role="status" ref={wynikRef}>
             <strong>
               Wynik: {punkty} / {wynik.length} kryteriów
             </strong>
