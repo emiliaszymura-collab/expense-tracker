@@ -184,7 +184,14 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
   stan.bledy++;
   const brakKrokow = wymaganiaKroku(poziom, zablokowany).filter((w) => !stan.wykonane.includes(w));
   if (brakKrokow.length > 0) {
-    const pierwszy = nastepnyKrok(poziom, stan.wykonane) ?? nazwaKroku(poziom, brakKrokow[0]);
+    // Wskazujemy brakujący krok z łańcucha TEGO kroku (najgłębszy, który da się już zrobić),
+    // a nie następny krok w kolejności protokołu.
+    let pierwszy = nazwaKroku(poziom, brakKrokow[0]);
+    for (let i = 0; i < 50; i++) {
+      const brak = wymaganiaKroku(poziom, pierwszy).filter((w) => !stan.wykonane.includes(w));
+      if (brak.length === 0) break;
+      pierwszy = nazwaKroku(poziom, brak[0]);
+    }
     dodaj({
       rodzaj: 'za-wczesnie',
       tekstGracza: tekst,
