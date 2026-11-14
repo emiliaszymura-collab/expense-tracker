@@ -15,6 +15,8 @@ interface Props {
   podpowiedzi: boolean;
   /** Egzamin: karta oceniana dopiero po oddaniu pracy. */
   bezSprawdzania?: boolean;
+  /** Egzamin: oddanie pracy prosto z karty. */
+  onOddaj?: () => void;
 }
 
 const SKALA_PH = ['#d62828', '#e2452a', '#ee6c2c', '#f39c2f', '#f1c93b', '#c9d544', '#6fbf4a', '#35a26b', '#2a9a8f', '#2b78b5', '#3a55a4', '#4a3f98', '#5b2d8c', '#6a1f7a'];
@@ -128,7 +130,7 @@ function WidokOdczytu({ o, p }: { o: Odczyt; p: Pomiary }) {
   );
 }
 
-export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi, bezSprawdzania = false }: Props) {
+export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi, bezSprawdzania = false, onOddaj }: Props) {
   const [wynik, setWynik] = useState<Kryterium[] | null>(null);
   const wynikRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -236,7 +238,10 @@ export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi
         )}
 
         {bezSprawdzania ? (
-          <p className="drobne">Egzamin: kartę oceni egzaminator po oddaniu pracy (przycisk „Zakończ egzamin”).</p>
+          <>
+            <p className="drobne">Egzamin: kartę oceni egzaminator po oddaniu pracy.</p>
+            {onOddaj && <OddajPrace onOddaj={onOddaj} />}
+          </>
         ) : (
           <button className="sprawdz" onClick={() => setWynik([...ocenKarte(spec, pomiary, odpowiedzi)])}>
             Sprawdź kartę
@@ -259,5 +264,18 @@ export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi
         )}
       </div>
     </aside>
+  );
+}
+
+function OddajPrace({ onOddaj }: { onOddaj: () => void }) {
+  const [pytaj, setPytaj] = useState(false);
+  return pytaj ? (
+    <p className="potwierdz">
+      Oddać pracę? Po oddaniu nie można już nic zmienić.{' '}
+      <button className="niebezpieczny" onClick={onOddaj}>Tak, oddaję</button>{' '}
+      <button className="drugorzedny" onClick={() => setPytaj(false)}>Nie</button>
+    </p>
+  ) : (
+    <button className="sprawdz" onClick={() => setPytaj(true)}>Zakończ egzamin i oddaj pracę</button>
   );
 }

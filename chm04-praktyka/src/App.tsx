@@ -244,6 +244,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
             onZwin={() => setKartaOtwarta(false)}
             podpowiedzi={!egzamin}
             bezSprawdzania={egzamin}
+            onOddaj={egzamin && !stan.zakonczony ? () => setStan((s) => ({ ...s, zakonczony: true })) : undefined}
           />
         )}
         <Konsola
