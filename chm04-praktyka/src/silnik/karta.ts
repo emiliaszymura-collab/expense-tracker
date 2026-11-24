@@ -139,7 +139,9 @@ export function wzorcoweWypelnienie(spec: KartaSpec, p: Pomiary): Odpowiedzi {
         const w = oblicz(s.wzor, z);
         if (Number.isFinite(w)) {
           // bez wymogu miejsc: tyle miejsc, ile wynika z tolerancji (błąd zaokrąglenia ≤ połowa tolerancji)
-          const d = miejsc[s.pole] ?? Math.min(6, Math.max(0, Math.ceil(-Math.log10(2 * (s.tol || 1e-6)))));
+          let d = miejsc[s.pole] ?? Math.min(6, Math.max(0, Math.ceil(-Math.log10(s.tol || 1e-6))));
+          // zbędne zero na końcu (0,1270 → 0,127), gdy krótszy zapis jest tak samo dokładny
+          if (miejsc[s.pole] === undefined && d > 0 && Math.abs(Number(w.toFixed(d - 1)) - w) < 1e-9) d--;
           o[s.pole] = w.toFixed(d).replace('.', ',');
         }
       } else if (s.typ === 'tekst') {
