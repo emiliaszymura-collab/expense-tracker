@@ -120,3 +120,73 @@ function warianty(fraza: string): string[] {
 export function grupaPasuje(grupa: string[], wpis: string[]): boolean {
   return grupa.some((fraza) => warianty(fraza).some((w) => frazaPasuje(w, wpis)));
 }
+
+/**
+ * Formy czasowników: tryb rozkazujący, bezokolicznik i rzeczownik odczasownikowy sprowadzamy do formy
+ * „robię” z przykładów („umyj”, „umyć”, „umycie” → „myję”). Pierwsza pozycja to forma podstawowa.
+ */
+export const FORMY: string[][] = [
+  ['myję', 'umyj', 'umyć', 'umycie', 'mycie', 'myć', 'myje', 'umyję'],
+  ['dodaję', 'dodaj', 'dodać', 'dodanie', 'dodaje', 'dodam'],
+  ['przelewam', 'przelej', 'przelać', 'przelanie', 'przelewa', 'przeleję'],
+  ['wycieram', 'wytrzyj', 'wytrzeć', 'wytarcie', 'wyciera', 'wytrę'],
+  ['odczytuję', 'odczytaj', 'odczytać', 'odczytanie', 'odczyt', 'odczytuje', 'odczytam'],
+  ['włączam', 'włącz', 'włączyć', 'włączenie', 'włącza', 'włączę'],
+  ['powtarzam', 'powtórz', 'powtórzyć', 'powtórzenie', 'powtarza', 'powtórzę'],
+  ['napełniam', 'napełnij', 'napełnić', 'napełnienie', 'napełnia', 'napełnię'],
+  ['ustawiam', 'ustaw', 'ustawić', 'ustawienie', 'ustawia', 'ustawię'],
+  ['miareczkuję', 'miareczkuj', 'miareczkować', 'miareczkowanie', 'miareczkuje', 'zmiareczkuj'],
+  ['mierzę', 'zmierz', 'zmierzyć', 'zmierzenie', 'pomiar', 'mierzyć', 'mierzy', 'zmierzę'],
+  ['odmierzam', 'odmierz', 'odmierzyć', 'odmierzenie', 'odmierza', 'odmierzę'],
+  ['montuję', 'zmontuj', 'zmontować', 'zmontowanie', 'montaż', 'montować', 'montuje', 'zmontuję'],
+  ['rozmontowuję', 'rozmontuj', 'rozmontować', 'rozmontowanie', 'rozmontowuje', 'demontaż', 'zdemontuj', 'rozmontuję'],
+  ['zdejmuję', 'zdejmij', 'zdjąć', 'zdjęcie', 'zdejmuje', 'zdejmę'],
+  ['usuwam', 'usuń', 'usunąć', 'usunięcie', 'usuwa', 'usunę'],
+  ['przepłukuję', 'przepłucz', 'przepłukać', 'przepłukanie', 'przepłukuje', 'przepłuczę'],
+  ['zgłaszam', 'zgłoś', 'zgłosić', 'zgłoszenie', 'zgłasza', 'zgłoszę'],
+  ['odważam', 'odważ', 'odważyć', 'odważenie', 'odważa', 'odważę'],
+  ['pipetuję', 'pipetuj', 'pipetować', 'pipetowanie', 'odpipetuj', 'odpipetować', 'pipetuje'],
+  ['zeruję', 'wyzeruj', 'wyzerować', 'zerowanie', 'wyzerowanie', 'zeruj', 'zerować', 'zeruje'],
+  ['nanoszę', 'nanieś', 'nanieść', 'naniesienie', 'nanosi', 'naniosę'],
+  ['wyłączam', 'wyłącz', 'wyłączyć', 'wyłączenie', 'wyłącza', 'wyłączę'],
+  ['przemywam', 'przemyj', 'przemyć', 'przemycie', 'przemywa', 'przemyję'],
+  ['przenoszę', 'przenieś', 'przenieść', 'przeniesienie', 'przenosi', 'przeniosę'],
+  ['uzupełniam', 'uzupełnij', 'uzupełnić', 'uzupełnienie', 'uzupełnia', 'uzupełnię'],
+  ['mieszam', 'wymieszaj', 'wymieszać', 'wymieszanie', 'mieszanie', 'zamieszaj', 'miesza', 'wymieszam'],
+  ['zanurzam', 'zanurz', 'zanurzyć', 'zanurzenie', 'zanurza', 'zanurzę'],
+  ['przesączam', 'przesącz', 'przesączyć', 'przesączenie', 'przesącza'],
+  ['opłukuję', 'opłucz', 'opłukać', 'opłukanie', 'opłukuje'],
+  ['rozpuszczam', 'rozpuść', 'rozpuścić', 'rozpuszczenie', 'rozpuszcza', 'rozpuszczę'],
+  ['ucieram', 'utrzyj', 'utrzeć', 'utarcie', 'uciera'],
+  ['przykrywam', 'przykryj', 'przykryć', 'przykrycie', 'przykrywa'],
+  ['badam', 'zbadaj', 'zbadać', 'zbadanie', 'bada', 'zbadam'],
+  ['opróżniam', 'opróżnij', 'opróżnić', 'opróżnienie', 'opróżnia'],
+  ['pobieram', 'pobierz', 'pobrać', 'pobranie', 'pobiera', 'pobiorę'],
+  ['ogrzewam', 'ogrzej', 'ogrzać', 'ogrzanie', 'ogrzewa', 'podgrzej', 'podgrzać'],
+  ['sączę', 'sącz', 'sączyć', 'sączenie', 'przesącz', 'odsącz', 'odsączyć'],
+  ['opisuję', 'opisz', 'opisać', 'opisanie', 'opisuje'],
+  ['wyrzucam', 'wyrzuć', 'wyrzucić', 'wyrzucenie', 'wyrzuca'],
+  ['dopełniam', 'dopełnij', 'dopełnić', 'dopełnienie', 'dopełnia'],
+  ['ważę', 'zważ', 'zważyć', 'zważenie', 'waży', 'zważę'],
+  ['rozcieram', 'rozetrzyj', 'rozetrzeć', 'roztarcie', 'rozciera'],
+  ['przesypuję', 'przesyp', 'przesypać', 'przesypanie', 'przesypuje'],
+  ['stawiam', 'postaw', 'postawić', 'postawienie', 'stawia', 'umieść', 'umieszczam', 'odstaw'],
+  ['odłączam', 'odłącz', 'odłączyć', 'odłączenie', 'odłącza'],
+  ['rozcieńczam', 'rozcieńcz', 'rozcieńczyć', 'rozcieńczenie', 'rozcieńcza'],
+  ['zamykam', 'zamknij', 'zamknąć', 'zamknięcie', 'zamyka'],
+  ['zakładam', 'załóż', 'założyć', 'założenie', 'zakłada', 'ubieram', 'ubierz', 'ubrać', 'nakładam', 'nałóż'],
+  ['osuszam', 'osusz', 'osuszyć', 'osuszenie', 'osusza'],
+  ['sprawdzam', 'sprawdź', 'sprawdzić', 'sprawdzenie', 'sprawdza'],
+  ['przygotowuję', 'przygotuj', 'przygotować', 'przygotowanie', 'przygotowuje', 'sporządź', 'sporządzić', 'sporządzam', 'sporządzenie'],
+  ['zapisuję', 'zapisz', 'zapisać', 'zapisanie', 'zapisuje', 'notuję', 'zanotuj'],
+  ['wylewam', 'wylej', 'wylać', 'wylanie', 'wylewa'],
+  ['taruję', 'wytaruj', 'tarować', 'wytarować', 'tarowanie', 'tara'],
+];
+
+const KANON = new Map<string, string>();
+for (const f of FORMY) for (const w of f.slice(1)) KANON.set(normalizuj(w), normalizuj(f[0]));
+
+/** Tokeny z formami czasowników sprowadzonymi do formy podstawowej (do drugiej próby dopasowania). */
+export function kanoniczne(wpis: string[]): string[] {
+  return wpis.map((t) => KANON.get(t) ?? t);
+}

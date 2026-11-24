@@ -68,3 +68,13 @@ describe('wpis bez przedmiotu – krok wynika z kontekstu (zgłoszenie)', () => 
       ['odczytać wynik', 'odczyt'],
     ]));
 });
+
+describe('dwie czynności w jednym zdaniu (zgłoszenie)', () => {
+  it('„rozmontuj zestaw do sączenia i miareczkowania” zalicza oba rozmontowania', () => {
+    const p = poziom('05-nacl-mohr');
+    const wszystkie = p.kroki.map((k) => k.id).filter((id) => !['rozmontuj', 'rozmontuj_sacz', 'myj', 'stol', 'odpady'].includes(id));
+    const stan = { ...nowyStan(p.id), wykonane: wszystkie, bhp: ['fartuch', 'rekawice', 'okulary'] as ('fartuch' | 'rekawice' | 'okulary')[] };
+    const r = ocenWpis(p, stan, 'rozmontuj zestaw do sączenia i miareczkowania', false);
+    expect(r.przyjete.map((k) => k.id)).toEqual(expect.arrayContaining(['rozmontuj', 'rozmontuj_sacz']));
+  });
+});

@@ -1,5 +1,5 @@
 // Logika rozgrywki: ocena wpisu gracza względem procedury poziomu.
-import { frazaPasuje, grupaPasuje, tokeny } from './dopasowanie';
+import { frazaPasuje, grupaPasuje, kanoniczne, normalizuj, tokeny } from './dopasowanie';
 import type { Odpowiedzi, Pomiary } from './karta';
 import type { ElementBhp, Krok, Poziom } from './typy';
 
@@ -69,7 +69,26 @@ export function wymaganiaKroku(poziom: Poziom, krok: Krok): string[] {
 
 export function krokPasuje(krok: Krok, wpis: string[]): boolean {
   if (krok.wykluczajace?.some((w) => frazaPasuje(w, wpis, false))) return false;
-  return krok.wymagane.every((grupa) => grupaPasuje(grupa, wpis));
+  const kanon = kanoniczne(wpis);
+  return krok.wymagane.every((grupa) => grupaPasuje(grupa, wpis) || grupaPasuje(grupa, kanon));
+}
+
+/**
+ * Warianty zdania złożonego: „rozmontuj zestaw do sączenia i miareczkowania” opisuje dwie czynności.
+ * Dzielimy po „i”, „oraz”, przecinku i średniku; część bez czasownika dostaje początek pierwszej części
+ * w miejsce jej ostatniego słowa („rozmontuj zestaw do miareczkowania”).
+ */
+export function wariantyWpisu(tekst: string): string[][] {
+  const czesci = normalizuj(tekst.replace(/[,;]/g, ' i '))
+    .split(/ (?:i|oraz|a potem|potem|nastepnie) /)
+    .map((c) => c.trim())
+    .filter(Boolean);
+  const wynik: string[][] = [tokeny(tekst)];
+  if (czesci.length < 2) return wynik;
+  const pierwsza = czesci[0].split(' ');
+  for (const c of czesci) wynik.push(c.split(' '));
+  for (const c of czesci.slice(1)) if (pierwsza.length > 1) wynik.push([...pierwsza.slice(0, -1), ...c.split(' ')]);
+  return wynik;
 }
 
 /** Pierwszy niewykonany krok, którego wymagania są spełnione – "co teraz?". */
@@ -138,7 +157,8 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
 
   // 3. Kroki procedury. Jeden wpis może opisywać kilka czynności ("dodaję wodę i mieszam"),
   //    także razem ze środkami ochrony ("zakładam fartuch i montuję zestaw").
-  let dopasowane = poziom.kroki.filter((k) => krokPasuje(k, wpis));
+  const warianty = wariantyWpisu(tekst);
+  let dopasowane = poziom.kroki.filter((k) => warianty.some((w) => krokPasuje(k, w)));
 
   // Wpis bez przedmiotu („zmierzyć absorbancję”, „odczytać wynik”): jeśli pasuje czynność (pierwsza grupa słów)
   // kroku, który właśnie jest do zrobienia, przyjmujemy ten krok – z kontekstu wiadomo, o co chodzi.
