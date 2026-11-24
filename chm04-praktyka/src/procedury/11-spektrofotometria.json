@@ -602,6 +602,18 @@
       "Próbkę rozcieńczono 2 razy (25 cm³ → 50 cm³): stężenie w próbce = 2 · c.",
       "Próbka była zatężona 10 razy: stężenie w wodzie = stężenie w próbce / 10."
     ],
+    "rozwiazanie": [
+      "1. Krzywa wzorcowa. Dla każdego wzorca dzielisz absorbancję przez jego stężenie (1, 2, 3, 4, 5 mg/dm³), np. wzorzec 2: {$A2|3} / 2 = {$k2|3}. Współczynnik a to średnia z pięciu ilorazów:",
+      "a = ({$k1|3} + {$k2|3} + {$k3|3} + {$k4|3} + {$k5|3}) / 5 = {$a|3} – czyli stężenie 1 mg/dm³ daje absorbancję {$a|3}.",
+      "2. Stężenie w kolbie z próbki – proporcja:",
+      "~{$a|3} — 1 mg/dm³ | {$Ax|3} — c",
+      "c = {$Ax|3} · 1 / {$a|3} = {$ck|2} mg/dm³",
+      "3. W kolbie próbka była rozcieńczona: 25 cm³ próbki uzupełniono do 50 cm³, czyli 2 razy. Stężenie w próbce jest 2 razy większe:",
+      "~25 cm³ próbki — 50 cm³ w kolbie | {$ck|2} mg/dm³ w kolbie — x",
+      "x = {$ck|2} · 50 / 25 = {$cp|2} mg/dm³",
+      "4. Próbkę przed analizą zatężono 10 razy, więc w wodzie stężenie jest 10 razy mniejsze: {$cp|2} / 10 = {$cw|2} mg/dm³.",
+      "5. Wniosek: {$cw|2} mg/dm³ porównujesz z normą 0,2 mg/dm³ – woda {$wniosek}."
+    ],
     "kryteria": [
       {
         "opis": "Absorbancje pięciu wzorców zgodne ze wskazaniami",
@@ -785,10 +797,10 @@
             "pole": "wniosek",
             "wzor": "0.2-$cw+0.000001",
             "tak": [
-              "spelnia"
+              "spełnia"
             ],
             "nie": [
-              "nie spelnia"
+              "nie spełnia"
             ]
           }
         ]

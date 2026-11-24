@@ -852,10 +852,10 @@
             "pole": "wniosek",
             "wzor": "$xc-11.2+0.000001",
             "tak": [
-              "spelnia"
+              "spełnia"
             ],
             "nie": [
-              "nie spelnia"
+              "nie spełnia"
             ]
           }
         ]

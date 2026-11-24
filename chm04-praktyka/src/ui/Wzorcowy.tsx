@@ -1,6 +1,6 @@
 // Arkusz wzorcowy: co masz źle i jak powinna wyglądać cała karta z obliczeniami.
 import type { KartaSpec } from '../silnik/typy';
-import { ocenKarte, polaKryterium, wzorcoweWypelnienie, type Odpowiedzi, type Pomiary } from '../silnik/karta';
+import { ocenKarte, polaKryterium, wypelnijRozwiazanie, wzorcoweWypelnienie, type Odpowiedzi, type Pomiary } from '../silnik/karta';
 
 interface Props {
   spec: KartaSpec;
@@ -71,7 +71,24 @@ export function ArkuszWzorcowy({ spec, pomiary, odpowiedzi }: Props) {
         </div>
       ))}
 
-      {spec.brudnopis && (
+      {spec.rozwiazanie && (
+        <>
+          <h3>Rozwiązanie krok po kroku – na Twoich liczbach</h3>
+          {wypelnijRozwiazanie(spec, pomiary).map((l, i) =>
+            l.startsWith('~') ? (
+              <div key={i} className="proporcja">
+                {l.slice(1).split(' | ').map((w) => (
+                  <div key={w}>{w}</div>
+                ))}
+              </div>
+            ) : (
+              <p key={i}>{l}</p>
+            ),
+          )}
+        </>
+      )}
+
+      {spec.brudnopis && !spec.rozwiazanie && (
         <>
           <h3>Obliczenia proporcjami – krok po kroku</h3>
           {spec.brudnopis.map((l, i) =>

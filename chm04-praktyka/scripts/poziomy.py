@@ -231,7 +231,7 @@ P = {
    kr('Trzy objętości kwasu solnego', 'Odczytaj na dolnym menisku, ±0,05 cm³.', *[liczba(f'v{i}', f'v{i}', 0.05) for i in (1, 2, 3)]),
    kr('Obliczone zawartości NaHCO₃ adekwatne do wyników miareczkowania', '1 cm³ HCl odpowiada 84 mg NaHCO₃. Próbka 1:', *[liczba(f'x{i}', f'$v{i}*0.084/$m{i}*100', 0.02) for i in (1, 2, 3)], pokaz=('$v1*0.084/$m1*100', 2, '%')),
    kr('Średnia zawartość z próbek 1–3', 'Średnia arytmetyczna trzech wyników.', liczba('xsr', 'sr($x1,$x2,$x3)', 0.011), pokaz=('sr($x1,$x2,$x3)', 2, '%')),
-   kr('Wniosek spójny z wynikiem (wymaganie 99,00–101,00%)', 'Porównaj swoją średnią z przedziałem 99,00–101,00%.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': 'min($xsr-99,101-$xsr)+0.000001', 'tak': ['spelnia'], 'nie': ['nie spelnia']}),
+   kr('Wniosek spójny z wynikiem (wymaganie 99,00–101,00%)', 'Porównaj swoją średnią z przedziałem 99,00–101,00%.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': 'min($xsr-99,101-$xsr)+0.000001', 'tak': ['spełnia'], 'nie': ['nie spełnia']}),
    kr('Wyniki ważenia i zawartości z dokładnością do drugiego miejsca po przecinku', 'Dwa miejsca po przecinku w masach i zawartościach.', *[miejsca(p, 2) for p in ('m1', 'm2', 'm3', 'x1', 'x2', 'x3', 'xsr')]),
    kr('Sprzęt miarowy: cylinder miarowy 50 cm³', 'Do odmierzenia 50 cm³ wody służy cylinder miarowy 50 cm³.', {'typ': 'tekstRazem', 'pola': ['sprzet1', 'sprzet2'], 'zawiera': ['cylind'], 'oraz': ['50']}),
    kr('Sprzęt miarowy: biureta 25 cm³', 'Miareczkujesz z biurety 25 cm³.', {'typ': 'tekstRazem', 'pola': ['sprzet1', 'sprzet2'], 'zawiera': ['biuret'], 'oraz': ['25']}),
@@ -567,7 +567,7 @@ P = {
    kr('Poprawka temperaturowa', '0,0002 na każdy stopień powyżej 20 °C.', liczba('popr', '($t-20)*0.0002', 0.00002), pokaz=('($t-20)*0.0002', 4, '')),
    kr('nD20 soku po poprawce', 'nD średnie + poprawka.', liczba('n20', '$nsr+$popr', 0.00006), pokaz=('$nsr+$popr', 4, '')),
    kr('Zawartość cukrów obliczona z proporcji, z dokładnością do 0,1%', 'X = 10% · (nD20 − nD wody) / (nD wzorca − nD wody).', liczba('xc', '10*($n20-$nw)/($nwz-$nw)', 0.06), miejsca('xc', 1), pokaz=('10*($n20-$nw)/($nwz-$nw)', 1, '%')),
-   kr('Wniosek spójny z wynikiem (wymaganie: co najmniej 11,2%)', 'Porównaj X z 11,2%.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '$xc-11.2+0.000001', 'tak': ['spelnia'], 'nie': ['nie spelnia']}),
+   kr('Wniosek spójny z wynikiem (wymaganie: co najmniej 11,2%)', 'Porównaj X z 11,2%.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '$xc-11.2+0.000001', 'tak': ['spełnia'], 'nie': ['nie spełnia']}),
   ]},
 }
 P['protokol'].append({'tytul': 'Skąd ten poziom', 'tresc': UWAGA})
@@ -638,6 +638,16 @@ P = {
    {'tytul': 'Krzywa wzorcowa', 'opis': 'Stężenia wzorców w kolbach: 1, 2, 3, 4, 5 mg/dm³.', 'tabela': {'wiersze': 5, 'kolumny': [{'naglowek': 'Absorbancja A', 'pole': 'A{i}'}, {'naglowek': 'A / c', 'pole': 'k{i}'}]}, 'pola': [pole('a', 'Współczynnik a (średnia z A/c) =', None, 'kr')]},
    {'tytul': 'Próbka', 'pola': [pole('Ax', 'Absorbancja próbki:', None, 'kr'), pole('ck', 'Stężenie Fe w kolbie c =', 'mg/dm³', 'kr'), pole('cp', 'Stężenie Fe w próbce (zatężonej) =', 'mg/dm³', 'kr'), pole('cw', 'Stężenie Fe w wodzie =', 'mg/dm³', 'kr'), pole('wniosek', 'Woda (spełnia / nie spełnia) normę 0,2 mg/dm³:', szer='dl')]}],
   'brudnopis': ['Prawo Lamberta-Beera: absorbancja jest proporcjonalna do stężenia.', '~a (absorbancja dla 1 mg/dm³) — 1 mg/dm³ | A próbki — c mg/dm³', 'Próbkę rozcieńczono 2 razy (25 cm³ → 50 cm³): stężenie w próbce = 2 · c.', 'Próbka była zatężona 10 razy: stężenie w wodzie = stężenie w próbce / 10.'],
+  'rozwiazanie': ['1. Krzywa wzorcowa. Dla każdego wzorca dzielisz absorbancję przez jego stężenie (1, 2, 3, 4, 5 mg/dm³), np. wzorzec 2: {$A2|3} / 2 = {$k2|3}. Współczynnik a to średnia z pięciu ilorazów:',
+                  'a = ({$k1|3} + {$k2|3} + {$k3|3} + {$k4|3} + {$k5|3}) / 5 = {$a|3} – czyli stężenie 1 mg/dm³ daje absorbancję {$a|3}.',
+                  '2. Stężenie w kolbie z próbki – proporcja:',
+                  '~{$a|3} — 1 mg/dm³ | {$Ax|3} — c',
+                  'c = {$Ax|3} · 1 / {$a|3} = {$ck|2} mg/dm³',
+                  '3. W kolbie próbka była rozcieńczona: 25 cm³ próbki uzupełniono do 50 cm³, czyli 2 razy. Stężenie w próbce jest 2 razy większe:',
+                  '~25 cm³ próbki — 50 cm³ w kolbie | {$ck|2} mg/dm³ w kolbie — x',
+                  'x = {$ck|2} · 50 / 25 = {$cp|2} mg/dm³',
+                  '4. Próbkę przed analizą zatężono 10 razy, więc w wodzie stężenie jest 10 razy mniejsze: {$cp|2} / 10 = {$cw|2} mg/dm³.',
+                  '5. Wniosek: {$cw|2} mg/dm³ porównujesz z normą 0,2 mg/dm³ – woda {$wniosek}.'],
   'kryteria': [
    kr('Absorbancje pięciu wzorców zgodne ze wskazaniami', 'Przepisz absorbancje z wyświetlacza.', *[liczba(f'A{i}', f'A{i}', 0.0005) for i in (1, 2, 3, 4, 5)]),
    kr('Ilorazy A/c dla wzorców', 'Podziel absorbancję przez stężenie wzorca (1, 2, 3, 4, 5 mg/dm³).', *[liczba(f'k{i}', f'$A{i}/{i}', 0.0011) for i in (1, 2, 3, 4, 5)]),
@@ -647,7 +657,7 @@ P = {
    kr('Stężenie w próbce z uwzględnieniem rozcieńczenia', 'Pomnóż przez 2 (25 cm³ → 50 cm³).', liczba('cp', '$ck*2', 0.021), pokaz=('$ck*2', 2, ' mg/dm³')),
    kr('Stężenie w wodzie z uwzględnieniem zatężenia', 'Podziel przez 10.', liczba('cw', '$cp/10', 0.006), pokaz=('$cp/10', 2, ' mg/dm³')),
    kr('Stężenia z dokładnością do 0,01', 'Dwa miejsca po przecinku.', miejsca('ck', 2), miejsca('cp', 2), miejsca('cw', 2)),
-   kr('Wniosek spójny z wynikiem (norma: najwyżej 0,2 mg/dm³)', 'Porównaj stężenie w wodzie z 0,2 mg/dm³.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '0.2-$cw+0.000001', 'tak': ['spelnia'], 'nie': ['nie spelnia']}),
+   kr('Wniosek spójny z wynikiem (norma: najwyżej 0,2 mg/dm³)', 'Porównaj stężenie w wodzie z 0,2 mg/dm³.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '0.2-$cw+0.000001', 'tak': ['spełnia'], 'nie': ['nie spełnia']}),
   ]},
 }
 P['protokol'].append({'tytul': 'Skąd ten poziom', 'tresc': UWAGA})
@@ -802,7 +812,7 @@ P = {
    kr('Średni kąt skręcenia', 'Średnia z trzech odczytów.', liczba('asr', 'sr($a1,$a2,$a3)', 0.011), pokaz=('sr($a1,$a2,$a3)', 2, '°')),
    kr('Stężenie glukozy z dokładnością do 0,01', 'c = 100 · α / (52,7 · 2).', liczba('c', '100*$asr/(52.7*2)', 0.011), miejsca('c', 2), pokaz=('100*$asr/(52.7*2)', 2, ' g/100 cm³')),
    kr('Odchylenie od deklaracji w %', '(c − 5,00) / 5,00 · 100%.', liczba('odch', '($c-5)/5*100', 0.11), pokaz=('($c-5)/5*100', 1, '%')),
-   kr('Wniosek spójny z wynikiem (±5%)', 'Spełnia, jeśli odchylenie mieści się w ±5%.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '0.25-abs($c-5)+0.000001', 'tak': ['spelnia'], 'nie': ['nie spelnia']}),
+   kr('Wniosek spójny z wynikiem (±5%)', 'Spełnia, jeśli odchylenie mieści się w ±5%.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '0.25-abs($c-5)+0.000001', 'tak': ['spełnia'], 'nie': ['nie spełnia']}),
   ]},
 }
 zapisz('14-polarymetria-glukoza.json', P)

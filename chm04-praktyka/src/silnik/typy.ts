@@ -151,5 +151,7 @@ export interface KartaSpec {
   sekcje: SekcjaKarty[];
   /** Linie brudnopisu; linia zaczynająca się od "~" to proporcja (wiersze rozdzielone " | "). */
   brudnopis?: string[];
+  /** Rozwiązanie krok po kroku z liczbami: {wzór|miejsca} – „$x” to wartość z arkusza wzorcowego, „x” to pomiar. */
+  rozwiazanie?: string[];
   kryteria: KryteriumSpec[];
 }

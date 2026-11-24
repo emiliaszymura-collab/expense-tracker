@@ -1189,10 +1189,10 @@
             "pole": "wniosek",
             "wzor": "min($xsr-99,101-$xsr)+0.000001",
             "tak": [
-              "spelnia"
+              "spełnia"
             ],
             "nie": [
-              "nie spelnia"
+              "nie spełnia"
             ]
           }
         ]

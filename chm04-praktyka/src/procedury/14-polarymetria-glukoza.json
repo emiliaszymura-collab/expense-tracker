@@ -612,10 +612,10 @@
             "pole": "wniosek",
             "wzor": "0.25-abs($c-5)+0.000001",
             "tak": [
-              "spelnia"
+              "spełnia"
             ],
             "nie": [
-              "nie spelnia"
+              "nie spełnia"
             ]
           }
         ]

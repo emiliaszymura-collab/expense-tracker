@@ -139,7 +139,7 @@ export function wzorcoweWypelnienie(spec: KartaSpec, p: Pomiary): Odpowiedzi {
         const w = oblicz(s.wzor, z);
         if (Number.isFinite(w)) {
           // bez wymogu miejsc: tyle miejsc, ile wynika z tolerancji (błąd zaokrąglenia ≤ połowa tolerancji)
-          const d = miejsc[s.pole] ?? Math.min(6, Math.max(0, Math.ceil(-Math.log10(s.tol || 1e-6))));
+          const d = miejsc[s.pole] ?? Math.min(6, Math.max(0, Math.ceil(-Math.log10(2 * (s.tol || 1e-6)))));
           o[s.pole] = w.toFixed(d).replace('.', ',');
         }
       } else if (s.typ === 'tekst') {
@@ -165,4 +165,17 @@ export function wzorcoweWypelnienie(spec: KartaSpec, p: Pomiary): Odpowiedzi {
 export function polaKryterium(s: Sprawdzenie): string[] {
   const x = s as unknown as { pole?: string; pola?: string[] };
   return [...(x.pole ? [x.pole] : []), ...(x.pola ?? [])];
+}
+
+/** Wstawia liczby do linii rozwiązania: {wzór|miejsca}. */
+export function wypelnijRozwiazanie(spec: KartaSpec, p: Pomiary): string[] {
+  const o = wzorcoweWypelnienie(spec, p);
+  const z = (n: string) => (n.startsWith('$') ? liczba(o[n.slice(1)]) : p[n]);
+  return (spec.rozwiazanie ?? []).map((l) =>
+    l.replace(/\{([^}|]+)(?:\|(\d+))?\}/g, (_, w: string, m?: string) => {
+      if (/^\$\w+$/.test(w.trim()) && !Number.isFinite(liczba(o[w.trim().slice(1)]))) return o[w.trim().slice(1)] ?? '?';
+      const v = oblicz(w, z);
+      return Number.isFinite(v) ? (m !== undefined ? v.toFixed(Number(m)) : String(Number(v.toFixed(6)))).replace('.', ',') : '?';
+    }),
+  );
 }
