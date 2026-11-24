@@ -10,7 +10,7 @@ import { ArkuszWzorcowy } from './ui/Wzorcowy';
 import { Karta } from './ui/Karta';
 import { Konsola } from './ui/Konsola';
 import { Lupa } from './ui/Lupa';
-import { OkularAbbego } from './ui/Okular';
+import { OkularAbbego, OkularPolarymetru } from './ui/Okular';
 import { PanelProtokolu } from './ui/PanelProtokolu';
 
 export default function App() {
@@ -246,9 +246,13 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
               <Lupa v={pomiary[poziom.scena?.odczytBiureta ?? 'v1'] ?? 0} podpis="Odczytaj objętość na dolnym menisku" />
             </div>
           )}
-          {okular && poziom.scena?.przyrzad === 'refraktometr' && poziom.scena.okular && (
+          {okular && poziom.scena?.okular && (
             <div className="lupa-plywajaca">
-              <OkularAbbego n={pomiary[poziom.scena.okular] ?? 1.333} podpis="Granica pól na przecięciu nici – odczytaj nD" />
+              {poziom.scena.przyrzad === 'polarymetr' ? (
+                <OkularPolarymetru kat={pomiary[poziom.scena.okular] ?? 0} podpis="Pola zrównane – odczytaj kąt: stopnie ze skali, setne z noniusza" />
+              ) : (
+                <OkularAbbego n={pomiary[poziom.scena.okular] ?? 1.333} podpis="Granica pól na przecięciu nici – odczytaj nD" />
+              )}
             </div>
           )}
         </div>

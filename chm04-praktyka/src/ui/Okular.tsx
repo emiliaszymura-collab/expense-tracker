@@ -41,3 +41,50 @@ export function OkularAbbego({ n, podpis }: { n: number; podpis?: string }) {
     </figure>
   );
 }
+
+// Widok w okularze polarymetru półcieniowego: pole podzielone na dwie połowy o równym zaciemnieniu
+// (analizator ustawiony) oraz skala główna co 1° z noniuszem 20-działkowym – dokładność 0,05°.
+export function OkularPolarymetru({ kat, podpis }: { kat: number; podpis?: string }) {
+  const W = 380;
+  const k = 16; // px na 1° skali głównej
+  const x0 = 26; // zero noniusza – przy nim odczytuje się pełne stopnie
+  const x = (st: number) => x0 + (st - kat) * k;
+  const glowna: JSX.Element[] = [];
+  for (let m = Math.ceil(kat - 1); m <= Math.floor(kat + 21); m++) {
+    const duza = m % 5 === 0;
+    glowna.push(<line key={m} x1={x(m)} x2={x(m)} y1={150} y2={duza ? 128 : 136} stroke="#1b1b1b" strokeWidth={duza ? 1.6 : 1} />);
+    if (duza) glowna.push(<text key={`t${m}`} x={x(m)} y={124} textAnchor="middle" fontSize="12" fontWeight="700" fill="#1b1b1b">{m}</text>);
+  }
+  const noniusz: JSX.Element[] = [];
+  for (let i = 0; i <= 20; i++) {
+    const xi = x0 + i * 0.95 * k;
+    const opis = i % 5 === 0;
+    noniusz.push(<line key={i} x1={xi} x2={xi} y1={150} y2={opis ? 170 : 163} stroke="#7a1f1f" strokeWidth={i === 0 ? 1.8 : 1} />);
+    if (opis) noniusz.push(<text key={`n${i}`} x={xi} y={183} textAnchor="middle" fontSize="10" fill="#7a1f1f">{i}</text>);
+  }
+  return (
+    <figure className="lupa okular">
+      <svg viewBox={`0 0 ${W} 200`} width={W} height={200} role="img" aria-label="Widok w okularze polarymetru – odczytaj kąt ze skali i noniusza">
+        <defs>
+          <clipPath id="pole-polarymetru">
+            <circle cx={W / 2} cy={55} r={46} />
+          </clipPath>
+        </defs>
+        <rect width={W} height={200} fill="#101418" rx="10" />
+        {/* półcień: obie połowy jednakowo zaciemnione – analizator ustawiony */}
+        <g clipPath="url(#pole-polarymetru)">
+          <rect x="0" y="0" width={W / 2} height={110} fill="#b9a45a" />
+          <rect x={W / 2} y="0" width={W / 2} height={110} fill="#b5a057" />
+          <line x1={W / 2} y1={0} x2={W / 2} y2={110} stroke="#5d5230" strokeWidth="1" />
+        </g>
+        <circle cx={W / 2} cy={55} r={46} fill="none" stroke="#5c646b" strokeWidth="3" />
+        <rect x="8" y="112" width={W - 16} height="80" fill="#f2efe3" rx="4" />
+        {glowna}
+        {noniusz}
+        <text x={14} y={142} fontSize="9" fill="#555">°</text>
+        <text x={W - 12} y={190} textAnchor="end" fontSize="9" fill="#7a1f1f">noniusz ×0,05°</text>
+      </svg>
+      {podpis && <figcaption>{podpis}</figcaption>}
+    </figure>
+  );
+}

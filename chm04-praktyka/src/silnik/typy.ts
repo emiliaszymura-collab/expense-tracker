@@ -96,6 +96,8 @@ export type Odczyt =
   | { typ: 'biureta'; id: string; etykieta: string }
   /** Widok w okularze refraktometru Abbego – granica pól i skala nD do odczytu. */
   | { typ: 'refraktometr'; id: string; etykieta: string }
+  /** Widok w okularze polarymetru – półcień i skala z noniuszem. */
+  | { typ: 'polarymetr'; id: string; etykieta: string }
   | { typ: 'papierek'; id: string; etykieta: string }
   /** Krzywa miareczkowania słabego kwasu mocną zasadą; id = pomiar z objętością w punkcie końcowym. */
   | { typ: 'krzywa'; id: string; etykieta: string }
