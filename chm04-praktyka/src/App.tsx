@@ -141,8 +141,8 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
   const ukonczony = poziomUkonczony(poziom, stan);
   const poOdczycie = Boolean(poziom.karta) && (ukonczony || (poziom.scena?.kartaPo ? stan.wykonane.includes(poziom.scena.kartaPo) : false));
   const otworzKarte = (otwarta: boolean) => {
+    // protokół zostaje otwarty obok – karta i protokół jednocześnie, jak dwie kartki na stole
     setKartaOtwarta(otwarta);
-    if (otwarta) setProtokolOtwarty(false);
   };
 
   // odliczanie czasu egzaminu
@@ -217,7 +217,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
             Arkusz<span className="tylko-szeroki">&nbsp;CKE</span>
           </button>
         ) : null}
-        {arkusz && <ArkuszCke poziom={poziom} onZamknij={() => setArkusz(false)} />}
+        {arkusz && <ArkuszCke poziom={poziom} obok={kartaOtwarta} onZamknij={() => setArkusz(false)} />}
         <button className="drugorzedny" onClick={() => otworzKarte(!kartaOtwarta)} disabled={!poOdczycie && !egzamin} title={poOdczycie || egzamin ? '' : 'Dostępna po pierwszym odczycie wyniku'}>
           Karta<span className="tylko-szeroki">&nbsp;wyników</span>
         </button>
@@ -249,7 +249,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
           <Laboratorium
             kroki={wykonaneKroki}
             bhp={stan.bhp}
-            pokazEtykiety={etykiety}
+            pokazEtykiety={etykiety && !kartaOtwarta}
             kartkaOtwarta={protokolOtwarty || kartaOtwarta}
             pisanie={kartaOtwarta}
             widok={widok}
@@ -260,16 +260,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
             przyrzad={poziom.scena?.przyrzad}
             phmetr={poziom.scena?.phmetr}
           />
-          {!kartaOtwarta && (
-            <PanelProtokolu
-              poziom={poziom}
-              otwarty={protokolOtwarty}
-              onPrzelacz={(o) => {
-                setProtokolOtwarty(o);
-                if (o) setKartaOtwarta(false);
-              }}
-            />
-          )}
+          <PanelProtokolu poziom={poziom} otwarty={protokolOtwarty} onPrzelacz={setProtokolOtwarty} />
           {lupa && (
             <div className="lupa-plywajaca">
               <Lupa v={pomiary[poziom.scena?.odczytBiureta ?? 'v1'] ?? 0} podpis="Odczytaj objętość na dolnym menisku" />
@@ -295,6 +286,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
             podpowiedzi={!egzamin}
             bezSprawdzania={egzamin}
             onOddaj={egzamin && !stan.zakonczony ? () => setPytanieOddaj(true) : undefined}
+            obok={protokolOtwarty || arkusz}
           />
         )}
         <Konsola

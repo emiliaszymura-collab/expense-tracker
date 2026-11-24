@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import type { Poziom } from '../silnik/typy';
 
 /** Cały oryginalny arkusz egzaminacyjny CKE – wszystkie strony z tabelami, tak jak na egzaminie. */
-export function ArkuszCke({ poziom, onZamknij }: { poziom: Poziom; onZamknij: () => void }) {
+export function ArkuszCke({ poziom, onZamknij, obok = false }: { poziom: Poziom; onZamknij: () => void; obok?: boolean }) {
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === 'Escape' && onZamknij();
     window.addEventListener('keydown', k);
@@ -11,7 +11,7 @@ export function ArkuszCke({ poziom, onZamknij }: { poziom: Poziom; onZamknij: ()
   const n = poziom.arkuszStron ?? 0;
   const nr = (i: number) => (n >= 10 ? String(i).padStart(2, '0') : String(i));
   return (
-    <div className="arkusz-cke" role="dialog" aria-label="Arkusz egzaminacyjny CKE">
+    <div className={`arkusz-cke${obok ? ' arkusz-obok' : ''}`} role="dialog" aria-label="Arkusz egzaminacyjny CKE">
       <div className="arkusz-cke-pasek">
         <strong>Arkusz CKE – {poziom.zrodlo}</strong>
         <button onClick={onZamknij}>Zamknij</button>

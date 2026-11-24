@@ -1336,3 +1336,14 @@ button.sprawdz {
 .arkusz-cke-pasek { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 16px; background: var(--panel, #fff); color: var(--tekst, #111); }
 .arkusz-cke-strony { overflow-y: auto; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .arkusz-cke-strony img { width: min(900px, 100%); background: #fff; box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
+
+/* Protokół (lewa połowa) i karta wyników (prawa połowa) jednocześnie */
+.kartka-karta.kartka-obok { left: auto; right: 10px; z-index: 6; }
+/* Arkusz CKE obok karty: lewa połowa ekranu, karta zostaje widoczna po prawej */
+.arkusz-cke.arkusz-obok { right: 50%; }
+.arkusz-cke.arkusz-obok ~ * {}
+@media (max-width: 800px) {
+  /* telefon: protokół u góry, karta na dole */
+  .kartka-karta.kartka-obok { left: 6px; right: 6px; top: 50%; bottom: 6px; height: auto; }
+  .arkusz-cke.arkusz-obok { right: 0; bottom: 50%; }
+}

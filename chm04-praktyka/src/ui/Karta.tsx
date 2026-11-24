@@ -19,6 +19,8 @@ interface Props {
   bezSprawdzania?: boolean;
   /** Egzamin: oddanie pracy prosto z karty. */
   onOddaj?: () => void;
+  /** Obok otwarty protokół / arkusz – karta zajmuje prawą połowę. */
+  obok?: boolean;
 }
 
 const SKALA_PH = ['#d62828', '#e2452a', '#ee6c2c', '#f39c2f', '#f1c93b', '#c9d544', '#6fbf4a', '#35a26b', '#2a9a8f', '#2b78b5', '#3a55a4', '#4a3f98', '#5b2d8c', '#6a1f7a'];
@@ -146,7 +148,7 @@ function WidokOdczytu({ o, p }: { o: Odczyt; p: Pomiary }) {
   );
 }
 
-export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi, bezSprawdzania = false, onOddaj }: Props) {
+export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi, bezSprawdzania = false, onOddaj, obok = false }: Props) {
   const [wynik, setWynik] = useState<Kryterium[] | null>(null);
   const wynikRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -173,7 +175,7 @@ export function Karta({ spec, pomiary, odpowiedzi, onZmiana, onZwin, podpowiedzi
   const punkty = wynik?.filter((k) => k.ok).length ?? 0;
 
   return (
-    <aside className="kartka kartka-karta" aria-label="Karta wyników">
+    <aside className={`kartka kartka-karta${obok ? ' kartka-obok' : ''}`} aria-label="Karta wyników">
       <header className="kartka-naglowek">
         <div>
           <span className="kartka-zrodlo">Dokumentacja z badań</span>
