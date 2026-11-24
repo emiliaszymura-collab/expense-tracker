@@ -8,7 +8,7 @@ const poziomy = Object.values(import.meta.glob<{ default: Poziom }>('../procedur
 const WPISY: Record<string, string[]> = {
   stol: ['umyj blat', 'myję blat', 'umycie blatu', 'wytrzyj stół', 'wycieram blat', 'osuszam blat', 'osuszenie blatu', 'przecieram stół', 'sprzątam stanowisko', 'porządkuję stanowisko pracy', 'czyszczę blat', 'wyczyść stół', 'przetarcie blatu', 'myję stanowisko'],
   myj: ['myję szkło', 'umyj szkło', 'płuczę naczynia', 'mycie szkła laboratoryjnego', 'umyj kolby', 'myję naczynia'],
-  odpady: ['przelewam do odpadów', 'wylewam mieszaniny do pojemnika na odpady', 'odpady do pojemnika', 'zlewam roztwory do pojemnika na odpady ciekłe'],
+  odpady: ['przelewam do odpadów', 'wylewam mieszaniny do pojemnika na odpady', 'odpady do pojemnika', 'zlewam roztwory do pojemnika na odpady ciekłe', 'wylej mieszaniny poreakcyjne', 'przelewam mieszaniny poreakcyjne', 'wylewam roztwory po miareczkowaniu', 'przelej zawartość kolb do odpadów'],
   wylacz_wage: ['wyłączam wagę', 'wyłącz wagę', 'wyłączenie wagi'],
   waga: ['włączam wagę', 'włącz wagę i wytaruj', 'uruchamiam wagę', 'taruję wagę'],
   rozmontuj: ['rozmontowuję zestaw', 'demontuję zestaw do miareczkowania', 'rozkładam zestaw'],

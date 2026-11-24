@@ -268,7 +268,12 @@
           "odpad",
           "pojemnik",
           "utyliz",
-          "butelk"
+          "butelk",
+          "mieszanin",
+          "poreakcyj",
+          "roztwor",
+          "resztk",
+          "zawartoś"
         ]
       ],
       "wymaga": [
