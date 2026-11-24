@@ -1,17 +1,17 @@
 {
   "id": "09-refraktometria",
-  "tytul": "Ekstrakt w soku – refraktometr",
+  "tytul": "Cukier w soku – refraktometr Abbego",
   "zrodlo": "Poziom przewidywany – podstawa programowa 2019",
-  "metoda": "Refraktometria (refraktometr Abbego, skala Brix)",
+  "metoda": "Refraktometria (refraktometr Abbego, współczynnik załamania nD)",
   "czasMinut": 180,
   "protokol": [
     {
       "tytul": "Zadanie egzaminacyjne",
-      "tresc": "Korzystając z zamieszczonej procedury, oznacz zawartość ekstraktu (cukrów) w soku owocowym metodą refraktometryczną (refraktometr Abbego, skala Brix).\nSprawdź wskazanie refraktometru na wodzie destylowanej. Sporządź roztwór wzorcowy sacharozy 10% i zmierz go.\nWykonaj trzy pomiary soku, każdy z nową porcją próbki. Oblicz średnią, uwzględnij poprawkę temperaturową i oceń, czy sok spełnia wymaganie producenta: co najmniej 11,2% Brix.\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj i osusz pryzmat oraz uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg sprawdzenia przyrządu i pomiarów (przygotowanie pryzmatu, nanoszenie próbki, ustawienie granicy, odczyt),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy."
+      "tresc": "Korzystając z zamieszczonej procedury, oznacz zawartość cukrów (w przeliczeniu na sacharozę) w soku owocowym metodą refraktometryczną z użyciem refraktometru Abbego.\nSprawdź wskazanie refraktometru na wodzie destylowanej (nD = 1,3330). Sporządź roztwór wzorcowy sacharozy 10% (m/m) i zmierz jego współczynnik załamania.\nWykonaj trzy pomiary współczynnika załamania soku, każdy z nową porcją próbki. Oblicz średnią, uwzględnij poprawkę temperaturową i oblicz zawartość cukrów. Oceń, czy sok spełnia wymaganie producenta: co najmniej 11,2% cukrów.\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj i osusz pryzmaty oraz uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg sprawdzenia przyrządu i pomiarów (przygotowanie pryzmatów, nanoszenie próbki, ustawienie granicy pól, odczyt nD),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy."
     },
     {
       "tytul": "Procedura",
-      "tresc": "1. Sprawdzenie refraktometru\nPryzmat przemyć wodą destylowaną i osuszyć miękką bibułą. Nanieść 2–3 krople wody destylowanej, zamknąć pryzmat i odczytać wskazanie: n = 1,3330, 0,0% Brix (20 °C).\n2. Roztwór wzorcowy\nOdważyć 10,00 g sacharozy, rozpuścić w wodzie w zlewce i uzupełnić wodą do masy 100,00 g. Zmierzyć – wskazanie powinno wynosić 10,0% Brix.\n3. Pomiar próbki\nPryzmat osuszyć. Nanieść bagietką 2–3 krople soku (nie dotykać pryzmatu szkłem), zamknąć pryzmat. Ustawić ostrą granicę światła i cienia na przecięciu nici, usunąć zabarwienie kompensatorem. Odczytać % Brix i temperaturę. Pomiar wykonać trzy razy, każdorazowo nanosząc nową porcję soku.\n4. Zakończenie\nPryzmat umyć wodą destylowaną i osuszyć.\nObliczenia\nWynik to średnia arytmetyczna trzech odczytów nieróżniących się o więcej niż 0,2% Brix, z dokładnością do 0,1.\nPoprawka temperaturowa: +0,07% Brix na każdy 1 °C powyżej 20 °C (poniżej 20 °C – odjąć)."
+      "tresc": "1. Sprawdzenie refraktometru\nOtworzyć pryzmaty, przemyć je wodą destylowaną i osuszyć miękką bibułą. Nanieść 2–3 krople wody destylowanej na dolny pryzmat, zamknąć pryzmaty. Patrząc w okular, ustawić pokrętłem granicę pola jasnego i ciemnego na przecięciu nici, kompensatorem usunąć barwne zabarwienie granicy. Odczytać nD – dla wody w 20 °C: 1,3330.\n2. Roztwór wzorcowy\nOdważyć 10,00 g sacharozy, rozpuścić w wodzie w zlewce i uzupełnić wodą do masy 100,00 g. Zmierzyć nD roztworu wzorcowego (ok. 1,3478 w 20 °C).\n3. Pomiar próbki\nPryzmaty osuszyć. Nanieść bagietką 2–3 krople soku (nie dotykać pryzmatu szkłem), zamknąć pryzmaty. Ustawić ostrą granicę pól na przecięciu nici, usunąć zabarwienie kompensatorem. Odczytać nD z dokładnością do 0,0001 i temperaturę z termometru przy pryzmatach. Pomiar wykonać trzy razy, każdorazowo nanosząc nową porcję soku.\n4. Zakończenie\nPryzmaty umyć wodą destylowaną i osuszyć miękką bibułą.\nObliczenia\nŚrednia arytmetyczna trzech odczytów nieróżniących się o więcej niż 0,0003, z dokładnością do 0,0001.\nPoprawka temperaturowa: +0,0002 na każdy 1 °C powyżej 20 °C (poniżej 20 °C – odjąć): nD20 = nD(t) + 0,0002 · (t − 20).\nZawartość cukrów z proporcji (zależność liniowa):\nX = 10% · (nD20 soku − nD wody) / (nD wzorca − nD wody)\nWynik z dokładnością do 0,1%."
     },
     {
       "tytul": "Skąd ten poziom",
@@ -21,7 +21,7 @@
   "kroki": [
     {
       "id": "pryzmat1",
-      "opis": "Pryzmat refraktometru przemyty wodą destylowaną i osuszony miękką bibułą.",
+      "opis": "Pryzmaty refraktometru otwarte, przemyte wodą destylowaną i osuszone miękką bibułą.",
       "wymagane": [
         [
           "przemy",
@@ -31,27 +31,31 @@
           "osusz",
           "wytrz",
           "czyszcz",
-          "czyść"
+          "czyść",
+          "otwórz",
+          "otwier"
         ],
         [
-          "pryzmat"
+          "pryzmat",
+          "refraktometr"
         ]
       ],
       "wykluczajace": [
         "koniec",
         "zakończ",
-        "po pomiar"
+        "po pomiar",
+        "na koniec"
       ],
       "wymaga": [],
-      "podpowiedz": "Przemyj pryzmat wodą destylowaną i osusz miękką bibułą.",
+      "podpowiedz": "Otwórz pryzmaty, przemyj je wodą destylowaną i osusz miękką bibułą.",
       "dlaczego": "Resztki poprzedniej próbki zmieniają współczynnik załamania.",
-      "sprzet": "stol",
-      "animacja": "siegnij",
-      "przyklad": "przemywam pryzmat wodą destylowaną i osuszam bibułą"
+      "sprzet": "przyrzad",
+      "animacja": "mycie",
+      "przyklad": "przemywam pryzmaty wodą destylowaną i osuszam bibułą"
     },
     {
       "id": "zero",
-      "opis": "Sprawdzono wskazanie na wodzie destylowanej: n = 1,3330, 0,0% Brix.",
+      "opis": "Na pryzmat naniesiono wodę destylowaną; odczyt nD = 1,3330 – przyrząd wskazuje poprawnie.",
       "wymagane": [
         [
           "sprawdz",
@@ -60,7 +64,9 @@
           "wzorc",
           "nanoś",
           "nanieś",
-          "naniesi"
+          "naniesi",
+          "zmierz",
+          "mierz"
         ],
         [
           "wod"
@@ -69,14 +75,15 @@
       "wykluczajace": [
         "sok",
         "sacharoz",
+        "cukr",
         "pryzmat wod"
       ],
       "wymaga": [
         "pryzmat1"
       ],
-      "podpowiedz": "Nanieś 2–3 krople wody destylowanej i sprawdź, czy przyrząd wskazuje 1,3330 (0,0% Brix).",
+      "podpowiedz": "Nanieś 2–3 krople wody destylowanej, zamknij pryzmaty i sprawdź, czy przyrząd wskazuje nD = 1,3330.",
       "dlaczego": "Bez sprawdzenia na wodzie nie wiesz, czy przyrząd nie ma błędu systematycznego.",
-      "sprzet": "stol",
+      "sprzet": "przyrzad",
       "animacja": "pipetowanie",
       "przyklad": "nanoszę wodę destylowaną i sprawdzam wskazanie refraktometru"
     },
@@ -122,7 +129,8 @@
           "sporządz",
           "przygotow",
           "rozpuść",
-          "rozpuszcz"
+          "rozpuszcz",
+          "zważ"
         ],
         [
           "sacharoz",
@@ -133,16 +141,19 @@
       "wykluczajace": [
         "pomiar",
         "mierz",
-        "nanoś"
+        "nanoś",
+        "nanieś",
+        "pryzmat",
+        "refraktometr"
       ],
       "wymaga": [
         "waga"
       ],
       "wymagaBhp": true,
       "podpowiedz": "Odważ 10,00 g sacharozy, rozpuść w wodzie i uzupełnij wodą do masy 100,00 g.",
-      "dlaczego": "10 g cukru w 100 g roztworu to dokładnie 10% (m/m), czyli 10,0% Brix.",
+      "dlaczego": "10 g cukru w 100 g roztworu to dokładnie 10% (m/m).",
       "sprzet": "waga",
-      "animacja": "siegnij",
+      "animacja": "wazenie",
       "stanSceny": {
         "zlewka": "roztwor"
       },
@@ -150,7 +161,7 @@
     },
     {
       "id": "pomiar_wz",
-      "opis": "Zmierzono roztwór wzorcowy – wskazanie 10,0% Brix.",
+      "opis": "Zmierzono nD roztworu wzorcowego.",
       "wymagane": [
         [
           "mierz",
@@ -158,30 +169,33 @@
           "pomiar",
           "nanoś",
           "nanieś",
-          "odczyt"
+          "odczyt",
+          "sprawdz"
         ],
         [
           "wzorc",
-          "sacharoz"
+          "sacharoz",
+          "cukr"
         ]
       ],
       "wykluczajace": [
         "odważ",
-        "sporządz"
+        "sporządz",
+        "rozpuść"
       ],
       "wymaga": [
         "wzorzec",
         "zero"
       ],
-      "podpowiedz": "Nanieś roztwór wzorcowy na pryzmat i odczytaj wskazanie.",
-      "dlaczego": "Potwierdzasz, że przyrząd mierzy poprawnie także w zakresie próbki.",
-      "sprzet": "stol",
+      "podpowiedz": "Nanieś roztwór wzorcowy na pryzmat, ustaw granicę pól i odczytaj nD.",
+      "dlaczego": "nD wzorca to drugi punkt proporcji – razem z wodą wyznacza zależność nD od stężenia.",
+      "sprzet": "przyrzad",
       "animacja": "pipetowanie",
-      "przyklad": "mierzę roztwór wzorcowy sacharozy na refraktometrze"
+      "przyklad": "mierzę współczynnik załamania roztworu wzorcowego"
     },
     {
       "id": "sok",
-      "opis": "Na osuszony pryzmat naniesiono bagietką 2–3 krople soku i zamknięto pryzmat.",
+      "opis": "Na osuszony pryzmat naniesiono bagietką 2–3 krople soku i zamknięto pryzmaty.",
       "wymagane": [
         [
           "nanoś",
@@ -189,7 +203,8 @@
           "naniesi",
           "nakład",
           "nakrapl",
-          "kropl"
+          "kropl",
+          "umieść"
         ],
         [
           "sok",
@@ -200,49 +215,64 @@
         "pomiar_wz"
       ],
       "wymagaBhp": true,
-      "podpowiedz": "Osusz pryzmat i nanieś bagietką 2–3 krople soku; zamknij pryzmat.",
+      "podpowiedz": "Osusz pryzmat i nanieś bagietką 2–3 krople soku; zamknij pryzmaty.",
       "dlaczego": "Szklaną pipetą łatwo zarysować pryzmat – próbkę nanosi się bagietką, nie dotykając szkła.",
-      "sprzet": "stol",
+      "sprzet": "przyrzad",
       "animacja": "pipetowanie",
       "przyklad": "nanoszę bagietką 3 krople soku na pryzmat"
     },
     {
       "id": "granica",
-      "opis": "Ustawiono ostrą granicę światła i cienia na przecięciu nici, usunięto zabarwienie kompensatorem.",
+      "opis": "W okularze ustawiono ostrą granicę pola jasnego i ciemnego na przecięciu nici, kompensatorem usunięto zabarwienie.",
       "wymagane": [
         [
           "granic",
           "ostroś",
+          "ostr",
           "nici",
           "krzyż",
           "kompensat",
-          "pokrętł"
+          "pokrętł",
+          "pole",
+          "pola",
+          "okular"
         ]
+      ],
+      "wykluczajace": [
+        "odczyt"
       ],
       "wymaga": [
         "sok"
       ],
-      "podpowiedz": "Ustaw ostrą granicę jasnego i ciemnego pola na przecięciu nici krzyża; zabarwienie usuń kompensatorem.",
-      "dlaczego": "Rozmyta lub kolorowa granica daje błędny odczyt.",
-      "sprzet": "stol",
-      "animacja": "siegnij",
-      "przyklad": "ustawiam ostrą granicę na przecięciu nici"
+      "podpowiedz": "Patrząc w okular, ustaw pokrętłem granicę jasnego i ciemnego pola na przecięciu nici; zabarwienie usuń kompensatorem.",
+      "dlaczego": "Rozmyta lub kolorowa granica daje błędny odczyt nD.",
+      "sprzet": "przyrzad",
+      "animacja": "pokretlo",
+      "przyklad": "ustawiam ostrą granicę pól na przecięciu nici"
     },
     {
       "id": "odczyt",
-      "opis": "Odczytano % Brix i temperaturę.",
+      "opis": "Odczytano nD soku ze skali w okularze oraz temperaturę.",
       "wymagane": [
         [
           "odczyt",
           "zapis",
-          "notuj"
+          "notuj",
+          "sprawdz",
+          "patrz",
+          "mierz",
+          "zmierz"
         ],
         [
-          "brix",
+          "nd",
+          "współczyn",
+          "załaman",
           "skal",
           "wynik",
           "temperatur",
-          "wskazan"
+          "wskazan",
+          "refrakc",
+          "okular"
         ]
       ],
       "wykluczajace": [
@@ -252,11 +282,11 @@
       "wymaga": [
         "granica"
       ],
-      "podpowiedz": "Odczytaj ze skali % Brix oraz temperaturę.",
-      "dlaczego": "Wskazanie zależy od temperatury – bez niej nie zrobisz poprawki.",
-      "sprzet": "stol",
-      "animacja": "siegnij",
-      "przyklad": "odczytuję Brix i temperaturę"
+      "podpowiedz": "Spójrz w okular i odczytaj nD ze skali (4 miejsca po przecinku) oraz temperaturę z termometru.",
+      "dlaczego": "Współczynnik załamania zależy od temperatury – bez niej nie zrobisz poprawki.",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
+      "przyklad": "odczytuję współczynnik załamania nD i temperaturę"
     },
     {
       "id": "powtorz",
@@ -283,34 +313,38 @@
       "wymagaBhp": true,
       "podpowiedz": "Powtórz pomiar jeszcze dwa razy, nanosząc nową porcję soku.",
       "dlaczego": "Wynik to średnia z trzech zgodnych odczytów.",
-      "sprzet": "stol",
-      "animacja": "pipetowanie",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
       "stanSceny": {},
-      "przyklad": "powtarzam pomiar jeszcze dwa razy"
+      "przyklad": "powtarzam pomiar jeszcze dwa razy z nową porcją soku"
     },
     {
       "id": "pryzmat2",
-      "opis": "Po pomiarach pryzmat umyto wodą destylowaną i osuszono.",
+      "opis": "Po pomiarach pryzmaty umyto wodą destylowaną i osuszono miękką bibułą.",
       "wymagane": [
         [
-          "koniec",
-          "zakończ",
-          "po pomiar",
-          "na koniec",
-          "ponown"
+          "przemy",
+          "umyj",
+          "myję",
+          "opłucz",
+          "osusz",
+          "wytrz",
+          "czyszcz",
+          "czyść"
         ],
         [
-          "pryzmat"
+          "pryzmat",
+          "refraktometr"
         ]
       ],
       "wymaga": [
         "powtorz"
       ],
-      "podpowiedz": "Po zakończeniu pomiarów umyj pryzmat wodą destylowaną i osusz.",
+      "podpowiedz": "Po zakończeniu pomiarów umyj pryzmaty wodą destylowaną i osusz.",
       "dlaczego": "Zaschnięty sok niszczy pryzmat i fałszuje kolejne pomiary.",
-      "sprzet": "stol",
-      "animacja": "siegnij",
-      "przyklad": "po pomiarach myję i osuszam pryzmat"
+      "sprzet": "przyrzad",
+      "animacja": "mycie",
+      "przyklad": "po pomiarach myję i osuszam pryzmaty"
     },
     {
       "id": "odpady",
@@ -325,7 +359,9 @@
           "zlewam",
           "utyliz",
           "wyrzuć",
-          "opróżn"
+          "opróżn",
+          "odpad",
+          "pojemnik"
         ],
         [
           "odpad",
@@ -401,7 +437,11 @@
           "wysusz",
           "przetrz",
           "przetar",
-          "porządk"
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
         ],
         [
           "stół",
@@ -466,13 +506,16 @@
       "sacharoza",
       "wzorzec 10%"
     ],
-    "kartaPo": "odczyt"
+    "kartaPo": "odczyt",
+    "przyrzad": "refraktometr",
+    "okular": "n1",
+    "masaWagi": "mw"
   },
   "karta": {
     "tytul": "Karta wyników – refraktometria",
     "losuj": [
       {
-        "id": "bx",
+        "id": "x",
         "od": 10.4,
         "do": 12.4
       },
@@ -486,81 +529,110 @@
         ]
       },
       {
-        "id": "b1",
-        "wzor": "bx",
-        "szum": 0.08,
-        "miejsca": 1
+        "id": "mw",
+        "od": 9.98,
+        "do": 10.02,
+        "miejsca": 2
       },
       {
-        "id": "b2",
-        "wzor": "bx",
-        "szum": 0.08,
-        "miejsca": 1
+        "id": "nw",
+        "wybierz": [
+          1.333
+        ]
       },
       {
-        "id": "b3",
-        "wzor": "bx",
-        "szum": 0.08,
-        "miejsca": 1
+        "id": "nwz",
+        "wzor": "1.3330+0.00148*10",
+        "szum": 8e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "n1",
+        "wzor": "1.3330+0.00148*x-0.0002*(t-20)",
+        "szum": 8e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "n2",
+        "wzor": "1.3330+0.00148*x-0.0002*(t-20)",
+        "szum": 8e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "n3",
+        "wzor": "1.3330+0.00148*x-0.0002*(t-20)",
+        "szum": 8e-05,
+        "miejsca": 4
       }
     ],
     "odczyty": [
       {
-        "typ": "wyswietlacz",
-        "id": "b1",
-        "etykieta": "Refraktometr – pomiar 1",
-        "jednostka": "% Brix",
-        "miejsca": 1
+        "typ": "refraktometr",
+        "id": "nw",
+        "etykieta": "Okular – woda destylowana"
       },
       {
-        "typ": "wyswietlacz",
-        "id": "b2",
-        "etykieta": "Refraktometr – pomiar 2",
-        "jednostka": "% Brix",
-        "miejsca": 1
+        "typ": "refraktometr",
+        "id": "nwz",
+        "etykieta": "Okular – wzorzec 10%"
       },
       {
-        "typ": "wyswietlacz",
-        "id": "b3",
-        "etykieta": "Refraktometr – pomiar 3",
-        "jednostka": "% Brix",
-        "miejsca": 1
+        "typ": "refraktometr",
+        "id": "n1",
+        "etykieta": "Okular – sok, pomiar 1"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "n2",
+        "etykieta": "Okular – sok, pomiar 2"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "n3",
+        "etykieta": "Okular – sok, pomiar 3"
       },
       {
         "typ": "wyswietlacz",
         "id": "t",
-        "etykieta": "Temperatura",
+        "etykieta": "Termometr przy pryzmatach",
         "jednostka": "°C",
         "miejsca": 0
       },
       {
         "typ": "info",
         "etykieta": "Wymaganie producenta",
-        "tekst": "co najmniej 11,2% Brix"
+        "tekst": "co najmniej 11,2% cukrów"
       }
     ],
     "sekcje": [
       {
-        "tytul": "Dokumentacja z pomiarów",
+        "tytul": "Sprawdzenie przyrządu i wzorzec",
         "pola": [
           {
-            "id": "b1",
-            "etykieta": "Odczyt 1:",
-            "szer": "kr",
-            "jednostka": "% Brix"
+            "id": "nw",
+            "etykieta": "nD wody destylowanej =",
+            "szer": "kr"
           },
           {
-            "id": "b2",
-            "etykieta": "Odczyt 2:",
-            "szer": "kr",
-            "jednostka": "% Brix"
-          },
-          {
-            "id": "b3",
-            "etykieta": "Odczyt 3:",
-            "szer": "kr",
-            "jednostka": "% Brix"
-          },
+            "id": "nwz",
+            "etykieta": "nD wzorca sacharozy 10% =",
+            "szer": "kr"
+          }
+        ]
+      },
+      {
+        "tytul": "Pomiary soku",
+        "opis": "nD z dokładnością do 0,0001 (cztery miejsca po przecinku).",
+        "tabela": {
+          "wiersze": 3,
+          "kolumny": [
+            {
+              "naglowek": "nD soku",
+              "pole": "n{i}"
+            }
+          ]
+        },
+        "pola": [
           {
             "id": "t",
             "etykieta": "Temperatura pomiaru:",
@@ -568,22 +640,30 @@
             "jednostka": "°C"
           },
           {
-            "id": "bsr",
-            "etykieta": "Średnia:",
-            "szer": "kr",
-            "jednostka": "% Brix"
+            "id": "nsr",
+            "etykieta": "nD średnie =",
+            "szer": "kr"
           },
           {
             "id": "popr",
-            "etykieta": "Poprawka temperaturowa:",
-            "szer": "kr",
-            "jednostka": "% Brix"
+            "etykieta": "Poprawka temperaturowa =",
+            "szer": "kr"
           },
           {
-            "id": "wynik",
-            "etykieta": "Wynik po poprawce:",
+            "id": "n20",
+            "etykieta": "nD20 soku (po poprawce) =",
+            "szer": "kr"
+          }
+        ]
+      },
+      {
+        "tytul": "Obliczenia i ocena",
+        "pola": [
+          {
+            "id": "xc",
+            "etykieta": "Zawartość cukrów w soku X =",
             "szer": "kr",
-            "jednostka": "% Brix"
+            "jednostka": "%"
           },
           {
             "id": "wniosek",
@@ -594,38 +674,84 @@
       }
     ],
     "brudnopis": [
-      "Poprawka: +0,07% Brix na każdy stopień powyżej 20 °C.",
-      "~1 °C — 0,07% Brix | (t − 20) °C — poprawka",
-      "Wynik po poprawce = średnia + poprawka."
+      "Woda (0% cukru) ma nD = 1,3330, wzorzec (10%) – odczytane nD wzorca. Między nimi zależność jest liniowa.",
+      "~(nD wzorca − 1,3330) — 10% | (nD20 soku − 1,3330) — X%",
+      "Poprawka temperaturowa: +0,0002 na każdy stopień powyżej 20 °C.",
+      "~1 °C — 0,0002 | (t − 20) °C — poprawka",
+      "Przykład na innych liczbach: nD wzorca 1,3478, nD20 soku 1,3502 → X = 10% · 0,0172 / 0,0148 = 11,6%."
     ],
     "kryteria": [
       {
-        "opis": "Trzy odczyty zgodne ze wskazaniami przyrządu",
-        "uwaga": "Przepisz odczyty z refraktometru.",
+        "opis": "Zapisane nD wody i wzorca zgodne z odczytem",
+        "uwaga": "Przepisz odczyty ze skali okularu (4 miejsca po przecinku).",
         "sprawdz": [
           {
             "typ": "liczba",
-            "pole": "b1",
-            "wzor": "b1",
-            "tol": 0.05
+            "pole": "nw",
+            "wzor": "nw",
+            "tol": 6e-05
           },
           {
             "typ": "liczba",
-            "pole": "b2",
-            "wzor": "b2",
-            "tol": 0.05
+            "pole": "nwz",
+            "wzor": "nwz",
+            "tol": 6e-05
+          }
+        ]
+      },
+      {
+        "opis": "Trzy odczyty nD soku zgodne ze wskazaniami przyrządu",
+        "uwaga": "Odczytaj skalę w okularze w miejscu czerwonej kreski – 4 miejsca po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "n1",
+            "wzor": "n1",
+            "tol": 6e-05
           },
           {
             "typ": "liczba",
-            "pole": "b3",
-            "wzor": "b3",
-            "tol": 0.05
+            "pole": "n2",
+            "wzor": "n2",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "n3",
+            "wzor": "n3",
+            "tol": 6e-05
+          }
+        ]
+      },
+      {
+        "opis": "Odczyty nD z dokładnością do 0,0001",
+        "uwaga": "Cztery miejsca po przecinku, np. 1,3502.",
+        "sprawdz": [
+          {
+            "typ": "miejsca",
+            "pole": "n1",
+            "ile": 4
+          },
+          {
+            "typ": "miejsca",
+            "pole": "n2",
+            "ile": 4
+          },
+          {
+            "typ": "miejsca",
+            "pole": "n3",
+            "ile": 4
+          },
+          {
+            "typ": "miejsca",
+            "pole": "nwz",
+            "ile": 4
           }
         ]
       },
       {
         "opis": "Zapisana temperatura pomiaru",
-        "uwaga": "Przepisz temperaturę.",
+        "uwaga": "Przepisz temperaturę z termometru.",
         "sprawdz": [
           {
             "typ": "liczba",
@@ -636,78 +762,95 @@
         ]
       },
       {
-        "opis": "Średnia z trzech odczytów nieróżniących się o więcej niż 0,2",
-        "uwaga": "Średnia arytmetyczna.",
+        "opis": "Średnia z trzech odczytów nieróżniących się o więcej niż 0,0003",
+        "uwaga": "Średnia arytmetyczna trzech nD.",
         "sprawdz": [
           {
             "typ": "rozrzut",
             "pola": [
-              "b1",
-              "b2",
-              "b3"
+              "n1",
+              "n2",
+              "n3"
             ],
-            "max": 0.2
+            "max": 0.0003
           },
           {
             "typ": "liczba",
-            "pole": "bsr",
-            "wzor": "sr($b1,$b2,$b3)",
-            "tol": 0.06
+            "pole": "nsr",
+            "wzor": "sr($n1,$n2,$n3)",
+            "tol": 6e-05
           }
         ],
         "pokaz": {
-          "wzor": "sr($b1,$b2,$b3)",
-          "miejsca": 1,
-          "jednostka": "% Brix"
+          "wzor": "sr($n1,$n2,$n3)",
+          "miejsca": 4,
+          "jednostka": ""
         }
       },
       {
         "opis": "Poprawka temperaturowa",
-        "uwaga": "0,07% Brix na każdy stopień powyżej 20 °C.",
+        "uwaga": "0,0002 na każdy stopień powyżej 20 °C.",
         "sprawdz": [
           {
             "typ": "liczba",
             "pole": "popr",
-            "wzor": "($t-20)*0.07",
-            "tol": 0.011
+            "wzor": "($t-20)*0.0002",
+            "tol": 2e-05
           }
         ],
         "pokaz": {
-          "wzor": "($t-20)*0.07",
-          "miejsca": 2,
-          "jednostka": "% Brix"
+          "wzor": "($t-20)*0.0002",
+          "miejsca": 4,
+          "jednostka": ""
         }
       },
       {
-        "opis": "Wynik po poprawce z dokładnością do 0,1",
-        "uwaga": "Średnia + poprawka, jedno miejsce po przecinku.",
+        "opis": "nD20 soku po poprawce",
+        "uwaga": "nD średnie + poprawka.",
         "sprawdz": [
           {
             "typ": "liczba",
-            "pole": "wynik",
-            "wzor": "$bsr+$popr",
+            "pole": "n20",
+            "wzor": "$nsr+$popr",
+            "tol": 6e-05
+          }
+        ],
+        "pokaz": {
+          "wzor": "$nsr+$popr",
+          "miejsca": 4,
+          "jednostka": ""
+        }
+      },
+      {
+        "opis": "Zawartość cukrów obliczona z proporcji, z dokładnością do 0,1%",
+        "uwaga": "X = 10% · (nD20 − nD wody) / (nD wzorca − nD wody).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "xc",
+            "wzor": "10*($n20-$nw)/($nwz-$nw)",
             "tol": 0.06
           },
           {
             "typ": "miejsca",
-            "pole": "wynik",
+            "pole": "xc",
             "ile": 1
           }
         ],
         "pokaz": {
-          "wzor": "$bsr+$popr",
+          "wzor": "10*($n20-$nw)/($nwz-$nw)",
           "miejsca": 1,
-          "jednostka": "% Brix"
+          "jednostka": "%"
         }
       },
       {
-        "opis": "Wniosek spójny z wynikiem (wymaganie: co najmniej 11,2% Brix)",
-        "uwaga": "Porównaj wynik po poprawce z 11,2% Brix.",
+        "opis": "Wniosek spójny z wynikiem (wymaganie: co najmniej 11,2%)",
+        "uwaga": "Porównaj X z 11,2%.",
         "sprawdz": [
           {
             "typ": "wybor",
             "pole": "wniosek",
-            "wzor": "$wynik-11.2+0.000001",
+            "wzor": "$xc-11.2+0.000001",
             "tak": [
               "spelnia"
             ],

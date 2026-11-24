@@ -15,7 +15,8 @@ import { Opcjonalnie } from './Opcjonalnie';
 import { Pomieszczenie } from './Pomieszczenie';
 import { Postac, nowePostacApi, nowySter } from './Postac';
 import { Butelka, Cylinder, Kolba, PojemnikOdpady, Statyw, Tryskawka, Waga, Zlew, Zlewka } from './Sprzet';
-import { BIURETA, BIURETA_GORA, BLAT, NAZWY_SPRZETU, POZYCJE, Z_LABORANTA, gladko } from './uklad';
+import { BIURETA, BIURETA_GORA, BLAT, NAZWY_PRZYRZADOW, NAZWY_SPRZETU, POZYCJE, Z_LABORANTA, gladko } from './uklad';
+import { ABBE, Kuwety, PhMetr, Polarymetr, RefraktometrAbbego, RurkaPolarymetryczna, Spektrofotometr } from './Przyrzady';
 
 type StanSceny = Record<string, string | number | boolean>;
 
@@ -35,6 +36,12 @@ interface Props {
   onZblizenie?: (aktywne: boolean) => void;
   /** Napisy na butelkach dla bieżącego poziomu. */
   napisy?: { titrant?: string[]; wskaznik?: string[] };
+  /** Przyrząd zamiast statywu z biuretą. */
+  przyrzad?: 'refraktometr' | 'polarymetr' | 'spektrofotometr';
+  /** pH-metr z elektrodą przy zlewce. */
+  phmetr?: boolean;
+  /** Laborant patrzy w okular przyrządu (pokaż widok w okularze). */
+  onOkular?: (aktywne: boolean) => void;
 }
 
 const scal = (kroki: Krok[]): StanSceny => Object.assign({}, ...kroki.map((k) => k.stanSceny ?? {}));
@@ -129,6 +136,15 @@ function KameraRezyser({ anim, widok, pisanie }: { anim: React.MutableRefObject<
       } else if (a.sprzet === 'statyw' && a.typ === 'odczyt') {
         klucz = 'odczyt';
         zbliz(POZYCJE.statyw[0], 1.5, 1.55, 1.0);
+      } else if (a.sprzet === 'przyrzad' || a.sprzet === 'rurka') {
+        klucz = 'przyrzad' + a.typ;
+        const x = POZYCJE[a.sprzet][0];
+        if (tyl) zbliz(x, BLAT + 0.25, 1.4, 1.1);
+        else {
+          // z ukosa, z przodu i z boku – widać pryzmat, ręce i twarz przy okularze
+          v.t.set(x, BLAT + (a.typ === 'okular' || a.typ === 'pokretlo' ? 0.36 : 0.24), -0.15);
+          v.p.set(x + 0.75, BLAT + 0.62, 0.75);
+        }
       } else if (a.typ === 'wazenie') {
         klucz = 'waga';
         zbliz(POZYCJE.waga[0], 1.05, 1.4, 1.35);
@@ -155,16 +171,17 @@ function KameraRezyser({ anim, widok, pisanie }: { anim: React.MutableRefObject<
   return null;
 }
 
-function Etykieta({ id }: { id: string }) {
+function Etykieta({ id, tekst }: { id: string; tekst?: string }) {
   const [x, , z] = POZYCJE[id];
   return (
     <Html position={[x, BLAT - 0.12, z + 0.45]} center distanceFactor={2.3} zIndexRange={[10, 0]}>
-      <span className="etykieta-3d">{NAZWY_SPRZETU[id]}</span>
+      <span className="etykieta-3d">{tekst ?? NAZWY_SPRZETU[id]}</span>
     </Html>
   );
 }
 
-function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, napisy }: Omit<Props, 'kartkaOtwarta'>) {
+function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, napisy, przyrzad, phmetr, onOkular }: Omit<Props, 'kartkaOtwarta'>) {
+  const okularRef = useRef(false);
   const titrant = napisy?.titrant ?? ['HCl', '0,01 mol/dm³'];
   const wskaznik = napisy?.wskaznik ?? ['oranż', 'metylowy 0,1%'];
   const zblizenie = useRef(false);
@@ -224,6 +241,7 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
     sL.glowa = 0;
     a.rekwizyt = null;
     przechyl.current = 0;
+    sL.z = Z_LABORANTA;
     sE.x = EGZ.x;
     sE.z = EGZ.z;
     sE.obrotY = EGZ.obrot;
@@ -281,6 +299,11 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
         sL.lewa = L.set(px + 0.12, BLAT + 0.04, pz + 0.06);
       }
     }
+    const czyOkular = a.aktywna && typ === 'okular';
+    if (czyOkular !== okularRef.current) {
+      okularRef.current = czyOkular;
+      onOkular?.(czyOkular);
+    }
     const czyOdczyt = a.aktywna && typ === 'odczyt' && sprzet === 'statyw';
     if (czyOdczyt !== zblizenie.current) {
       zblizenie.current = czyOdczyt;
@@ -303,8 +326,9 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
           if (sprzet === 'statyw') cel.set(sx, BIURETA_GORA + 0.06, sz);
           else if (sprzet === 'kolba') cel.set(kPos.x, kPos.y + 0.24, kPos.z);
           else if (sprzet === 'odpady') cel.set(sx, BLAT + 0.33, sz);
+          else if (sprzet === 'rurka') cel.set(sx, BLAT + (przyrzad === 'polarymetr' ? 0.25 : 0.1), sz);
           else cel.set(sx, BLAT + 0.14, sz);
-          a.rekwizyt = sprzet === 'statyw' ? 'butelka' : sprzet === 'odpady' ? 'kolbaPelna' : 'cylinder';
+          a.rekwizyt = sprzet === 'statyw' ? 'butelka' : sprzet === 'odpady' ? 'kolbaPelna' : sprzet === 'rurka' ? 'kolbaPelna' : 'cylinder';
           const w = gladko(0, 0.22, p) * (1 - gladko(0.84, 1, p));
           przechyl.current = gladko(0.24, 0.4, p) * (1 - gladko(0.72, 0.86, p));
           sL.prawa = P.set(cel.x - 0.14, THREE.MathUtils.lerp(BLAT + 0.22, cel.y + 0.04, w), cel.z);
@@ -314,7 +338,7 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
             sL.pochyl = 0.08;
             sL.glowa = 0.25;
           }
-          if (przechyl.current > 0.85) strugaDo = sprzet === 'statyw' ? cel.y - 0.04 : cel.y - 0.14;
+          if (przechyl.current > 0.85) strugaDo = sprzet === 'statyw' || sprzet === 'rurka' ? cel.y - 0.04 : cel.y - 0.14;
           break;
         }
         case 'wazenie': {
@@ -330,6 +354,21 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
           break;
         }
         case 'pipetowanie':
+          if (sprzet === 'przyrzad') {
+            // kropla próbki na pryzmat refraktometru (bagietką / pipetką), bez dotykania szkła
+            sL.z = Z_LABORANTA + 0.1;
+            sL.pochyl = 0.3;
+            sL.glowa = 0.35;
+            a.rekwizyt = 'pipeta';
+            cel.set(sx + ABBE.pryzmat.x, BLAT + ABBE.pryzmat.y, sz + ABBE.pryzmat.z);
+            sL.prawa = P.set(cel.x - 0.01, cel.y + 0.2, cel.z);
+            sL.lewa = L.set(cel.x + 0.03, cel.y + 0.1, cel.z - 0.02);
+            if (p > 0.3 && p < 0.6) {
+              kroplaOd = [cel.x, cel.y + 0.07, cel.z];
+              kroplaDo = cel.y + 0.004;
+            }
+            break;
+          }
           sL.pochyl = 0.11;
           sL.glowa = 0.3;
           a.rekwizyt = 'pipeta';
@@ -401,7 +440,14 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
         case 'mycie':
           sL.pochyl = 0.12;
           sL.glowa = 0.3;
-          if (sprzet === 'zlew') {
+          if (sprzet === 'przyrzad') {
+            // przecieranie pryzmatu miękką bibułą – małe ruchy, przy otwartym pryzmacie
+            sL.z = Z_LABORANTA + 0.1;
+            sL.pochyl = 0.3;
+            a.rekwizyt = 'bibula';
+            sL.prawa = P.set(sx + ABBE.pryzmat.x + Math.sin(t * 7) * 0.02, BLAT + ABBE.pryzmat.y + 0.03, sz + ABBE.pryzmat.z + Math.cos(t * 9) * 0.01);
+            sL.lewa = L.set(sx - 0.06, BLAT + 0.2, sz + 0.06);
+          } else if (sprzet === 'zlew') {
             a.rekwizyt = 'kolbaPusta';
             sL.prawa = P.set(sx - 0.05, BLAT + 0.2 + Math.sin(t * 6) * 0.015, sz - 0.03);
             sL.lewa = L.set(sx + 0.06 + Math.sin(t * 10) * 0.025, BLAT + 0.17, sz - 0.03);
@@ -410,7 +456,33 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
             sL.prawa = P.set(sx + Math.sin(t * 5) * 0.28, BLAT + 0.06, sz + Math.cos(t * 10) * 0.05);
           }
           break;
+        case 'okular': {
+          // laborant podchodzi do blatu i pochyla się do okularu; prawa ręka na pokrętle, lewa na kompensatorze / tarczy
+          sL.z = Z_LABORANTA + 0.12;
+          sL.pochyl = 0.5;
+          sL.glowa = 0.35;
+          if (przyrzad === 'refraktometr') {
+            sL.prawa = P.set(sx + ABBE.pokretlo.x + 0.02, BLAT + ABBE.pokretlo.y + Math.sin(t * 2) * 0.006, sz + ABBE.pokretlo.z);
+            sL.lewa = L.set(sx + ABBE.kompensator.x - 0.02, BLAT + ABBE.kompensator.y, sz + ABBE.kompensator.z);
+          } else {
+            sL.prawa = P.set(sx + 0.07, BLAT + 0.12 + Math.sin(t * 2) * 0.006, sz - 0.16);
+            sL.lewa = L.set(sx - 0.05, BLAT + 0.15, sz - 0.12);
+          }
+          break;
+        }
+        case 'pokretlo':
+          sL.z = Z_LABORANTA + 0.12;
+          sL.pochyl = 0.5;
+          sL.glowa = 0.3;
+          sL.prawa = P.set(sx + ABBE.pokretlo.x + 0.02, BLAT + ABBE.pokretlo.y + Math.sin(t * 3) * 0.008, sz + ABBE.pokretlo.z);
+          if (przyrzad === 'refraktometr') sL.lewa = L.set(sx + ABBE.kompensator.x - 0.02, BLAT + ABBE.kompensator.y, sz + ABBE.kompensator.z);
+          break;
         case 'przycisk':
+          if (sprzet === 'przyrzad') {
+            sL.pochyl = 0.13;
+            if (wTrakcie) sL.prawa = P.set(sx + (przyrzad === 'polarymetr' ? 0.0 : 0.08), BLAT + (przyrzad === 'polarymetr' ? 0.1 : 0.07), sz - (przyrzad === 'polarymetr' ? -0.2 : 0.17));
+            break;
+          }
           sL.pochyl = 0.13;
           if (wTrakcie) sL.prawa = P.set(sx - 0.1, BLAT + 0.07, sz + 0.1);
           break;
@@ -419,7 +491,11 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
           break;
         default:
           sL.pochyl = 0.1;
-          if (wTrakcie) sL.prawa = P.set(sx - 0.03, BLAT + 0.14, sz);
+          if (sprzet === 'przyrzad' && przyrzad && przyrzad !== 'refraktometr') {
+            // wkładanie rurki / kuwety do komory przyrządu
+            a.rekwizyt = przyrzad === 'polarymetr' ? 'rurka' : 'kuweta';
+            if (wTrakcie) sL.prawa = P.set(sx + (przyrzad === 'polarymetr' ? 0.0 : 0.1), BLAT + 0.22, sz + 0.0);
+          } else if (wTrakcie) sL.prawa = P.set(sx - 0.03, BLAT + 0.14, sz);
       }
     }
 
@@ -512,6 +588,37 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
         <Butelka napis={titrant} />
       </group>
 
+      {przyrzad === 'refraktometr' && (
+        <group position={POZYCJE.przyrzad}>
+          <RefraktometrAbbego anim={anim} />
+        </group>
+      )}
+      {przyrzad === 'polarymetr' && (
+        <>
+          <group position={POZYCJE.przyrzad}>
+            <Polarymetr anim={anim} wlaczony={Boolean(stan.lampa)} />
+          </group>
+          <group position={POZYCJE.rurka}>
+            <RurkaPolarymetryczna pelna={Boolean(stan.rurka)} />
+          </group>
+        </>
+      )}
+      {przyrzad === 'spektrofotometr' && (
+        <>
+          <group position={POZYCJE.przyrzad}>
+            <Spektrofotometr anim={anim} wlaczony={Boolean(stan.spektro)} />
+          </group>
+          <group position={POZYCJE.rurka}>
+            <Kuwety barwa={stan.kuweta ? '#e0483e' : undefined} />
+          </group>
+        </>
+      )}
+      {phmetr && (
+        <group position={[POZYCJE.zlewka[0] - 0.08, BLAT, POZYCJE.zlewka[2] - 0.02]}>
+          <PhMetr anim={anim} zanurzona={false} />
+        </group>
+      )}
+      {!przyrzad && (
       <group position={POZYCJE.statyw}>
         <Statyw
           zestaw={Boolean(stan.zestaw)}
@@ -521,6 +628,7 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
           anim={anim}
         />
       </group>
+      )}
       <group position={[0.66, BLAT, 0.24]}>
         <Tryskawka />
       </group>
@@ -589,6 +697,22 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
               <meshStandardMaterial color="#1f4fa3" roughness={0.4} />
             </mesh>
           </group>
+          <group name="bibula" visible={false}>
+            <mesh position={[0, -0.02, 0]}>
+              <boxGeometry args={[0.05, 0.004, 0.04]} />
+              <meshStandardMaterial color="#f8f8f4" roughness={0.95} />
+            </mesh>
+          </group>
+          <group name="rurka" visible={false}>
+            <mesh position={[0, -0.03, 0]} rotation={[Math.PI / 2, 0, 0]} material={SZKLO}>
+              <cylinderGeometry args={[0.009, 0.009, 0.2, 12]} />
+            </mesh>
+          </group>
+          <group name="kuweta" visible={false}>
+            <mesh position={[0, -0.04, 0]} material={SZKLO}>
+              <boxGeometry args={[0.012, 0.045, 0.012]} />
+            </mesh>
+          </group>
           <group name="sciereczka" visible={false}>
             <mesh position={[0, -0.05, 0]}>
               <boxGeometry args={[0.14, 0.012, 0.1]} />
@@ -618,7 +742,8 @@ function Scena({ kroki, bhp, pokazEtykiety, pisanie, widok, masa, onZblizenie, n
           <span className="ocena-3d">✓ Zestaw oceniony</span>
         </Html>
       )}
-      {pokazEtykiety && Object.keys(NAZWY_SPRZETU).map((id) => <Etykieta key={id} id={id} />)}
+      {pokazEtykiety && Object.keys(NAZWY_SPRZETU).filter((id) => !(przyrzad && id === 'statyw')).map((id) => <Etykieta key={id} id={id} />)}
+      {pokazEtykiety && przyrzad && <Etykieta id="przyrzad" tekst={NAZWY_PRZYRZADOW[przyrzad]} />}
 
       <Opcjonalnie>
         <Postac ster={sterL} api={apiL} rola="laborant" fartuch={bhp.includes('fartuch')} rekawice={bhp.includes('rekawice')} okulary={bhp.includes('okulary')} />

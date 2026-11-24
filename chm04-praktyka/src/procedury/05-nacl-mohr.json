@@ -573,7 +573,9 @@
           "zlewam",
           "utyliz",
           "wyrzuć",
-          "opróżn"
+          "opróżn",
+          "odpad",
+          "pojemnik"
         ],
         [
           "odpad",
@@ -713,7 +715,11 @@
           "wysusz",
           "przetrz",
           "przetar",
-          "porządk"
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
         ],
         [
           "stół",

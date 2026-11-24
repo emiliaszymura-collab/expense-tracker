@@ -82,6 +82,41 @@ export function frazaPasuje(fraza: string, wpis: string[], rozmyte = true): bool
   return false;
 }
 
+/**
+ * Rodziny słów znaczących w laboratorium to samo. Jeśli krok wymaga któregoś z nich, pasuje każde z rodziny –
+ * „umyj blat”, „wytrzyj stół”, „osusz powierzchnię roboczą” to ta sama czynność.
+ * Rozróżnienie kroków zapewnia druga grupa (przedmiot) albo słowa wykluczające.
+ */
+const RODZINY: string[][] = [
+  // sprzątanie powierzchni
+  ['wytrz', 'wycier', 'wytar', 'przetrz', 'przetar', 'przecier', 'ścier', 'umyj', 'umyc', 'umyw', 'myj', 'myję', 'myci', 'zmyj', 'czyść', 'czyszcz', 'wyczyść', 'oczyść', 'osusz', 'wysusz', 'susz', 'sprząt', 'posprząt', 'uporządk', 'porządk', 'ogarn'],
+  // stół roboczy
+  ['stół', 'stol', 'blat', 'stanowisk', 'powierzchni', 'miejsce pracy', 'ławk'],
+  // włączanie
+  ['włącz', 'uruchom', 'zapal', 'odpal', 'startuj', 'załącz'],
+  // nanoszenie próbki
+  ['nanoś', 'nanieś', 'naniesi', 'nakrapl', 'nakropl', 'nałóż', 'nakład', 'umieść', 'kropl', 'zakrapl', 'wkrop'],
+  // pomiar
+  ['mierz', 'zmierz', 'pomiar', 'zmierzeni', 'zbadaj', 'badam', 'wykonaj pomiar'],
+  // odczyt
+  ['odczyt', 'odczytaj', 'odczytuj', 'zapis', 'zanotuj', 'notuj', 'spisz', 'spisuj'],
+  // napełnianie
+  ['napełn', 'nalew', 'nalej', 'wlew', 'wlej', 'wypełn', 'zalej', 'zalew'],
+  // zerowanie
+  ['zeruj', 'wyzer', 'zerow', 'kalibr', 'wzorcuj'],
+  // odczekanie
+  ['odczek', 'poczek', 'czekam', 'zaczek', 'nagrz', 'rozgrz'],
+];
+
+const RODZINA_SLOWA = new Map<string, string[]>();
+for (const r of RODZINY) for (const w of r) RODZINA_SLOWA.set(normalizuj(w), r);
+
+/** Fraza wraz z jej rodziną (dla fraz dokładnych "=" rodziny nie używamy). */
+function warianty(fraza: string): string[] {
+  if (fraza.startsWith('=')) return [fraza];
+  return RODZINA_SLOWA.get(normalizuj(fraza)) ?? [fraza];
+}
+
 export function grupaPasuje(grupa: string[], wpis: string[]): boolean {
-  return grupa.some((fraza) => frazaPasuje(fraza, wpis));
+  return grupa.some((fraza) => warianty(fraza).some((w) => frazaPasuje(w, wpis)));
 }

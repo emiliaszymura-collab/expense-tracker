@@ -28,4 +28,6 @@ export const CZAS: Record<string, number> = {
   mieszanie: 2.6,
   siegnij_gora: 2,
   siegnij: 1.8,
+  okular: 5,
+  pokretlo: 2.6,
 };

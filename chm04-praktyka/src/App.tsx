@@ -10,6 +10,7 @@ import { ArkuszWzorcowy } from './ui/Wzorcowy';
 import { Karta } from './ui/Karta';
 import { Konsola } from './ui/Konsola';
 import { Lupa } from './ui/Lupa';
+import { OkularAbbego } from './ui/Okular';
 import { PanelProtokolu } from './ui/PanelProtokolu';
 
 export default function App() {
@@ -102,6 +103,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
   const [kartaOtwarta, setKartaOtwarta] = useState(false);
   const [widok, setWidok] = useState<'przod' | 'tyl'>('przod');
   const [lupa, setLupa] = useState(false);
+  const [okular, setOkular] = useState(false);
   const [etykiety, setEtykiety] = useState(true);
   // Kartka z protokołem otwarta na start nowego poziomu, zwinięta przy powrocie do rozpoczętego.
   const [protokolOtwarty, setProtokolOtwarty] = useState(() => stan.dziennik.length === 0);
@@ -225,6 +227,9 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
             masa={pomiary[poziom.scena?.masaWagi ?? 'm1'] ?? 2}
             napisy={poziom.scena}
             onZblizenie={setLupa}
+            onOkular={setOkular}
+            przyrzad={poziom.scena?.przyrzad}
+            phmetr={poziom.scena?.phmetr}
           />
           {!kartaOtwarta && (
             <PanelProtokolu
@@ -239,6 +244,11 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
           {lupa && (
             <div className="lupa-plywajaca">
               <Lupa v={pomiary[poziom.scena?.odczytBiureta ?? 'v1'] ?? 0} podpis="Odczytaj objętość na dolnym menisku" />
+            </div>
+          )}
+          {okular && poziom.scena?.przyrzad === 'refraktometr' && poziom.scena.okular && (
+            <div className="lupa-plywajaca">
+              <OkularAbbego n={pomiary[poziom.scena.okular] ?? 1.333} podpis="Granica pól na przecięciu nici – odczytaj nD" />
             </div>
           )}
         </div>

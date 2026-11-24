@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ocenKarte, type Kryterium, type Odpowiedzi, type Pomiary } from '../silnik/karta';
 import type { KartaSpec, Odczyt, PoleKarty } from '../silnik/typy';
 import { Lupa } from './Lupa';
+import { OkularAbbego } from './Okular';
 
 interface Props {
   spec: KartaSpec;
@@ -93,6 +94,13 @@ function WidokOdczytu({ o, p }: { o: Odczyt; p: Pomiary }) {
     return (
       <div className="odczyt odczyt-szeroki">
         <Krzywa vpk={p[o.id]} />
+        <span>{o.etykieta}</span>
+      </div>
+    );
+  if (o.typ === 'refraktometr')
+    return (
+      <div className="odczyt odczyt-szeroki">
+        <OkularAbbego n={p[o.id]} />
         <span>{o.etykieta}</span>
       </div>
     );

@@ -72,8 +72,11 @@
       "wymaga": [],
       "podpowiedz": "Włącz lampę sodową i odczekaj 5 minut.",
       "dlaczego": "Lampa sodowa musi się nagrzać, żeby świeciła stabilnym światłem o długości fali 589 nm.",
-      "sprzet": "stol",
+      "sprzet": "przyrzad",
       "animacja": "przycisk",
+      "stanSceny": {
+        "lampa": true
+      },
       "przyklad": "włączam lampę sodową polarymetru"
     },
     {
@@ -98,8 +101,11 @@
       ],
       "podpowiedz": "Napełnij rurkę polarymetryczną wodą destylowaną bez pęcherzyka powietrza i wytrzyj okienka.",
       "dlaczego": "Pęcherzyk powietrza na drodze światła uniemożliwia poprawny odczyt.",
-      "sprzet": "stol",
+      "sprzet": "rurka",
       "animacja": "przelewanie",
+      "stanSceny": {
+        "rurka": true
+      },
       "przyklad": "napełniam rurkę wodą destylowaną bez pęcherzyka powietrza"
     },
     {
@@ -128,8 +134,8 @@
       ],
       "podpowiedz": "Włóż rurkę z wodą do polarymetru i ustaw zero – równe zaciemnienie obu pól.",
       "dlaczego": "Woda nie skręca płaszczyzny polaryzacji; to punkt odniesienia dla pomiaru.",
-      "sprzet": "stol",
-      "animacja": "siegnij",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
       "przyklad": "zeruję polarymetr na wodzie destylowanej"
     },
     {
@@ -161,7 +167,7 @@
       "wymagaBhp": true,
       "podpowiedz": "Przepłucz rurkę badanym roztworem, napełnij ją bez pęcherzyka i wytrzyj okienka.",
       "dlaczego": "Resztki wody rozcieńczyłyby próbkę i zaniżyły kąt skręcenia.",
-      "sprzet": "stol",
+      "sprzet": "rurka",
       "animacja": "przelewanie",
       "przyklad": "przepłukuję i napełniam rurkę badanym roztworem"
     },
@@ -188,8 +194,8 @@
       ],
       "podpowiedz": "Obracaj analizator do zrównania zaciemnienia pól i odczytaj kąt z noniusza.",
       "dlaczego": "Kąt skręcenia jest proporcjonalny do stężenia sacharozy i długości rurki.",
-      "sprzet": "stol",
-      "animacja": "siegnij",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
       "przyklad": "odczytuję kąt skręcenia z noniusza"
     },
     {
@@ -217,8 +223,8 @@
       "wymagaBhp": true,
       "podpowiedz": "Wykonaj jeszcze dwa odczyty kąta.",
       "dlaczego": "Wynik to średnia z trzech odczytów.",
-      "sprzet": "stol",
-      "animacja": "siegnij",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
       "stanSceny": {},
       "przyklad": "powtarzam odczyt jeszcze dwa razy"
     },
@@ -263,7 +269,9 @@
           "zlewam",
           "utyliz",
           "wyrzuć",
-          "opróżn"
+          "opróżn",
+          "odpad",
+          "pojemnik"
         ],
         [
           "odpad",
@@ -339,7 +347,11 @@
           "wysusz",
           "przetrz",
           "przetar",
-          "porządk"
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
         ],
         [
           "stół",
@@ -404,7 +416,8 @@
       "sacharoza",
       "[α] = +66,5"
     ],
-    "kartaPo": "odczyt"
+    "kartaPo": "odczyt",
+    "przyrzad": "polarymetr"
   },
   "karta": {
     "tytul": "Karta wyników – polarymetria",

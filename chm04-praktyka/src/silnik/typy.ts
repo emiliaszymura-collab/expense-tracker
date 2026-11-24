@@ -64,6 +64,12 @@ export interface Poziom {
     odczytBiureta?: string;
     /** Id kroku, po którym można otworzyć kartę wyników (domyślnie: po ukończeniu). */
     kartaPo?: string;
+    /** Przyrząd na stanowisku zamiast statywu z biuretą. */
+    przyrzad?: 'refraktometr' | 'polarymetr' | 'spektrofotometr';
+    /** pH-metr z elektrodą przy zlewce. */
+    phmetr?: boolean;
+    /** Id pomiaru pokazywanego w okularze podczas odczytu z przyrządu. */
+    okular?: string;
   };
   /** Karta wyników: losowane pomiary, tabele do wypełnienia i kryteria oceny. */
   karta?: KartaSpec;
@@ -88,6 +94,8 @@ export interface Losowanie {
 export type Odczyt =
   | { typ: 'waga' | 'wyswietlacz'; id: string; etykieta: string; jednostka: string; miejsca: number }
   | { typ: 'biureta'; id: string; etykieta: string }
+  /** Widok w okularze refraktometru Abbego – granica pól i skala nD do odczytu. */
+  | { typ: 'refraktometr'; id: string; etykieta: string }
   | { typ: 'papierek'; id: string; etykieta: string }
   /** Krzywa miareczkowania słabego kwasu mocną zasadą; id = pomiar z objętością w punkcie końcowym. */
   | { typ: 'krzywa'; id: string; etykieta: string }

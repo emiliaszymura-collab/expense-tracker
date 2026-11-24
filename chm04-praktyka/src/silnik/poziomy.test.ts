@@ -1,4 +1,5 @@
 // Każdy poziom musi dać się przejść wpisami z pól "przyklad", a jego karta – wypełnić poprawnie.
+import { CZAS } from '../scena/animacje';
 import { describe, expect, it } from 'vitest';
 import { losujPomiary, ocenKarte } from './karta';
 import { nowyStan, ocenWpis, poziomUkonczony } from './gra';
@@ -25,8 +26,22 @@ describe.each(poziomy.map((p) => [p.id, p] as const))('poziom %s', (_, poziom) =
     expect(ids.size).toBe(poziom.kroki.length);
     for (const k of poziom.kroki) {
       for (const w of k.wymaga ?? []) expect(ids.has(w), `${k.id} wymaga nieistniejącego ${w}`).toBe(true);
-      expect(['zlew', 'waga', 'kolba', 'statyw', 'zlewka', 'odpady', 'stol', undefined]).toContain(k.sprzet);
+      const stanowiska = ['zlew', 'waga', 'kolba', 'zlewka', 'odpady', 'stol', undefined];
+      // statyw z biuretą albo przyrząd – na stanowisku stoi jedno z nich
+      if (poziom.scena?.przyrzad) stanowiska.push('przyrzad', 'rurka');
+      else stanowiska.push('statyw');
+      expect(stanowiska, `${k.id}: stanowisko ${k.sprzet} nie istnieje na tym poziomie`).toContain(k.sprzet);
+      expect(Object.keys(CZAS), `${k.id}: nieznana animacja ${k.animacja}`).toContain(k.animacja ?? 'siegnij');
     }
+  });
+
+  it('metoda instrumentalna ma przyrząd w scenie 3D', () => {
+    const m = poziom.metoda.toLowerCase();
+    if (m.includes('refrakt')) expect(poziom.scena?.przyrzad).toBe('refraktometr');
+    if (m.includes('polarym')) expect(poziom.scena?.przyrzad).toBe('polarymetr');
+    if (m.includes('spektrofot')) expect(poziom.scena?.przyrzad).toBe('spektrofotometr');
+    if (m.includes('ph-metr')) expect(poziom.scena?.phmetr).toBe(true);
+    if (poziom.scena?.przyrzad) expect(poziom.kroki.filter((k) => k.sprzet === 'przyrzad').length).toBeGreaterThan(2);
   });
 
   it('karta: losowanie działa, pusta karta nie zalicza kryteriów liczbowych, wzory się liczą', () => {

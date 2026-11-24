@@ -154,8 +154,11 @@
       "wymaga": [],
       "podpowiedz": "Włącz spektrofotometr i ustaw długość fali 480 nm.",
       "dlaczego": "Przy 480 nm kompleks rodankowy żelaza pochłania najsilniej – pomiar jest najczulszy.",
-      "sprzet": "stol",
+      "sprzet": "przyrzad",
       "animacja": "przycisk",
+      "stanSceny": {
+        "spektro": true
+      },
       "przyklad": "włączam spektrofotometr i ustawiam długość fali 480 nm"
     },
     {
@@ -177,8 +180,11 @@
       "wymagaBhp": true,
       "podpowiedz": "Przepłucz kuwetę mierzonym roztworem, napełnij do ¾ i wytrzyj; trzymaj za matowe ścianki.",
       "dlaczego": "Odciski palców i krople na przezroczystych ściankach zawyżają absorbancję.",
-      "sprzet": "stol",
+      "sprzet": "rurka",
       "animacja": "przelewanie",
+      "stanSceny": {
+        "kuweta": true
+      },
       "przyklad": "przepłukuję kuwetę, napełniam do trzech czwartych i wycieram"
     },
     {
@@ -197,8 +203,8 @@
       ],
       "podpowiedz": "Wyzeruj spektrofotometr na ślepej próbie.",
       "dlaczego": "Dzięki temu absorbancja pochodzi tylko od kompleksu żelaza, a nie od odczynników.",
-      "sprzet": "stol",
-      "animacja": "przycisk",
+      "sprzet": "przyrzad",
+      "animacja": "siegnij",
       "przyklad": "zeruję spektrofotometr na ślepej próbie"
     },
     {
@@ -223,7 +229,7 @@
       ],
       "podpowiedz": "Zmierz absorbancję wzorców, zaczynając od najmniejszego stężenia.",
       "dlaczego": "Kolejność od najmniejszego stężenia ogranicza błąd przenoszenia między pomiarami.",
-      "sprzet": "stol",
+      "sprzet": "przyrzad",
       "animacja": "siegnij",
       "przyklad": "mierzę absorbancję wzorców od najmniejszego stężenia"
     },
@@ -249,7 +255,7 @@
       ],
       "podpowiedz": "Na końcu zmierz absorbancję badanej próbki.",
       "dlaczego": "Absorbancję próbki porównujesz z krzywą wzorcową.",
-      "sprzet": "stol",
+      "sprzet": "przyrzad",
       "animacja": "siegnij",
       "przyklad": "mierzę absorbancję próbki"
     },
@@ -266,7 +272,9 @@
           "zlewam",
           "utyliz",
           "wyrzuć",
-          "opróżn"
+          "opróżn",
+          "odpad",
+          "pojemnik"
         ],
         [
           "odpad",
@@ -342,7 +350,11 @@
           "wysusz",
           "przetrz",
           "przetar",
-          "porządk"
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
         ],
         [
           "stół",
@@ -407,7 +419,8 @@
       "KSCN",
       "10%"
     ],
-    "kartaPo": "odczyt"
+    "kartaPo": "odczyt",
+    "przyrzad": "spektrofotometr"
   },
   "karta": {
     "tytul": "Karta wyników – spektrofotometria",

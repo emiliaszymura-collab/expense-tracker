@@ -143,7 +143,7 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
   if (dopasowane.length === 0 && bylyBhp) return { stan, przyjete };
 
   if (dopasowane.length === 0) {
-    stan.bledy += trybCwiczenia ? 0 : 1;
+    // Nierozpoznany wpis nigdy nie odbiera punktów – to sprawa sformułowania, a nie błąd w pracy.
     const nastepny = nastepnyKrok(poziom, stan.wykonane);
     dodaj({
       rodzaj: 'nie-rozpoznano',

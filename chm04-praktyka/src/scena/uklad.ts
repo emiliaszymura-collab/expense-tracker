@@ -15,6 +15,10 @@ export const POZYCJE: Record<string, [number, number, number]> = {
   zlewka: [0.95, BLAT, 0.06],
   odpady: [1.55, BLAT, 0.04],
   stol: [0.62, BLAT, 0.1],
+  /** Przyrząd (refraktometr, polarymetr, spektrofotometr) – stoi w miejscu statywu. */
+  przyrzad: [0.3, BLAT, -0.1],
+  /** Rurka polarymetryczna / kuwety obok przyrządu. */
+  rurka: [-0.05, BLAT, 0.05],
 };
 
 export const NAZWY_SPRZETU: Record<string, string> = {
@@ -24,6 +28,12 @@ export const NAZWY_SPRZETU: Record<string, string> = {
   statyw: 'biureta',
   zlewka: 'zlewka',
   odpady: 'odpady ciekłe',
+};
+
+export const NAZWY_PRZYRZADOW: Record<string, string> = {
+  refraktometr: 'refraktometr Abbego',
+  polarymetr: 'polarymetr',
+  spektrofotometr: 'spektrofotometr',
 };
 
 /** Biureta: wysokość końcówki nad blatem i długość rurki. */

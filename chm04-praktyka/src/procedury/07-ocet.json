@@ -631,7 +631,9 @@
           "zlewam",
           "utyliz",
           "wyrzuć",
-          "opróżn"
+          "opróżn",
+          "odpad",
+          "pojemnik"
         ],
         [
           "odpad",
@@ -740,7 +742,11 @@
           "wysusz",
           "przetrz",
           "przetar",
-          "porządk"
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
         ],
         [
           "stół",
@@ -813,7 +819,8 @@
       "1%"
     ],
     "odczytBiureta": "v1",
-    "kartaPo": "potencjo"
+    "kartaPo": "potencjo",
+    "phmetr": true
   },
   "karta": {
     "tytul": "Karta wyników – kwas octowy w occie",

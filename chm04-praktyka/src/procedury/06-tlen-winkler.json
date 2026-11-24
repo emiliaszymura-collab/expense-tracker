@@ -591,7 +591,9 @@
           "zlewam",
           "utyliz",
           "wyrzuć",
-          "opróżn"
+          "opróżn",
+          "odpad",
+          "pojemnik"
         ],
         [
           "odpad",
@@ -704,7 +706,11 @@
           "wysusz",
           "przetrz",
           "przetar",
-          "porządk"
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
         ],
         [
           "stół",
@@ -771,7 +777,8 @@
       "0,5%"
     ],
     "odczytBiureta": "v1",
-    "kartaPo": "odczyt"
+    "kartaPo": "odczyt",
+    "phmetr": true
   },
   "karta": {
     "tytul": "Karta wyników – tlen rozpuszczony",
