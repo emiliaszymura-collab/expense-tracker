@@ -138,7 +138,24 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
 
   // 3. Kroki procedury. Jeden wpis może opisywać kilka czynności ("dodaję wodę i mieszam"),
   //    także razem ze środkami ochrony ("zakładam fartuch i montuję zestaw").
-  const dopasowane = poziom.kroki.filter((k) => krokPasuje(k, wpis));
+  let dopasowane = poziom.kroki.filter((k) => krokPasuje(k, wpis));
+
+  // Wpis bez przedmiotu („zmierzyć absorbancję”, „odczytać wynik”): jeśli pasuje czynność (pierwsza grupa słów)
+  // kroku, który właśnie jest do zrobienia, przyjmujemy ten krok – z kontekstu wiadomo, o co chodzi.
+  // Tylko gdy wpis nie wskazuje żadnego innego kroku (żadna grupa słów innego kroku nie pasuje).
+  if (dopasowane.length === 0 && !bylyBhp) {
+    const dostepny = poziom.kroki.find(
+      (k) =>
+        !stan.wykonane.includes(k.id) &&
+        k.wymagane.length >= 2 &&
+        wymaganiaKroku(poziom, k).every((w) => stan.wykonane.includes(w)) &&
+        !k.wykluczajace?.some((w) => frazaPasuje(w, wpis, false)) &&
+        grupaPasuje(k.wymagane[0], wpis),
+    );
+    const inneWskazane =
+      dostepny && poziom.kroki.some((k) => k.id !== dostepny.id && k.wymagane.some((g, i) => (i > 0 || k.wymagane.length === 1) && grupaPasuje(g, wpis)));
+    if (dostepny && !inneWskazane) dopasowane = [dostepny];
+  }
 
   if (dopasowane.length === 0 && bylyBhp) return { stan, przyjete };
 

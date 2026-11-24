@@ -53,3 +53,18 @@ describe('żelazo – kuweta po wywołaniu barwy (zgłoszenie)', () => {
     expect(r.stan.bledy).toBe(0);
   });
 });
+
+describe('wpis bez przedmiotu – krok wynika z kontekstu (zgłoszenie)', () => {
+  it('„zmierzyć absorbancję”, „odczytać wynik”', () =>
+    graj(poziom('11-spektrofotometria'), [
+      ['odmierzam do kolb roztwór podstawowy żelaza', 'wzorce'],
+      ['do szóstej kolby 25 cm3 badanej próbki', 'probka'],
+      ['dodaję do każdej kolby HCl i rodanek potasu', 'barwa'],
+      ['uzupełniam do kreski', 'kreska'],
+      ['włączam spektrofotometr i ustawiam 480 nm', 'fala'],
+      ['napełniam kuwetę', 'kuweta'],
+      ['zeruję na ślepej próbie', 'slepa'],
+      ['zmierzyć absorbancję', 'pomiar_wz'],
+      ['odczytać wynik', 'odczyt'],
+    ]));
+});
