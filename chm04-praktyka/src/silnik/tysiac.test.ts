@@ -31,7 +31,7 @@ for (const poziom of poziomy)
   describe(`sformułowania – ${poziom.id}`, () => {
     for (const krok of poziom.kroki) {
       const stan = stanDla(poziom, krok.id);
-      for (const wpis of warianty(krok.przyklad))
+      for (const wpis of warianty(krok.przyklad ?? krok.id))
         it(`${krok.id}: „${wpis}”`, () => {
           const r = ocenWpis(poziom, stan, wpis, false);
           const ost = r.stan.dziennik.at(-1);

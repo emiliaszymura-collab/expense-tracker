@@ -1331,3 +1331,8 @@ button.sprawdz {
 .gorny-pasek .oddaj { order: -1; flex-shrink: 0; }
 
 .grupa-poziomow h2 { font-size: 1.05rem; margin: 22px 0 6px; }
+
+.arkusz-cke { position: fixed; inset: 0; z-index: 900; background: rgba(10, 20, 26, 0.75); display: flex; flex-direction: column; }
+.arkusz-cke-pasek { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 16px; background: var(--panel, #fff); color: var(--tekst, #111); }
+.arkusz-cke-strony { overflow-y: auto; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.arkusz-cke-strony img { width: min(900px, 100%); background: #fff; box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }

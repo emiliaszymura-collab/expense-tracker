@@ -939,3 +939,13 @@ P = {
 }
 zapisz('17-spektrofotometria-bialko.json', P)
 print('ok 12-17')
+
+# Oryginalne arkusze CKE (strony jako obrazy w public/zasoby/arkusze/<id>/s-N.jpg) – cały arkusz z wszystkimi tabelami.
+for plik in sorted(os.listdir(KAT)):
+    if not plik.endswith('.json'): continue
+    katalog = os.path.join(os.path.dirname(__file__), '..', 'public', 'zasoby', 'arkusze', plik[:-5])
+    if os.path.isdir(katalog):
+        d = json.load(open(os.path.join(KAT, plik), encoding='utf-8'))
+        d['arkuszStron'] = len([f for f in os.listdir(katalog) if f.endswith('.jpg')])
+        zapisz(plik, d)
+print('ok arkusze')

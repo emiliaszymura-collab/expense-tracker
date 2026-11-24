@@ -49,6 +49,8 @@ export interface Poziom {
   metoda: string;
   /** Grupa na liście poziomów, np. „Refraktometr Abbego” (brak = zadania z arkuszy CKE). */
   grupa?: string;
+  /** Liczba stron oryginalnego arkusza CKE (obrazy w zasoby/arkusze/<id>/s-N.jpg). */
+  arkuszStron?: number;
   /** Czas egzaminu w minutach (tryb egzaminu – etap 7). */
   czasMinut: number;
   /** Treść zadania i procedury jak w arkuszu (markdown-lite: akapity i listy "- "). */

@@ -10,6 +10,7 @@ import { ArkuszWzorcowy } from './ui/Wzorcowy';
 import { Karta } from './ui/Karta';
 import { Konsola } from './ui/Konsola';
 import { Lupa } from './ui/Lupa';
+import { ArkuszCke } from './ui/ArkuszCke';
 import { OkularAbbego, OkularPolarymetru } from './ui/Okular';
 import { PanelProtokolu } from './ui/PanelProtokolu';
 
@@ -125,6 +126,7 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
   const [widok, setWidok] = useState<'przod' | 'tyl'>('przod');
   const [lupa, setLupa] = useState(false);
   const [okular, setOkular] = useState(false);
+  const [arkusz, setArkusz] = useState(false);
   const [etykiety, setEtykiety] = useState(true);
   // Kartka z protokołem otwarta na start nowego poziomu, zwinięta przy powrocie do rozpoczętego.
   const [protokolOtwarty, setProtokolOtwarty] = useState(() => stan.dziennik.length === 0);
@@ -210,6 +212,12 @@ function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: (
             </div>
           </div>
         )}
+        {poziom.arkuszStron ? (
+          <button className="drugorzedny" onClick={() => setArkusz(true)}>
+            Arkusz<span className="tylko-szeroki">&nbsp;CKE</span>
+          </button>
+        ) : null}
+        {arkusz && <ArkuszCke poziom={poziom} onZamknij={() => setArkusz(false)} />}
         <button className="drugorzedny" onClick={() => otworzKarte(!kartaOtwarta)} disabled={!poOdczycie && !egzamin} title={poOdczycie || egzamin ? '' : 'Dostępna po pierwszym odczycie wyniku'}>
           Karta<span className="tylko-szeroki">&nbsp;wyników</span>
         </button>
