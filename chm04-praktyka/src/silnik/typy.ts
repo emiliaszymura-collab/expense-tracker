@@ -47,6 +47,8 @@ export interface Poziom {
   /** Np. "CHM.04 – styczeń 2026". */
   zrodlo: string;
   metoda: string;
+  /** Grupa na liście poziomów, np. „Refraktometr Abbego” (brak = zadania z arkuszy CKE). */
+  grupa?: string;
   /** Czas egzaminu w minutach (tryb egzaminu – etap 7). */
   czasMinut: number;
   /** Treść zadania i procedury jak w arkuszu (markdown-lite: akapity i listy "- "). */
@@ -128,6 +130,8 @@ export type Sprawdzenie =
   | { typ: 'rozrzut'; pola: string[]; max: number }
   /** Wniosek zależny od wyniku: gdy wzór > 0, wpis ma zawierać frazę z „tak”, w przeciwnym razie z „nie”. */
   | { typ: 'wybor'; pole: string; wzor: string; tak: string[]; nie: string[] }
+  /** Identyfikacja: wzór daje numer (0, 1, 2…) właściwej odpowiedzi; wpis ma zawierać frazę z opcje[numer]. */
+  | { typ: 'tekstWg'; pole: string; wzor: string; opcje: string[][] }
   /** Jedno z pól zawiera słowo z „zawiera” i wszystkie z „oraz” (np. nazwa sprzętu i pojemność). */
   | { typ: 'tekstRazem'; pola: string[]; zawiera: string[]; oraz: string[] }
   | { typ: 'niepuste'; pole: string };

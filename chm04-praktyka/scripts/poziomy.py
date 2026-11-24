@@ -617,13 +617,13 @@ P = {
   {'tytul': 'Zadanie egzaminacyjne', 'tresc': 'Korzystając z zamieszczonej procedury, oznacz stężenie żelaza(III) w próbce wody metodą spektrofotometryczną z rodankiem potasu.\nPrzygotuj serię pięciu roztworów wzorcowych, próbkę i ślepą próbę. Wywołaj barwę, zmierz absorbancję przy 480 nm, wyznacz krzywą wzorcową (współczynnik a = A/c) i oblicz stężenie żelaza w próbce.\nOceń, czy woda spełnia normę dla wody do picia: najwyżej 0,2 mg Fe/dm³. Badana próbka była przed analizą zatężona 10-krotnie.\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy uporządkuj stanowisko, mieszaniny poreakcyjne przelej do pojemnika na odpady ciekłe.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania roztworów i pomiarów (wzorce, ślepa próba, obsługa kuwety, zerowanie),\n- dokumentacja pomiarów i obliczeń – karta wyników z krzywą wzorcową,\n- uporządkowane stanowisko pracy.'},
   {'tytul': 'Procedura', 'tresc': '1. Roztwory wzorcowe\nDo kolb miarowych 50 cm³ odmierzyć pipetą kolejno 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza(III) o stężeniu 50 mg/dm³. Do szóstej kolby – 25 cm³ badanej próbki. Siódma kolba to ślepa próba (bez żelaza).\n2. Wywołanie barwy\nDo każdej kolby dodać 2 cm³ HCl 2 mol/dm³ i 5 cm³ roztworu rodanku potasu 10%. Uzupełnić wodą do kreski i wymieszać. Powstaje czerwone zabarwienie.\n3. Pomiar\nWłączyć spektrofotometr, ustawić długość fali 480 nm. Kuwetę trzymać za matowe ścianki, przepłukać mierzonym roztworem, napełnić do ¾ i wytrzeć. Wyzerować przyrząd na ślepej próbie. Zmierzyć absorbancję wzorców od najmniejszego stężenia, na końcu próbki.\n4. Obliczenia\nStężenia wzorców w kolbach: 1, 2, 3, 4, 5 mg/dm³. Z krzywej wzorcowej A = a · c wyznaczyć współczynnik a (średnia z A/c) i obliczyć stężenie w kolbie z próbką: c = A / a. Próbkę rozcieńczono 2 razy (25 → 50 cm³). Wyniki stężeń z dokładnością do 0,01.'}],
  'kroki': [
-  K('wzorce', 'Do kolb miarowych 50 cm³ odmierzono pipetą 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza.', PIPETA + ';wzorc|podstawow|żelaz', 'Odmierz pipetą 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza do kolejnych kolb miarowych 50 cm³.', 'Wzorce o znanych stężeniach tworzą krzywą wzorcową.', 'odmierzam pipetą roztwór podstawowy żelaza do pięciu kolb miarowych', 'kolba', 'pipetowanie', [], True, wykl='próbk'),
-  K('probka', 'Do szóstej kolby odmierzono 25 cm³ badanej próbki; siódma kolba to ślepa próba.', PIPETA + ';próbk|25', 'Odmierz 25 cm³ badanej próbki do szóstej kolby; siódmą zostaw jako ślepą próbę.', 'Ślepa próba zawiera wszystkie odczynniki oprócz żelaza – na niej zeruje się przyrząd.', 'odmierzam pipetą 25 cm3 badanej próbki do szóstej kolby', 'kolba', 'pipetowanie', ['wzorce'], True, wykl='wzorc|podstawow'),
+  K('wzorce', 'Do kolb miarowych 50 cm³ odmierzono pipetą 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza.', PIPETA + ';wzorc|podstawow|żelaz|kolb|roztw|podan|ilości', 'Odmierz pipetą 1, 2, 3, 4 i 5 cm³ roztworu podstawowego żelaza do kolejnych kolb miarowych 50 cm³.', 'Wzorce o znanych stężeniach tworzą krzywą wzorcową.', 'odmierzam pipetą roztwór podstawowy żelaza do pięciu kolb miarowych', 'kolba', 'pipetowanie', [], True, wykl='próbk|szóst|siódm|ślep|badan|hcl|kwas|rodan|kscn'),
+  K('probka', 'Do szóstej kolby odmierzono 25 cm³ badanej próbki; siódma kolba to ślepa próba.', PIPETA + '|przygotow|sporządz|szóst|siódm|ślep;próbk|25|ślep|szóst|siódm', 'Odmierz 25 cm³ badanej próbki do szóstej kolby; siódmą zostaw jako ślepą próbę.', 'Ślepa próba zawiera wszystkie odczynniki oprócz żelaza – na niej zeruje się przyrząd.', 'odmierzam pipetą 25 cm3 badanej próbki do szóstej kolby', 'kolba', 'pipetowanie', ['wzorce'], True, wykl='wzorc|podstawow'),
   K('barwa', 'Do każdej kolby dodano 2 cm³ HCl i 5 cm³ rodanku potasu – czerwone zabarwienie.', 'rodan|kscn|hcl|kwas', 'Dodaj do każdej kolby 2 cm³ HCl 2 mol/dm³ i 5 cm³ rodanku potasu 10%.', 'Żelazo(III) z rodankiem daje czerwony kompleks; środowisko kwasowe zapobiega hydrolizie.', 'dodaję do każdej kolby kwas solny i rodanek potasu', 'kolba', 'pipetowanie', ['probka'], True, stan={'kolba': 'czerwony'}),
   K('kreska', 'Kolby uzupełniono wodą do kreski i wymieszano.', 'uzupełn|dopełn|dolew|dolej;kresk|wod', 'Uzupełnij kolby wodą destylowaną do kreski i wymieszaj.', 'Objętość musi być dokładnie 50 cm³, bo od niej zależy stężenie wzorców.', 'uzupełniam kolby wodą do kreski i mieszam', 'kolba', 'przelewanie', ['barwa']),
   K('fala', 'Włączono spektrofotometr i ustawiono długość fali 480 nm.', 'włącz|ustaw|nastaw;spektrofot|fal|480', 'Włącz spektrofotometr i ustaw długość fali 480 nm.', 'Przy 480 nm kompleks rodankowy żelaza pochłania najsilniej – pomiar jest najczulszy.', 'włączam spektrofotometr i ustawiam długość fali 480 nm', 'przyrzad', 'przycisk', wykl='=wyłącz', stan={'spektro': True}),
-  K('kuweta', 'Kuwetę (trzymaną za matowe ścianki) przepłukano, napełniono do ¾ i wytarto.', 'kuwet', 'Przepłucz kuwetę mierzonym roztworem, napełnij do ¾ i wytrzyj; trzymaj za matowe ścianki.', 'Odciski palców i krople na przezroczystych ściankach zawyżają absorbancję.', 'przepłukuję kuwetę, napełniam do trzech czwartych i wycieram', 'rurka', 'przelewanie', ['kreska', 'fala'], True, wykl='ślep|zer', stan={'kuweta': True}),
-  K('slepa', 'Przyrząd wyzerowano na ślepej próbie.', 'zeruj|wyzer|zero|ślep', 'Wyzeruj spektrofotometr na ślepej próbie.', 'Dzięki temu absorbancja pochodzi tylko od kompleksu żelaza, a nie od odczynników.', 'zeruję spektrofotometr na ślepej próbie', 'przyrzad', 'siegnij', ['kuweta']),
+  K('kuweta', 'Kuwetę (trzymaną za matowe ścianki) przepłukano, napełniono do ¾ i wytarto.', 'kuwet|matow', 'Przepłucz kuwetę mierzonym roztworem, napełnij do ¾ i wytrzyj; trzymaj za matowe ścianki.', 'Odciski palców i krople na przezroczystych ściankach zawyżają absorbancję.', 'przepłukuję kuwetę, napełniam do trzech czwartych i wycieram', 'rurka', 'przelewanie', ['barwa', 'fala'], True, wykl='ślep|zer', stan={'kuweta': True}),
+  K('slepa', 'Przyrząd wyzerowano na ślepej próbie.', 'zeruj|wyzer|zero|kalibr', 'Wyzeruj spektrofotometr na ślepej próbie.', 'Dzięki temu absorbancja pochodzi tylko od kompleksu żelaza, a nie od odczynników.', 'zeruję spektrofotometr na ślepej próbie', 'przyrzad', 'siegnij', ['kuweta']),
   K('pomiar_wz', 'Zmierzono absorbancję wzorców – od najmniejszego stężenia.', 'mierz|zmierz|pomiar|odczyt;wzorc', 'Zmierz absorbancję wzorców, zaczynając od najmniejszego stężenia.', 'Kolejność od najmniejszego stężenia ogranicza błąd przenoszenia między pomiarami.', 'mierzę absorbancję wzorców od najmniejszego stężenia', 'przyrzad', 'siegnij', ['slepa'], wykl='próbk'),
   K('odczyt', 'Zmierzono absorbancję próbki.', 'mierz|zmierz|pomiar|odczyt;próbk', 'Na końcu zmierz absorbancję badanej próbki.', 'Absorbancję próbki porównujesz z krzywą wzorcową.', 'mierzę absorbancję próbki', 'przyrzad', 'siegnij', ['pomiar_wz'], wykl='wzorc'),
   *aparat_porzadki(['odczyt']),
@@ -653,3 +653,279 @@ P = {
 P['protokol'].append({'tytul': 'Skąd ten poziom', 'tresc': UWAGA})
 zapisz('11-spektrofotometria.json', P)
 print('ok 9-11')
+
+# ═════════════════════════ Kolejne zadania przewidywane – inne zadania z tymi samymi przyrządami
+G_REFR, G_POL, G_SPEKTRO = 'Refraktometr Abbego', 'Polarymetr', 'Spektrofotometr UV-Vis'
+for plik, grupa in (('09-refraktometria.json', G_REFR), ('10-polarymetria.json', G_POL), ('11-spektrofotometria.json', G_SPEKTRO)):
+    sciezka = os.path.join(KAT, plik)
+    d = json.load(open(sciezka, encoding='utf-8'))
+    d['grupa'] = grupa
+    zapisz(plik, d)
+
+def zadanie(tresc, procedura):
+    return [{'tytul': 'Zadanie egzaminacyjne', 'tresc': tresc}, {'tytul': 'Procedura', 'tresc': procedura}, {'tytul': 'Skąd ten poziom', 'tresc': UWAGA}]
+
+def okular(id, et): return {'typ': 'refraktometr', 'id': id, 'etykieta': et}
+def polar(id, et): return {'typ': 'polarymetr', 'id': id, 'etykieta': et}
+
+# ── wspólne kroki refraktometru
+def R_pryzmat1():
+    return K('pryzmat1', 'Pryzmaty refraktometru otwarte, przemyte wodą destylowaną i osuszone miękką bibułą.', 'przemy|umyj|myję|opłucz|osusz|wytrz|czyszcz|czyść|otwórz|otwier;pryzmat|refraktometr', 'Otwórz pryzmaty, przemyj je wodą destylowaną i osusz miękką bibułą.', 'Resztki poprzedniej próbki zmieniają współczynnik załamania.', 'przemywam pryzmaty wodą destylowaną i osuszam bibułą', 'przyrzad', 'mycie', wykl='koniec|zakończ|po pomiar|na koniec')
+def R_zero():
+    return K('zero', 'Na pryzmat naniesiono wodę destylowaną; odczyt nD = 1,3330 – przyrząd wskazuje poprawnie.', 'sprawdz|kalibr|zeruj|nanoś|nanieś|naniesi|zmierz|mierz;wod', 'Nanieś 2–3 krople wody destylowanej, zamknij pryzmaty i sprawdź, czy przyrząd wskazuje nD = 1,3330.', 'Bez sprawdzenia na wodzie nie wiesz, czy przyrząd nie ma błędu systematycznego.', 'nanoszę wodę destylowaną i sprawdzam wskazanie refraktometru', 'przyrzad', 'pipetowanie', ['pryzmat1'], wykl='wzorc|próbk|cieczy|badan|albumin|białk|pryzmat wod')
+def R_granica(po):
+    return K('granica', 'W okularze ustawiono ostrą granicę pola jasnego i ciemnego na przecięciu nici, kompensatorem usunięto zabarwienie.', 'granic|ostroś|ostr|nici|krzyż|kompensat|pokrętł|pole|pola|okular', 'Patrząc w okular, ustaw pokrętłem granicę pól na przecięciu nici; zabarwienie usuń kompensatorem.', 'Rozmyta lub kolorowa granica daje błędny odczyt nD.', 'ustawiam ostrą granicę pól na przecięciu nici', 'przyrzad', 'pokretlo', [po], wykl='odczyt')
+def R_odczyt(co, slowa_wykl='wod|wzorc'):
+    return K('odczyt', f'Odczytano nD {co} ze skali w okularze oraz temperaturę.', 'odczyt|zapis|notuj|sprawdz|patrz|mierz|zmierz;nd|współczyn|załaman|skal|wynik|temperatur|wskazan|refrakc|okular', f'Spójrz w okular i odczytaj nD {co} (4 miejsca po przecinku) oraz temperaturę.', 'Współczynnik załamania zależy od temperatury.', 'odczytuję współczynnik załamania nD i temperaturę', 'przyrzad', 'okular', ['granica'], wykl=slowa_wykl)
+def R_powtorz(co):
+    return W('powtorz', f'powtarzam pomiar jeszcze dwa razy z nową porcją {co}', wymaga=['odczyt'], sprzet='przyrzad', animacja='okular', opis=f'Wykonano kolejne pomiary – razem trzy, każdy z nową porcją {co}.', podpowiedz=f'Powtórz pomiar jeszcze dwa razy, nanosząc nową porcję {co}.', dlaczego='Wynik to średnia z trzech zgodnych odczytów.', stan={})
+def R_pryzmat2():
+    return K('pryzmat2', 'Po pomiarach pryzmaty umyto wodą destylowaną i osuszono miękką bibułą.', 'przemy|umyj|myję|opłucz|osusz|wytrz|czyszcz|czyść;pryzmat|refraktometr', 'Po zakończeniu pomiarów umyj pryzmaty wodą destylowaną (lub etanolem) i osusz.', 'Zaschnięta próbka niszczy pryzmat i fałszuje kolejne pomiary.', 'po pomiarach myję i osuszam pryzmaty', 'przyrzad', 'mycie', ['powtorz'])
+
+# ───────────────────────── 12. Refraktometria – białko, krzywa wzorcowa
+P = {
+ 'id': '12-refraktometria-bialko', 'grupa': G_REFR, 'tytul': 'Białko w roztworze – refraktometr', 'zrodlo': 'Poziom przewidywany – podstawa programowa 2019', 'metoda': 'Refraktometria – krzywa wzorcowa nD = f(c), białko (albumina)', 'czasMinut': 180,
+ 'protokol': zadanie(
+  'Korzystając z zamieszczonej procedury, oznacz stężenie białka (albuminy) w badanym roztworze metodą refraktometryczną z krzywą wzorcową.\nSporządź cztery roztwory wzorcowe albuminy, zmierz ich współczynniki załamania nD i wyznacz współczynnik kierunkowy krzywej wzorcowej.\nWykonaj trzy pomiary nD badanego roztworu, oblicz stężenie białka i oceń, czy zgadza się z deklaracją producenta: 6,0 g/100 cm³ (dopuszczalna różnica ±0,3 g/100 cm³).\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj i osusz pryzmaty oraz uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg sporządzania wzorców i pomiarów (sprawdzenie przyrządu, nanoszenie próbek, ustawienie granicy pól, odczyt nD),\n- dokumentacja pomiarów i obliczeń – karta wyników z krzywą wzorcową,\n- uporządkowane stanowisko pracy.',
+  '1. Sprawdzenie refraktometru\nPryzmaty przemyć wodą destylowaną i osuszyć. Zmierzyć nD wody destylowanej – w 20 °C: 1,3330. Pryzmaty termostatowane w 20 °C.\n2. Roztwory wzorcowe\nDo kolb miarowych 25 cm³ odmierzyć pipetą 5, 10, 15 i 20 cm³ roztworu podstawowego albuminy o stężeniu 10 g/100 cm³, uzupełnić wodą do kreski i wymieszać (nie wstrząsać – białko się pieni). Stężenia wzorców: 2, 4, 6 i 8 g/100 cm³.\n3. Pomiar wzorców\nZmierzyć nD wzorców od najmniejszego stężenia. Przed każdym pomiarem pryzmaty osuszyć.\n4. Pomiar próbki\nNanieść bagietką 2–3 krople badanego roztworu, ustawić granicę pól na przecięciu nici, odczytać nD. Pomiar wykonać trzy razy z nową porcją roztworu.\n5. Zakończenie\nPryzmaty umyć wodą destylowaną i osuszyć.\nObliczenia\nΔn = nD − nD wody. Dla każdego wzorca a = Δn / c, współczynnik krzywej – średnia z czterech wartości a (6 miejsc po przecinku).\nStężenie białka: c = (nD próbki − nD wody) / a, z dokładnością do 0,1 g/100 cm³.'),
+ 'kroki': [
+  R_pryzmat1(), R_zero(),
+  K('wzorce', 'Do kolb miarowych 25 cm³ odmierzono 5, 10, 15 i 20 cm³ roztworu albuminy, uzupełniono do kreski i wymieszano.', PIPETA + '|sporządz|przygotow|rozcieńcz;wzorc|albumin|białk|podstawow', 'Odmierz pipetą 5, 10, 15 i 20 cm³ roztworu podstawowego albuminy do kolb miarowych 25 cm³ i uzupełnij wodą do kreski.', 'Wzorce o znanym stężeniu tworzą krzywą wzorcową nD = f(c).', 'odmierzam pipetą roztwór albuminy do czterech kolb miarowych i uzupełniam do kreski', 'kolba', 'pipetowanie', ['zero'], True, wykl='pryzmat|nanoś|nanieś|mierz', stan={'kolba': 'roztwor'}),
+  K('pomiar_wz', 'Zmierzono nD czterech wzorców – od najmniejszego stężenia, z osuszaniem pryzmatów.', 'mierz|zmierz|pomiar|nanoś|nanieś|odczyt|sprawdz;wzorc', 'Zmierz nD wzorców od najmniejszego stężenia; przed każdym pomiarem osusz pryzmaty.', 'Od najmniejszego stężenia – resztka poprzedniego roztworu mniej zafałszuje wynik.', 'mierzę nD wzorców od najmniejszego stężenia', 'przyrzad', 'okular', ['wzorce'], wykl='odmierz|pipet|sporządz'),
+  K('probka', 'Na osuszony pryzmat naniesiono bagietką 2–3 krople badanego roztworu i zamknięto pryzmaty.', 'nanoś|nanieś|naniesi|nakład|nakrapl|kropl|umieść;próbk|badan|roztw', 'Osusz pryzmaty i nanieś bagietką 2–3 krople badanego roztworu.', 'Próbkę nanosi się bagietką, nie dotykając pryzmatu szkłem.', 'nanoszę bagietką badany roztwór na pryzmat', 'przyrzad', 'pipetowanie', ['pomiar_wz'], True, wykl='wzorc|wod'),
+  R_granica('probka'), R_odczyt('próbki'), R_powtorz('roztworu'), R_pryzmat2(),
+  *aparat_porzadki(['pryzmat2']),
+ ],
+ 'bledy': BLEDY,
+ 'scena': {'titrant': ['albumina', '10 g/100 cm³'], 'wskaznik': ['próbka', 'białko'], 'kartaPo': 'odczyt', 'przyrzad': 'refraktometr', 'okular': 'x1'},
+ 'karta': {
+  'tytul': 'Karta wyników – białko (refraktometria)',
+  'losuj': [{'id': 'a', 'od': 0.00180, 'do': 0.00190}, {'id': 'cx', 'od': 5.4, 'do': 6.6}, {'id': 'nw', 'wybierz': [1.3330]}] +
+           [{'id': f'n{i}', 'wzor': f'1.3330+a*{2*i}', 'szum': 0.00004, 'miejsca': 4} for i in (1, 2, 3, 4)] +
+           [{'id': f'x{i}', 'wzor': '1.3330+a*cx', 'szum': 0.00008, 'miejsca': 4} for i in (1, 2, 3)],
+  'odczyty': [okular('nw', 'Okular – woda destylowana')] + [okular(f'n{i}', f'Okular – wzorzec {2*i} g/100 cm³') for i in (1, 2, 3, 4)] + [okular(f'x{i}', f'Okular – próbka, pomiar {i}') for i in (1, 2, 3)] + [info('Deklaracja producenta', '6,0 g/100 cm³ ± 0,3')],
+  'sekcje': [
+   {'tytul': 'Krzywa wzorcowa', 'opis': 'Wzorce kolejno: 2, 4, 6 i 8 g/100 cm³. nD – 4 miejsca, a – 6 miejsc po przecinku.', 'tabela': {'wiersze': 4, 'kolumny': [{'naglowek': 'nD wzorca', 'pole': 'n{i}'}, {'naglowek': 'Δn = nD − nD wody', 'pole': 'd{i}'}, {'naglowek': 'a = Δn / c', 'pole': 'k{i}'}]},
+    'pola': [pole('nw', 'nD wody =', None, 'kr'), pole('a', 'Współczynnik krzywej a (średnia) =', None, 'sr')]},
+   {'tytul': 'Próbka', 'tabela': {'wiersze': 3, 'kolumny': [{'naglowek': 'nD próbki', 'pole': 'x{i}'}]},
+    'pola': [pole('xsr', 'nD próbki (średnia) =', None, 'kr'), pole('c', 'Stężenie białka c =', 'g/100 cm³', 'kr'), pole('wniosek', 'Wynik (zgodny / niezgodny) z deklaracją:', szer='dl')]}],
+  'brudnopis': ['Zależność nD od stężenia białka jest liniowa: Δn = a · c.', '~2 g/100 cm³ — Δn wzorca 1 | 1 g/100 cm³ — a', '~a — 1 g/100 cm³ | Δn próbki — c', 'Przykład na innych liczbach: Δn = 0,0110, a = 0,001850 → c = 0,0110 / 0,001850 = 5,9 g/100 cm³.'],
+  'kryteria': [
+   kr('nD wody i czterech wzorców zgodne z odczytem', 'Odczytaj skalę w okularze w miejscu czerwonej kreski.', liczba('nw', 'nw', 0.00006), *[liczba(f'n{i}', f'n{i}', 0.00006) for i in (1, 2, 3, 4)]),
+   kr('Różnice Δn dla wzorców', 'Δn = nD wzorca − nD wody.', *[liczba(f'd{i}', f'$n{i}-$nw', 0.00006) for i in (1, 2, 3, 4)]),
+   kr('Ilorazy a = Δn / c', 'Podziel Δn przez stężenie wzorca (2, 4, 6, 8).', *[liczba(f'k{i}', f'$d{i}/{2*i}', 0.0000051) for i in (1, 2, 3, 4)]),
+   kr('Współczynnik krzywej wzorcowej', 'Średnia z czterech wartości a.', liczba('a', 'sr($k1,$k2,$k3,$k4)', 0.0000051), pokaz=('sr($k1,$k2,$k3,$k4)', 6, '')),
+   kr('Trzy odczyty nD próbki i ich średnia', 'Odczyty nieróżniące się o więcej niż 0,0003.', *[liczba(f'x{i}', f'x{i}', 0.00006) for i in (1, 2, 3)], {'typ': 'rozrzut', 'pola': ['x1', 'x2', 'x3'], 'max': 0.0003}, liczba('xsr', 'sr($x1,$x2,$x3)', 0.00006)),
+   kr('Stężenie białka z dokładnością do 0,1', 'c = (nD próbki − nD wody) / a.', liczba('c', '($xsr-$nw)/$a', 0.06), miejsca('c', 1), pokaz=('($xsr-$nw)/$a', 1, ' g/100 cm³')),
+   kr('Wniosek spójny z wynikiem (6,0 ± 0,3 g/100 cm³)', 'Porównaj c z 6,0 g/100 cm³.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '0.3-abs($c-6)+0.000001', 'tak': ['zgodny', 'zgodna'], 'nie': ['niezgodny', 'niezgodna', 'nie zgodny', 'nie jest']}),
+  ]},
+}
+zapisz('12-refraktometria-bialko.json', P)
+
+# ───────────────────────── 13. Refraktometria – identyfikacja cieczy i czystość
+CIECZE = [('etanol', 1.3611), ('aceton', 1.3588), ('propan-2-ol', 1.3776), ('glicerol', 1.4730), ('cykloheksan', 1.4262)]
+NTAB = 'wg(idx,' + ','.join(str(n) for _, n in CIECZE) + ')'
+P = {
+ 'id': '13-refraktometria-identyfikacja', 'grupa': G_REFR, 'tytul': 'Identyfikacja cieczy – refraktometr', 'zrodlo': 'Poziom przewidywany – podstawa programowa 2019', 'metoda': 'Refraktometria – identyfikacja i ocena czystości cieczy', 'czasMinut': 180,
+ 'protokol': zadanie(
+  'Korzystając z zamieszczonej procedury, zidentyfikuj ciecz organiczną na podstawie współczynnika załamania światła nD i oceń jej czystość.\nSprawdź wskazanie refraktometru na wodzie destylowanej. Wykonaj trzy pomiary nD badanej cieczy, odczytaj temperaturę, przelicz wynik na 20 °C i porównaj z tabelą.\nCiecz uznaje się za czystą, jeśli nD20 różni się od wartości tablicowej najwyżej o 0,0005.\nWyniki, obliczenia, identyfikację i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp – ciecze organiczne są lotne i palne, pracuj przy włączonym dygestorium. Po pracy umyj pryzmaty etanolem i osusz.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg pomiarów (sprawdzenie przyrządu, nanoszenie próbki, odczyt nD i temperatury),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy.',
+  '1. Sprawdzenie refraktometru\nPryzmaty przemyć i osuszyć, zmierzyć nD wody destylowanej (1,3330).\n2. Pomiar cieczy\nNanieść 2–3 krople badanej cieczy, szybko zamknąć pryzmaty (ciecz paruje). Ustawić granicę pól, usunąć zabarwienie kompensatorem, odczytać nD i temperaturę. Pomiar wykonać trzy razy.\n3. Zakończenie\nPryzmaty umyć etanolem, potem wodą i osuszyć.\nObliczenia\nnD20 = nD(t) + 0,0004 · (t − 20) – dla cieczy organicznych.\nWartości tablicowe nD20:\n- etanol 1,3611\n- aceton 1,3588\n- propan-2-ol 1,3776\n- glicerol 1,4730\n- cykloheksan 1,4262'),
+ 'kroki': [
+  W('dygestorium', 'włączam dygestorium', nid='dygestorium') if False else K('dygestorium', 'Włączono wyciąg dygestorium – pracujesz z lotną cieczą organiczną.', 'włącz|uruchom;dygestor|wyciąg', 'Włącz dygestorium – ciecze organiczne są lotne i palne.', 'Pary rozpuszczalników organicznych są szkodliwe i palne.', 'włączam dygestorium', 'stol', 'przycisk', wykl='=wyłącz'),
+  R_pryzmat1(), R_zero(),
+  K('probka', 'Na pryzmat naniesiono 2–3 krople badanej cieczy i szybko zamknięto pryzmaty.', 'nanoś|nanieś|naniesi|nakład|nakrapl|kropl|umieść;ciecz|próbk|badan|substancj', 'Nanieś 2–3 krople badanej cieczy i od razu zamknij pryzmaty.', 'Ciecz organiczna szybko paruje – otwarte pryzmaty dałyby zawyżony, niestabilny odczyt.', 'nanoszę badaną ciecz na pryzmat i zamykam pryzmaty', 'przyrzad', 'pipetowanie', ['zero', 'dygestorium'], True, wykl='wod'),
+  R_granica('probka'), R_odczyt('cieczy'), R_powtorz('cieczy'), R_pryzmat2(),
+  *aparat_porzadki(['pryzmat2']),
+ ],
+ 'bledy': BLEDY,
+ 'scena': {'titrant': ['ciecz', 'badana'], 'wskaznik': ['etanol', 'do mycia'], 'kartaPo': 'odczyt', 'przyrzad': 'refraktometr', 'okular': 'x1'},
+ 'karta': {
+  'tytul': 'Karta wyników – identyfikacja cieczy',
+  'losuj': [{'id': 'idx', 'wybierz': list(range(len(CIECZE)))}, {'id': 'zan', 'wybierz': [0, 0, 0.0021, -0.0018]}, {'id': 't', 'wybierz': [19, 21, 22, 23, 24]}, {'id': 'nw', 'wybierz': [1.3330]}, {'id': 'ntab', 'wzor': NTAB}] +
+           [{'id': f'x{i}', 'wzor': 'ntab+zan-0.0004*(t-20)', 'szum': 0.00006, 'miejsca': 4} for i in (1, 2, 3)],
+  'odczyty': [okular(f'x{i}', f'Okular – ciecz, pomiar {i}') for i in (1, 2, 3)] + [wysw('t', 'Termometr przy pryzmatach', 0, '°C')],
+  'sekcje': [
+   {'tytul': 'Pomiary', 'tabela': {'wiersze': 3, 'kolumny': [{'naglowek': 'nD cieczy', 'pole': 'x{i}'}]},
+    'pola': [pole('t', 'Temperatura pomiaru:', '°C', 'kr'), pole('xsr', 'nD średnie =', None, 'kr'), pole('popr', 'Poprawka 0,0004 · (t − 20) =', None, 'kr'), pole('n20', 'nD20 =', None, 'kr')]},
+   {'tytul': 'Identyfikacja i ocena', 'pola': [pole('ciecz', 'Badana ciecz to:', szer='dl'), pole('roznica', 'Różnica od wartości tablicowej =', None, 'kr'), pole('wniosek', 'Ciecz (czysta / zanieczyszczona):', szer='dl')]}],
+  'brudnopis': ['Przeliczenie na 20 °C: nD maleje, gdy temperatura rośnie.', '~1 °C — 0,0004 | (t − 20) °C — poprawka', 'nD20 = nD średnie + poprawka (poniżej 20 °C poprawka jest ujemna).', 'Porównaj nD20 z tabelą – wybierz ciecz o najbliższej wartości, policz różnicę.'],
+  'kryteria': [
+   kr('Trzy odczyty nD zgodne ze wskazaniami', 'Odczytaj skalę w okularze – 4 miejsca po przecinku.', *[liczba(f'x{i}', f'x{i}', 0.00006) for i in (1, 2, 3)], *[miejsca(f'x{i}', 4) for i in (1, 2, 3)]),
+   kr('Zapisana temperatura pomiaru', 'Przepisz temperaturę z termometru.', liczba('t', 't', 0.1)),
+   kr('Średnia nD', 'Średnia z trzech odczytów.', liczba('xsr', 'sr($x1,$x2,$x3)', 0.00006), pokaz=('sr($x1,$x2,$x3)', 4, '')),
+   kr('Poprawka temperaturowa i nD20', 'Poprawka = 0,0004 · (t − 20); nD20 = średnia + poprawka.', liczba('popr', '0.0004*($t-20)', 0.00002), liczba('n20', '$xsr+$popr', 0.00006), pokaz=('$xsr+$popr', 4, '')),
+   kr('Poprawna identyfikacja cieczy', 'Wybierz ciecz z tabeli o nD20 najbliższym Twojemu wynikowi.', {'typ': 'tekstWg', 'pole': 'ciecz', 'wzor': 'idx', 'opcje': [[n] for n, _ in CIECZE]}),
+   kr('Różnica od wartości tablicowej', '|nD20 − nD tablicowe|.', liczba('roznica', f'abs($n20-ntab)', 0.00007)),
+   kr('Ocena czystości spójna z wynikiem (różnica ≤ 0,0005)', 'Czysta, jeśli różnica nie przekracza 0,0005.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '0.0005-abs($n20-ntab)+0.0000001', 'tak': ['czyst'], 'nie': ['zanieczyszcz', 'nieczyst', 'nie jest czyst']}),
+  ]},
+}
+zapisz('13-refraktometria-identyfikacja.json', P)
+
+# ── wspólne kroki polarymetru
+def PL_lampa():
+    return K('lampa', 'Włączono lampę sodową polarymetru i odczekano 5 minut.', 'włącz|uruchom|zapal;lamp|polarymetr', 'Włącz lampę sodową i odczekaj 5 minut.', 'Lampa sodowa musi się nagrzać, żeby świeciła stabilnym światłem 589 nm.', 'włączam lampę sodową polarymetru', 'przyrzad', 'przycisk', wykl='=wyłącz', stan={'lampa': True})
+def PL_rurka_woda():
+    return K('rurka_woda', 'Rurkę napełniono wodą destylowaną bez pęcherzyka powietrza i wytarto okienka.', 'napełn|nalew|wlew|wlej;rurk;wod', 'Napełnij rurkę polarymetryczną wodą destylowaną bez pęcherzyka powietrza i wytrzyj okienka.', 'Pęcherzyk powietrza na drodze światła uniemożliwia poprawny odczyt.', 'napełniam rurkę wodą destylowaną bez pęcherzyka powietrza', 'rurka', 'przelewanie', ['lampa'], stan={'rurka': True})
+def PL_zero():
+    return K('zero', 'Polarymetr wyzerowano na wodzie – równe zaciemnienie obu pól.', 'zeruj|wyzer|zero|ustaw;polarymetr|zero|pól|pola|wod', 'Włóż rurkę z wodą do polarymetru i ustaw zero – równe zaciemnienie obu pól.', 'Woda nie skręca płaszczyzny polaryzacji; to punkt odniesienia.', 'zeruję polarymetr na wodzie destylowanej', 'przyrzad', 'pokretlo', ['rurka_woda'], wykl='napełn')
+def PL_rurka_proba(po):
+    return K('rurka_proba', 'Rurkę przepłukano badanym roztworem i napełniono bez pęcherzyka powietrza.', 'przepłuk|przepłucz|napełn|nalew|wlew|wlej;rurk;roztw|próbk|badan|płyn', 'Przepłucz rurkę badanym roztworem, napełnij ją bez pęcherzyka i wytrzyj okienka.', 'Resztki wody rozcieńczyłyby próbkę i zaniżyły kąt skręcenia.', 'przepłukuję i napełniam rurkę badanym roztworem', 'rurka', 'przelewanie', ['zero'] + po, True)
+def PL_odczyt():
+    return K('odczyt', 'Obrócono analizator do zrównania pól i odczytano kąt skręcenia ze skali i noniusza.', 'odczyt|zmierz|mierz|pomiar;kąt|skręc|nonius|analizator|polarymetr', 'Obracaj analizator do zrównania zaciemnienia pól i odczytaj kąt ze skali i noniusza.', 'Kąt skręcenia jest proporcjonalny do stężenia i długości rurki.', 'odczytuję kąt skręcenia z noniusza', 'przyrzad', 'okular', ['rurka_proba'])
+def PL_powtorz():
+    return W('powtorz', 'powtarzam odczyt jeszcze dwa razy', wymaga=['odczyt'], sprzet='przyrzad', animacja='okular', opis='Wykonano kolejne odczyty – razem trzy.', podpowiedz='Wykonaj jeszcze dwa odczyty kąta.', dlaczego='Wynik to średnia z trzech odczytów.', stan={})
+def PL_myj():
+    return K('rurka_myj', 'Rurkę polarymetryczną umyto wodą destylowaną, lampę wyłączono.', 'umyj|myję|wypłucz|opłucz|płucz;rurk', 'Umyj rurkę wodą destylowaną i wyłącz lampę.', 'Zaschnięty cukier zabrudzi okienka rurki.', 'myję rurkę polarymetryczną wodą destylowaną', 'zlew', 'mycie', ['powtorz'], wykl='przepłuk|napełn')
+
+# ───────────────────────── 14. Polarymetria – glukoza w płynie infuzyjnym
+P = {
+ 'id': '14-polarymetria-glukoza', 'grupa': G_POL, 'tytul': 'Glukoza w płynie infuzyjnym – polarymetr', 'zrodlo': 'Poziom przewidywany – podstawa programowa 2019', 'metoda': 'Polarymetria – glukoza (mutarotacja, rurka 2 dm)', 'czasMinut': 180,
+ 'protokol': zadanie(
+  'Korzystając z zamieszczonej procedury, oznacz stężenie glukozy w płynie infuzyjnym metodą polarymetryczną.\nPrzygotuj próbkę (ustal równowagę mutarotacji), wyzeruj polarymetr na wodzie i wykonaj trzy odczyty kąta skręcenia.\nOblicz stężenie glukozy i oceń, czy płyn spełnia deklarację: 5,00 g/100 cm³ (dopuszczalne odchylenie ±5%, czyli 4,75–5,25 g/100 cm³).\nWyniki, obliczenia i wniosek zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj rurkę, wyłącz lampę i uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania próbki i pomiarów,\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy.',
+  '1. Przygotowanie próbki\nDo 50 cm³ płynu w zlewce dodać 2 krople roztworu amoniaku i odczekać 15 minut. Świeży roztwór glukozy zmienia kąt skręcenia (mutarotacja) – amoniak przyspiesza ustalenie się równowagi.\n2. Zerowanie\nWłączyć lampę sodową, odczekać 5 minut. Rurkę 2 dm napełnić wodą bez pęcherzyka, ustawić zero – równe zaciemnienie pól.\n3. Pomiar\nRurkę przepłukać i napełnić próbką, ustawić równe zaciemnienie pól, odczytać kąt ze skali i noniusza (dokładność 0,05°). Trzy odczyty.\nObliczenia\nc = (100 · α) / ([α] · l)\n- [α] glukozy (stan równowagi) = +52,7\n- l = 2 dm\nWynik z dokładnością do 0,01 g/100 cm³.'),
+ 'kroki': [
+  PL_lampa(),
+  K('mutarotacja', 'Do próbki dodano 2 krople amoniaku i odczekano 15 minut – ustaliła się równowaga mutarotacji.', 'amoniak|nh3|mutarot|odczek|poczek|15 minut', 'Dodaj do próbki 2 krople roztworu amoniaku i odczekaj 15 minut.', 'Bez ustalenia równowagi kąt skręcenia glukozy zmienia się w czasie – wynik byłby fałszywy.', 'dodaję 2 krople amoniaku do próbki i odczekuję 15 minut', 'kolba', 'pipetowanie', [], True, stan={'kolba': 'roztwor'}),
+  PL_rurka_woda(), PL_zero(), PL_rurka_proba(['mutarotacja']), PL_odczyt(), PL_powtorz(), PL_myj(),
+  *aparat_porzadki(['rurka_myj']),
+ ],
+ 'bledy': BLEDY,
+ 'scena': {'titrant': ['glukoza', '5% – płyn'], 'wskaznik': ['NH₃', 'roztwór'], 'kartaPo': 'odczyt', 'przyrzad': 'polarymetr', 'okular': 'a1'},
+ 'karta': {
+  'tytul': 'Karta wyników – glukoza (polarymetria)',
+  'losuj': [{'id': 'c', 'od': 4.6, 'do': 5.4}] + [{'id': f'a{i}', 'wzor': 'c*52.7*2/100', 'szum': 0.05, 'krok': 0.05, 'miejsca': 2} for i in (1, 2, 3)],
+  'odczyty': [polar(f'a{i}', f'Okular polarymetru – odczyt {i}') for i in (1, 2, 3)] + [info('Dane', 'rurka l = 2 dm, [α] glukozy = +52,7'), info('Deklaracja', '5,00 g/100 cm³ ± 5%')],
+  'sekcje': [{'tytul': 'Dokumentacja z pomiarów', 'pola': [pole('a1', 'α₁ =', '°', 'kr'), pole('a2', 'α₂ =', '°', 'kr'), pole('a3', 'α₃ =', '°', 'kr'), pole('asr', 'α średnie =', '°', 'kr'), pole('c', 'Stężenie glukozy c =', 'g/100 cm³', 'kr'), pole('odch', 'Odchylenie od deklaracji =', '%', 'kr'), pole('wniosek', 'Płyn (spełnia / nie spełnia) deklarację:', szer='dl')]}],
+  'brudnopis': ['Roztwór 1 g/100 cm³ glukozy w rurce 1 dm skręca o 0,527°, w rurce 2 dm – o 1,054°.', '~1,054° — 1 g/100 cm³ | α° — c g/100 cm³', 'Odchylenie: (c − 5,00) / 5,00 · 100%.'],
+  'kryteria': [
+   kr('Trzy odczyty kąta zgodne ze wskazaniami', 'Stopnie ze skali przy zerze noniusza, setne: kreska noniusza pokrywająca się ze skalą × 0,05°.', *[liczba(f'a{i}', f'a{i}', 0.026) for i in (1, 2, 3)]),
+   kr('Średni kąt skręcenia', 'Średnia z trzech odczytów.', liczba('asr', 'sr($a1,$a2,$a3)', 0.011), pokaz=('sr($a1,$a2,$a3)', 2, '°')),
+   kr('Stężenie glukozy z dokładnością do 0,01', 'c = 100 · α / (52,7 · 2).', liczba('c', '100*$asr/(52.7*2)', 0.011), miejsca('c', 2), pokaz=('100*$asr/(52.7*2)', 2, ' g/100 cm³')),
+   kr('Odchylenie od deklaracji w %', '(c − 5,00) / 5,00 · 100%.', liczba('odch', '($c-5)/5*100', 0.11), pokaz=('($c-5)/5*100', 1, '%')),
+   kr('Wniosek spójny z wynikiem (±5%)', 'Spełnia, jeśli odchylenie mieści się w ±5%.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '0.25-abs($c-5)+0.000001', 'tak': ['spelnia'], 'nie': ['nie spelnia']}),
+  ]},
+}
+zapisz('14-polarymetria-glukoza.json', P)
+
+# ───────────────────────── 15. Polarymetria – skręcalność właściwa i identyfikacja cukru
+CUKRY = [('glukoza', 52.7), ('sacharoza', 66.5), ('galaktoza', 80.2), ('maltoza', 130.4)]
+ALFA = 'wg(idx,' + ','.join(str(a) for _, a in CUKRY) + ')'
+P = {
+ 'id': '15-polarymetria-identyfikacja', 'grupa': G_POL, 'tytul': 'Identyfikacja cukru – polarymetr', 'zrodlo': 'Poziom przewidywany – podstawa programowa 2019', 'metoda': 'Polarymetria – skręcalność właściwa i identyfikacja', 'czasMinut': 180,
+ 'protokol': zadanie(
+  'Korzystając z zamieszczonej procedury, wyznacz skręcalność właściwą cukru w badanej próbce i zidentyfikuj ten cukier.\nSporządź roztwór: 10,00 g cukru w kolbie miarowej 100 cm³. Wyzeruj polarymetr i wykonaj trzy odczyty kąta skręcenia.\nOblicz skręcalność właściwą [α] i porównaj z wartościami tablicowymi.\nWyniki, obliczenia i identyfikację zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj rurkę, wyłącz lampę i uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg sporządzenia roztworu i pomiarów,\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy.',
+  '1. Roztwór\nOdważyć 10,00 g cukru, przenieść ilościowo do kolby miarowej 100 cm³, rozpuścić, uzupełnić wodą do kreski i wymieszać (c = 10,00 g/100 cm³).\n2. Zerowanie\nWłączyć lampę sodową, odczekać 5 minut, wyzerować polarymetr na wodzie (rurka 2 dm).\n3. Pomiar\nRurkę przepłukać i napełnić roztworem bez pęcherzyka, odczytać kąt ze skali i noniusza. Trzy odczyty.\nObliczenia\n[α] = (100 · α) / (l · c), l = 2 dm, c = 10,00 g/100 cm³. Wynik z dokładnością do 0,1.\nWartości tablicowe [α] (20 °C, 589 nm):\n- glukoza +52,7\n- sacharoza +66,5\n- galaktoza +80,2\n- maltoza +130,4'),
+ 'kroki': [
+  PL_lampa(), WAGA_ON(),
+  K('roztwor', 'Odważono 10,00 g cukru, przeniesiono ilościowo do kolby miarowej 100 cm³, uzupełniono do kreski i wymieszano.', 'odważ|zważ|sporządz|przygotow|rozpuść|rozpuszcz;cukr|10|roztw|próbk|substancj', 'Odważ 10,00 g cukru, przenieś do kolby miarowej 100 cm³ i uzupełnij wodą do kreski.', 'Skręcalność właściwą liczy się dla znanego stężenia – odważka musi być dokładna.', 'odważam 10,00 g cukru i sporządzam roztwór w kolbie miarowej 100 cm3', 'waga', 'wazenie', ['waga'], True, wykl='rurk|polarymetr', stan={'kolba': 'roztwor'}),
+  PL_rurka_woda(), PL_zero(), PL_rurka_proba(['roztwor']), PL_odczyt(), PL_powtorz(), PL_myj(),
+  *aparat_porzadki(['rurka_myj']),
+ ],
+ 'bledy': BLEDY,
+ 'scena': {'titrant': ['cukier', 'nieznany'], 'wskaznik': ['woda', 'destylowana'], 'kartaPo': 'odczyt', 'przyrzad': 'polarymetr', 'okular': 'a1', 'masaWagi': 'm'},
+ 'karta': {
+  'tytul': 'Karta wyników – identyfikacja cukru',
+  'losuj': [{'id': 'idx', 'wybierz': list(range(len(CUKRY)))}, {'id': 'm', 'wybierz': [10.00]}, {'id': 'alfa', 'wzor': ALFA}] + [{'id': f'a{i}', 'wzor': 'alfa*2*10/100', 'szum': 0.05, 'krok': 0.05, 'miejsca': 2} for i in (1, 2, 3)],
+  'odczyty': [polar(f'a{i}', f'Okular polarymetru – odczyt {i}') for i in (1, 2, 3)] + [info('Dane', 'l = 2 dm, c = 10,00 g/100 cm³')],
+  'sekcje': [{'tytul': 'Dokumentacja z pomiarów', 'pola': [pole('a1', 'α₁ =', '°', 'kr'), pole('a2', 'α₂ =', '°', 'kr'), pole('a3', 'α₃ =', '°', 'kr'), pole('asr', 'α średnie =', '°', 'kr'), pole('sk', 'Skręcalność właściwa [α] =', None, 'kr'), pole('cukier', 'Badany cukier to:', szer='dl')]}],
+  'brudnopis': ['[α] to kąt dla rurki 1 dm i stężenia 1 g/cm³ (100 g/100 cm³).', '~2 dm i 10 g/100 cm³ — α° | 1 dm i 100 g/100 cm³ — [α]', '[α] = α · (1 / 2) · (100 / 10) = 5 · α', 'Wybierz z tabeli cukier o najbliższej wartości [α].'],
+  'kryteria': [
+   kr('Trzy odczyty kąta zgodne ze wskazaniami', 'Stopnie ze skali przy zerze noniusza, setne z noniusza (× 0,05°).', *[liczba(f'a{i}', f'a{i}', 0.026) for i in (1, 2, 3)]),
+   kr('Średni kąt skręcenia', 'Średnia z trzech odczytów.', liczba('asr', 'sr($a1,$a2,$a3)', 0.011), pokaz=('sr($a1,$a2,$a3)', 2, '°')),
+   kr('Skręcalność właściwa z dokładnością do 0,1', '[α] = 100 · α / (2 · 10,00).', liczba('sk', '100*$asr/(2*10)', 0.06), miejsca('sk', 1), pokaz=('100*$asr/(2*10)', 1, '')),
+   kr('Poprawna identyfikacja cukru', 'Porównaj [α] z tabelą w procedurze.', {'typ': 'tekstWg', 'pole': 'cukier', 'wzor': 'idx', 'opcje': [[n] for n, _ in CUKRY]}),
+  ]},
+}
+zapisz('15-polarymetria-identyfikacja.json', P)
+
+# ── wspólne kroki spektrofotometru
+def SP_fala(nm):
+    return K('fala', f'Włączono spektrofotometr i ustawiono długość fali {nm} nm.', f'włącz|ustaw|nastaw;spektrofot|fal|{nm}', f'Włącz spektrofotometr i ustaw długość fali {nm} nm.', f'Przy {nm} nm barwny związek pochłania najsilniej – pomiar jest najczulszy.', f'włączam spektrofotometr i ustawiam długość fali {nm} nm', 'przyrzad', 'przycisk', wykl='=wyłącz|widm', stan={'spektro': True})
+def SP_kuweta(po):
+    return K('kuweta', 'Kuwetę (trzymaną za matowe ścianki) przepłukano, napełniono do ¾ i wytarto.', 'kuwet|matow', 'Przepłucz kuwetę mierzonym roztworem, napełnij do ¾ i wytrzyj; trzymaj za matowe ścianki.', 'Odciski palców i krople na przezroczystych ściankach zawyżają absorbancję.', 'przepłukuję kuwetę, napełniam do trzech czwartych i wycieram', 'rurka', 'przelewanie', po, True, wykl='ślep|zer', stan={'kuweta': True})
+def SP_slepa():
+    return K('slepa', 'Przyrząd wyzerowano na ślepej próbie.', 'zeruj|wyzer|zero|kalibr', 'Wyzeruj spektrofotometr na ślepej próbie.', 'Absorbancja ma pochodzić tylko od oznaczanego związku, a nie od odczynników.', 'zeruję spektrofotometr na ślepej próbie', 'przyrzad', 'siegnij', ['kuweta'])
+def SP_wzorce_pomiar():
+    return K('pomiar_wz', 'Zmierzono absorbancję wzorców – od najmniejszego stężenia.', 'mierz|zmierz|pomiar|odczyt;wzorc', 'Zmierz absorbancję wzorców, zaczynając od najmniejszego stężenia.', 'Kolejność od najmniejszego stężenia ogranicza błąd przenoszenia.', 'mierzę absorbancję wzorców od najmniejszego stężenia', 'przyrzad', 'siegnij', ['slepa'], wykl='próbk|widm')
+def SP_odczyt():
+    return K('odczyt', 'Zmierzono absorbancję próbki.', 'mierz|zmierz|pomiar|odczyt;próbk', 'Na końcu zmierz absorbancję badanej próbki.', 'Absorbancję próbki porównujesz z krzywą wzorcową.', 'mierzę absorbancję próbki', 'przyrzad', 'siegnij', ['pomiar_wz'], wykl='wzorc')
+
+def krzywa_kryteria(nwz, conc):
+    return [
+     kr(f'Absorbancje {nwz} wzorców zgodne ze wskazaniami', 'Przepisz absorbancje z wyświetlacza.', *[liczba(f'A{i}', f'A{i}', 0.0005) for i in range(1, nwz + 1)]),
+     kr('Ilorazy A/c dla wzorców', 'Podziel absorbancję przez stężenie wzorca.', *[liczba(f'k{i}', f'$A{i}/{conc(i)}', 0.0011) for i in range(1, nwz + 1)]),
+     kr('Współczynnik a krzywej wzorcowej', f'Średnia z {nwz} ilorazów A/c.', liczba('a', 'sr(' + ','.join(f'$k{i}' for i in range(1, nwz + 1)) + ')', 0.0011), pokaz=('sr(' + ','.join(f'$k{i}' for i in range(1, nwz + 1)) + ')', 3, '')),
+     kr('Absorbancja próbki zgodna ze wskazaniem', 'Przepisz absorbancję próbki.', liczba('Ax', 'Ax', 0.0005)),
+    ]
+
+# ───────────────────────── 16. Spektrofotometria – KMnO₄: widmo, λmax i krzywa wzorcowa
+LAMBDY = [485, 505, 525, 545, 565, 585]
+P = {
+ 'id': '16-spektrofotometria-kmno4', 'grupa': G_SPEKTRO, 'tytul': 'Mangan (KMnO₄) – widmo i krzywa wzorcowa', 'zrodlo': 'Poziom przewidywany – podstawa programowa 2019', 'metoda': 'Spektrofotometria UV-Vis – widmo absorpcji, λmax, krzywa wzorcowa', 'czasMinut': 180,
+ 'protokol': zadanie(
+  'Korzystając z zamieszczonej procedury, wyznacz długość fali maksymalnej absorpcji (λmax) roztworu KMnO₄, a następnie oznacz stężenie KMnO₄ w badanym roztworze metodą krzywej wzorcowej.\nZmierz widmo absorpcji jednego wzorca w zakresie 485–585 nm, wybierz λmax. Przy λmax zmierz absorbancję pięciu wzorców i próbki.\nOblicz stężenie KMnO₄ w próbce i porównaj z deklaracją: 40 mg/dm³ (dopuszczalna różnica ±2 mg/dm³).\nWyniki, obliczenia i wniosek zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy uporządkuj stanowisko, roztwory przelej do pojemnika na odpady ciekłe.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania roztworów i pomiarów (widmo, wzorce, ślepa próba, obsługa kuwety),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy.',
+  '1. Roztwory wzorcowe\nDo kolb miarowych 50 cm³ odmierzyć 2, 4, 6, 8 i 10 cm³ roztworu podstawowego KMnO₄ (100 mg/dm³), uzupełnić wodą do kreski. Stężenia: 4, 8, 12, 16 i 20 mg/dm³.\n2. Próbka\nDo kolby miarowej 50 cm³ odmierzyć 20 cm³ badanego roztworu i uzupełnić wodą do kreski (rozcieńczenie 2,5 raza).\n3. Widmo\nWyzerować spektrofotometr na wodzie przy każdej długości fali. Zmierzyć absorbancję wzorca 12 mg/dm³ przy 485, 505, 525, 545, 565 i 585 nm. λmax – długość fali o największej absorbancji.\n4. Krzywa i próbka\nPrzy λmax zmierzyć absorbancję wzorców od najmniejszego stężenia, na końcu próbki.\nObliczenia\na = średnia z A/c; c w kolbie = A / a; c w badanym roztworze = c · 2,5. Wynik z dokładnością do 0,1 mg/dm³.'),
+ 'kroki': [
+  K('wzorce', 'Do kolb miarowych 50 cm³ odmierzono 2, 4, 6, 8 i 10 cm³ roztworu podstawowego KMnO₄ i uzupełniono do kreski.', PIPETA + ';wzorc|podstawow|kmno4|nadmanganian|manganian', 'Odmierz 2, 4, 6, 8 i 10 cm³ roztworu podstawowego KMnO₄ do kolb miarowych 50 cm³ i uzupełnij wodą.', 'Wzorce o znanych stężeniach tworzą krzywą wzorcową.', 'odmierzam pipetą roztwór podstawowy KMnO4 do pięciu kolb miarowych', 'kolba', 'pipetowanie', [], True, wykl='próbk|badan', stan={'kolba': 'fioletowy'}),
+  K('probka', 'Do kolby miarowej 50 cm³ odmierzono 20 cm³ badanego roztworu i uzupełniono do kreski.', PIPETA + ';próbk|badan|20', 'Odmierz 20 cm³ badanego roztworu do kolby miarowej 50 cm³ i uzupełnij wodą.', 'Rozcieńczenie 2,5 raza musisz uwzględnić w obliczeniach.', 'odmierzam pipetą 20 cm3 badanego roztworu do kolby miarowej', 'kolba', 'pipetowanie', ['wzorce'], True, wykl='wzorc|podstawow'),
+  K('widmo', 'Zmierzono widmo absorpcji wzorca 12 mg/dm³ w zakresie 485–585 nm (zerowanie na wodzie przy każdej długości fali).', 'widm|λmax|lambda|maksimum|długości fal|zakres', 'Zmierz absorbancję wzorca 12 mg/dm³ przy 485, 505, 525, 545, 565 i 585 nm, zerując na wodzie przy każdej długości fali.', 'λmax to długość fali, przy której pomiar jest najczulszy.', 'mierzę widmo absorpcji wzorca w zakresie 485–585 nm', 'przyrzad', 'przycisk', ['probka'], stan={'spektro': True}),
+  K('fala', 'Ustawiono długość fali równą λmax.', 'ustaw|nastaw|wybier|wybór;λmax|lambda|maks|525', 'Ustaw długość fali odpowiadającą maksimum absorpcji.', 'Przy λmax pomiar jest najczulszy, a krzywa wzorcowa najbardziej stroma.', 'ustawiam długość fali λmax 525 nm', 'przyrzad', 'przycisk', ['widmo'], wykl='widm|zakres'),
+  SP_kuweta(['fala']), SP_slepa(), SP_wzorce_pomiar(), SP_odczyt(),
+  *aparat_porzadki(['odczyt']),
+ ],
+ 'bledy': BLEDY,
+ 'scena': {'titrant': ['KMnO₄', '100 mg/dm³'], 'wskaznik': ['woda', 'destylowana'], 'kartaPo': 'odczyt', 'przyrzad': 'spektrofotometr'},
+ 'karta': {
+  'tytul': 'Karta wyników – KMnO₄',
+  'losuj': [{'id': 'a', 'od': 0.0440, 'do': 0.0480}, {'id': 'cx', 'od': 15.2, 'do': 16.8}] +
+           [{'id': f'W{i}', 'wzor': f'a*12*exp(0-(({l}-525)/32)*(({l}-525)/32))', 'szum': 0.003, 'miejsca': 3} for i, l in enumerate(LAMBDY, 1)] +
+           [{'id': f'A{i}', 'wzor': f'a*{4*i}', 'szum': 0.003, 'miejsca': 3} for i in (1, 2, 3, 4, 5)] + [{'id': 'Ax', 'wzor': 'a*cx', 'szum': 0.002, 'miejsca': 3}],
+  'odczyty': [wysw(f'W{i}', f'Widmo – {l} nm', 3, 'A') for i, l in enumerate(LAMBDY, 1)] + [wysw(f'A{i}', f'Wzorzec {4*i} mg/dm³ (λmax)', 3, 'A') for i in (1, 2, 3, 4, 5)] + [wysw('Ax', 'Próbka (λmax)', 3, 'A'), info('Deklaracja', '40 mg/dm³ ± 2')],
+  'sekcje': [
+   {'tytul': 'Widmo absorpcji wzorca 12 mg/dm³', 'opis': 'Długości fali kolejno: 485, 505, 525, 545, 565, 585 nm.', 'tabela': {'wiersze': 6, 'kolumny': [{'naglowek': 'Absorbancja A', 'pole': 'W{i}'}]}, 'pola': [pole('lmax', 'λmax =', 'nm', 'kr')]},
+   {'tytul': 'Krzywa wzorcowa przy λmax', 'opis': 'Stężenia wzorców: 4, 8, 12, 16, 20 mg/dm³.', 'tabela': {'wiersze': 5, 'kolumny': [{'naglowek': 'Absorbancja A', 'pole': 'A{i}'}, {'naglowek': 'A / c', 'pole': 'k{i}'}]}, 'pola': [pole('a', 'Współczynnik a (średnia z A/c) =', None, 'kr')]},
+   {'tytul': 'Próbka', 'pola': [pole('Ax', 'Absorbancja próbki:', None, 'kr'), pole('ck', 'Stężenie w kolbie c =', 'mg/dm³', 'kr'), pole('cp', 'Stężenie w badanym roztworze =', 'mg/dm³', 'kr'), pole('wniosek', 'Wynik (zgodny / niezgodny) z deklaracją:', szer='dl')]}],
+  'brudnopis': ['λmax: wybierz długość fali z największą absorbancją w tabeli widma.', '~a — 1 mg/dm³ | A próbki — c mg/dm³', 'Rozcieńczenie: 20 cm³ → 50 cm³, czyli 2,5 raza.', '~20 cm³ badanego roztworu — w 50 cm³ | stężenie w roztworze = 2,5 · c'],
+  'kryteria': [
+   kr('Absorbancje widma zgodne ze wskazaniami', 'Przepisz sześć wartości z wyświetlacza.', *[liczba(f'W{i}', f'W{i}', 0.0005) for i in range(1, 7)]),
+   kr('Poprawnie wybrana λmax', 'Długość fali, przy której absorbancja jest największa.', liczba('lmax', '525', 0.5)),
+   *krzywa_kryteria(5, lambda i: 4 * i),
+   kr('Stężenie w kolbie i w badanym roztworze, do 0,1', 'c = A / a, potem × 2,5.', liczba('ck', '$Ax/$a', 0.06), liczba('cp', '$ck*2.5', 0.16), miejsca('ck', 1), miejsca('cp', 1), pokaz=('$Ax/$a*2.5', 1, ' mg/dm³')),
+   kr('Wniosek spójny z wynikiem (40 ± 2 mg/dm³)', 'Porównaj z deklaracją.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '2-abs($cp-40)+0.000001', 'tak': ['zgodny', 'zgodna'], 'nie': ['niezgodny', 'niezgodna', 'nie zgodny', 'nie jest']}),
+  ]},
+}
+zapisz('16-spektrofotometria-kmno4.json', P)
+
+# ───────────────────────── 17. Spektrofotometria – białko metodą biuretową
+P = {
+ 'id': '17-spektrofotometria-bialko', 'grupa': G_SPEKTRO, 'tytul': 'Białko metodą biuretową – spektrofotometr', 'zrodlo': 'Poziom przewidywany – podstawa programowa 2019', 'metoda': 'Spektrofotometria UV-Vis – białko metodą biuretową (540 nm)', 'czasMinut': 180,
+ 'protokol': zadanie(
+  'Korzystając z zamieszczonej procedury, oznacz stężenie białka całkowitego w próbce metodą biuretową.\nPrzygotuj pięć wzorców albuminy, próbkę i ślepą próbę, dodaj odczynnik biuretowy, odczekaj na rozwinięcie barwy i zmierz absorbancję przy 540 nm.\nOblicz stężenie białka w próbce i oceń, czy mieści się w zakresie wartości prawidłowych dla surowicy: 60–80 g/dm³.\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp – odczynnik biuretowy jest żrący (NaOH). Po pracy uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania roztworów i pomiarów,\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy.',
+  '1. Wzorce\nDo probówek odmierzyć 0,2; 0,4; 0,6; 0,8 i 1,0 cm³ roztworu wzorcowego albuminy 10 g/dm³ i uzupełnić wodą do 1,0 cm³ (zawartość białka: 2, 4, 6, 8, 10 mg).\n2. Próbka i ślepa próba\nPróbkę surowicy rozcieńczyć 10 razy; do probówki odmierzyć 1,0 cm³ rozcieńczenia. Ślepa próba: 1,0 cm³ wody.\n3. Reakcja\nDo każdej probówki dodać 4,0 cm³ odczynnika biuretowego, wymieszać i odczekać 30 minut (fioletowe zabarwienie kompleksu Cu²⁺ z wiązaniami peptydowymi).\n4. Pomiar\nUstawić 540 nm, wyzerować na ślepej próbie, zmierzyć wzorce od najmniejszej zawartości, na końcu próbkę.\nObliczenia\na = średnia z A/m (m – mg białka w probówce). m próbki = A / a [mg w 1 cm³ rozcieńczenia]. Stężenie w surowicy = m · 10 [mg/cm³ = g/dm³], z dokładnością do 0,1.'),
+ 'kroki': [
+  K('wzorce', 'Do probówek odmierzono 0,2–1,0 cm³ wzorca albuminy i uzupełniono wodą do 1,0 cm³.', PIPETA + ';wzorc|albumin', 'Odmierz 0,2; 0,4; 0,6; 0,8 i 1,0 cm³ wzorca albuminy do probówek i uzupełnij wodą do 1,0 cm³.', 'Wzorce o znanej zawartości białka tworzą krzywą wzorcową.', 'odmierzam pipetą wzorzec albuminy do pięciu probówek', 'kolba', 'pipetowanie', [], True, wykl='próbk|surowic|ślep'),
+  K('probka', 'Rozcieńczono surowicę 10 razy, odmierzono 1,0 cm³ do probówki; przygotowano ślepą próbę z wodą.', PIPETA + '|rozcieńcz;próbk|surowic|ślep', 'Rozcieńcz surowicę 10 razy i odmierz 1,0 cm³ do probówki; ślepa próba – 1,0 cm³ wody.', 'Surowica jest zbyt stężona; ślepa próba zawiera wszystko oprócz białka.', 'rozcieńczam surowicę 10 razy i odmierzam 1 cm3 do probówki, przygotowuję ślepą próbę', 'kolba', 'pipetowanie', ['wzorce'], True, wykl='wzorc|albumin|zeruj|zero'),
+  K('biuret', 'Do każdej probówki dodano 4,0 cm³ odczynnika biuretowego, wymieszano i odczekano 30 minut – fioletowe zabarwienie.', 'biuret|odczynnik', 'Dodaj do każdej probówki 4,0 cm³ odczynnika biuretowego, wymieszaj i odczekaj 30 minut.', 'Kompleks Cu²⁺ z wiązaniami peptydowymi tworzy się powoli – pomiar przed czasem zaniży wynik.', 'dodaję odczynnik biuretowy do każdej probówki i odczekuję 30 minut', 'kolba', 'pipetowanie', ['probka'], True, stan={'kolba': 'fioletowy'}),
+  SP_fala(540), SP_kuweta(['biuret', 'fala']), SP_slepa(), SP_wzorce_pomiar(), SP_odczyt(),
+  *aparat_porzadki(['odczyt']),
+ ],
+ 'bledy': BLEDY,
+ 'scena': {'titrant': ['odczynnik', 'biuretowy'], 'wskaznik': ['albumina', '10 g/dm³'], 'kartaPo': 'odczyt', 'przyrzad': 'spektrofotometr'},
+ 'karta': {
+  'tytul': 'Karta wyników – białko (metoda biuretowa)',
+  'losuj': [{'id': 'a', 'od': 0.0380, 'do': 0.0420}, {'id': 'mx', 'od': 5.6, 'do': 8.4}] +
+           [{'id': f'A{i}', 'wzor': f'a*{2*i}', 'szum': 0.003, 'miejsca': 3} for i in (1, 2, 3, 4, 5)] + [{'id': 'Ax', 'wzor': 'a*mx', 'szum': 0.002, 'miejsca': 3}],
+  'odczyty': [wysw(f'A{i}', f'Wzorzec {2*i} mg', 3, 'A') for i in (1, 2, 3, 4, 5)] + [wysw('Ax', 'Próbka', 3, 'A'), info('Zakres prawidłowy', '60–80 g/dm³')],
+  'sekcje': [
+   {'tytul': 'Krzywa wzorcowa (540 nm)', 'opis': 'Zawartość białka we wzorcach: 2, 4, 6, 8, 10 mg.', 'tabela': {'wiersze': 5, 'kolumny': [{'naglowek': 'Absorbancja A', 'pole': 'A{i}'}, {'naglowek': 'A / m', 'pole': 'k{i}'}]}, 'pola': [pole('a', 'Współczynnik a (średnia z A/m) =', None, 'kr')]},
+   {'tytul': 'Próbka', 'pola': [pole('Ax', 'Absorbancja próbki:', None, 'kr'), pole('mp', 'Białko w probówce m =', 'mg', 'kr'), pole('cs', 'Stężenie białka w surowicy =', 'g/dm³', 'kr'), pole('wniosek', 'Wynik (w normie / poza normą):', szer='dl')]}],
+  'brudnopis': ['~a — 1 mg białka | A próbki — m mg', 'm mg jest w 1 cm³ rozcieńczenia, surowicę rozcieńczono 10 razy:', '~1 cm³ rozcieńczenia — m mg | 1 cm³ surowicy — 10 · m mg', '1 mg/cm³ = 1 g/dm³.'],
+  'kryteria': [
+   *krzywa_kryteria(5, lambda i: 2 * i),
+   kr('Zawartość białka w probówce', 'm = A / a.', liczba('mp', '$Ax/$a', 0.06), pokaz=('$Ax/$a', 2, ' mg')),
+   kr('Stężenie w surowicy z dokładnością do 0,1', 'Pomnóż przez 10 (rozcieńczenie).', liczba('cs', '$mp*10', 0.6), miejsca('cs', 1), pokaz=('$mp*10', 1, ' g/dm³')),
+   kr('Ocena spójna z wynikiem (60–80 g/dm³)', 'W normie, jeśli wynik mieści się w zakresie 60–80 g/dm³.', {'typ': 'wybor', 'pole': 'wniosek', 'wzor': '10-abs($cs-70)+0.000001', 'tak': ['w normie', 'mieści', 'miesci', 'prawidłow'], 'nie': ['poza', 'nie mieści', 'nie miesci', 'nieprawidłow', 'nie jest w normie']}),
+  ]},
+}
+zapisz('17-spektrofotometria-bialko.json', P)
+print('ok 12-17')

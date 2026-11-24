@@ -51,8 +51,13 @@ function WyborPoziomu({ onWybierz }: { onWybierz: (id: string, tryb: Tryb) => vo
         <p>Ćwicz procedury z egzaminu praktycznego: czytasz protokół, opisujesz, co robisz, a laborant to wykonuje.</p>
         <p className="drobne-start">Kliknij poziom, żeby ćwiczyć z podpowiedziami. „Egzamin” to próba jak na prawdziwym egzaminie: limit czasu, bez podpowiedzi, wynik w punktach (zdane od {PROG}%).</p>
       </header>
+      {GRUPY.map((g) => (
+        <section key={g.nazwa} className="grupa-poziomow">
+          <h2>{g.nazwa}</h2>
+          {g.opis && <p className="drobne-start">{g.opis}</p>}
       <ul className="lista-poziomow">
-        {POZIOMY.map((p, i) => {
+        {g.poziomy.map((p) => {
+          const i = POZIOMY.indexOf(p);
           const zapis = wczytajStan(p.id);
           const status = !zapis
             ? 'nowy'
@@ -83,9 +88,25 @@ function WyborPoziomu({ onWybierz }: { onWybierz: (id: string, tryb: Tryb) => vo
           );
         })}
       </ul>
+        </section>
+      ))}
     </main>
   );
 }
+
+/** Zadania z arkuszy CKE osobno, a przewidywane – pogrupowane według przyrządu. */
+const GRUPY: { nazwa: string; opis?: string; poziomy: Poziom[] }[] = (() => {
+  const zArkuszy = POZIOMY.filter((p) => !p.grupa);
+  const nazwy = [...new Set(POZIOMY.filter((p) => p.grupa).map((p) => p.grupa!))];
+  return [
+    { nazwa: 'Zadania z arkuszy CKE', poziomy: zArkuszy },
+    ...nazwy.map((n, i) => ({
+      nazwa: `Co może się jeszcze pojawić: ${n}`,
+      opis: i === 0 ? 'Metody z podstawy programowej 2019, których nie było jeszcze w arkuszach – każde typowe zadanie z danym przyrządem.' : undefined,
+      poziomy: POZIOMY.filter((p) => p.grupa === n),
+    })),
+  ];
+})();
 
 function Gra({ poziom, tryb, onWyjdz }: { poziom: Poziom; tryb: Tryb; onWyjdz: () => void }) {
   const egzamin = tryb === 'egzamin';

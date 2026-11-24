@@ -1,0 +1,625 @@
+{
+  "id": "14-polarymetria-glukoza",
+  "grupa": "Polarymetr",
+  "tytul": "Glukoza w płynie infuzyjnym – polarymetr",
+  "zrodlo": "Poziom przewidywany – podstawa programowa 2019",
+  "metoda": "Polarymetria – glukoza (mutarotacja, rurka 2 dm)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Korzystając z zamieszczonej procedury, oznacz stężenie glukozy w płynie infuzyjnym metodą polarymetryczną.\nPrzygotuj próbkę (ustal równowagę mutarotacji), wyzeruj polarymetr na wodzie i wykonaj trzy odczyty kąta skręcenia.\nOblicz stężenie glukozy i oceń, czy płyn spełnia deklarację: 5,00 g/100 cm³ (dopuszczalne odchylenie ±5%, czyli 4,75–5,25 g/100 cm³).\nWyniki, obliczenia i wniosek zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj rurkę, wyłącz lampę i uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania próbki i pomiarów,\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "1. Przygotowanie próbki\nDo 50 cm³ płynu w zlewce dodać 2 krople roztworu amoniaku i odczekać 15 minut. Świeży roztwór glukozy zmienia kąt skręcenia (mutarotacja) – amoniak przyspiesza ustalenie się równowagi.\n2. Zerowanie\nWłączyć lampę sodową, odczekać 5 minut. Rurkę 2 dm napełnić wodą bez pęcherzyka, ustawić zero – równe zaciemnienie pól.\n3. Pomiar\nRurkę przepłukać i napełnić próbką, ustawić równe zaciemnienie pól, odczytać kąt ze skali i noniusza (dokładność 0,05°). Trzy odczyty.\nObliczenia\nc = (100 · α) / ([α] · l)\n- [α] glukozy (stan równowagi) = +52,7\n- l = 2 dm\nWynik z dokładnością do 0,01 g/100 cm³."
+    },
+    {
+      "tytul": "Skąd ten poziom",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "lampa",
+      "opis": "Włączono lampę sodową polarymetru i odczekano 5 minut.",
+      "wymagane": [
+        [
+          "włącz",
+          "uruchom",
+          "zapal"
+        ],
+        [
+          "lamp",
+          "polarymetr"
+        ]
+      ],
+      "wykluczajace": [
+        "=wyłącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz lampę sodową i odczekaj 5 minut.",
+      "dlaczego": "Lampa sodowa musi się nagrzać, żeby świeciła stabilnym światłem 589 nm.",
+      "sprzet": "przyrzad",
+      "animacja": "przycisk",
+      "stanSceny": {
+        "lampa": true
+      },
+      "przyklad": "włączam lampę sodową polarymetru"
+    },
+    {
+      "id": "mutarotacja",
+      "opis": "Do próbki dodano 2 krople amoniaku i odczekano 15 minut – ustaliła się równowaga mutarotacji.",
+      "wymagane": [
+        [
+          "amoniak",
+          "nh3",
+          "mutarot",
+          "odczek",
+          "poczek",
+          "15 minut"
+        ]
+      ],
+      "wymaga": [],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj do próbki 2 krople roztworu amoniaku i odczekaj 15 minut.",
+      "dlaczego": "Bez ustalenia równowagi kąt skręcenia glukozy zmienia się w czasie – wynik byłby fałszywy.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "roztwor"
+      },
+      "przyklad": "dodaję 2 krople amoniaku do próbki i odczekuję 15 minut"
+    },
+    {
+      "id": "rurka_woda",
+      "opis": "Rurkę napełniono wodą destylowaną bez pęcherzyka powietrza i wytarto okienka.",
+      "wymagane": [
+        [
+          "napełn",
+          "nalew",
+          "wlew",
+          "wlej"
+        ],
+        [
+          "rurk"
+        ],
+        [
+          "wod"
+        ]
+      ],
+      "wymaga": [
+        "lampa"
+      ],
+      "podpowiedz": "Napełnij rurkę polarymetryczną wodą destylowaną bez pęcherzyka powietrza i wytrzyj okienka.",
+      "dlaczego": "Pęcherzyk powietrza na drodze światła uniemożliwia poprawny odczyt.",
+      "sprzet": "rurka",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "rurka": true
+      },
+      "przyklad": "napełniam rurkę wodą destylowaną bez pęcherzyka powietrza"
+    },
+    {
+      "id": "zero",
+      "opis": "Polarymetr wyzerowano na wodzie – równe zaciemnienie obu pól.",
+      "wymagane": [
+        [
+          "zeruj",
+          "wyzer",
+          "zero",
+          "ustaw"
+        ],
+        [
+          "polarymetr",
+          "zero",
+          "pól",
+          "pola",
+          "wod"
+        ]
+      ],
+      "wykluczajace": [
+        "napełn"
+      ],
+      "wymaga": [
+        "rurka_woda"
+      ],
+      "podpowiedz": "Włóż rurkę z wodą do polarymetru i ustaw zero – równe zaciemnienie obu pól.",
+      "dlaczego": "Woda nie skręca płaszczyzny polaryzacji; to punkt odniesienia.",
+      "sprzet": "przyrzad",
+      "animacja": "pokretlo",
+      "przyklad": "zeruję polarymetr na wodzie destylowanej"
+    },
+    {
+      "id": "rurka_proba",
+      "opis": "Rurkę przepłukano badanym roztworem i napełniono bez pęcherzyka powietrza.",
+      "wymagane": [
+        [
+          "przepłuk",
+          "przepłucz",
+          "napełn",
+          "nalew",
+          "wlew",
+          "wlej"
+        ],
+        [
+          "rurk"
+        ],
+        [
+          "roztw",
+          "próbk",
+          "badan",
+          "płyn"
+        ]
+      ],
+      "wymaga": [
+        "zero",
+        "mutarotacja"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Przepłucz rurkę badanym roztworem, napełnij ją bez pęcherzyka i wytrzyj okienka.",
+      "dlaczego": "Resztki wody rozcieńczyłyby próbkę i zaniżyły kąt skręcenia.",
+      "sprzet": "rurka",
+      "animacja": "przelewanie",
+      "przyklad": "przepłukuję i napełniam rurkę badanym roztworem"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Obrócono analizator do zrównania pól i odczytano kąt skręcenia ze skali i noniusza.",
+      "wymagane": [
+        [
+          "odczyt",
+          "zmierz",
+          "mierz",
+          "pomiar"
+        ],
+        [
+          "kąt",
+          "skręc",
+          "nonius",
+          "analizator",
+          "polarymetr"
+        ]
+      ],
+      "wymaga": [
+        "rurka_proba"
+      ],
+      "podpowiedz": "Obracaj analizator do zrównania zaciemnienia pól i odczytaj kąt ze skali i noniusza.",
+      "dlaczego": "Kąt skręcenia jest proporcjonalny do stężenia i długości rurki.",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
+      "przyklad": "odczytuję kąt skręcenia z noniusza"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano kolejne odczyty – razem trzy.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Wykonaj jeszcze dwa odczyty kąta.",
+      "dlaczego": "Wynik to średnia z trzech odczytów.",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
+      "stanSceny": {},
+      "przyklad": "powtarzam odczyt jeszcze dwa razy"
+    },
+    {
+      "id": "rurka_myj",
+      "opis": "Rurkę polarymetryczną umyto wodą destylowaną, lampę wyłączono.",
+      "wymagane": [
+        [
+          "umyj",
+          "myję",
+          "wypłucz",
+          "opłucz",
+          "płucz"
+        ],
+        [
+          "rurk"
+        ]
+      ],
+      "wykluczajace": [
+        "przepłuk",
+        "napełn"
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Umyj rurkę wodą destylowaną i wyłącz lampę.",
+      "dlaczego": "Zaschnięty cukier zabrudzi okienka rurki.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję rurkę polarymetryczną wodą destylowaną"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn",
+          "odpad",
+          "pojemnik"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "rurka_myj"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam roztwory do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "glukoza",
+      "5% – płyn"
+    ],
+    "wskaznik": [
+      "NH₃",
+      "roztwór"
+    ],
+    "kartaPo": "odczyt",
+    "przyrzad": "polarymetr",
+    "okular": "a1"
+  },
+  "karta": {
+    "tytul": "Karta wyników – glukoza (polarymetria)",
+    "losuj": [
+      {
+        "id": "c",
+        "od": 4.6,
+        "do": 5.4
+      },
+      {
+        "id": "a1",
+        "wzor": "c*52.7*2/100",
+        "szum": 0.05,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "a2",
+        "wzor": "c*52.7*2/100",
+        "szum": 0.05,
+        "krok": 0.05,
+        "miejsca": 2
+      },
+      {
+        "id": "a3",
+        "wzor": "c*52.7*2/100",
+        "szum": 0.05,
+        "krok": 0.05,
+        "miejsca": 2
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "polarymetr",
+        "id": "a1",
+        "etykieta": "Okular polarymetru – odczyt 1"
+      },
+      {
+        "typ": "polarymetr",
+        "id": "a2",
+        "etykieta": "Okular polarymetru – odczyt 2"
+      },
+      {
+        "typ": "polarymetr",
+        "id": "a3",
+        "etykieta": "Okular polarymetru – odczyt 3"
+      },
+      {
+        "typ": "info",
+        "etykieta": "Dane",
+        "tekst": "rurka l = 2 dm, [α] glukozy = +52,7"
+      },
+      {
+        "typ": "info",
+        "etykieta": "Deklaracja",
+        "tekst": "5,00 g/100 cm³ ± 5%"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Dokumentacja z pomiarów",
+        "pola": [
+          {
+            "id": "a1",
+            "etykieta": "α₁ =",
+            "szer": "kr",
+            "jednostka": "°"
+          },
+          {
+            "id": "a2",
+            "etykieta": "α₂ =",
+            "szer": "kr",
+            "jednostka": "°"
+          },
+          {
+            "id": "a3",
+            "etykieta": "α₃ =",
+            "szer": "kr",
+            "jednostka": "°"
+          },
+          {
+            "id": "asr",
+            "etykieta": "α średnie =",
+            "szer": "kr",
+            "jednostka": "°"
+          },
+          {
+            "id": "c",
+            "etykieta": "Stężenie glukozy c =",
+            "szer": "kr",
+            "jednostka": "g/100 cm³"
+          },
+          {
+            "id": "odch",
+            "etykieta": "Odchylenie od deklaracji =",
+            "szer": "kr",
+            "jednostka": "%"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Płyn (spełnia / nie spełnia) deklarację:",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "Roztwór 1 g/100 cm³ glukozy w rurce 1 dm skręca o 0,527°, w rurce 2 dm – o 1,054°.",
+      "~1,054° — 1 g/100 cm³ | α° — c g/100 cm³",
+      "Odchylenie: (c − 5,00) / 5,00 · 100%."
+    ],
+    "kryteria": [
+      {
+        "opis": "Trzy odczyty kąta zgodne ze wskazaniami",
+        "uwaga": "Stopnie ze skali przy zerze noniusza, setne: kreska noniusza pokrywająca się ze skalą × 0,05°.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "a1",
+            "wzor": "a1",
+            "tol": 0.026
+          },
+          {
+            "typ": "liczba",
+            "pole": "a2",
+            "wzor": "a2",
+            "tol": 0.026
+          },
+          {
+            "typ": "liczba",
+            "pole": "a3",
+            "wzor": "a3",
+            "tol": 0.026
+          }
+        ]
+      },
+      {
+        "opis": "Średni kąt skręcenia",
+        "uwaga": "Średnia z trzech odczytów.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "asr",
+            "wzor": "sr($a1,$a2,$a3)",
+            "tol": 0.011
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($a1,$a2,$a3)",
+          "miejsca": 2,
+          "jednostka": "°"
+        }
+      },
+      {
+        "opis": "Stężenie glukozy z dokładnością do 0,01",
+        "uwaga": "c = 100 · α / (52,7 · 2).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "c",
+            "wzor": "100*$asr/(52.7*2)",
+            "tol": 0.011
+          },
+          {
+            "typ": "miejsca",
+            "pole": "c",
+            "ile": 2
+          }
+        ],
+        "pokaz": {
+          "wzor": "100*$asr/(52.7*2)",
+          "miejsca": 2,
+          "jednostka": " g/100 cm³"
+        }
+      },
+      {
+        "opis": "Odchylenie od deklaracji w %",
+        "uwaga": "(c − 5,00) / 5,00 · 100%.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "odch",
+            "wzor": "($c-5)/5*100",
+            "tol": 0.11
+          }
+        ],
+        "pokaz": {
+          "wzor": "($c-5)/5*100",
+          "miejsca": 1,
+          "jednostka": "%"
+        }
+      },
+      {
+        "opis": "Wniosek spójny z wynikiem (±5%)",
+        "uwaga": "Spełnia, jeśli odchylenie mieści się w ±5%.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "0.25-abs($c-5)+0.000001",
+            "tak": [
+              "spelnia"
+            ],
+            "nie": [
+              "nie spelnia"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

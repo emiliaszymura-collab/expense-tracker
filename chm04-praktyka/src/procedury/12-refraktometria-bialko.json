@@ -1,0 +1,868 @@
+{
+  "id": "12-refraktometria-bialko",
+  "grupa": "Refraktometr Abbego",
+  "tytul": "Białko w roztworze – refraktometr",
+  "zrodlo": "Poziom przewidywany – podstawa programowa 2019",
+  "metoda": "Refraktometria – krzywa wzorcowa nD = f(c), białko (albumina)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Korzystając z zamieszczonej procedury, oznacz stężenie białka (albuminy) w badanym roztworze metodą refraktometryczną z krzywą wzorcową.\nSporządź cztery roztwory wzorcowe albuminy, zmierz ich współczynniki załamania nD i wyznacz współczynnik kierunkowy krzywej wzorcowej.\nWykonaj trzy pomiary nD badanego roztworu, oblicz stężenie białka i oceń, czy zgadza się z deklaracją producenta: 6,0 g/100 cm³ (dopuszczalna różnica ±0,3 g/100 cm³).\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy umyj i osusz pryzmaty oraz uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg sporządzania wzorców i pomiarów (sprawdzenie przyrządu, nanoszenie próbek, ustawienie granicy pól, odczyt nD),\n- dokumentacja pomiarów i obliczeń – karta wyników z krzywą wzorcową,\n- uporządkowane stanowisko pracy."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "1. Sprawdzenie refraktometru\nPryzmaty przemyć wodą destylowaną i osuszyć. Zmierzyć nD wody destylowanej – w 20 °C: 1,3330. Pryzmaty termostatowane w 20 °C.\n2. Roztwory wzorcowe\nDo kolb miarowych 25 cm³ odmierzyć pipetą 5, 10, 15 i 20 cm³ roztworu podstawowego albuminy o stężeniu 10 g/100 cm³, uzupełnić wodą do kreski i wymieszać (nie wstrząsać – białko się pieni). Stężenia wzorców: 2, 4, 6 i 8 g/100 cm³.\n3. Pomiar wzorców\nZmierzyć nD wzorców od najmniejszego stężenia. Przed każdym pomiarem pryzmaty osuszyć.\n4. Pomiar próbki\nNanieść bagietką 2–3 krople badanego roztworu, ustawić granicę pól na przecięciu nici, odczytać nD. Pomiar wykonać trzy razy z nową porcją roztworu.\n5. Zakończenie\nPryzmaty umyć wodą destylowaną i osuszyć.\nObliczenia\nΔn = nD − nD wody. Dla każdego wzorca a = Δn / c, współczynnik krzywej – średnia z czterech wartości a (6 miejsc po przecinku).\nStężenie białka: c = (nD próbki − nD wody) / a, z dokładnością do 0,1 g/100 cm³."
+    },
+    {
+      "tytul": "Skąd ten poziom",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "pryzmat1",
+      "opis": "Pryzmaty refraktometru otwarte, przemyte wodą destylowaną i osuszone miękką bibułą.",
+      "wymagane": [
+        [
+          "przemy",
+          "umyj",
+          "myję",
+          "opłucz",
+          "osusz",
+          "wytrz",
+          "czyszcz",
+          "czyść",
+          "otwórz",
+          "otwier"
+        ],
+        [
+          "pryzmat",
+          "refraktometr"
+        ]
+      ],
+      "wykluczajace": [
+        "koniec",
+        "zakończ",
+        "po pomiar",
+        "na koniec"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Otwórz pryzmaty, przemyj je wodą destylowaną i osusz miękką bibułą.",
+      "dlaczego": "Resztki poprzedniej próbki zmieniają współczynnik załamania.",
+      "sprzet": "przyrzad",
+      "animacja": "mycie",
+      "przyklad": "przemywam pryzmaty wodą destylowaną i osuszam bibułą"
+    },
+    {
+      "id": "zero",
+      "opis": "Na pryzmat naniesiono wodę destylowaną; odczyt nD = 1,3330 – przyrząd wskazuje poprawnie.",
+      "wymagane": [
+        [
+          "sprawdz",
+          "kalibr",
+          "zeruj",
+          "nanoś",
+          "nanieś",
+          "naniesi",
+          "zmierz",
+          "mierz"
+        ],
+        [
+          "wod"
+        ]
+      ],
+      "wykluczajace": [
+        "wzorc",
+        "próbk",
+        "cieczy",
+        "badan",
+        "albumin",
+        "białk",
+        "pryzmat wod"
+      ],
+      "wymaga": [
+        "pryzmat1"
+      ],
+      "podpowiedz": "Nanieś 2–3 krople wody destylowanej, zamknij pryzmaty i sprawdź, czy przyrząd wskazuje nD = 1,3330.",
+      "dlaczego": "Bez sprawdzenia na wodzie nie wiesz, czy przyrząd nie ma błędu systematycznego.",
+      "sprzet": "przyrzad",
+      "animacja": "pipetowanie",
+      "przyklad": "nanoszę wodę destylowaną i sprawdzam wskazanie refraktometru"
+    },
+    {
+      "id": "wzorce",
+      "opis": "Do kolb miarowych 25 cm³ odmierzono 5, 10, 15 i 20 cm³ roztworu albuminy, uzupełniono do kreski i wymieszano.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos",
+          "sporządz",
+          "przygotow",
+          "rozcieńcz"
+        ],
+        [
+          "wzorc",
+          "albumin",
+          "białk",
+          "podstawow"
+        ]
+      ],
+      "wykluczajace": [
+        "pryzmat",
+        "nanoś",
+        "nanieś",
+        "mierz"
+      ],
+      "wymaga": [
+        "zero"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz pipetą 5, 10, 15 i 20 cm³ roztworu podstawowego albuminy do kolb miarowych 25 cm³ i uzupełnij wodą do kreski.",
+      "dlaczego": "Wzorce o znanym stężeniu tworzą krzywą wzorcową nD = f(c).",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "roztwor"
+      },
+      "przyklad": "odmierzam pipetą roztwór albuminy do czterech kolb miarowych i uzupełniam do kreski"
+    },
+    {
+      "id": "pomiar_wz",
+      "opis": "Zmierzono nD czterech wzorców – od najmniejszego stężenia, z osuszaniem pryzmatów.",
+      "wymagane": [
+        [
+          "mierz",
+          "zmierz",
+          "pomiar",
+          "nanoś",
+          "nanieś",
+          "odczyt",
+          "sprawdz"
+        ],
+        [
+          "wzorc"
+        ]
+      ],
+      "wykluczajace": [
+        "odmierz",
+        "pipet",
+        "sporządz"
+      ],
+      "wymaga": [
+        "wzorce"
+      ],
+      "podpowiedz": "Zmierz nD wzorców od najmniejszego stężenia; przed każdym pomiarem osusz pryzmaty.",
+      "dlaczego": "Od najmniejszego stężenia – resztka poprzedniego roztworu mniej zafałszuje wynik.",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
+      "przyklad": "mierzę nD wzorców od najmniejszego stężenia"
+    },
+    {
+      "id": "probka",
+      "opis": "Na osuszony pryzmat naniesiono bagietką 2–3 krople badanego roztworu i zamknięto pryzmaty.",
+      "wymagane": [
+        [
+          "nanoś",
+          "nanieś",
+          "naniesi",
+          "nakład",
+          "nakrapl",
+          "kropl",
+          "umieść"
+        ],
+        [
+          "próbk",
+          "badan",
+          "roztw"
+        ]
+      ],
+      "wykluczajace": [
+        "wzorc",
+        "wod"
+      ],
+      "wymaga": [
+        "pomiar_wz"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Osusz pryzmaty i nanieś bagietką 2–3 krople badanego roztworu.",
+      "dlaczego": "Próbkę nanosi się bagietką, nie dotykając pryzmatu szkłem.",
+      "sprzet": "przyrzad",
+      "animacja": "pipetowanie",
+      "przyklad": "nanoszę bagietką badany roztwór na pryzmat"
+    },
+    {
+      "id": "granica",
+      "opis": "W okularze ustawiono ostrą granicę pola jasnego i ciemnego na przecięciu nici, kompensatorem usunięto zabarwienie.",
+      "wymagane": [
+        [
+          "granic",
+          "ostroś",
+          "ostr",
+          "nici",
+          "krzyż",
+          "kompensat",
+          "pokrętł",
+          "pole",
+          "pola",
+          "okular"
+        ]
+      ],
+      "wykluczajace": [
+        "odczyt"
+      ],
+      "wymaga": [
+        "probka"
+      ],
+      "podpowiedz": "Patrząc w okular, ustaw pokrętłem granicę pól na przecięciu nici; zabarwienie usuń kompensatorem.",
+      "dlaczego": "Rozmyta lub kolorowa granica daje błędny odczyt nD.",
+      "sprzet": "przyrzad",
+      "animacja": "pokretlo",
+      "przyklad": "ustawiam ostrą granicę pól na przecięciu nici"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano nD próbki ze skali w okularze oraz temperaturę.",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "sprawdz",
+          "patrz",
+          "mierz",
+          "zmierz"
+        ],
+        [
+          "nd",
+          "współczyn",
+          "załaman",
+          "skal",
+          "wynik",
+          "temperatur",
+          "wskazan",
+          "refrakc",
+          "okular"
+        ]
+      ],
+      "wykluczajace": [
+        "wod",
+        "wzorc"
+      ],
+      "wymaga": [
+        "granica"
+      ],
+      "podpowiedz": "Spójrz w okular i odczytaj nD próbki (4 miejsca po przecinku) oraz temperaturę.",
+      "dlaczego": "Współczynnik załamania zależy od temperatury.",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
+      "przyklad": "odczytuję współczynnik załamania nD i temperaturę"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano kolejne pomiary – razem trzy, każdy z nową porcją roztworu.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Powtórz pomiar jeszcze dwa razy, nanosząc nową porcję roztworu.",
+      "dlaczego": "Wynik to średnia z trzech zgodnych odczytów.",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
+      "stanSceny": {},
+      "przyklad": "powtarzam pomiar jeszcze dwa razy z nową porcją roztworu"
+    },
+    {
+      "id": "pryzmat2",
+      "opis": "Po pomiarach pryzmaty umyto wodą destylowaną i osuszono miękką bibułą.",
+      "wymagane": [
+        [
+          "przemy",
+          "umyj",
+          "myję",
+          "opłucz",
+          "osusz",
+          "wytrz",
+          "czyszcz",
+          "czyść"
+        ],
+        [
+          "pryzmat",
+          "refraktometr"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Po zakończeniu pomiarów umyj pryzmaty wodą destylowaną (lub etanolem) i osusz.",
+      "dlaczego": "Zaschnięta próbka niszczy pryzmat i fałszuje kolejne pomiary.",
+      "sprzet": "przyrzad",
+      "animacja": "mycie",
+      "przyklad": "po pomiarach myję i osuszam pryzmaty"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn",
+          "odpad",
+          "pojemnik"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "pryzmat2"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam roztwory do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "albumina",
+      "10 g/100 cm³"
+    ],
+    "wskaznik": [
+      "próbka",
+      "białko"
+    ],
+    "kartaPo": "odczyt",
+    "przyrzad": "refraktometr",
+    "okular": "x1"
+  },
+  "karta": {
+    "tytul": "Karta wyników – białko (refraktometria)",
+    "losuj": [
+      {
+        "id": "a",
+        "od": 0.0018,
+        "do": 0.0019
+      },
+      {
+        "id": "cx",
+        "od": 5.4,
+        "do": 6.6
+      },
+      {
+        "id": "nw",
+        "wybierz": [
+          1.333
+        ]
+      },
+      {
+        "id": "n1",
+        "wzor": "1.3330+a*2",
+        "szum": 4e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "n2",
+        "wzor": "1.3330+a*4",
+        "szum": 4e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "n3",
+        "wzor": "1.3330+a*6",
+        "szum": 4e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "n4",
+        "wzor": "1.3330+a*8",
+        "szum": 4e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "x1",
+        "wzor": "1.3330+a*cx",
+        "szum": 8e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "x2",
+        "wzor": "1.3330+a*cx",
+        "szum": 8e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "x3",
+        "wzor": "1.3330+a*cx",
+        "szum": 8e-05,
+        "miejsca": 4
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "refraktometr",
+        "id": "nw",
+        "etykieta": "Okular – woda destylowana"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "n1",
+        "etykieta": "Okular – wzorzec 2 g/100 cm³"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "n2",
+        "etykieta": "Okular – wzorzec 4 g/100 cm³"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "n3",
+        "etykieta": "Okular – wzorzec 6 g/100 cm³"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "n4",
+        "etykieta": "Okular – wzorzec 8 g/100 cm³"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "x1",
+        "etykieta": "Okular – próbka, pomiar 1"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "x2",
+        "etykieta": "Okular – próbka, pomiar 2"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "x3",
+        "etykieta": "Okular – próbka, pomiar 3"
+      },
+      {
+        "typ": "info",
+        "etykieta": "Deklaracja producenta",
+        "tekst": "6,0 g/100 cm³ ± 0,3"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Krzywa wzorcowa",
+        "opis": "Wzorce kolejno: 2, 4, 6 i 8 g/100 cm³. nD – 4 miejsca, a – 6 miejsc po przecinku.",
+        "tabela": {
+          "wiersze": 4,
+          "kolumny": [
+            {
+              "naglowek": "nD wzorca",
+              "pole": "n{i}"
+            },
+            {
+              "naglowek": "Δn = nD − nD wody",
+              "pole": "d{i}"
+            },
+            {
+              "naglowek": "a = Δn / c",
+              "pole": "k{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "nw",
+            "etykieta": "nD wody =",
+            "szer": "kr"
+          },
+          {
+            "id": "a",
+            "etykieta": "Współczynnik krzywej a (średnia) =",
+            "szer": "sr"
+          }
+        ]
+      },
+      {
+        "tytul": "Próbka",
+        "tabela": {
+          "wiersze": 3,
+          "kolumny": [
+            {
+              "naglowek": "nD próbki",
+              "pole": "x{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "xsr",
+            "etykieta": "nD próbki (średnia) =",
+            "szer": "kr"
+          },
+          {
+            "id": "c",
+            "etykieta": "Stężenie białka c =",
+            "szer": "kr",
+            "jednostka": "g/100 cm³"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Wynik (zgodny / niezgodny) z deklaracją:",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "Zależność nD od stężenia białka jest liniowa: Δn = a · c.",
+      "~2 g/100 cm³ — Δn wzorca 1 | 1 g/100 cm³ — a",
+      "~a — 1 g/100 cm³ | Δn próbki — c",
+      "Przykład na innych liczbach: Δn = 0,0110, a = 0,001850 → c = 0,0110 / 0,001850 = 5,9 g/100 cm³."
+    ],
+    "kryteria": [
+      {
+        "opis": "nD wody i czterech wzorców zgodne z odczytem",
+        "uwaga": "Odczytaj skalę w okularze w miejscu czerwonej kreski.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "nw",
+            "wzor": "nw",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "n1",
+            "wzor": "n1",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "n2",
+            "wzor": "n2",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "n3",
+            "wzor": "n3",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "n4",
+            "wzor": "n4",
+            "tol": 6e-05
+          }
+        ]
+      },
+      {
+        "opis": "Różnice Δn dla wzorców",
+        "uwaga": "Δn = nD wzorca − nD wody.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "d1",
+            "wzor": "$n1-$nw",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "d2",
+            "wzor": "$n2-$nw",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "d3",
+            "wzor": "$n3-$nw",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "d4",
+            "wzor": "$n4-$nw",
+            "tol": 6e-05
+          }
+        ]
+      },
+      {
+        "opis": "Ilorazy a = Δn / c",
+        "uwaga": "Podziel Δn przez stężenie wzorca (2, 4, 6, 8).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "k1",
+            "wzor": "$d1/2",
+            "tol": 5.1e-06
+          },
+          {
+            "typ": "liczba",
+            "pole": "k2",
+            "wzor": "$d2/4",
+            "tol": 5.1e-06
+          },
+          {
+            "typ": "liczba",
+            "pole": "k3",
+            "wzor": "$d3/6",
+            "tol": 5.1e-06
+          },
+          {
+            "typ": "liczba",
+            "pole": "k4",
+            "wzor": "$d4/8",
+            "tol": 5.1e-06
+          }
+        ]
+      },
+      {
+        "opis": "Współczynnik krzywej wzorcowej",
+        "uwaga": "Średnia z czterech wartości a.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "a",
+            "wzor": "sr($k1,$k2,$k3,$k4)",
+            "tol": 5.1e-06
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($k1,$k2,$k3,$k4)",
+          "miejsca": 6,
+          "jednostka": ""
+        }
+      },
+      {
+        "opis": "Trzy odczyty nD próbki i ich średnia",
+        "uwaga": "Odczyty nieróżniące się o więcej niż 0,0003.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "x1",
+            "wzor": "x1",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "x2",
+            "wzor": "x2",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "x3",
+            "wzor": "x3",
+            "tol": 6e-05
+          },
+          {
+            "typ": "rozrzut",
+            "pola": [
+              "x1",
+              "x2",
+              "x3"
+            ],
+            "max": 0.0003
+          },
+          {
+            "typ": "liczba",
+            "pole": "xsr",
+            "wzor": "sr($x1,$x2,$x3)",
+            "tol": 6e-05
+          }
+        ]
+      },
+      {
+        "opis": "Stężenie białka z dokładnością do 0,1",
+        "uwaga": "c = (nD próbki − nD wody) / a.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "c",
+            "wzor": "($xsr-$nw)/$a",
+            "tol": 0.06
+          },
+          {
+            "typ": "miejsca",
+            "pole": "c",
+            "ile": 1
+          }
+        ],
+        "pokaz": {
+          "wzor": "($xsr-$nw)/$a",
+          "miejsca": 1,
+          "jednostka": " g/100 cm³"
+        }
+      },
+      {
+        "opis": "Wniosek spójny z wynikiem (6,0 ± 0,3 g/100 cm³)",
+        "uwaga": "Porównaj c z 6,0 g/100 cm³.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "0.3-abs($c-6)+0.000001",
+            "tak": [
+              "zgodny",
+              "zgodna"
+            ],
+            "nie": [
+              "niezgodny",
+              "niezgodna",
+              "nie zgodny",
+              "nie jest"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

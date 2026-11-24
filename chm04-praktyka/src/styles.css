@@ -1329,3 +1329,5 @@ button.sprawdz {
 
 .zegar { font-variant-numeric: tabular-nums; display: inline-block; min-width: 7.5ch; text-align: center; flex-shrink: 0; }
 .gorny-pasek .oddaj { order: -1; flex-shrink: 0; }
+
+.grupa-poziomow h2 { font-size: 1.05rem; margin: 22px 0 6px; }

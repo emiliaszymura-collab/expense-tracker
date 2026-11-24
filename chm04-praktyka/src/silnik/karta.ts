@@ -101,6 +101,14 @@ function sprawdz(s: Sprawdzenie, p: Pomiary, o: Odpowiedzi): boolean {
         return s.zawiera.some((x) => t.includes(bezZnakow(x))) && s.oraz.every((x) => t.includes(bezZnakow(x)));
       });
     }
+    case 'tekstWg': {
+      const n = Math.round(oblicz(s.wzor, z));
+      const t = bezZnakow(o[s.pole] ?? '');
+      if (!(n >= 0 && n < s.opcje.length) || !t.trim()) return false;
+      const inne = s.opcje.filter((_, i) => i !== n).flat();
+      // pełna nazwa innej opcji w odpowiedzi = zła identyfikacja (np. „glukoza” zamiast „sacharoza”)
+      return s.opcje[n].some((x) => t.includes(bezZnakow(x))) && !inne.some((x) => t.includes(bezZnakow(x)) && !s.opcje[n].some((y) => bezZnakow(y).includes(bezZnakow(x))));
+    }
     case 'niepuste':
       return (o[s.pole] ?? '').trim().length > 0;
   }
@@ -140,6 +148,9 @@ export function wzorcoweWypelnienie(spec: KartaSpec, p: Pomiary): Odpowiedzi {
       else if (s.typ === 'wybor') {
         const w = oblicz(s.wzor, z);
         if (Number.isFinite(w)) o[s.pole] = w > 0 ? s.tak[0] : s.nie[0];
+      } else if (s.typ === 'tekstWg') {
+        const n = Math.round(oblicz(s.wzor, z));
+        if (n >= 0 && n < s.opcje.length) o[s.pole] = s.opcje[n][0];
       } else if (s.typ === 'tekstRazem') {
         if (s.pola.some((id) => (o[id] ?? '').includes(s.zawiera[0]))) continue;
         const wolne = s.pola.find((id) => !o[id]) ?? s.pola[0];

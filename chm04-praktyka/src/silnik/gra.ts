@@ -181,7 +181,6 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
     return { stan, przyjete };
   }
 
-  stan.bledy++;
   const brakKrokow = wymaganiaKroku(poziom, zablokowany).filter((w) => !stan.wykonane.includes(w));
   if (brakKrokow.length > 0) {
     // Wskazujemy brakujący krok z łańcucha TEGO kroku (najgłębszy, który da się już zrobić),
@@ -195,11 +194,13 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
     dodaj({
       rodzaj: 'za-wczesnie',
       tekstGracza: tekst,
-      komunikat: 'Za wcześnie – pominięto wcześniejszy krok.',
+      // Bez kary: kroku nie przyjęto, więc gracz po prostu wpisuje brakujący krok. Pominięty krok i tak traci swój punkt.
+      komunikat: 'Jeszcze nie teraz – najpierw brakuje wcześniejszego kroku. Nic nie tracisz, wpisz brakujący krok.',
       wyjasnienie: trybCwiczenia ? `Najpierw: ${pierwszy.podpowiedz} ${pierwszy.dlaczego}` : undefined,
       krokId: zablokowany.id,
     });
   } else {
+    stan.bledy++;
     const brak = brakujaceBhp(stan);
     dodaj({
       rodzaj: 'brak-bhp',
@@ -249,5 +250,5 @@ export function dodajPodpowiedz(poziom: Poziom, stan: StanGry, tekstGracza = 'Po
 /** Czy wpis to prośba o pomoc („nie wiem”, „pomóż mi”, „podpowiedź”, „co teraz?”). */
 export function prosiOPomoc(tekst: string): boolean {
   const t = tokeny(tekst).join(' ');
-  return /(^| )(pomoc|pomoz|pomóz|podpowiedz|podpowiedź|podpowiedzi|help|hint)/.test(t) || /nie wiem|co (teraz|dalej|mam)|co robic|jak dalej/.test(t);
+  return /(^| )(pomoc|pomoz|pomóz|podpo|podpw|podop|help|hint)/.test(t) || /nie wiem|co (teraz|dalej|mam)|co robic|jak dalej/.test(t);
 }

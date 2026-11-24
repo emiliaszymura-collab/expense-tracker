@@ -1,0 +1,882 @@
+{
+  "id": "16-spektrofotometria-kmno4",
+  "grupa": "Spektrofotometr UV-Vis",
+  "tytul": "Mangan (KMnO₄) – widmo i krzywa wzorcowa",
+  "zrodlo": "Poziom przewidywany – podstawa programowa 2019",
+  "metoda": "Spektrofotometria UV-Vis – widmo absorpcji, λmax, krzywa wzorcowa",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Korzystając z zamieszczonej procedury, wyznacz długość fali maksymalnej absorpcji (λmax) roztworu KMnO₄, a następnie oznacz stężenie KMnO₄ w badanym roztworze metodą krzywej wzorcowej.\nZmierz widmo absorpcji jednego wzorca w zakresie 485–585 nm, wybierz λmax. Przy λmax zmierz absorbancję pięciu wzorców i próbki.\nOblicz stężenie KMnO₄ w próbce i porównaj z deklaracją: 40 mg/dm³ (dopuszczalna różnica ±2 mg/dm³).\nWyniki, obliczenia i wniosek zapisz w karcie wyników.\nPamiętaj o zasadach bhp. Po pracy uporządkuj stanowisko, roztwory przelej do pojemnika na odpady ciekłe.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania roztworów i pomiarów (widmo, wzorce, ślepa próba, obsługa kuwety),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "1. Roztwory wzorcowe\nDo kolb miarowych 50 cm³ odmierzyć 2, 4, 6, 8 i 10 cm³ roztworu podstawowego KMnO₄ (100 mg/dm³), uzupełnić wodą do kreski. Stężenia: 4, 8, 12, 16 i 20 mg/dm³.\n2. Próbka\nDo kolby miarowej 50 cm³ odmierzyć 20 cm³ badanego roztworu i uzupełnić wodą do kreski (rozcieńczenie 2,5 raza).\n3. Widmo\nWyzerować spektrofotometr na wodzie przy każdej długości fali. Zmierzyć absorbancję wzorca 12 mg/dm³ przy 485, 505, 525, 545, 565 i 585 nm. λmax – długość fali o największej absorbancji.\n4. Krzywa i próbka\nPrzy λmax zmierzyć absorbancję wzorców od najmniejszego stężenia, na końcu próbki.\nObliczenia\na = średnia z A/c; c w kolbie = A / a; c w badanym roztworze = c · 2,5. Wynik z dokładnością do 0,1 mg/dm³."
+    },
+    {
+      "tytul": "Skąd ten poziom",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "wzorce",
+      "opis": "Do kolb miarowych 50 cm³ odmierzono 2, 4, 6, 8 i 10 cm³ roztworu podstawowego KMnO₄ i uzupełniono do kreski.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos"
+        ],
+        [
+          "wzorc",
+          "podstawow",
+          "kmno4",
+          "nadmanganian",
+          "manganian"
+        ]
+      ],
+      "wykluczajace": [
+        "próbk",
+        "badan"
+      ],
+      "wymaga": [],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz 2, 4, 6, 8 i 10 cm³ roztworu podstawowego KMnO₄ do kolb miarowych 50 cm³ i uzupełnij wodą.",
+      "dlaczego": "Wzorce o znanych stężeniach tworzą krzywą wzorcową.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "fioletowy"
+      },
+      "przyklad": "odmierzam pipetą roztwór podstawowy KMnO4 do pięciu kolb miarowych"
+    },
+    {
+      "id": "probka",
+      "opis": "Do kolby miarowej 50 cm³ odmierzono 20 cm³ badanego roztworu i uzupełniono do kreski.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos"
+        ],
+        [
+          "próbk",
+          "badan",
+          "20"
+        ]
+      ],
+      "wykluczajace": [
+        "wzorc",
+        "podstawow"
+      ],
+      "wymaga": [
+        "wzorce"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz 20 cm³ badanego roztworu do kolby miarowej 50 cm³ i uzupełnij wodą.",
+      "dlaczego": "Rozcieńczenie 2,5 raza musisz uwzględnić w obliczeniach.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "odmierzam pipetą 20 cm3 badanego roztworu do kolby miarowej"
+    },
+    {
+      "id": "widmo",
+      "opis": "Zmierzono widmo absorpcji wzorca 12 mg/dm³ w zakresie 485–585 nm (zerowanie na wodzie przy każdej długości fali).",
+      "wymagane": [
+        [
+          "widm",
+          "λmax",
+          "lambda",
+          "maksimum",
+          "długości fal",
+          "zakres"
+        ]
+      ],
+      "wymaga": [
+        "probka"
+      ],
+      "podpowiedz": "Zmierz absorbancję wzorca 12 mg/dm³ przy 485, 505, 525, 545, 565 i 585 nm, zerując na wodzie przy każdej długości fali.",
+      "dlaczego": "λmax to długość fali, przy której pomiar jest najczulszy.",
+      "sprzet": "przyrzad",
+      "animacja": "przycisk",
+      "stanSceny": {
+        "spektro": true
+      },
+      "przyklad": "mierzę widmo absorpcji wzorca w zakresie 485–585 nm"
+    },
+    {
+      "id": "fala",
+      "opis": "Ustawiono długość fali równą λmax.",
+      "wymagane": [
+        [
+          "ustaw",
+          "nastaw",
+          "wybier",
+          "wybór"
+        ],
+        [
+          "λmax",
+          "lambda",
+          "maks",
+          "525"
+        ]
+      ],
+      "wykluczajace": [
+        "widm",
+        "zakres"
+      ],
+      "wymaga": [
+        "widmo"
+      ],
+      "podpowiedz": "Ustaw długość fali odpowiadającą maksimum absorpcji.",
+      "dlaczego": "Przy λmax pomiar jest najczulszy, a krzywa wzorcowa najbardziej stroma.",
+      "sprzet": "przyrzad",
+      "animacja": "przycisk",
+      "przyklad": "ustawiam długość fali λmax 525 nm"
+    },
+    {
+      "id": "kuweta",
+      "opis": "Kuwetę (trzymaną za matowe ścianki) przepłukano, napełniono do ¾ i wytarto.",
+      "wymagane": [
+        [
+          "kuwet",
+          "matow"
+        ]
+      ],
+      "wykluczajace": [
+        "ślep",
+        "zer"
+      ],
+      "wymaga": [
+        "fala"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Przepłucz kuwetę mierzonym roztworem, napełnij do ¾ i wytrzyj; trzymaj za matowe ścianki.",
+      "dlaczego": "Odciski palców i krople na przezroczystych ściankach zawyżają absorbancję.",
+      "sprzet": "rurka",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kuweta": true
+      },
+      "przyklad": "przepłukuję kuwetę, napełniam do trzech czwartych i wycieram"
+    },
+    {
+      "id": "slepa",
+      "opis": "Przyrząd wyzerowano na ślepej próbie.",
+      "wymagane": [
+        [
+          "zeruj",
+          "wyzer",
+          "zero",
+          "kalibr"
+        ]
+      ],
+      "wymaga": [
+        "kuweta"
+      ],
+      "podpowiedz": "Wyzeruj spektrofotometr na ślepej próbie.",
+      "dlaczego": "Absorbancja ma pochodzić tylko od oznaczanego związku, a nie od odczynników.",
+      "sprzet": "przyrzad",
+      "animacja": "siegnij",
+      "przyklad": "zeruję spektrofotometr na ślepej próbie"
+    },
+    {
+      "id": "pomiar_wz",
+      "opis": "Zmierzono absorbancję wzorców – od najmniejszego stężenia.",
+      "wymagane": [
+        [
+          "mierz",
+          "zmierz",
+          "pomiar",
+          "odczyt"
+        ],
+        [
+          "wzorc"
+        ]
+      ],
+      "wykluczajace": [
+        "próbk",
+        "widm"
+      ],
+      "wymaga": [
+        "slepa"
+      ],
+      "podpowiedz": "Zmierz absorbancję wzorców, zaczynając od najmniejszego stężenia.",
+      "dlaczego": "Kolejność od najmniejszego stężenia ogranicza błąd przenoszenia.",
+      "sprzet": "przyrzad",
+      "animacja": "siegnij",
+      "przyklad": "mierzę absorbancję wzorców od najmniejszego stężenia"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Zmierzono absorbancję próbki.",
+      "wymagane": [
+        [
+          "mierz",
+          "zmierz",
+          "pomiar",
+          "odczyt"
+        ],
+        [
+          "próbk"
+        ]
+      ],
+      "wykluczajace": [
+        "wzorc"
+      ],
+      "wymaga": [
+        "pomiar_wz"
+      ],
+      "podpowiedz": "Na końcu zmierz absorbancję badanej próbki.",
+      "dlaczego": "Absorbancję próbki porównujesz z krzywą wzorcową.",
+      "sprzet": "przyrzad",
+      "animacja": "siegnij",
+      "przyklad": "mierzę absorbancję próbki"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn",
+          "odpad",
+          "pojemnik"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam roztwory do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "KMnO₄",
+      "100 mg/dm³"
+    ],
+    "wskaznik": [
+      "woda",
+      "destylowana"
+    ],
+    "kartaPo": "odczyt",
+    "przyrzad": "spektrofotometr"
+  },
+  "karta": {
+    "tytul": "Karta wyników – KMnO₄",
+    "losuj": [
+      {
+        "id": "a",
+        "od": 0.044,
+        "do": 0.048
+      },
+      {
+        "id": "cx",
+        "od": 15.2,
+        "do": 16.8
+      },
+      {
+        "id": "W1",
+        "wzor": "a*12*exp(0-((485-525)/32)*((485-525)/32))",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "W2",
+        "wzor": "a*12*exp(0-((505-525)/32)*((505-525)/32))",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "W3",
+        "wzor": "a*12*exp(0-((525-525)/32)*((525-525)/32))",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "W4",
+        "wzor": "a*12*exp(0-((545-525)/32)*((545-525)/32))",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "W5",
+        "wzor": "a*12*exp(0-((565-525)/32)*((565-525)/32))",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "W6",
+        "wzor": "a*12*exp(0-((585-525)/32)*((585-525)/32))",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A1",
+        "wzor": "a*4",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A2",
+        "wzor": "a*8",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A3",
+        "wzor": "a*12",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A4",
+        "wzor": "a*16",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A5",
+        "wzor": "a*20",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "Ax",
+        "wzor": "a*cx",
+        "szum": 0.002,
+        "miejsca": 3
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "wyswietlacz",
+        "id": "W1",
+        "etykieta": "Widmo – 485 nm",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "W2",
+        "etykieta": "Widmo – 505 nm",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "W3",
+        "etykieta": "Widmo – 525 nm",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "W4",
+        "etykieta": "Widmo – 545 nm",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "W5",
+        "etykieta": "Widmo – 565 nm",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "W6",
+        "etykieta": "Widmo – 585 nm",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A1",
+        "etykieta": "Wzorzec 4 mg/dm³ (λmax)",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A2",
+        "etykieta": "Wzorzec 8 mg/dm³ (λmax)",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A3",
+        "etykieta": "Wzorzec 12 mg/dm³ (λmax)",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A4",
+        "etykieta": "Wzorzec 16 mg/dm³ (λmax)",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A5",
+        "etykieta": "Wzorzec 20 mg/dm³ (λmax)",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "Ax",
+        "etykieta": "Próbka (λmax)",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "info",
+        "etykieta": "Deklaracja",
+        "tekst": "40 mg/dm³ ± 2"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Widmo absorpcji wzorca 12 mg/dm³",
+        "opis": "Długości fali kolejno: 485, 505, 525, 545, 565, 585 nm.",
+        "tabela": {
+          "wiersze": 6,
+          "kolumny": [
+            {
+              "naglowek": "Absorbancja A",
+              "pole": "W{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "lmax",
+            "etykieta": "λmax =",
+            "szer": "kr",
+            "jednostka": "nm"
+          }
+        ]
+      },
+      {
+        "tytul": "Krzywa wzorcowa przy λmax",
+        "opis": "Stężenia wzorców: 4, 8, 12, 16, 20 mg/dm³.",
+        "tabela": {
+          "wiersze": 5,
+          "kolumny": [
+            {
+              "naglowek": "Absorbancja A",
+              "pole": "A{i}"
+            },
+            {
+              "naglowek": "A / c",
+              "pole": "k{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "a",
+            "etykieta": "Współczynnik a (średnia z A/c) =",
+            "szer": "kr"
+          }
+        ]
+      },
+      {
+        "tytul": "Próbka",
+        "pola": [
+          {
+            "id": "Ax",
+            "etykieta": "Absorbancja próbki:",
+            "szer": "kr"
+          },
+          {
+            "id": "ck",
+            "etykieta": "Stężenie w kolbie c =",
+            "szer": "kr",
+            "jednostka": "mg/dm³"
+          },
+          {
+            "id": "cp",
+            "etykieta": "Stężenie w badanym roztworze =",
+            "szer": "kr",
+            "jednostka": "mg/dm³"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Wynik (zgodny / niezgodny) z deklaracją:",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "λmax: wybierz długość fali z największą absorbancją w tabeli widma.",
+      "~a — 1 mg/dm³ | A próbki — c mg/dm³",
+      "Rozcieńczenie: 20 cm³ → 50 cm³, czyli 2,5 raza.",
+      "~20 cm³ badanego roztworu — w 50 cm³ | stężenie w roztworze = 2,5 · c"
+    ],
+    "kryteria": [
+      {
+        "opis": "Absorbancje widma zgodne ze wskazaniami",
+        "uwaga": "Przepisz sześć wartości z wyświetlacza.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "W1",
+            "wzor": "W1",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "W2",
+            "wzor": "W2",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "W3",
+            "wzor": "W3",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "W4",
+            "wzor": "W4",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "W5",
+            "wzor": "W5",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "W6",
+            "wzor": "W6",
+            "tol": 0.0005
+          }
+        ]
+      },
+      {
+        "opis": "Poprawnie wybrana λmax",
+        "uwaga": "Długość fali, przy której absorbancja jest największa.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "lmax",
+            "wzor": "525",
+            "tol": 0.5
+          }
+        ]
+      },
+      {
+        "opis": "Absorbancje 5 wzorców zgodne ze wskazaniami",
+        "uwaga": "Przepisz absorbancje z wyświetlacza.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "A1",
+            "wzor": "A1",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A2",
+            "wzor": "A2",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A3",
+            "wzor": "A3",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A4",
+            "wzor": "A4",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A5",
+            "wzor": "A5",
+            "tol": 0.0005
+          }
+        ]
+      },
+      {
+        "opis": "Ilorazy A/c dla wzorców",
+        "uwaga": "Podziel absorbancję przez stężenie wzorca.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "k1",
+            "wzor": "$A1/4",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k2",
+            "wzor": "$A2/8",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k3",
+            "wzor": "$A3/12",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k4",
+            "wzor": "$A4/16",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k5",
+            "wzor": "$A5/20",
+            "tol": 0.0011
+          }
+        ]
+      },
+      {
+        "opis": "Współczynnik a krzywej wzorcowej",
+        "uwaga": "Średnia z 5 ilorazów A/c.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "a",
+            "wzor": "sr($k1,$k2,$k3,$k4,$k5)",
+            "tol": 0.0011
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($k1,$k2,$k3,$k4,$k5)",
+          "miejsca": 3,
+          "jednostka": ""
+        }
+      },
+      {
+        "opis": "Absorbancja próbki zgodna ze wskazaniem",
+        "uwaga": "Przepisz absorbancję próbki.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "Ax",
+            "wzor": "Ax",
+            "tol": 0.0005
+          }
+        ]
+      },
+      {
+        "opis": "Stężenie w kolbie i w badanym roztworze, do 0,1",
+        "uwaga": "c = A / a, potem × 2,5.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "ck",
+            "wzor": "$Ax/$a",
+            "tol": 0.06
+          },
+          {
+            "typ": "liczba",
+            "pole": "cp",
+            "wzor": "$ck*2.5",
+            "tol": 0.16
+          },
+          {
+            "typ": "miejsca",
+            "pole": "ck",
+            "ile": 1
+          },
+          {
+            "typ": "miejsca",
+            "pole": "cp",
+            "ile": 1
+          }
+        ],
+        "pokaz": {
+          "wzor": "$Ax/$a*2.5",
+          "miejsca": 1,
+          "jednostka": " mg/dm³"
+        }
+      },
+      {
+        "opis": "Wniosek spójny z wynikiem (40 ± 2 mg/dm³)",
+        "uwaga": "Porównaj z deklaracją.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "2-abs($cp-40)+0.000001",
+            "tak": [
+              "zgodny",
+              "zgodna"
+            ],
+            "nie": [
+              "niezgodny",
+              "niezgodna",
+              "nie zgodny",
+              "nie jest"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

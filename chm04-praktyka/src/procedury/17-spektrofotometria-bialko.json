@@ -1,0 +1,733 @@
+{
+  "id": "17-spektrofotometria-bialko",
+  "grupa": "Spektrofotometr UV-Vis",
+  "tytul": "Białko metodą biuretową – spektrofotometr",
+  "zrodlo": "Poziom przewidywany – podstawa programowa 2019",
+  "metoda": "Spektrofotometria UV-Vis – białko metodą biuretową (540 nm)",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Korzystając z zamieszczonej procedury, oznacz stężenie białka całkowitego w próbce metodą biuretową.\nPrzygotuj pięć wzorców albuminy, próbkę i ślepą próbę, dodaj odczynnik biuretowy, odczekaj na rozwinięcie barwy i zmierz absorbancję przy 540 nm.\nOblicz stężenie białka w próbce i oceń, czy mieści się w zakresie wartości prawidłowych dla surowicy: 60–80 g/dm³.\nWyniki, obliczenia i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp – odczynnik biuretowy jest żrący (NaOH). Po pracy uporządkuj stanowisko.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg przygotowania roztworów i pomiarów,\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "1. Wzorce\nDo probówek odmierzyć 0,2; 0,4; 0,6; 0,8 i 1,0 cm³ roztworu wzorcowego albuminy 10 g/dm³ i uzupełnić wodą do 1,0 cm³ (zawartość białka: 2, 4, 6, 8, 10 mg).\n2. Próbka i ślepa próba\nPróbkę surowicy rozcieńczyć 10 razy; do probówki odmierzyć 1,0 cm³ rozcieńczenia. Ślepa próba: 1,0 cm³ wody.\n3. Reakcja\nDo każdej probówki dodać 4,0 cm³ odczynnika biuretowego, wymieszać i odczekać 30 minut (fioletowe zabarwienie kompleksu Cu²⁺ z wiązaniami peptydowymi).\n4. Pomiar\nUstawić 540 nm, wyzerować na ślepej próbie, zmierzyć wzorce od najmniejszej zawartości, na końcu próbkę.\nObliczenia\na = średnia z A/m (m – mg białka w probówce). m próbki = A / a [mg w 1 cm³ rozcieńczenia]. Stężenie w surowicy = m · 10 [mg/cm³ = g/dm³], z dokładnością do 0,1."
+    },
+    {
+      "tytul": "Skąd ten poziom",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "wzorce",
+      "opis": "Do probówek odmierzono 0,2–1,0 cm³ wzorca albuminy i uzupełniono wodą do 1,0 cm³.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos"
+        ],
+        [
+          "wzorc",
+          "albumin"
+        ]
+      ],
+      "wykluczajace": [
+        "próbk",
+        "surowic",
+        "ślep"
+      ],
+      "wymaga": [],
+      "wymagaBhp": true,
+      "podpowiedz": "Odmierz 0,2; 0,4; 0,6; 0,8 i 1,0 cm³ wzorca albuminy do probówek i uzupełnij wodą do 1,0 cm³.",
+      "dlaczego": "Wzorce o znanej zawartości białka tworzą krzywą wzorcową.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "odmierzam pipetą wzorzec albuminy do pięciu probówek"
+    },
+    {
+      "id": "probka",
+      "opis": "Rozcieńczono surowicę 10 razy, odmierzono 1,0 cm³ do probówki; przygotowano ślepą próbę z wodą.",
+      "wymagane": [
+        [
+          "pobier",
+          "pobrać",
+          "odpipet",
+          "pipetuj",
+          "pipet",
+          "odmierz",
+          "przenoś",
+          "przenieś",
+          "przenos",
+          "rozcieńcz"
+        ],
+        [
+          "próbk",
+          "surowic",
+          "ślep"
+        ]
+      ],
+      "wykluczajace": [
+        "wzorc",
+        "albumin",
+        "zeruj",
+        "zero"
+      ],
+      "wymaga": [
+        "wzorce"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Rozcieńcz surowicę 10 razy i odmierz 1,0 cm³ do probówki; ślepa próba – 1,0 cm³ wody.",
+      "dlaczego": "Surowica jest zbyt stężona; ślepa próba zawiera wszystko oprócz białka.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "przyklad": "rozcieńczam surowicę 10 razy i odmierzam 1 cm3 do probówki, przygotowuję ślepą próbę"
+    },
+    {
+      "id": "biuret",
+      "opis": "Do każdej probówki dodano 4,0 cm³ odczynnika biuretowego, wymieszano i odczekano 30 minut – fioletowe zabarwienie.",
+      "wymagane": [
+        [
+          "biuret",
+          "odczynnik"
+        ]
+      ],
+      "wymaga": [
+        "probka"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Dodaj do każdej probówki 4,0 cm³ odczynnika biuretowego, wymieszaj i odczekaj 30 minut.",
+      "dlaczego": "Kompleks Cu²⁺ z wiązaniami peptydowymi tworzy się powoli – pomiar przed czasem zaniży wynik.",
+      "sprzet": "kolba",
+      "animacja": "pipetowanie",
+      "stanSceny": {
+        "kolba": "fioletowy"
+      },
+      "przyklad": "dodaję odczynnik biuretowy do każdej probówki i odczekuję 30 minut"
+    },
+    {
+      "id": "fala",
+      "opis": "Włączono spektrofotometr i ustawiono długość fali 540 nm.",
+      "wymagane": [
+        [
+          "włącz",
+          "ustaw",
+          "nastaw"
+        ],
+        [
+          "spektrofot",
+          "fal",
+          "540"
+        ]
+      ],
+      "wykluczajace": [
+        "=wyłącz",
+        "widm"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz spektrofotometr i ustaw długość fali 540 nm.",
+      "dlaczego": "Przy 540 nm barwny związek pochłania najsilniej – pomiar jest najczulszy.",
+      "sprzet": "przyrzad",
+      "animacja": "przycisk",
+      "stanSceny": {
+        "spektro": true
+      },
+      "przyklad": "włączam spektrofotometr i ustawiam długość fali 540 nm"
+    },
+    {
+      "id": "kuweta",
+      "opis": "Kuwetę (trzymaną za matowe ścianki) przepłukano, napełniono do ¾ i wytarto.",
+      "wymagane": [
+        [
+          "kuwet",
+          "matow"
+        ]
+      ],
+      "wykluczajace": [
+        "ślep",
+        "zer"
+      ],
+      "wymaga": [
+        "biuret",
+        "fala"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Przepłucz kuwetę mierzonym roztworem, napełnij do ¾ i wytrzyj; trzymaj za matowe ścianki.",
+      "dlaczego": "Odciski palców i krople na przezroczystych ściankach zawyżają absorbancję.",
+      "sprzet": "rurka",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kuweta": true
+      },
+      "przyklad": "przepłukuję kuwetę, napełniam do trzech czwartych i wycieram"
+    },
+    {
+      "id": "slepa",
+      "opis": "Przyrząd wyzerowano na ślepej próbie.",
+      "wymagane": [
+        [
+          "zeruj",
+          "wyzer",
+          "zero",
+          "kalibr"
+        ]
+      ],
+      "wymaga": [
+        "kuweta"
+      ],
+      "podpowiedz": "Wyzeruj spektrofotometr na ślepej próbie.",
+      "dlaczego": "Absorbancja ma pochodzić tylko od oznaczanego związku, a nie od odczynników.",
+      "sprzet": "przyrzad",
+      "animacja": "siegnij",
+      "przyklad": "zeruję spektrofotometr na ślepej próbie"
+    },
+    {
+      "id": "pomiar_wz",
+      "opis": "Zmierzono absorbancję wzorców – od najmniejszego stężenia.",
+      "wymagane": [
+        [
+          "mierz",
+          "zmierz",
+          "pomiar",
+          "odczyt"
+        ],
+        [
+          "wzorc"
+        ]
+      ],
+      "wykluczajace": [
+        "próbk",
+        "widm"
+      ],
+      "wymaga": [
+        "slepa"
+      ],
+      "podpowiedz": "Zmierz absorbancję wzorców, zaczynając od najmniejszego stężenia.",
+      "dlaczego": "Kolejność od najmniejszego stężenia ogranicza błąd przenoszenia.",
+      "sprzet": "przyrzad",
+      "animacja": "siegnij",
+      "przyklad": "mierzę absorbancję wzorców od najmniejszego stężenia"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Zmierzono absorbancję próbki.",
+      "wymagane": [
+        [
+          "mierz",
+          "zmierz",
+          "pomiar",
+          "odczyt"
+        ],
+        [
+          "próbk"
+        ]
+      ],
+      "wykluczajace": [
+        "wzorc"
+      ],
+      "wymaga": [
+        "pomiar_wz"
+      ],
+      "podpowiedz": "Na końcu zmierz absorbancję badanej próbki.",
+      "dlaczego": "Absorbancję próbki porównujesz z krzywą wzorcową.",
+      "sprzet": "przyrzad",
+      "animacja": "siegnij",
+      "przyklad": "mierzę absorbancję próbki"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn",
+          "odpad",
+          "pojemnik"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam roztwory do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "odczynnik",
+      "biuretowy"
+    ],
+    "wskaznik": [
+      "albumina",
+      "10 g/dm³"
+    ],
+    "kartaPo": "odczyt",
+    "przyrzad": "spektrofotometr"
+  },
+  "karta": {
+    "tytul": "Karta wyników – białko (metoda biuretowa)",
+    "losuj": [
+      {
+        "id": "a",
+        "od": 0.038,
+        "do": 0.042
+      },
+      {
+        "id": "mx",
+        "od": 5.6,
+        "do": 8.4
+      },
+      {
+        "id": "A1",
+        "wzor": "a*2",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A2",
+        "wzor": "a*4",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A3",
+        "wzor": "a*6",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A4",
+        "wzor": "a*8",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "A5",
+        "wzor": "a*10",
+        "szum": 0.003,
+        "miejsca": 3
+      },
+      {
+        "id": "Ax",
+        "wzor": "a*mx",
+        "szum": 0.002,
+        "miejsca": 3
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "wyswietlacz",
+        "id": "A1",
+        "etykieta": "Wzorzec 2 mg",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A2",
+        "etykieta": "Wzorzec 4 mg",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A3",
+        "etykieta": "Wzorzec 6 mg",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A4",
+        "etykieta": "Wzorzec 8 mg",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "A5",
+        "etykieta": "Wzorzec 10 mg",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "Ax",
+        "etykieta": "Próbka",
+        "jednostka": "A",
+        "miejsca": 3
+      },
+      {
+        "typ": "info",
+        "etykieta": "Zakres prawidłowy",
+        "tekst": "60–80 g/dm³"
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Krzywa wzorcowa (540 nm)",
+        "opis": "Zawartość białka we wzorcach: 2, 4, 6, 8, 10 mg.",
+        "tabela": {
+          "wiersze": 5,
+          "kolumny": [
+            {
+              "naglowek": "Absorbancja A",
+              "pole": "A{i}"
+            },
+            {
+              "naglowek": "A / m",
+              "pole": "k{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "a",
+            "etykieta": "Współczynnik a (średnia z A/m) =",
+            "szer": "kr"
+          }
+        ]
+      },
+      {
+        "tytul": "Próbka",
+        "pola": [
+          {
+            "id": "Ax",
+            "etykieta": "Absorbancja próbki:",
+            "szer": "kr"
+          },
+          {
+            "id": "mp",
+            "etykieta": "Białko w probówce m =",
+            "szer": "kr",
+            "jednostka": "mg"
+          },
+          {
+            "id": "cs",
+            "etykieta": "Stężenie białka w surowicy =",
+            "szer": "kr",
+            "jednostka": "g/dm³"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Wynik (w normie / poza normą):",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "~a — 1 mg białka | A próbki — m mg",
+      "m mg jest w 1 cm³ rozcieńczenia, surowicę rozcieńczono 10 razy:",
+      "~1 cm³ rozcieńczenia — m mg | 1 cm³ surowicy — 10 · m mg",
+      "1 mg/cm³ = 1 g/dm³."
+    ],
+    "kryteria": [
+      {
+        "opis": "Absorbancje 5 wzorców zgodne ze wskazaniami",
+        "uwaga": "Przepisz absorbancje z wyświetlacza.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "A1",
+            "wzor": "A1",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A2",
+            "wzor": "A2",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A3",
+            "wzor": "A3",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A4",
+            "wzor": "A4",
+            "tol": 0.0005
+          },
+          {
+            "typ": "liczba",
+            "pole": "A5",
+            "wzor": "A5",
+            "tol": 0.0005
+          }
+        ]
+      },
+      {
+        "opis": "Ilorazy A/c dla wzorców",
+        "uwaga": "Podziel absorbancję przez stężenie wzorca.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "k1",
+            "wzor": "$A1/2",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k2",
+            "wzor": "$A2/4",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k3",
+            "wzor": "$A3/6",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k4",
+            "wzor": "$A4/8",
+            "tol": 0.0011
+          },
+          {
+            "typ": "liczba",
+            "pole": "k5",
+            "wzor": "$A5/10",
+            "tol": 0.0011
+          }
+        ]
+      },
+      {
+        "opis": "Współczynnik a krzywej wzorcowej",
+        "uwaga": "Średnia z 5 ilorazów A/c.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "a",
+            "wzor": "sr($k1,$k2,$k3,$k4,$k5)",
+            "tol": 0.0011
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($k1,$k2,$k3,$k4,$k5)",
+          "miejsca": 3,
+          "jednostka": ""
+        }
+      },
+      {
+        "opis": "Absorbancja próbki zgodna ze wskazaniem",
+        "uwaga": "Przepisz absorbancję próbki.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "Ax",
+            "wzor": "Ax",
+            "tol": 0.0005
+          }
+        ]
+      },
+      {
+        "opis": "Zawartość białka w probówce",
+        "uwaga": "m = A / a.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "mp",
+            "wzor": "$Ax/$a",
+            "tol": 0.06
+          }
+        ],
+        "pokaz": {
+          "wzor": "$Ax/$a",
+          "miejsca": 2,
+          "jednostka": " mg"
+        }
+      },
+      {
+        "opis": "Stężenie w surowicy z dokładnością do 0,1",
+        "uwaga": "Pomnóż przez 10 (rozcieńczenie).",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "cs",
+            "wzor": "$mp*10",
+            "tol": 0.6
+          },
+          {
+            "typ": "miejsca",
+            "pole": "cs",
+            "ile": 1
+          }
+        ],
+        "pokaz": {
+          "wzor": "$mp*10",
+          "miejsca": 1,
+          "jednostka": " g/dm³"
+        }
+      },
+      {
+        "opis": "Ocena spójna z wynikiem (60–80 g/dm³)",
+        "uwaga": "W normie, jeśli wynik mieści się w zakresie 60–80 g/dm³.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "10-abs($cs-70)+0.000001",
+            "tak": [
+              "w normie",
+              "mieści",
+              "miesci",
+              "prawidłow"
+            ],
+            "nie": [
+              "poza",
+              "nie mieści",
+              "nie miesci",
+              "nieprawidłow",
+              "nie jest w normie"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -9,6 +9,9 @@ const FUNKCJE: Record<string, (a: number[]) => number> = {
   min: (a) => Math.min(...a),
   max: (a) => Math.max(...a),
   zaokr: (a) => Number(a[0].toFixed(a[1] ?? 0)),
+  /** wg(i, x0, x1, …) – i-ta wartość z listy (do losowania substancji). */
+  wg: (a) => a[1 + Math.round(a[0])],
+  exp: (a) => Math.exp(a[0]),
 };
 
 export function oblicz(wzor: string, zmienne: Zmienne): number {

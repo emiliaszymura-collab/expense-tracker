@@ -37,11 +37,23 @@
         [
           "wzorc",
           "podstawow",
-          "żelaz"
+          "żelaz",
+          "kolb",
+          "roztw",
+          "podan",
+          "ilości"
         ]
       ],
       "wykluczajace": [
-        "próbk"
+        "próbk",
+        "szóst",
+        "siódm",
+        "ślep",
+        "badan",
+        "hcl",
+        "kwas",
+        "rodan",
+        "kscn"
       ],
       "wymaga": [],
       "wymagaBhp": true,
@@ -64,11 +76,19 @@
           "odmierz",
           "przenoś",
           "przenieś",
-          "przenos"
+          "przenos",
+          "przygotow",
+          "sporządz",
+          "szóst",
+          "siódm",
+          "ślep"
         ],
         [
           "próbk",
-          "25"
+          "25",
+          "ślep",
+          "szóst",
+          "siódm"
         ]
       ],
       "wykluczajace": [
@@ -166,7 +186,8 @@
       "opis": "Kuwetę (trzymaną za matowe ścianki) przepłukano, napełniono do ¾ i wytarto.",
       "wymagane": [
         [
-          "kuwet"
+          "kuwet",
+          "matow"
         ]
       ],
       "wykluczajace": [
@@ -174,7 +195,7 @@
         "zer"
       ],
       "wymaga": [
-        "kreska",
+        "barwa",
         "fala"
       ],
       "wymagaBhp": true,
@@ -195,7 +216,7 @@
           "zeruj",
           "wyzer",
           "zero",
-          "ślep"
+          "kalibr"
         ]
       ],
       "wymaga": [
@@ -773,5 +794,6 @@
         ]
       }
     ]
-  }
+  },
+  "grupa": "Spektrofotometr UV-Vis"
 }

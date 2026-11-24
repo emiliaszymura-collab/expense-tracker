@@ -1,0 +1,740 @@
+{
+  "id": "13-refraktometria-identyfikacja",
+  "grupa": "Refraktometr Abbego",
+  "tytul": "Identyfikacja cieczy – refraktometr",
+  "zrodlo": "Poziom przewidywany – podstawa programowa 2019",
+  "metoda": "Refraktometria – identyfikacja i ocena czystości cieczy",
+  "czasMinut": 180,
+  "protokol": [
+    {
+      "tytul": "Zadanie egzaminacyjne",
+      "tresc": "Korzystając z zamieszczonej procedury, zidentyfikuj ciecz organiczną na podstawie współczynnika załamania światła nD i oceń jej czystość.\nSprawdź wskazanie refraktometru na wodzie destylowanej. Wykonaj trzy pomiary nD badanej cieczy, odczytaj temperaturę, przelicz wynik na 20 °C i porównaj z tabelą.\nCiecz uznaje się za czystą, jeśli nD20 różni się od wartości tablicowej najwyżej o 0,0005.\nWyniki, obliczenia, identyfikację i ocenę zapisz w karcie wyników.\nPamiętaj o zasadach bhp – ciecze organiczne są lotne i palne, pracuj przy włączonym dygestorium. Po pracy umyj pryzmaty etanolem i osusz.\nCzas na wykonanie zadania: 180 minut.\nOcenie podlegać będą:\n- przebieg pomiarów (sprawdzenie przyrządu, nanoszenie próbki, odczyt nD i temperatury),\n- dokumentacja pomiarów i obliczeń – karta wyników,\n- uporządkowane stanowisko pracy."
+    },
+    {
+      "tytul": "Procedura",
+      "tresc": "1. Sprawdzenie refraktometru\nPryzmaty przemyć i osuszyć, zmierzyć nD wody destylowanej (1,3330).\n2. Pomiar cieczy\nNanieść 2–3 krople badanej cieczy, szybko zamknąć pryzmaty (ciecz paruje). Ustawić granicę pól, usunąć zabarwienie kompensatorem, odczytać nD i temperaturę. Pomiar wykonać trzy razy.\n3. Zakończenie\nPryzmaty umyć etanolem, potem wodą i osuszyć.\nObliczenia\nnD20 = nD(t) + 0,0004 · (t − 20) – dla cieczy organicznych.\nWartości tablicowe nD20:\n- etanol 1,3611\n- aceton 1,3588\n- propan-2-ol 1,3776\n- glicerol 1,4730\n- cykloheksan 1,4262"
+    },
+    {
+      "tytul": "Skąd ten poziom",
+      "tresc": "To poziom przewidywany: takiego zadania nie było jeszcze w arkuszach CHM.04, ale metoda jest w podstawie programowej 2019, a przyrząd jest na liście wyposażenia stanowiska CKE. Procedura jest typowa, a nie przepisana z arkusza."
+    }
+  ],
+  "kroki": [
+    {
+      "id": "dygestorium",
+      "opis": "Włączono wyciąg dygestorium – pracujesz z lotną cieczą organiczną.",
+      "wymagane": [
+        [
+          "włącz",
+          "uruchom"
+        ],
+        [
+          "dygestor",
+          "wyciąg"
+        ]
+      ],
+      "wykluczajace": [
+        "=wyłącz"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Włącz dygestorium – ciecze organiczne są lotne i palne.",
+      "dlaczego": "Pary rozpuszczalników organicznych są szkodliwe i palne.",
+      "sprzet": "stol",
+      "animacja": "przycisk",
+      "przyklad": "włączam dygestorium"
+    },
+    {
+      "id": "pryzmat1",
+      "opis": "Pryzmaty refraktometru otwarte, przemyte wodą destylowaną i osuszone miękką bibułą.",
+      "wymagane": [
+        [
+          "przemy",
+          "umyj",
+          "myję",
+          "opłucz",
+          "osusz",
+          "wytrz",
+          "czyszcz",
+          "czyść",
+          "otwórz",
+          "otwier"
+        ],
+        [
+          "pryzmat",
+          "refraktometr"
+        ]
+      ],
+      "wykluczajace": [
+        "koniec",
+        "zakończ",
+        "po pomiar",
+        "na koniec"
+      ],
+      "wymaga": [],
+      "podpowiedz": "Otwórz pryzmaty, przemyj je wodą destylowaną i osusz miękką bibułą.",
+      "dlaczego": "Resztki poprzedniej próbki zmieniają współczynnik załamania.",
+      "sprzet": "przyrzad",
+      "animacja": "mycie",
+      "przyklad": "przemywam pryzmaty wodą destylowaną i osuszam bibułą"
+    },
+    {
+      "id": "zero",
+      "opis": "Na pryzmat naniesiono wodę destylowaną; odczyt nD = 1,3330 – przyrząd wskazuje poprawnie.",
+      "wymagane": [
+        [
+          "sprawdz",
+          "kalibr",
+          "zeruj",
+          "nanoś",
+          "nanieś",
+          "naniesi",
+          "zmierz",
+          "mierz"
+        ],
+        [
+          "wod"
+        ]
+      ],
+      "wykluczajace": [
+        "wzorc",
+        "próbk",
+        "cieczy",
+        "badan",
+        "albumin",
+        "białk",
+        "pryzmat wod"
+      ],
+      "wymaga": [
+        "pryzmat1"
+      ],
+      "podpowiedz": "Nanieś 2–3 krople wody destylowanej, zamknij pryzmaty i sprawdź, czy przyrząd wskazuje nD = 1,3330.",
+      "dlaczego": "Bez sprawdzenia na wodzie nie wiesz, czy przyrząd nie ma błędu systematycznego.",
+      "sprzet": "przyrzad",
+      "animacja": "pipetowanie",
+      "przyklad": "nanoszę wodę destylowaną i sprawdzam wskazanie refraktometru"
+    },
+    {
+      "id": "probka",
+      "opis": "Na pryzmat naniesiono 2–3 krople badanej cieczy i szybko zamknięto pryzmaty.",
+      "wymagane": [
+        [
+          "nanoś",
+          "nanieś",
+          "naniesi",
+          "nakład",
+          "nakrapl",
+          "kropl",
+          "umieść"
+        ],
+        [
+          "ciecz",
+          "próbk",
+          "badan",
+          "substancj"
+        ]
+      ],
+      "wykluczajace": [
+        "wod"
+      ],
+      "wymaga": [
+        "zero",
+        "dygestorium"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Nanieś 2–3 krople badanej cieczy i od razu zamknij pryzmaty.",
+      "dlaczego": "Ciecz organiczna szybko paruje – otwarte pryzmaty dałyby zawyżony, niestabilny odczyt.",
+      "sprzet": "przyrzad",
+      "animacja": "pipetowanie",
+      "przyklad": "nanoszę badaną ciecz na pryzmat i zamykam pryzmaty"
+    },
+    {
+      "id": "granica",
+      "opis": "W okularze ustawiono ostrą granicę pola jasnego i ciemnego na przecięciu nici, kompensatorem usunięto zabarwienie.",
+      "wymagane": [
+        [
+          "granic",
+          "ostroś",
+          "ostr",
+          "nici",
+          "krzyż",
+          "kompensat",
+          "pokrętł",
+          "pole",
+          "pola",
+          "okular"
+        ]
+      ],
+      "wykluczajace": [
+        "odczyt"
+      ],
+      "wymaga": [
+        "probka"
+      ],
+      "podpowiedz": "Patrząc w okular, ustaw pokrętłem granicę pól na przecięciu nici; zabarwienie usuń kompensatorem.",
+      "dlaczego": "Rozmyta lub kolorowa granica daje błędny odczyt nD.",
+      "sprzet": "przyrzad",
+      "animacja": "pokretlo",
+      "przyklad": "ustawiam ostrą granicę pól na przecięciu nici"
+    },
+    {
+      "id": "odczyt",
+      "opis": "Odczytano nD cieczy ze skali w okularze oraz temperaturę.",
+      "wymagane": [
+        [
+          "odczyt",
+          "zapis",
+          "notuj",
+          "sprawdz",
+          "patrz",
+          "mierz",
+          "zmierz"
+        ],
+        [
+          "nd",
+          "współczyn",
+          "załaman",
+          "skal",
+          "wynik",
+          "temperatur",
+          "wskazan",
+          "refrakc",
+          "okular"
+        ]
+      ],
+      "wykluczajace": [
+        "wod",
+        "wzorc"
+      ],
+      "wymaga": [
+        "granica"
+      ],
+      "podpowiedz": "Spójrz w okular i odczytaj nD cieczy (4 miejsca po przecinku) oraz temperaturę.",
+      "dlaczego": "Współczynnik załamania zależy od temperatury.",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
+      "przyklad": "odczytuję współczynnik załamania nD i temperaturę"
+    },
+    {
+      "id": "powtorz",
+      "opis": "Wykonano kolejne pomiary – razem trzy, każdy z nową porcją cieczy.",
+      "wymagane": [
+        [
+          "powtórz",
+          "powtarz",
+          "ponown",
+          "jeszcze",
+          "kolejn",
+          "drug",
+          "trzec",
+          "trzykrot",
+          "3 razy",
+          "trzy razy",
+          "równoleg",
+          "następn"
+        ]
+      ],
+      "wymaga": [
+        "odczyt"
+      ],
+      "wymagaBhp": true,
+      "podpowiedz": "Powtórz pomiar jeszcze dwa razy, nanosząc nową porcję cieczy.",
+      "dlaczego": "Wynik to średnia z trzech zgodnych odczytów.",
+      "sprzet": "przyrzad",
+      "animacja": "okular",
+      "stanSceny": {},
+      "przyklad": "powtarzam pomiar jeszcze dwa razy z nową porcją cieczy"
+    },
+    {
+      "id": "pryzmat2",
+      "opis": "Po pomiarach pryzmaty umyto wodą destylowaną i osuszono miękką bibułą.",
+      "wymagane": [
+        [
+          "przemy",
+          "umyj",
+          "myję",
+          "opłucz",
+          "osusz",
+          "wytrz",
+          "czyszcz",
+          "czyść"
+        ],
+        [
+          "pryzmat",
+          "refraktometr"
+        ]
+      ],
+      "wymaga": [
+        "powtorz"
+      ],
+      "podpowiedz": "Po zakończeniu pomiarów umyj pryzmaty wodą destylowaną (lub etanolem) i osusz.",
+      "dlaczego": "Zaschnięta próbka niszczy pryzmat i fałszuje kolejne pomiary.",
+      "sprzet": "przyrzad",
+      "animacja": "mycie",
+      "przyklad": "po pomiarach myję i osuszam pryzmaty"
+    },
+    {
+      "id": "odpady",
+      "opis": "Mieszaniny poreakcyjne przelane do pojemnika na odpady ciekłe.",
+      "wymagane": [
+        [
+          "przelej",
+          "przelew",
+          "wylej",
+          "wylew",
+          "zlej",
+          "zlewam",
+          "utyliz",
+          "wyrzuć",
+          "opróżn",
+          "odpad",
+          "pojemnik"
+        ],
+        [
+          "odpad",
+          "pojemnik",
+          "utyliz",
+          "butelk"
+        ]
+      ],
+      "wymaga": [
+        "pryzmat2"
+      ],
+      "podpowiedz": "Przelej mieszaniny poreakcyjne do pojemnika na odpady ciekłe.",
+      "dlaczego": "Kryterium porządkowania: mieszaniny poreakcyjne w pojemniku na odpady ciekłe do utylizacji – nigdy do zlewu.",
+      "sprzet": "odpady",
+      "animacja": "przelewanie",
+      "stanSceny": {
+        "kolba": "pusta",
+        "zlewka": "pusta",
+        "kolby": 1,
+        "papierek": "brak",
+        "kolbaMiejsce": "stol"
+      },
+      "przyklad": "przelewam roztwory do pojemnika na odpady ciekłe"
+    },
+    {
+      "id": "myj",
+      "opis": "Szkło laboratoryjne umyte.",
+      "wymagane": [
+        [
+          "umyj",
+          "myj",
+          "myję",
+          "myci",
+          "wypłucz",
+          "wypłuk",
+          "opłucz",
+          "płucz",
+          "płucz"
+        ],
+        [
+          "szkł",
+          "kolb",
+          "zlewk",
+          "biuret",
+          "naczy",
+          "sprzęt",
+          "cylind",
+          "pipet"
+        ]
+      ],
+      "wymaga": [
+        "odpady"
+      ],
+      "podpowiedz": "Umyj szkło laboratoryjne.",
+      "dlaczego": "Kryterium porządkowania: szkło laboratoryjne pozostawione czyste.",
+      "sprzet": "zlew",
+      "animacja": "mycie",
+      "przyklad": "myję szkło laboratoryjne"
+    },
+    {
+      "id": "stol",
+      "opis": "Stół roboczy czysty i suchy.",
+      "wymagane": [
+        [
+          "wytrz",
+          "wycier",
+          "ścier",
+          "przecier",
+          "posprząt",
+          "sprząt",
+          "uporządk",
+          "osusz",
+          "wysusz",
+          "przetrz",
+          "przetar",
+          "porządk",
+          "umyj",
+          "myj",
+          "czyść",
+          "czyszcz"
+        ],
+        [
+          "stół",
+          "stol",
+          "stanowisk",
+          "blat"
+        ]
+      ],
+      "wymaga": [
+        "myj"
+      ],
+      "podpowiedz": "Wytrzyj stół i zostaw stanowisko czyste i suche.",
+      "dlaczego": "Kryterium porządkowania: stół roboczy pozostawiony czysty i suchy.",
+      "sprzet": "stol",
+      "animacja": "mycie",
+      "przyklad": "wycieram stół"
+    }
+  ],
+  "bledy": [
+    {
+      "slowa": [
+        "zlew"
+      ],
+      "wykluczajace": [
+        "zlewk",
+        "zlewc",
+        "zlewek",
+        "zlewam",
+        "zlewać",
+        "odpad",
+        "pojemnik",
+        "myj",
+        "myję",
+        "umyj",
+        "płucz",
+        "wypłucz",
+        "mycie"
+      ],
+      "dokladnie": true,
+      "komunikat": "Mieszanin poreakcyjnych nie wylewa się do zlewu – na egzaminie przelewasz je do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "kanaliz"
+      ],
+      "komunikat": "Odczynników nie wylewa się do kanalizacji – tylko do pojemnika na odpady ciekłe."
+    },
+    {
+      "slowa": [
+        "ustami"
+      ],
+      "dokladnie": true,
+      "komunikat": "Nigdy nie pipetuje się ustami – zawsze gruszka lub pompka do pipet."
+    }
+  ],
+  "scena": {
+    "titrant": [
+      "ciecz",
+      "badana"
+    ],
+    "wskaznik": [
+      "etanol",
+      "do mycia"
+    ],
+    "kartaPo": "odczyt",
+    "przyrzad": "refraktometr",
+    "okular": "x1"
+  },
+  "karta": {
+    "tytul": "Karta wyników – identyfikacja cieczy",
+    "losuj": [
+      {
+        "id": "idx",
+        "wybierz": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "id": "zan",
+        "wybierz": [
+          0,
+          0,
+          0.0021,
+          -0.0018
+        ]
+      },
+      {
+        "id": "t",
+        "wybierz": [
+          19,
+          21,
+          22,
+          23,
+          24
+        ]
+      },
+      {
+        "id": "nw",
+        "wybierz": [
+          1.333
+        ]
+      },
+      {
+        "id": "ntab",
+        "wzor": "wg(idx,1.3611,1.3588,1.3776,1.473,1.4262)"
+      },
+      {
+        "id": "x1",
+        "wzor": "ntab+zan-0.0004*(t-20)",
+        "szum": 6e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "x2",
+        "wzor": "ntab+zan-0.0004*(t-20)",
+        "szum": 6e-05,
+        "miejsca": 4
+      },
+      {
+        "id": "x3",
+        "wzor": "ntab+zan-0.0004*(t-20)",
+        "szum": 6e-05,
+        "miejsca": 4
+      }
+    ],
+    "odczyty": [
+      {
+        "typ": "refraktometr",
+        "id": "x1",
+        "etykieta": "Okular – ciecz, pomiar 1"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "x2",
+        "etykieta": "Okular – ciecz, pomiar 2"
+      },
+      {
+        "typ": "refraktometr",
+        "id": "x3",
+        "etykieta": "Okular – ciecz, pomiar 3"
+      },
+      {
+        "typ": "wyswietlacz",
+        "id": "t",
+        "etykieta": "Termometr przy pryzmatach",
+        "jednostka": "°C",
+        "miejsca": 0
+      }
+    ],
+    "sekcje": [
+      {
+        "tytul": "Pomiary",
+        "tabela": {
+          "wiersze": 3,
+          "kolumny": [
+            {
+              "naglowek": "nD cieczy",
+              "pole": "x{i}"
+            }
+          ]
+        },
+        "pola": [
+          {
+            "id": "t",
+            "etykieta": "Temperatura pomiaru:",
+            "szer": "kr",
+            "jednostka": "°C"
+          },
+          {
+            "id": "xsr",
+            "etykieta": "nD średnie =",
+            "szer": "kr"
+          },
+          {
+            "id": "popr",
+            "etykieta": "Poprawka 0,0004 · (t − 20) =",
+            "szer": "kr"
+          },
+          {
+            "id": "n20",
+            "etykieta": "nD20 =",
+            "szer": "kr"
+          }
+        ]
+      },
+      {
+        "tytul": "Identyfikacja i ocena",
+        "pola": [
+          {
+            "id": "ciecz",
+            "etykieta": "Badana ciecz to:",
+            "szer": "dl"
+          },
+          {
+            "id": "roznica",
+            "etykieta": "Różnica od wartości tablicowej =",
+            "szer": "kr"
+          },
+          {
+            "id": "wniosek",
+            "etykieta": "Ciecz (czysta / zanieczyszczona):",
+            "szer": "dl"
+          }
+        ]
+      }
+    ],
+    "brudnopis": [
+      "Przeliczenie na 20 °C: nD maleje, gdy temperatura rośnie.",
+      "~1 °C — 0,0004 | (t − 20) °C — poprawka",
+      "nD20 = nD średnie + poprawka (poniżej 20 °C poprawka jest ujemna).",
+      "Porównaj nD20 z tabelą – wybierz ciecz o najbliższej wartości, policz różnicę."
+    ],
+    "kryteria": [
+      {
+        "opis": "Trzy odczyty nD zgodne ze wskazaniami",
+        "uwaga": "Odczytaj skalę w okularze – 4 miejsca po przecinku.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "x1",
+            "wzor": "x1",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "x2",
+            "wzor": "x2",
+            "tol": 6e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "x3",
+            "wzor": "x3",
+            "tol": 6e-05
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x1",
+            "ile": 4
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x2",
+            "ile": 4
+          },
+          {
+            "typ": "miejsca",
+            "pole": "x3",
+            "ile": 4
+          }
+        ]
+      },
+      {
+        "opis": "Zapisana temperatura pomiaru",
+        "uwaga": "Przepisz temperaturę z termometru.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "t",
+            "wzor": "t",
+            "tol": 0.1
+          }
+        ]
+      },
+      {
+        "opis": "Średnia nD",
+        "uwaga": "Średnia z trzech odczytów.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "xsr",
+            "wzor": "sr($x1,$x2,$x3)",
+            "tol": 6e-05
+          }
+        ],
+        "pokaz": {
+          "wzor": "sr($x1,$x2,$x3)",
+          "miejsca": 4,
+          "jednostka": ""
+        }
+      },
+      {
+        "opis": "Poprawka temperaturowa i nD20",
+        "uwaga": "Poprawka = 0,0004 · (t − 20); nD20 = średnia + poprawka.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "popr",
+            "wzor": "0.0004*($t-20)",
+            "tol": 2e-05
+          },
+          {
+            "typ": "liczba",
+            "pole": "n20",
+            "wzor": "$xsr+$popr",
+            "tol": 6e-05
+          }
+        ],
+        "pokaz": {
+          "wzor": "$xsr+$popr",
+          "miejsca": 4,
+          "jednostka": ""
+        }
+      },
+      {
+        "opis": "Poprawna identyfikacja cieczy",
+        "uwaga": "Wybierz ciecz z tabeli o nD20 najbliższym Twojemu wynikowi.",
+        "sprawdz": [
+          {
+            "typ": "tekstWg",
+            "pole": "ciecz",
+            "wzor": "idx",
+            "opcje": [
+              [
+                "etanol"
+              ],
+              [
+                "aceton"
+              ],
+              [
+                "propan-2-ol"
+              ],
+              [
+                "glicerol"
+              ],
+              [
+                "cykloheksan"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "opis": "Różnica od wartości tablicowej",
+        "uwaga": "|nD20 − nD tablicowe|.",
+        "sprawdz": [
+          {
+            "typ": "liczba",
+            "pole": "roznica",
+            "wzor": "abs($n20-ntab)",
+            "tol": 7e-05
+          }
+        ]
+      },
+      {
+        "opis": "Ocena czystości spójna z wynikiem (różnica ≤ 0,0005)",
+        "uwaga": "Czysta, jeśli różnica nie przekracza 0,0005.",
+        "sprawdz": [
+          {
+            "typ": "wybor",
+            "pole": "wniosek",
+            "wzor": "0.0005-abs($n20-ntab)+0.0000001",
+            "tak": [
+              "czyst"
+            ],
+            "nie": [
+              "zanieczyszcz",
+              "nieczyst",
+              "nie jest czyst"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
