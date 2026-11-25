@@ -88,3 +88,13 @@ describe('białko – wzorce bez słowa „albumina” (zgłoszenie)', () => {
   it('wzorce przed sprawdzeniem refraktometru też są dobre', () =>
     graj(poziom('12-refraktometria-bialko'), [['odmierz pipeta roztwór do kolb miarowych', 'wzorce']]));
 });
+
+describe('fragment bieżącego kroku (zgłoszenie)', () => {
+  it('„osusz pryzmat” przed nanoszeniem próbki – bez „za wcześnie”, bez kary', () => {
+    const p = poziom('12-refraktometria-bialko');
+    const stan = { ...nowyStan(p.id), wykonane: ['pryzmat1', 'zero', 'wzorce', 'pomiar_wz'], bhp: ['fartuch', 'rekawice', 'okulary'] as ('fartuch' | 'rekawice' | 'okulary')[] };
+    const r = ocenWpis(p, stan, 'osusz pryzmat', false);
+    expect(r.stan.dziennik.at(-1)!.rodzaj).toBe('czesc');
+    expect(r.stan.bledy).toBe(0);
+  });
+});

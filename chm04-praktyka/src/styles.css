@@ -1347,3 +1347,5 @@ button.sprawdz {
   .kartka-karta.kartka-obok { left: 6px; right: 6px; top: 50%; bottom: 6px; height: auto; }
   .arkusz-cke.arkusz-obok { right: 0; bottom: 50%; }
 }
+
+.wpis-czesc { border-left-color: var(--ok); background: var(--ok-tlo, transparent); }

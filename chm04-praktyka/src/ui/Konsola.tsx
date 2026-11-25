@@ -12,6 +12,7 @@ const IKONY: Record<WpisDziennika['rodzaj'], string> = {
   'nie-rozpoznano': '?',
   'juz-zrobione': '↺',
   podpowiedz: '💡',
+  czesc: '◐',
 };
 
 const ETYKIETY_BHP: Record<ElementBhp, string> = { fartuch: 'Fartuch', rekawice: 'Rękawice', okulary: 'Okulary' };

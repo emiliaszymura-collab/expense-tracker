@@ -24,7 +24,7 @@ export interface StanGry {
   dziennik: WpisDziennika[];
 }
 
-export type RodzajWpisu = 'ok' | 'bhp' | 'za-wczesnie' | 'brak-bhp' | 'blad' | 'nie-rozpoznano' | 'juz-zrobione' | 'podpowiedz';
+export type RodzajWpisu = 'ok' | 'bhp' | 'za-wczesnie' | 'brak-bhp' | 'blad' | 'nie-rozpoznano' | 'juz-zrobione' | 'podpowiedz' | 'czesc';
 
 export interface WpisDziennika {
   rodzaj: RodzajWpisu;
@@ -219,6 +219,22 @@ export function ocenWpis(poziom: Poziom, stanWejsciowy: StanGry, tekst: string, 
   }
 
   const brakKrokow = wymaganiaKroku(poziom, zablokowany).filter((w) => !stan.wykonane.includes(w));
+  // Wpis opisuje fragment kroku, który właśnie jest do zrobienia (np. „osusz pryzmat” przed „osusz pryzmaty
+  // i nanieś próbkę”) – to dobra czynność, tylko jeszcze nie cały krok. Bez kary i bez mylącego „za wcześnie”.
+  const biezace = poziom.kroki.filter((k) => !stan.wykonane.includes(k.id) && wymaganiaKroku(poziom, k).every((w) => stan.wykonane.includes(w)));
+  const czescKroku = biezace.find((k) => {
+    const opis = tokeny(`${k.podpowiedz} ${k.opis}`);
+    return wpis.every((t) => t.length < 3 || opis.some((o) => o.slice(0, 4) === t.slice(0, 4)));
+  });
+  if (brakKrokow.length > 0 && czescKroku) {
+    dodaj({
+      rodzaj: 'czesc',
+      tekstGracza: tekst,
+      komunikat: 'Dobrze – to część bieżącego kroku. Opisz go do końca, żeby został zaliczony.',
+      wyjasnienie: trybCwiczenia ? `Cały krok: ${czescKroku.podpowiedz}` : undefined,
+    });
+    return { stan, przyjete };
+  }
   if (brakKrokow.length > 0) {
     // Wskazujemy brakujący krok z łańcucha TEGO kroku (najgłębszy, który da się już zrobić),
     // a nie następny krok w kolejności protokołu.
