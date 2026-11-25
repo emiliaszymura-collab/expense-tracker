@@ -66,7 +66,8 @@
           "nanieś",
           "naniesi",
           "zmierz",
-          "mierz"
+          "mierz",
+          "odczyt"
         ],
         [
           "wod"
@@ -304,7 +305,16 @@
           "3 razy",
           "trzy razy",
           "równoleg",
-          "następn"
+          "następn",
+          "dwa razy",
+          "dwukrot",
+          "dwa oznacz",
+          "trzy odczyt",
+          "trzy pomiar",
+          "dwa pomiar",
+          "co najmniej",
+          "wykonać trzy",
+          "wykonać dwa"
         ]
       ],
       "wymaga": [

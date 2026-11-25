@@ -78,3 +78,13 @@ describe('dwie czynności w jednym zdaniu (zgłoszenie)', () => {
     expect(r.przyjete.map((k) => k.id)).toEqual(expect.arrayContaining(['rozmontuj', 'rozmontuj_sacz']));
   });
 });
+
+describe('białko – wzorce bez słowa „albumina” (zgłoszenie)', () => {
+  it('„do kolb miarowych odmierz pipetą 5,10,15 i 20 cm roztworu”', () =>
+    graj(poziom('12-refraktometria-bialko'), [
+      ['przemywam pryzmaty i osuszam', 'pryzmat1'],
+      ['do kolb miarowych odmierz pipeta 5,10,15 i 20 cm roztworu', 'wzorce'],
+    ]));
+  it('wzorce przed sprawdzeniem refraktometru też są dobre', () =>
+    graj(poziom('12-refraktometria-bialko'), [['odmierz pipeta roztwór do kolb miarowych', 'wzorce']]));
+});

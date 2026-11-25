@@ -112,18 +112,22 @@
           "wzorc",
           "albumin",
           "białk",
-          "podstawow"
+          "podstawow",
+          "roztw",
+          "kolb",
+          "miarow"
         ]
       ],
       "wykluczajace": [
         "pryzmat",
         "nanoś",
         "nanieś",
-        "mierz"
+        "=mierz",
+        "zmierz",
+        "próbk",
+        "badan"
       ],
-      "wymaga": [
-        "zero"
-      ],
+      "wymaga": [],
       "wymagaBhp": true,
       "podpowiedz": "Odmierz pipetą 5, 10, 15 i 20 cm³ roztworu podstawowego albuminy do kolb miarowych 25 cm³ i uzupełnij wodą do kreski.",
       "dlaczego": "Wzorce o znanym stężeniu tworzą krzywą wzorcową nD = f(c).",
@@ -157,7 +161,8 @@
         "sporządz"
       ],
       "wymaga": [
-        "wzorce"
+        "wzorce",
+        "zero"
       ],
       "podpowiedz": "Zmierz nD wzorców od najmniejszego stężenia; przed każdym pomiarem osusz pryzmaty.",
       "dlaczego": "Od najmniejszego stężenia – resztka poprzedniego roztworu mniej zafałszuje wynik.",
@@ -281,7 +286,16 @@
           "3 razy",
           "trzy razy",
           "równoleg",
-          "następn"
+          "następn",
+          "dwa razy",
+          "dwukrot",
+          "dwa oznacz",
+          "trzy odczyt",
+          "trzy pomiar",
+          "dwa pomiar",
+          "co najmniej",
+          "wykonać trzy",
+          "wykonać dwa"
         ]
       ],
       "wymaga": [
