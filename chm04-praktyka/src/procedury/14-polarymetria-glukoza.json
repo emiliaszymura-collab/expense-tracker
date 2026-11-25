@@ -634,6 +634,12 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Średni kąt: {$asr|2}°. Glukoza 1 g/100 cm³ w rurce 2 dm: 52,7 · 2 / 100 = 1,054°.",
+      "~1,054° — 1 g/100 cm³ | {$asr|2}° — c",
+      "c = {$c|2} g/100 cm³.",
+      "2. Odchylenie: ({$c|2} − 5,00) / 5,00 · 100% = {$odch|1}%. Dopuszczalne ±5% – płyn {$wniosek}."
     ]
   }
 }

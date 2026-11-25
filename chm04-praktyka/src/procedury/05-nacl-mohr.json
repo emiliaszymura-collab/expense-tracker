@@ -1266,6 +1266,15 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. NaCl + AgNO₃ → AgCl↓ + NaNO₃ – reagują 1 : 1. Do kolby 100 cm³ dałaś 25 cm³ marynaty, a do miareczkowania bierzesz 10 cm³ – to 2,5 cm³ (≈ 2,5 g) marynaty.",
+      "2. Moli AgNO₃ (0,1 mol/dm³ = 0,1 mmol/cm³) w próbce 1: {$v1|2} · 0,1 = {$v1*0.1|3} mmol = tyle samo mmol NaCl.",
+      "3. Masa NaCl (0,05845 g/mmol): {$v1*0.1|3} · 0,05845 = {$v1*0.1*0.05845|5} g.",
+      "~2,5 cm³ (≈ 2,5 g) marynaty — 100% | {$v1*0.1*0.05845|5} g — X₁",
+      "X₁ = {$x1|2}%. Tak samo: X₂ = {$x2|2}%, X₃ = {$x3|2}%.",
+      "4. W gramach na 1 kg: 1% = 10 g/kg, więc {$x1|2}% = {$g1|1} g/kg (i {$g2|1}, {$g3|1} g/kg).",
+      "5. Średnia: {$xsr|2}% = {$gsr|1} g/kg. Etykieta 10 g/kg (±1) – wynik {$wniosek}."
     ]
   },
   "arkuszStron": 5

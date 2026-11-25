@@ -1320,6 +1320,19 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Objętości EDTA w dm³: {$v1|1} cm³ = {$vd1|4} dm³, {$v2|1} cm³ = {$vd2|4} dm³; średnia {$vsr|5} dm³.",
+      "2. Moli EDTA = moli Zn (reakcja 1 : 1), stężenie EDTA 0,05 mol/dm³:",
+      "~1 dm³ — 0,05 mol | {$vsr|5} dm³ — n",
+      "n = {$vsr*0.05|7} mol – tyle ZnO jest w 25 cm³ roztworu.",
+      "3. Cała próbka była w 100 cm³, czyli 4 razy więcej (W = 4): {$vsr*0.05*4|7} mol ZnO.",
+      "4. Masa ZnO (M = 81,37 g/mol):",
+      "~1 mol — 81,37 g | {$vsr*0.05*4|7} mol — m ZnO",
+      "m ZnO = {$mzno|4} g",
+      "5. Zawartość procentowa w paście o masie {$m|2} g:",
+      "~{$m|2} g — 100% | {$mzno|4} g — X",
+      "X = {$proc|2}%. Etykieta: 25% ± 0,5% – zawartość {$ocena}."
     ]
   },
   "arkuszStron": 5

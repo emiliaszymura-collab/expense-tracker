@@ -675,6 +675,13 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Średni kąt: {$asr|2}°.",
+      "2. [α] dotyczy rurki 1 dm i 100 g/100 cm³; masz 2 dm i 10 g/100 cm³:",
+      "~2 dm, 10 g/100 cm³ — {$asr|2}° | 1 dm, 100 g/100 cm³ — [α]",
+      "[α] = {$asr|2} · (1/2) · (100/10) = {$sk|1}.",
+      "3. Najbliższa wartość w tabeli: {$cukier}."
     ]
   }
 }

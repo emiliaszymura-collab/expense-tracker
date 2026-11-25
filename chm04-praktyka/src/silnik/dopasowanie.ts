@@ -11,6 +11,7 @@ export function normalizuj(tekst: string): string {
   return tekst
     .toLowerCase()
     .replace(/[ąćęłńóśźż]/g, (z) => ZNAKI_PL[z])
+    .replace(/[₀-₉]/g, (c) => String('₀₁₂₃₄₅₆₇₈₉'.indexOf(c)))
     .replace(/³/g, '3')
     .replace(/²/g, '2')
     .replace(/(\d),(\d)/g, '$1.$2')
@@ -49,6 +50,8 @@ function dozwolonyBlad(dlugosc: number): number {
 
 /** Czy pojedyncze słowo wpisu (token) pasuje do rdzenia słowa kluczowego. */
 export function slowoPasuje(rdzen: string, token: string, rozmyte = true): boolean {
+  // liczby całe: „10” nie pasuje do „100”, ale pasuje do „10cm”
+  if (/^\d/.test(rdzen)) return token.startsWith(rdzen) && !/\d/.test(token.charAt(rdzen.length));
   if (token.startsWith(rdzen)) return true;
   if (!rozmyte) return false;
   // Krótkich rdzeni (np. "hcl", "wag") nie rozmywamy – za dużo fałszywych trafień.

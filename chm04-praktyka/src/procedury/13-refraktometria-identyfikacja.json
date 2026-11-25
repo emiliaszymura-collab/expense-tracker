@@ -749,6 +749,11 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Średnia: {$xsr|4}. Poprawka 0,0004 · ({$t|0} − 20) = {$popr|4}; nD20 = {$n20|4}.",
+      "2. Najbliższa wartość w tabeli: {$ciecz} (nD20 = {ntab|4}).",
+      "3. Różnica: |{$n20|4} − {ntab|4}| = {$roznica|4}. Granica czystości 0,0005 – ciecz {$wniosek}."
     ]
   }
 }

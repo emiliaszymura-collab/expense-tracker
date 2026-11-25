@@ -1138,6 +1138,17 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Ibuprofen reaguje z NaOH 1 : 1. Liczba mmoli NaOH (0,1 mol/dm³ = 0,1 mmol/cm³) w próbce 1: {$v1|2} cm³ · 0,1 = {$v1*0.1|3} mmol.",
+      "2. Masa ibuprofenu w próbce (M = 206,28 mg/mmol):",
+      "~1 mmol — 206,28 mg | {$v1*0.1|3} mmol — a",
+      "a = {$v1*0.1*206.28|1} mg w próbce o masie {$m1|3} g.",
+      "3. Przeliczenie na całą tabletkę o masie {$mt|3} g:",
+      "~{$m1|3} g próbki — {$v1*0.1*206.28|1} mg | {$mt|3} g tabletki — X₁",
+      "X₁ = {$x1|1} mg. Tak samo próbka 2: X₂ = {$x2|1} mg.",
+      "4. Średnia: ({$x1|1} + {$x2|1}) / 2 = {$xsr|1} mg w tabletce.",
+      "5. Błąd bezwzględny: |400 − {$xsr|1}| = {$db|1} mg; błąd względny: {$db|1} / 400 · 100% = {$dw|2}%."
     ]
   },
   "arkuszStron": 5

@@ -735,6 +735,13 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Krzywa: wzorzec 2 mg → {$A1|3} / 2 = {$k1|3} (i {$k2|3}, {$k3|3}, {$k4|3}, {$k5|3}); a = {$a|3}.",
+      "~{$a|3} — 1 mg | {$Ax|3} — m",
+      "m = {$mp|2} mg białka w 1 cm³ rozcieńczenia.",
+      "2. Surowicę rozcieńczono 10 razy: {$mp|2} · 10 = {$cs|1} mg/cm³ = {$cs|1} g/dm³.",
+      "3. Norma 60–80 g/dm³ – wynik {$wniosek}."
     ]
   }
 }

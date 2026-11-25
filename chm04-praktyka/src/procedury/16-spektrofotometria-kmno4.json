@@ -884,6 +884,13 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Największa absorbancja w widmie jest przy 525 nm – to λmax.",
+      "2. Krzywa: wzorzec 4 mg/dm³ → {$A1|3} / 4 = {$k1|3} (i {$k2|3}, {$k3|3}, {$k4|3}, {$k5|3}); a = {$a|3}.",
+      "~{$a|3} — 1 mg/dm³ | {$Ax|3} — c",
+      "c w kolbie = {$ck|1} mg/dm³.",
+      "3. Rozcieńczenie 20 → 50 cm³ (2,5 raza): {$ck|1} · 2,5 = {$cp|1} mg/dm³. Deklaracja 40 ± 2 – wynik {$wniosek}."
     ]
   }
 }

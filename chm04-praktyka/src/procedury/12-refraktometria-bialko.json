@@ -882,6 +882,13 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Różnice Δn = nD wzorca − nD wody ({$nw|4}): {$d1|4}, {$d2|4}, {$d3|4}, {$d4|4}.",
+      "2. Na 1 g/100 cm³: wzorzec 2 g → {$d1|4} / 2 = {$k1|6} (i {$k2|6}, {$k3|6}, {$k4|6}); a = średnia = {$a|6}.",
+      "3. Próbka: średnie nD = {$xsr|4}, Δn = {$xsr-$nw|4}.",
+      "~{$a|6} — 1 g/100 cm³ | {$xsr-$nw|4} — c",
+      "c = {$c|1} g/100 cm³. Deklaracja 6,0 ± 0,3 – wynik {$wniosek}."
     ]
   }
 }

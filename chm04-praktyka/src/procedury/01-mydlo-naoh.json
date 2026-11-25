@@ -1265,6 +1265,20 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Objętość z cm³ na dm³ – dzielisz przez 1000: próbka 1: {$v1|2} cm³ = {$vd1|5} dm³ (tak samo próbki 2 i 3: {$vd2|5} i {$vd3|5} dm³).",
+      "2. Liczba moli HCl w zużytym titrancie (stężenie 0,01 mol/dm³):",
+      "~1 dm³ — 0,01 mol HCl | {$vd1|5} dm³ — n",
+      "n = {$vd1|5} · 0,01 = {$vd1*0.01|7} mol HCl. Z równania NaOH + HCl → NaCl + H₂O: n NaOH = n HCl.",
+      "3. Masa NaOH (M = 40 g/mol):",
+      "~1 mol — 40 g | {$vd1*0.01|7} mol — a",
+      "a = {$vd1*0.01|7} · 40 = {$vd1*0.01*40|6} g NaOH",
+      "4. Zawartość procentowa w próbce mydła o masie {$m1|2} g:",
+      "~{$m1|2} g — 100% | {$vd1*0.01*40|6} g — X₁",
+      "X₁ = {$vd1*0.01*40|6} · 100 / {$m1|2} = {$x1|2}%. Tak samo: X₂ = {$x2|2}%, X₃ = {$x3|2}%.",
+      "5. Średnia: ({$x1|2} + {$x2|2} + {$x3|2}) / 3 = {$xsr|2}%.",
+      "6. Odczyn: papierek pokazał pH ok. {$ph|0} – powyżej 7, więc odczyn zasadowy."
     ]
   },
   "arkuszStron": 6

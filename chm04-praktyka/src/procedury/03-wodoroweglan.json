@@ -1290,6 +1290,17 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. NaHCO₃ + HCl → NaCl + H₂O + CO₂ – reagują 1 : 1. Stężenie HCl 1 mol/dm³, czyli 1 mmol/cm³.",
+      "2. Próbka 1: {$v1|2} cm³ HCl = {$v1|2} mmol HCl = {$v1|2} mmol NaHCO₃.",
+      "3. Masa NaHCO₃ (M = 84 g/mol = 0,084 g/mmol):",
+      "~1 mmol — 0,084 g | {$v1|2} mmol — a",
+      "a = {$v1*0.084|4} g NaHCO₃ w odważce {$m1|2} g.",
+      "~{$m1|2} g — 100% | {$v1*0.084|4} g — X₁",
+      "X₁ = {$x1|2}%. Tak samo: X₂ = {$x2|2}%, X₃ = {$x3|2}%.",
+      "4. Średnia: {$xsr|2}%. Wymaganie 99,00–101,00% – substancja {$wniosek}.",
+      "5. pH roztworu: {$ph|1} – odczyn słabo zasadowy."
     ]
   },
   "arkuszStron": 9

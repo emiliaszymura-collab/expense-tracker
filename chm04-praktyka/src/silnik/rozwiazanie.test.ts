@@ -10,6 +10,6 @@ it('rozwiązania krok po kroku nie mają pustych miejsc', () => {
       const linie = wypelnijRozwiazanie(p.karta!, losujPomiary(p.karta!));
       expect(linie.join('\n'), p.id).not.toContain('?');
     }
-  const p = poziomy.find((x) => x.id === '11-spektrofotometria')!;
+  const p = poziomy.find((x) => x.id === '05-nacl-mohr')!;
   console.log(wypelnijRozwiazanie(p.karta!, losujPomiary(p.karta!)).join('\n'));
 });

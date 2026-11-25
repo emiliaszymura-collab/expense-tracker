@@ -1131,6 +1131,15 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Z krzywej miareczkowania: punkt końcowy (największy skok pH) przy V = {$vpk|2} cm³ NaOH.",
+      "2. CH₃COOH + NaOH → CH₃COONa + H₂O – reagują 1 : 1. Liczba mmoli NaOH = mmoli kwasu: {$vpk|2} cm³ · 0,250 mmol/cm³ = {$vpk*0.25|4} mmol.",
+      "3. Masa kwasu w miareczkowanej porcji (60,05 mg/mmol):",
+      "~1 mmol — 60,05 mg | {$vpk*0.25|4} mmol — a",
+      "a = {$vpk*0.25*60.05|1} mg. Współmierność kolby i pipety 5, czyli w całej próbce: {$vpk*0.25*60.05*5|1} mg.",
+      "4. Wzór z procedury: X = V · C · M · 5 / 100 = {$vpk|2} · 0,250 · 60,05 · 5 / 100 = {$xpot|2}%.",
+      "5. Wobec wskaźnika: średnia objętość ({$v1|2} + {$v2|2}) / 2 = {$vsr|2} cm³ → X = {$vsr|2} · 0,250 · 60,05 · 5 / 100 = {$xwsk|2}%. Deklaracja: {$dekl|0}%."
     ]
   },
   "arkuszStron": 9

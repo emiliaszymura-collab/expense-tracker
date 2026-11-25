@@ -949,3 +949,141 @@ for plik in sorted(os.listdir(KAT)):
         d['arkuszStron'] = len([f for f in os.listdir(katalog) if f.endswith('.jpg')])
         zapisz(plik, d)
 print('ok arkusze')
+
+# ═════════════════════════ Rozwiązanie krok po kroku na liczbach gracza (arkusz wzorcowy)
+# {$pole|miejsca} – wartość z arkusza wzorcowego (policzona z odczytów gracza), {pomiar|miejsca} – odczyt z przyrządu.
+R = {
+ '01-mydlo-naoh': [
+  '1. Objętość z cm³ na dm³ – dzielisz przez 1000: próbka 1: {$v1|2} cm³ = {$vd1|5} dm³ (tak samo próbki 2 i 3: {$vd2|5} i {$vd3|5} dm³).',
+  '2. Liczba moli HCl w zużytym titrancie (stężenie 0,01 mol/dm³):',
+  '~1 dm³ — 0,01 mol HCl | {$vd1|5} dm³ — n',
+  'n = {$vd1|5} · 0,01 = {$vd1*0.01|7} mol HCl. Z równania NaOH + HCl → NaCl + H₂O: n NaOH = n HCl.',
+  '3. Masa NaOH (M = 40 g/mol):',
+  '~1 mol — 40 g | {$vd1*0.01|7} mol — a',
+  'a = {$vd1*0.01|7} · 40 = {$vd1*0.01*40|6} g NaOH',
+  '4. Zawartość procentowa w próbce mydła o masie {$m1|2} g:',
+  '~{$m1|2} g — 100% | {$vd1*0.01*40|6} g — X₁',
+  'X₁ = {$vd1*0.01*40|6} · 100 / {$m1|2} = {$x1|2}%. Tak samo: X₂ = {$x2|2}%, X₃ = {$x3|2}%.',
+  '5. Średnia: ({$x1|2} + {$x2|2} + {$x3|2}) / 3 = {$xsr|2}%.',
+  '6. Odczyn: papierek pokazał pH ok. {$ph|0} – powyżej 7, więc odczyn zasadowy.'],
+ '02-ibuprofen': [
+  '1. Ibuprofen reaguje z NaOH 1 : 1. Liczba mmoli NaOH (0,1 mol/dm³ = 0,1 mmol/cm³) w próbce 1: {$v1|2} cm³ · 0,1 = {$v1*0.1|3} mmol.',
+  '2. Masa ibuprofenu w próbce (M = 206,28 mg/mmol):',
+  '~1 mmol — 206,28 mg | {$v1*0.1|3} mmol — a',
+  'a = {$v1*0.1*206.28|1} mg w próbce o masie {$m1|3} g.',
+  '3. Przeliczenie na całą tabletkę o masie {$mt|3} g:',
+  '~{$m1|3} g próbki — {$v1*0.1*206.28|1} mg | {$mt|3} g tabletki — X₁',
+  'X₁ = {$x1|1} mg. Tak samo próbka 2: X₂ = {$x2|1} mg.',
+  '4. Średnia: ({$x1|1} + {$x2|1}) / 2 = {$xsr|1} mg w tabletce.',
+  '5. Błąd bezwzględny: |400 − {$xsr|1}| = {$db|1} mg; błąd względny: {$db|1} / 400 · 100% = {$dw|2}%.'],
+ '03-wodoroweglan': [
+  '1. NaHCO₃ + HCl → NaCl + H₂O + CO₂ – reagują 1 : 1. Stężenie HCl 1 mol/dm³, czyli 1 mmol/cm³.',
+  '2. Próbka 1: {$v1|2} cm³ HCl = {$v1|2} mmol HCl = {$v1|2} mmol NaHCO₃.',
+  '3. Masa NaHCO₃ (M = 84 g/mol = 0,084 g/mmol):',
+  '~1 mmol — 0,084 g | {$v1|2} mmol — a',
+  'a = {$v1*0.084|4} g NaHCO₃ w odważce {$m1|2} g.',
+  '~{$m1|2} g — 100% | {$v1*0.084|4} g — X₁',
+  'X₁ = {$x1|2}%. Tak samo: X₂ = {$x2|2}%, X₃ = {$x3|2}%.',
+  '4. Średnia: {$xsr|2}%. Wymaganie 99,00–101,00% – substancja {$wniosek}.',
+  '5. pH roztworu: {$ph|1} – odczyn słabo zasadowy.'],
+ '04-tlenek-cynku': [
+  '1. Objętości EDTA w dm³: {$v1|1} cm³ = {$vd1|4} dm³, {$v2|1} cm³ = {$vd2|4} dm³; średnia {$vsr|5} dm³.',
+  '2. Moli EDTA = moli Zn (reakcja 1 : 1), stężenie EDTA 0,05 mol/dm³:',
+  '~1 dm³ — 0,05 mol | {$vsr|5} dm³ — n',
+  'n = {$vsr*0.05|7} mol – tyle ZnO jest w 25 cm³ roztworu.',
+  '3. Cała próbka była w 100 cm³, czyli 4 razy więcej (W = 4): {$vsr*0.05*4|7} mol ZnO.',
+  '4. Masa ZnO (M = 81,37 g/mol):',
+  '~1 mol — 81,37 g | {$vsr*0.05*4|7} mol — m ZnO',
+  'm ZnO = {$mzno|4} g',
+  '5. Zawartość procentowa w paście o masie {$m|2} g:',
+  '~{$m|2} g — 100% | {$mzno|4} g — X',
+  'X = {$proc|2}%. Etykieta: 25% ± 0,5% – zawartość {$ocena}.'],
+ '05-nacl-mohr': [
+  '1. NaCl + AgNO₃ → AgCl↓ + NaNO₃ – reagują 1 : 1. Do kolby 100 cm³ dałaś 25 cm³ marynaty, a do miareczkowania bierzesz 10 cm³ – to 2,5 cm³ (≈ 2,5 g) marynaty.',
+  '2. Moli AgNO₃ (0,1 mol/dm³ = 0,1 mmol/cm³) w próbce 1: {$v1|2} · 0,1 = {$v1*0.1|3} mmol = tyle samo mmol NaCl.',
+  '3. Masa NaCl (0,05845 g/mmol): {$v1*0.1|3} · 0,05845 = {$v1*0.1*0.05845|5} g.',
+  '~2,5 cm³ (≈ 2,5 g) marynaty — 100% | {$v1*0.1*0.05845|5} g — X₁',
+  'X₁ = {$x1|2}%. Tak samo: X₂ = {$x2|2}%, X₃ = {$x3|2}%.',
+  '4. W gramach na 1 kg: 1% = 10 g/kg, więc {$x1|2}% = {$g1|1} g/kg (i {$g2|1}, {$g3|1} g/kg).',
+  '5. Średnia: {$xsr|2}% = {$gsr|1} g/kg. Etykieta 10 g/kg (±1) – wynik {$wniosek}.'],
+ '06-tlen-winkler': [
+  '1. Średnia objętość tiosiarczanu: ({$v1|2} + {$v2|2}) / 2 = {$vsr|2} cm³.',
+  '2. 1 cm³ Na₂S₂O₃ 0,025 mol/dm³ odpowiada 0,2 mg O₂. Próbka 100 cm³:',
+  '~1 cm³ titranta — 0,2 mg O₂ | {$vsr|2} cm³ — a',
+  'a = {$vsr*0.2|3} mg O₂ w 100 cm³.',
+  '~100 cm³ — {$vsr*0.2|3} mg | 1000 cm³ — X',
+  'X = {$x|1} mg O₂/dm³',
+  '3. Nasycenie tlenem: w {$t|0} °C rozpuszczalność tlenu (tabela A) to {$xt|2} mg/dm³.',
+  '~{$xt|2} mg/dm³ — 100% | {$x|1} mg/dm³ — Xn',
+  'Xn = {$xn|1}%.',
+  '4. Klasy z tabeli B: dla tlenu klasa {$kt|0}, dla pH klasa {$kph|0}. Woda ma klasę gorszego wyniku: {$ocena|0}.'],
+ '07-ocet': [
+  '1. Z krzywej miareczkowania: punkt końcowy (największy skok pH) przy V = {$vpk|2} cm³ NaOH.',
+  '2. CH₃COOH + NaOH → CH₃COONa + H₂O – reagują 1 : 1. Liczba mmoli NaOH = mmoli kwasu: {$vpk|2} cm³ · 0,250 mmol/cm³ = {$vpk*0.25|4} mmol.',
+  '3. Masa kwasu w miareczkowanej porcji (60,05 mg/mmol):',
+  '~1 mmol — 60,05 mg | {$vpk*0.25|4} mmol — a',
+  'a = {$vpk*0.25*60.05|1} mg. Współmierność kolby i pipety 5, czyli w całej próbce: {$vpk*0.25*60.05*5|1} mg.',
+  '4. Wzór z procedury: X = V · C · M · 5 / 100 = {$vpk|2} · 0,250 · 60,05 · 5 / 100 = {$xpot|2}%.',
+  '5. Wobec wskaźnika: średnia objętość ({$v1|2} + {$v2|2}) / 2 = {$vsr|2} cm³ → X = {$vsr|2} · 0,250 · 60,05 · 5 / 100 = {$xwsk|2}%. Deklaracja: {$dekl|0}%.'],
+ '08-fosfor': [
+  '1. Pierwszy punkt końcowy (oranż): {$v1|2} cm³ NaOH 0,1 mol/dm³ – 1 cm³ odpowiada 0,007098 g P₂O₅ (wolny kwas).',
+  '~1 cm³ — 0,007098 g | {$v1|2} cm³ — a',
+  'a = {$v1*0.007098|5} g; z całej próbki (× 5 – miareczkowano 1/5): {$v1*0.007098*5|4} g.',
+  '~{$m|3} g nawozu — 100% | {$v1*0.007098*5|4} g — X₁',
+  'X₁ = {$x1|1}%.',
+  '2. Drugi punkt (fenoloftaleina): {$v2|2} cm³, 1 cm³ odpowiada 0,017745 g → X₂ = {$v2|2} · 0,017745 · 5 / {$m|3} · 100 = {$x2|1}%.'],
+ '09-refraktometria': [
+  '1. Średnia z trzech odczytów soku: ({$n1|4} + {$n2|4} + {$n3|4}) / 3 = {$nsr|4}.',
+  '2. Poprawka na temperaturę {$t|0} °C: 0,0002 · ({$t|0} − 20) = {$popr|4}; nD20 = {$nsr|4} + {$popr|4} = {$n20|4}.',
+  '3. Proporcja między wodą (0%) a wzorcem (10%):',
+  '~({$nwz|4} − {$nw|4}) = {$nwz-$nw|4} — 10% | ({$n20|4} − {$nw|4}) = {$n20-$nw|4} — X',
+  'X = 10 · {$n20-$nw|4} / {$nwz-$nw|4} = {$xc|1}%.',
+  '4. Wymaganie: co najmniej 11,2% – sok {$wniosek}.'],
+ '10-polarymetria': [
+  '1. Średni kąt: ({$a1|2} + {$a2|2} + {$a3|2}) / 3 = {$asr|2}°.',
+  '2. Roztwór 1 g/100 cm³ w rurce 2 dm skręca o 66,5 · 2 / 100 = 1,33°:',
+  '~1,33° — 1 g/100 cm³ | {$asr|2}° — c',
+  'c = {$c|1} g/100 cm³ w roztworze mierzonym.',
+  '3. Syrop rozcieńczono 4 razy (25 → 100 cm³): {$c|1} · 4 = {$cs|1} g/100 cm³.',
+  '4. Etykieta: 60 ± 2 g/100 cm³ – wynik {$wniosek}.'],
+ '12-refraktometria-bialko': [
+  '1. Różnice Δn = nD wzorca − nD wody ({$nw|4}): {$d1|4}, {$d2|4}, {$d3|4}, {$d4|4}.',
+  '2. Na 1 g/100 cm³: wzorzec 2 g → {$d1|4} / 2 = {$k1|6} (i {$k2|6}, {$k3|6}, {$k4|6}); a = średnia = {$a|6}.',
+  '3. Próbka: średnie nD = {$xsr|4}, Δn = {$xsr-$nw|4}.',
+  '~{$a|6} — 1 g/100 cm³ | {$xsr-$nw|4} — c',
+  'c = {$c|1} g/100 cm³. Deklaracja 6,0 ± 0,3 – wynik {$wniosek}.'],
+ '13-refraktometria-identyfikacja': [
+  '1. Średnia: {$xsr|4}. Poprawka 0,0004 · ({$t|0} − 20) = {$popr|4}; nD20 = {$n20|4}.',
+  '2. Najbliższa wartość w tabeli: {$ciecz} (nD20 = {ntab|4}).',
+  '3. Różnica: |{$n20|4} − {ntab|4}| = {$roznica|4}. Granica czystości 0,0005 – ciecz {$wniosek}.'],
+ '14-polarymetria-glukoza': [
+  '1. Średni kąt: {$asr|2}°. Glukoza 1 g/100 cm³ w rurce 2 dm: 52,7 · 2 / 100 = 1,054°.',
+  '~1,054° — 1 g/100 cm³ | {$asr|2}° — c',
+  'c = {$c|2} g/100 cm³.',
+  '2. Odchylenie: ({$c|2} − 5,00) / 5,00 · 100% = {$odch|1}%. Dopuszczalne ±5% – płyn {$wniosek}.'],
+ '15-polarymetria-identyfikacja': [
+  '1. Średni kąt: {$asr|2}°.',
+  '2. [α] dotyczy rurki 1 dm i 100 g/100 cm³; masz 2 dm i 10 g/100 cm³:',
+  '~2 dm, 10 g/100 cm³ — {$asr|2}° | 1 dm, 100 g/100 cm³ — [α]',
+  '[α] = {$asr|2} · (1/2) · (100/10) = {$sk|1}.',
+  '3. Najbliższa wartość w tabeli: {$cukier}.'],
+ '16-spektrofotometria-kmno4': [
+  '1. Największa absorbancja w widmie jest przy 525 nm – to λmax.',
+  '2. Krzywa: wzorzec 4 mg/dm³ → {$A1|3} / 4 = {$k1|3} (i {$k2|3}, {$k3|3}, {$k4|3}, {$k5|3}); a = {$a|3}.',
+  '~{$a|3} — 1 mg/dm³ | {$Ax|3} — c',
+  'c w kolbie = {$ck|1} mg/dm³.',
+  '3. Rozcieńczenie 20 → 50 cm³ (2,5 raza): {$ck|1} · 2,5 = {$cp|1} mg/dm³. Deklaracja 40 ± 2 – wynik {$wniosek}.'],
+ '17-spektrofotometria-bialko': [
+  '1. Krzywa: wzorzec 2 mg → {$A1|3} / 2 = {$k1|3} (i {$k2|3}, {$k3|3}, {$k4|3}, {$k5|3}); a = {$a|3}.',
+  '~{$a|3} — 1 mg | {$Ax|3} — m',
+  'm = {$mp|2} mg białka w 1 cm³ rozcieńczenia.',
+  '2. Surowicę rozcieńczono 10 razy: {$mp|2} · 10 = {$cs|1} mg/cm³ = {$cs|1} g/dm³.',
+  '3. Norma 60–80 g/dm³ – wynik {$wniosek}.'],
+}
+for plik in sorted(os.listdir(KAT)):
+    if not plik.endswith('.json'): continue
+    d = json.load(open(os.path.join(KAT, plik), encoding='utf-8'))
+    if d['id'] in R and d.get('karta'):
+        d['karta']['rozwiazanie'] = R[d['id']]
+        zapisz(plik, d)
+print('ok rozwiązania')

@@ -1128,6 +1128,14 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Pierwszy punkt końcowy (oranż): {$v1|2} cm³ NaOH 0,1 mol/dm³ – 1 cm³ odpowiada 0,007098 g P₂O₅ (wolny kwas).",
+      "~1 cm³ — 0,007098 g | {$v1|2} cm³ — a",
+      "a = {$v1*0.007098|5} g; z całej próbki (× 5 – miareczkowano 1/5): {$v1*0.007098*5|4} g.",
+      "~{$m|3} g nawozu — 100% | {$v1*0.007098*5|4} g — X₁",
+      "X₁ = {$x1|1}%.",
+      "2. Drugi punkt (fenoloftaleina): {$v2|2} cm³, 1 cm³ odpowiada 0,017745 g → X₂ = {$v2|2} · 0,017745 · 5 / {$m|3} · 100 = {$x2|1}%."
     ]
   },
   "arkuszStron": 5

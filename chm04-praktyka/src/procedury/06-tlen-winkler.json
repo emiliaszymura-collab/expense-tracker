@@ -1129,6 +1129,18 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Średnia objętość tiosiarczanu: ({$v1|2} + {$v2|2}) / 2 = {$vsr|2} cm³.",
+      "2. 1 cm³ Na₂S₂O₃ 0,025 mol/dm³ odpowiada 0,2 mg O₂. Próbka 100 cm³:",
+      "~1 cm³ titranta — 0,2 mg O₂ | {$vsr|2} cm³ — a",
+      "a = {$vsr*0.2|3} mg O₂ w 100 cm³.",
+      "~100 cm³ — {$vsr*0.2|3} mg | 1000 cm³ — X",
+      "X = {$x|1} mg O₂/dm³",
+      "3. Nasycenie tlenem: w {$t|0} °C rozpuszczalność tlenu (tabela A) to {$xt|2} mg/dm³.",
+      "~{$xt|2} mg/dm³ — 100% | {$x|1} mg/dm³ — Xn",
+      "Xn = {$xn|1}%.",
+      "4. Klasy z tabeli B: dla tlenu klasa {$kt|0}, dla pH klasa {$kph|0}. Woda ma klasę gorszego wyniku: {$ocena|0}."
     ]
   },
   "arkuszStron": 9

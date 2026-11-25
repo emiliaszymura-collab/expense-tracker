@@ -875,6 +875,14 @@
           }
         ]
       }
+    ],
+    "rozwiazanie": [
+      "1. Średnia z trzech odczytów soku: ({$n1|4} + {$n2|4} + {$n3|4}) / 3 = {$nsr|4}.",
+      "2. Poprawka na temperaturę {$t|0} °C: 0,0002 · ({$t|0} − 20) = {$popr|4}; nD20 = {$nsr|4} + {$popr|4} = {$n20|4}.",
+      "3. Proporcja między wodą (0%) a wzorcem (10%):",
+      "~({$nwz|4} − {$nw|4}) = {$nwz-$nw|4} — 10% | ({$n20|4} − {$nw|4}) = {$n20-$nw|4} — X",
+      "X = 10 · {$n20-$nw|4} / {$nwz-$nw|4} = {$xc|1}%.",
+      "4. Wymaganie: co najmniej 11,2% – sok {$wniosek}."
     ]
   },
   "grupa": "Refraktometr Abbego"
